@@ -13,7 +13,7 @@ import '../Controller/get_translation_controller/get_text_form.dart';
 
 class ProfileView extends StatelessWidget {
   final ScrollController scrollController;
-  const ProfileView({Key? key, required this.scrollController}) : super(key: key);
+   ProfileView({Key? key, required this.scrollController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +149,7 @@ class ProfileView extends StatelessWidget {
       {
         'title': 'Notifications',
         'subtitle': 'Manage your notification preferences',
-        'icon': PhosphorIcons.bell(PhosphorIconsStyle.regular)
+        'icon': PhosphorIcons.bell(PhosphorIconsStyle.regular),
       },
       {
         'title': 'Privacy & Security',
@@ -422,8 +422,11 @@ class ProfileView extends StatelessWidget {
                       onTap: () async {
                         if (!isSelected) {
                           Navigator.of(context).pop();
-                          _showLanguageChangeLoading(context);
+
+
                           try {
+                            _showLanguageChangeLoading(context);
+
                             await translationController.changeLanguage(
                               language,
                               showProgress: false,
@@ -459,32 +462,111 @@ class ProfileView extends StatelessWidget {
     );
   }
 
+// Replace your _showLanguageChangeLoading method with this enhanced version:
+
   void _showLanguageChangeLoading(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        // Automatically close the dialog after 5 seconds
+        Future.delayed(Duration(milliseconds: 3500), () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        });
+
+
         return AlertDialog(
           backgroundColor: SetuColors.cardBackground,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r * 0.85),
+            borderRadius: BorderRadius.circular(20.r * 0.85),
           ),
-          content: Padding(
-            padding: EdgeInsets.all(20.w * 0.85),
+          content: Container(
+            padding: EdgeInsets.all(24.w * 0.85),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator(
-                  color: SetuColors.primaryGreen,
-                  strokeWidth: 3,
-                ),
-                Gap(16.h * 0.85),
+                // Your existing loading content
+                Container(
+                  width: 80.w * 0.85,
+                  height: 80.h * 0.85,
+                  decoration: BoxDecoration(
+                    color: SetuColors.primaryGreen.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    PhosphorIcons.translate(PhosphorIconsStyle.regular),
+                    color: SetuColors.primaryGreen,
+                    size: 40.w * 0.85,
+                  ),
+                )
+                    .animate(onPlay: (controller) => controller.repeat())
+                    .rotate(duration: 2000.ms)
+                    .shimmer(
+                    duration: 1500.ms,
+                    color: SetuColors.primaryGreen.withOpacity(0.3)),
+                Gap(24.h * 0.85),
                 GetTranslatableText(
                   'Changing language...',
                   style: TextStyle(
                     fontSize: 16.sp * 0.85,
+                    fontWeight: FontWeight.w600,
                     color: SetuColors.textPrimary,
                   ),
+                ).animate(),
+                Gap(16.h * 0.85),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(3, (index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 4.w * 0.85),
+                      width: 8.w * 0.85,
+                      height: 8.h * 0.85,
+                      decoration: BoxDecoration(
+                        color: SetuColors.primaryGreen,
+                        shape: BoxShape.circle,
+                      ),
+                    )
+                        .animate(onPlay: (controller) => controller.repeat())
+                        .scale(
+                        duration: 600.ms,
+                        delay: (index * 200).ms,
+                        begin: const Offset(0.5, 0.5),
+                        end: const Offset(1.2, 1.2))
+                        .then()
+                        .scale(
+                        duration: 600.ms,
+                        begin: const Offset(1.2, 1.2),
+                        end: const Offset(0.5, 0.5));
+                  }),
+                ),
+                Gap(16.h * 0.85),
+                Container(
+                  width: double.infinity,
+                  height: 4.h * 0.85,
+                  decoration: BoxDecoration(
+                    color: SetuColors.primaryGreen.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(2.r * 0.85),
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: SetuColors.primaryGreen,
+                      borderRadius: BorderRadius.circular(2.r * 0.85),
+                    ),
+                  )
+                      .animate(onPlay: (controller) => controller.repeat())
+                      .scaleX(
+                      duration: 2000.ms,
+                      alignment: Alignment.centerLeft,
+                      begin: 0.0,
+                      end: 1.0)
+                      .then()
+                      .scaleX(
+                      duration: 1000.ms,
+                      alignment: Alignment.centerLeft,
+                      begin: 1.0,
+                      end: 0.0),
                 ),
               ],
             ),
@@ -493,6 +575,7 @@ class ProfileView extends StatelessWidget {
       },
     );
   }
+
 
   void _showLanguageChangeSuccess(BuildContext context, Language language) {
     Get.snackbar(

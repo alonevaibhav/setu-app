@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:gap/gap.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:setuapp/Route%20Manager/app_routes.dart';
 import '../Constants/color_constant.dart';
 
 class DashboardView extends StatelessWidget {
@@ -219,34 +222,34 @@ class DashboardView extends StatelessWidget {
   Widget _buildGovernmentSchemes(BuildContext context) {
     final schemes = [
       {
-        'icon': PhosphorIcons.bank,
-        'title': 'Jan Dhan Yojana',
+        'icon': PhosphorIcons.calculator,
+        'title': 'New Calculation\nApplication',
         'color': SetuColors.success,
-        'description': 'Banking Services for Financial Inclusion'
+        'description': 'Permanent, Sub-share, Non-farm, Gunthewari & Integration'
       },
       {
-        'icon': PhosphorIcons.house,
-        'title': 'Gramin Awas Yojana',
+        'icon': PhosphorIcons.mapPin,
+        'title': 'Land Acquisition\nCalculation',
         'color': SetuColors.earthBrown,
-        'description': 'Housing Scheme for Rural Areas'
+        'description': 'Land Acquisition Calculation Application'
       },
       {
-        'icon': PhosphorIcons.heartbeat,
-        'title': 'Ayushman Bharat',
+        'icon': PhosphorIcons.scales,
+        'title': 'Court Commission\nCase',
         'color': SetuColors.error,
-        'description': 'Health Insurance Coverage'
+        'description': 'Court Commission Case Management'
       },
       {
-        'icon': PhosphorIcons.addressBook,
-        'title': 'PM Kisan Samman',
+        'icon': PhosphorIcons.gavel,
+        'title': 'Court Allocation\nCase',
         'color': SetuColors.lightGreen,
-        'description': 'Direct Income Support for Farmers'
+        'description': 'Court Allocation Case Processing'
       },
       {
-        'icon': PhosphorIcons.gasPump,
-        'title': 'Ujjwala Yojana',
+        'icon': PhosphorIcons.clipboardText,
+        'title': 'Government\nCensus',
         'color': SetuColors.warning,
-        'description': 'Free LPG Connection for Women'
+        'description': 'Government Census Data Management'
       },
     ];
 
@@ -338,7 +341,6 @@ class DashboardView extends StatelessWidget {
       }).toList(),
     );
   }
-
   // Navigation handlers for Quick Actions
   void _handleQuickActionTap(BuildContext context, String actionTitle) {
     switch (actionTitle) {
@@ -364,33 +366,35 @@ class DashboardView extends StatelessWidget {
   }
 
   // Navigation handlers for Government Schemes
+// Navigation handlers for Government Schemes
   void _handleSchemeTap(BuildContext context, String schemeTitle) {
     // Remove line breaks from title for cleaner routing
     String cleanTitle = schemeTitle.replaceAll('\n', ' ');
 
     switch (cleanTitle) {
-      case 'Jan Dhan Yojana':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => JanDhanYojanaPage()));
-        print('Navigate to: Jan Dhan Yojana Page');
+      case 'New Calculation Application':
+        Get.toNamed(AppRoutes.newCalculationApplication);
+
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => NewCalculationPage()));
+        print('Navigate to: New Calculation Application Page');
         break;
-      case 'Gramin Awas Yojana':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => GraminAwasYojanaPage()));
-        print('Navigate to: Gramin Awas Yojana Page');
+      case 'Land Acquisition Calculation':
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => LandAcquisitionPage()));
+        print('Navigate to: Land Acquisition Calculation Page');
         break;
-      case 'Ayushman Bharat':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => AyushmanBharatPage()));
-        print('Navigate to: Ayushman Bharat Page');
+      case 'Court Commission Case':
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => CourtCommissionPage()));
+        print('Navigate to: Court Commission Case Page');
         break;
-      case 'PM Kisan Samman':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => PMKisanSammanPage()));
-        print('Navigate to: PM Kisan Samman Page');
+      case 'Court Allocation Case':
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => CourtAllocationPage()));
+        print('Navigate to: Court Allocation Case Page');
         break;
-      case 'Ujjwala Yojana':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => UjjwalaYojanaPage()));
-        print('Navigate to: Ujjwala Yojana Page');
+      case 'Government Census':
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => GovernmentCensusPage()));
+        print('Navigate to: Government Census Page');
         break;
       default:
         print('Unknown scheme: $cleanTitle');
     }
-  }
-}
+  }}

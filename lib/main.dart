@@ -11,9 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiService.init();
-  Get.put(TranslationController());
 
-  // Set system UI overlay style
+  Get.lazyPut(() => TranslationController());
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.white,
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
             ),
           ),
           debugShowCheckedModeBanner: false,
-          title: 'SetuApp',
+          title: 'Setu-App',
           initialRoute: initialRoute,
           getPages: AppRoutes.routes,
           initialBinding: AppBindings(),
