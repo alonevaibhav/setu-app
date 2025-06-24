@@ -1,102 +1,3 @@
-// // lib/features/survey/controllers/survey_controller.dart
-// import 'package:get/get.dart';
-// import 'package:flutter/material.dart';
-//
-// class SurveyController extends GetxController {
-//   // Survey Flow State
-//   final currentStep = 0.obs;
-//   final isLoading = false.obs;
-//   final errorMessage = ''.obs;
-//
-//   // Survey Data Storage - Direct Map as per requirements
-//   final surveyData = Rxn<Map<String, dynamic>>();
-//
-//   @override
-//   void onInit() {
-//     super.onInit();
-//     initializeSurveyData();
-//   }
-//
-//   void initializeSurveyData() {
-//     surveyData.value = {
-//       'applicationId': '',
-//       'status': 'draft',
-//       'timestamp': DateTime.now().toIso8601String(),
-//     };
-//   }
-//
-//   // Navigation Methods
-//   void nextStep() {
-//     if (currentStep.value < 2) {
-//       currentStep.value++;
-//     } else {
-//       submitSurvey();
-//     }
-//   }
-//
-//   void previousStep() {
-//     if (currentStep.value > 0) {
-//       currentStep.value--;
-//     }
-//   }
-//
-//   void goToStep(int step) {
-//     if (step >= 0 && step <= 2) {
-//       currentStep.value = step;
-//     }
-//   }
-//
-//   // API Submit Method
-//   Future<void> submitSurvey() async {
-//     try {
-//       isLoading.value = true;
-//
-//       // Mock API call for rural survey submission
-//       await Future.delayed(Duration(seconds: 2));
-//
-//       // Store response directly as Map (no model conversion)
-//       final response = {
-//         'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-//         'status': 'submitted',
-//         'timestamp': DateTime.now().toIso8601String(),
-//         'surveyData': surveyData.value,
-//       };
-//
-//       surveyData.value = response;
-//
-//       // Success handling with rural-friendly messaging
-//       Get.snackbar(
-//         'Success',
-//         'Your survey has been submitted successfully',
-//         backgroundColor: Color(0xFF52B788),
-//         colorText: Colors.white,
-//       );
-//
-//       Get.toNamed('/confirmation');
-//     } catch (e) {
-//       // Error handling
-//       errorMessage.value = e.toString();
-//       Get.snackbar(
-//         'Error',
-//         'Something went wrong. Please try again',
-//         backgroundColor: Color(0xFFDC3545),
-//         colorText: Colors.white,
-//       );
-//     } finally {
-//       isLoading.value = false;
-//     }
-//   }
-//
-//   // Update survey data
-//   void updateSurveyData(String key, dynamic value) {
-//     final currentData = Map<String, dynamic>.from(surveyData.value ?? {});
-//     currentData[key] = value;
-//     surveyData.value = currentData;
-//   }
-// }
-
-
-// lib/features/survey/controllers/survey_controller.dart
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
@@ -129,9 +30,19 @@ class SurveyController extends GetxController {
 
   // Sub-step configurations for each main step
   final Map<int, List<String>> stepConfigurations = {
-    0: ['name', 'phone', 'email', 'gender', 'category'], // Personal Info substeps
-    1: ['address', 'state', 'surveyType', 'documents'], // Survey/CTS substeps
-    2: ['remarks', 'status', 'images', 'summary'], // Survey Information substeps
+    0: [
+      'name',
+      'phone',
+      'email',
+      'gender',
+      'category'
+    ], // Personal Info substeps
+    1: ['address', 'state', ], // Survey/CTS substeps
+    2: [
+      'remarks',
+      'status',
+
+    ], // Survey Information substeps
   };
 
   @override
@@ -166,7 +77,8 @@ class SurveyController extends GetxController {
   }
 
   // Get total sub-steps for current main step
-  int get totalSubStepsInCurrentStep => stepConfigurations[currentStep.value]?.length ?? 1;
+  int get totalSubStepsInCurrentStep =>
+      stepConfigurations[currentStep.value]?.length ?? 1;
 
   // Get current sub-step field name
   String get currentSubStepField {
@@ -195,6 +107,8 @@ class SurveyController extends GetxController {
   }
 
   // Navigation Methods
+  // Replace your existing nextSubStep method with this fixed version:
+
   void nextSubStep() {
     if (!isCurrentSubStepValid) {
       _showValidationError();
@@ -203,7 +117,12 @@ class SurveyController extends GetxController {
 
     _saveCurrentSubStepData();
 
-    if (currentSubStep.value < totalSubStepsInCurrentStep - 1) {
+    // Get the current step's total substeps
+    final currentStepSubSteps = stepConfigurations[currentStep.value];
+    final totalSubSteps = currentStepSubSteps?.length ?? 1;
+
+    if (currentSubStep.value < totalSubSteps - 1) {
+      // Move to next substep within current main step
       currentSubStep.value++;
     } else {
       // Move to next main step
@@ -212,17 +131,22 @@ class SurveyController extends GetxController {
         currentSubStep.value = 0;
         _updateStepValidation();
       } else {
+        // We're at the last step and last substep, submit the survey
         submitSurvey();
       }
     }
   }
 
+// Also fix the previousSubStep method:
   void previousSubStep() {
     if (currentSubStep.value > 0) {
       currentSubStep.value--;
     } else if (currentStep.value > 0) {
       currentStep.value--;
-      currentSubStep.value = totalSubStepsInCurrentStep - 1;
+      // Get the previous step's total substeps
+      final previousStepSubSteps = stepConfigurations[currentStep.value];
+      final totalSubSteps = previousStepSubSteps?.length ?? 1;
+      currentSubStep.value = totalSubSteps - 1;
     }
   }
 
@@ -379,7 +303,8 @@ class SurveyController extends GetxController {
 
   // Get button text based on current state
   String get nextButtonText {
-    if (currentStep.value == 2 && currentSubStep.value == totalSubStepsInCurrentStep - 1) {
+    if (currentStep.value == 2 &&
+        currentSubStep.value == totalSubStepsInCurrentStep - 1) {
       return 'Submit';
     } else if (currentSubStep.value == totalSubStepsInCurrentStep - 1) {
       return 'Next Step';
@@ -418,7 +343,9 @@ class SurveyController extends GetxController {
       isLoading.value = true;
 
       // Final validation
-      if (!isMainStepCompleted(0) || !isMainStepCompleted(1) || !isMainStepCompleted(2)) {
+      if (!isMainStepCompleted(0) ||
+          !isMainStepCompleted(1) ||
+          !isMainStepCompleted(2)) {
         Get.snackbar(
           'Incomplete Form',
           'Please complete all required fields',
@@ -465,6 +392,3 @@ class SurveyController extends GetxController {
     }
   }
 }
-
-
-
