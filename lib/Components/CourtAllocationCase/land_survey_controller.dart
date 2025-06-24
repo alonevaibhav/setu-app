@@ -213,7 +213,8 @@ class SurveyController extends GetxController {
       case 'preview':
         return true; // Always valid for preview
       case 'payment':
-        return paymentController.text.trim().length >= 2; // Add your payment validation logic here
+        return paymentController.text.trim().length >=
+            2; // Add your payment validation logic here
       default:
         return true;
     }
@@ -262,7 +263,6 @@ class SurveyController extends GetxController {
       error,
       backgroundColor: Color(0xFFDC3545),
       colorText: Colors.white,
-      duration: Duration(milliseconds: 800),
     );
   }
 
