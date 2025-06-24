@@ -6,7 +6,6 @@ import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/land_survey_controller.dart';
 
-
 class SurveyInfoStep extends StatelessWidget {
   final int currentSubStep;
   final SurveyController controller;
@@ -19,7 +18,13 @@ class SurveyInfoStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps = ['remarks', 'status'];
+    final subSteps = controller.stepConfigurations[2] ?? ['remarks'];
+
+    // Ensure currentSubStep is within bounds
+    if (currentSubStep >= subSteps.length) {
+      return _buildRemarksInput(); // Fallback
+    }
+
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {

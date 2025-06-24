@@ -50,7 +50,6 @@ class PersonalInfoStep extends StatelessWidget {
       children: [
         SurveyUIUtils.buildStepHeader(
           'Personal Information',
-          'What is your full name?',
         ),
         Gap(24.h),
         SurveyUIUtils.buildTextFormField(

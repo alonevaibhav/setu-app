@@ -1,7 +1,4 @@
-
-
 import 'package:flutter/material.dart';
-import 'dart:io';
 import '../../Controller/land_survey_controller.dart';
 import 'Steps/personal_info_step.dart';
 import 'Steps/survey_cts_step.dart';
@@ -24,8 +21,6 @@ class SurveyStepWidget extends StatefulWidget {
 }
 
 class _SurveyStepWidgetState extends State<SurveyStepWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     switch (widget.currentStep) {

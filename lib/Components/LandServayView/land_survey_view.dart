@@ -6,7 +6,7 @@
 // import 'package:google_fonts/google_fonts.dart';
 // import '../../Constants/color_constant.dart';
 // import '../../Controller/land_survey_controller.dart';
-// import 'land_survey_widget.dart';
+// import 'nevigation_route.dart';
 //
 // class SurveyView extends StatelessWidget {
 //   const SurveyView({Key? key}) : super(key: key);
@@ -14,6 +14,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     final controller = Get.put(SurveyController());
+//     const double sizeFactor = 0.9; // Size constant variable
 //
 //     return Scaffold(
 //       backgroundColor: SetuColors.background,
@@ -24,13 +25,15 @@
 //           'Setu Survey',
 //           style: GoogleFonts.poppins(
 //             color: Colors.white,
-//             fontSize: 20.sp,
+//             fontSize: 20.sp * sizeFactor,
 //             fontWeight: FontWeight.w600,
 //           ),
 //         ),
 //         leading: IconButton(
-//           icon: Icon(PhosphorIcons.arrowLeft(PhosphorIconsStyle.regular),
-//               color: Colors.white),
+//           icon: Icon(
+//             PhosphorIcons.arrowLeft(PhosphorIconsStyle.bold),
+//             color: Colors.white,
+//           ),
 //           onPressed: () => Get.back(),
 //         ),
 //       ),
@@ -39,7 +42,7 @@
 //           // Progress Header
 //           Container(
 //             color: SetuColors.primaryGreen,
-//             padding: EdgeInsets.only(bottom: 20.h),
+//             padding: EdgeInsets.only(bottom: 20.h * sizeFactor),
 //             child: Column(
 //               children: [
 //                 Row(
@@ -50,38 +53,38 @@
 //                       0,
 //                       'Personal\nInfo',
 //                       PhosphorIcons.user(PhosphorIconsStyle.regular),
+//                       sizeFactor,
 //                     ),
 //                     _buildStepIndicator(
 //                       controller,
 //                       1,
 //                       'Survey/CTS\nInformation',
 //                       PhosphorIcons.clipboard(PhosphorIconsStyle.regular),
+//                       sizeFactor,
 //                     ),
 //                     _buildStepIndicator(
 //                       controller,
 //                       2,
 //                       'Survey\nDetails',
 //                       PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+//                       sizeFactor,
 //                     ),
 //                   ],
 //                 ),
-//
-//                 Gap(16.h),
-//
+//                 Gap(16.h * sizeFactor),
 //                 // Sub-step Progress Bar
-//                 Obx(() => _buildSubStepProgress(controller)),
+//                 Obx(() => _buildSubStepProgress(controller, sizeFactor)),
 //               ],
 //             ),
 //           ),
-//
 //           // Main Content
 //           Expanded(
 //             child: SingleChildScrollView(
-//               padding: EdgeInsets.all(20.w),
+//               padding: EdgeInsets.all(15.w * sizeFactor),
 //               child: Column(
 //                 children: [
 //                   // Dynamic Input Container with Navigation
-//                   Obx(() => _buildInputContainer(controller)),
+//                   Obx(() => _buildInputContainer(controller, sizeFactor)),
 //                 ],
 //               ),
 //             ),
@@ -96,19 +99,19 @@
 //     int step,
 //     String title,
 //     IconData icon,
+//     double sizeFactor,
 //   ) {
 //     return Obx(() {
 //       final isCompleted = controller.isMainStepCompleted(step);
 //       final isCurrent = controller.currentStep.value == step;
 //       final color = controller.getStepIndicatorColor(step);
-//
 //       return GestureDetector(
 //         onTap: () => controller.goToStep(step),
 //         child: Column(
 //           children: [
 //             Container(
-//               width: 60.w,
-//               height: 60.w,
+//               width: 60.w * sizeFactor,
+//               height: 60.w * sizeFactor,
 //               decoration: BoxDecoration(
 //                 color: color,
 //                 shape: BoxShape.circle,
@@ -121,23 +124,23 @@
 //                   ? Icon(
 //                       PhosphorIcons.check(PhosphorIconsStyle.bold),
 //                       color: Colors.white,
-//                       size: 24.w,
+//                       size: 24.w * sizeFactor,
 //                     )
 //                   : Icon(
 //                       icon,
 //                       color: isCurrent
 //                           ? Colors.black
 //                           : Colors.white.withOpacity(0.7),
-//                       size: 24.w,
+//                       size: 24.w * sizeFactor,
 //                     ),
 //             ),
-//             Gap(8.h),
+//             Gap(8.h * sizeFactor),
 //             Text(
 //               title,
 //               textAlign: TextAlign.center,
 //               style: GoogleFonts.poppins(
 //                 color: Colors.white,
-//                 fontSize: 12.sp,
+//                 fontSize: 12.sp * sizeFactor,
 //                 fontWeight: FontWeight.w500,
 //               ),
 //             ),
@@ -147,9 +150,9 @@
 //     });
 //   }
 //
-//   Widget _buildSubStepProgress(SurveyController controller) {
+//   Widget _buildSubStepProgress(SurveyController controller, double sizeFactor) {
 //     return Container(
-//       margin: EdgeInsets.symmetric(horizontal: 40.w),
+//       margin: EdgeInsets.symmetric(horizontal: 40.w * sizeFactor),
 //       child: Column(
 //         children: [
 //           Row(
@@ -159,7 +162,7 @@
 //                 'Step ${controller.currentSubStep.value + 1} of ${controller.totalSubStepsInCurrentStep}',
 //                 style: GoogleFonts.poppins(
 //                   color: Colors.white,
-//                   fontSize: 14.sp,
+//                   fontSize: 14.sp * sizeFactor,
 //                   fontWeight: FontWeight.w500,
 //                 ),
 //               ),
@@ -167,32 +170,32 @@
 //                 '${(((controller.currentSubStep.value + 1) / controller.totalSubStepsInCurrentStep) * 100).toInt()}%',
 //                 style: GoogleFonts.poppins(
 //                   color: Colors.white,
-//                   fontSize: 14.sp,
+//                   fontSize: 14.sp * sizeFactor,
 //                   fontWeight: FontWeight.w600,
 //                 ),
 //               ),
 //             ],
 //           ),
-//           Gap(8.h),
+//           Gap(8.h * sizeFactor),
 //           LinearProgressIndicator(
 //             value: (controller.currentSubStep.value + 1) /
 //                 controller.totalSubStepsInCurrentStep,
 //             backgroundColor: Colors.white.withOpacity(0.3),
-//             valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-//             minHeight: 4.h,
+//             valueColor: const AlwaysStoppedAnimation<Color>(Colors.orange),
+//             minHeight: 4.h * sizeFactor,
 //           ),
 //         ],
 //       ),
 //     );
 //   }
 //
-//   Widget _buildInputContainer(SurveyController controller) {
+//   Widget _buildInputContainer(SurveyController controller, double sizeFactor) {
 //     return Container(
 //       width: double.infinity,
-//       padding: EdgeInsets.all(24.w),
+//       padding: EdgeInsets.all(24.w * sizeFactor),
 //       decoration: BoxDecoration(
 //         color: SetuColors.cardBackground,
-//         borderRadius: BorderRadius.circular(20.r),
+//         borderRadius: BorderRadius.circular(20.r * sizeFactor),
 //         boxShadow: [
 //           BoxShadow(
 //             color: SetuColors.primaryGreen.withOpacity(0.1),
@@ -213,13 +216,13 @@
 //             currentSubStep: controller.currentSubStep.value,
 //             controller: controller,
 //           ),
-//
-//           Gap(32.h),
+//           Gap(32.h * sizeFactor),
 //         ],
 //       ),
 //     );
 //   }
 // }
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -229,7 +232,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Constants/color_constant.dart';
 import '../../Controller/land_survey_controller.dart';
-import 'land_survey_widget.dart';
+import 'nevigation_route.dart';
 
 class SurveyView extends StatelessWidget {
   const SurveyView({Key? key}) : super(key: key);
@@ -254,7 +257,7 @@ class SurveyView extends StatelessWidget {
         ),
         leading: IconButton(
           icon: Icon(
-            PhosphorIcons.arrowLeft(PhosphorIconsStyle.regular),
+            PhosphorIcons.arrowLeft(PhosphorIconsStyle.bold),
             color: Colors.white,
           ),
           onPressed: () => Get.back(),
@@ -268,14 +271,15 @@ class SurveyView extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 20.h * sizeFactor),
             child: Column(
               children: [
+                // First Row - 4 Steps
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildStepIndicator(
                       controller,
                       0,
-                      'Personal\nInfo',
-                      PhosphorIcons.user(PhosphorIconsStyle.regular),
+                      'Start',
+                      PhosphorIcons.lockSimple(PhosphorIconsStyle.regular),
                       sizeFactor,
                     ),
                     _buildStepIndicator(
@@ -288,10 +292,76 @@ class SurveyView extends StatelessWidget {
                     _buildStepIndicator(
                       controller,
                       2,
-                      'Survey\nDetails',
+                      'Survey\nInformation',
                       PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                       sizeFactor,
                     ),
+                    _buildStepIndicator(
+                      controller,
+                      3,
+                      'Calculation\nInformation',
+                      PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                  ],
+                ),
+                Gap(12.h * sizeFactor),
+                // Second Row - 4 Steps
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStepIndicator(
+                      controller,
+                      4,
+                      'Applicant\nInformation',
+                      PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                    _buildStepIndicator(
+                      controller,
+                      5,
+                      'Co-owner\nInformation',
+                      PhosphorIcons.users(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                    _buildStepIndicator(
+                      controller,
+                      6,
+                      'Information about\nAdjacent Holders',
+                      PhosphorIcons.user(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                    _buildStepIndicator(
+                      controller,
+                      7,
+                      'Document\nUpload',
+                      PhosphorIcons.folders(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                  ],
+                ),
+                Gap(12.h * sizeFactor),
+                // Third Row - 2 Steps
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStepIndicator(
+                      controller,
+                      8,
+                      'Preview',
+                      PhosphorIcons.eye(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                    _buildStepIndicator(
+                      controller,
+                      9,
+                      'Payment',
+                      PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+                      sizeFactor,
+                    ),
+                    // Empty spaces to maintain alignment
+                    SizedBox(width: 60.w * sizeFactor),
+                    SizedBox(width: 60.w * sizeFactor),
                   ],
                 ),
                 Gap(16.h * sizeFactor),
@@ -333,8 +403,8 @@ class SurveyView extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              width: 60.w * sizeFactor,
-              height: 60.w * sizeFactor,
+              width: 50.w * sizeFactor,
+              height: 50.w * sizeFactor,
               decoration: BoxDecoration(
                 color: color,
                 shape: BoxShape.circle,
@@ -347,24 +417,30 @@ class SurveyView extends StatelessWidget {
                   ? Icon(
                 PhosphorIcons.check(PhosphorIconsStyle.bold),
                 color: Colors.white,
-                size: 24.w * sizeFactor,
+                size: 20.w * sizeFactor,
               )
                   : Icon(
                 icon,
                 color: isCurrent
                     ? Colors.black
                     : Colors.white.withOpacity(0.7),
-                size: 24.w * sizeFactor,
+                size: 20.w * sizeFactor,
               ),
             ),
-            Gap(8.h * sizeFactor),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 12.sp * sizeFactor,
-                fontWeight: FontWeight.w500,
+            Gap(6.h * sizeFactor),
+            SizedBox(
+              width: 70.w * sizeFactor,
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 10.sp * sizeFactor,
+                  fontWeight: FontWeight.w500,
+                  height: 1.2,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
           ],

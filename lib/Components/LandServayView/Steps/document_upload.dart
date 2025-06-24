@@ -7,11 +7,11 @@ import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/land_survey_controller.dart';
 
-class SurveyCTSStep extends StatelessWidget {
+class DocumentUpload extends StatelessWidget {
   final int currentSubStep;
   final SurveyController controller;
 
-  const SurveyCTSStep({
+  const DocumentUpload({
     Key? key,
     required this.currentSubStep,
     required this.controller,
@@ -19,13 +19,23 @@ class SurveyCTSStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps = ['address', 'state'];
+    // final subSteps = ['address', 'state'];
+
+
+    // final currentField = subSteps[currentSubStep];
+    final subSteps = controller.stepConfigurations[7] ?? ['address'];
+
+    // Ensure currentSubStep is within bounds
+    if (currentSubStep >= subSteps.length) {
+      return _buildAddressInput(); // Fallback
+    }
+
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
-      case 'address':
+      case 'documents':
         return _buildAddressInput();
-      case 'state':
+      case 'status':
         return _buildStateInput();
       default:
         return _buildAddressInput();

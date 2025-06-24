@@ -10,8 +10,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await ApiService.init();
 
+  await ApiService.init();
   Get.lazyPut(() => TranslationController());
 
   SystemChrome.setSystemUIOverlayStyle(
