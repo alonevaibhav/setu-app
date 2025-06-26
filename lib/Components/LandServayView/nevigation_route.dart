@@ -37,47 +37,47 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           controller: widget.controller,
         );
       case 1:
-        return SurveyCTSStep(
-          currentSubStep: widget.currentSubStep,
-          controller: widget.controller,
-        );
-      case 2:
         return SurveyInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
+      case 2:
+        return PersonalInfoStep(
+          currentSubStep: widget.currentSubStep,
+          controller: widget.controller,
+        );
       case 3:
-        return CalculationInformation(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 4:
-        return ApplicationInformation(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 5:
-        return CoownerInformation(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 6:
-        return InformationAbout(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 7:
-        return DocumentUpload(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 8:
-        return Preview(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );
       case 9:
-        return Payment(
+        return PersonalInfoStep(
           currentSubStep: widget.currentSubStep,
           controller: widget.controller,
         );

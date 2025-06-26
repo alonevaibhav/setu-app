@@ -5,6 +5,8 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 import '../../../Controller/land_survey_controller.dart';
+import '../../../Constants/color_constant.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PersonalInfoStep extends StatelessWidget {
   final int currentSubStep;
@@ -19,211 +21,229 @@ class PersonalInfoStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the substeps from controller configuration
-    final subSteps = controller.stepConfigurations[0] ?? ['name'];
+    final subSteps = controller.stepConfigurations[0] ??
+        ['holder_verification', 'enumeration_check'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildNameInput(); // Fallback
+      return _buildHolderVerification(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
-      case 'name':
-        return _buildNameInput();
-      case 'phone':
-        return _buildPhoneInput();
-      case 'email':
-        return _buildEmailInput();
-      case 'gender':
-        return _buildGenderInput();
-      case 'category':
-        return _buildCategoryInput();
+      case 'holder_verification':
+        return _buildHolderVerification();
+      case 'enumeration_check':
+        return _buildEnumerationCheck();
       default:
-        return _buildNameInput();
+        return _buildHolderVerification();
     }
   }
 
-  Widget _buildNameInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Personal Information',
-        ),
-        Gap(24.h),
-        SurveyUIUtils.buildTextFormField(
-          controller: controller.nameController,
-          label: 'Full Name',
-          hint: 'Enter your complete name',
-          icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.name,
-          validator: (value) {
-            if (value == null || value.trim().length < 2) {
-              return 'Name must be at least 2 characters';
-            }
-            return null;
-          },
-        ),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(controller),
-      ],
-    );
-  }
-
-  Widget _buildPhoneInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Contact Information',
-          'What is your mobile number?',
-        ),
-        Gap(24.h),
-        SurveyUIUtils.buildTextFormField(
-          controller: controller.phoneController,
-          label: 'Mobile Number',
-          hint: 'Enter 10-digit mobile number',
-          icon: PhosphorIcons.phone(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.phone,
-          maxLength: 10,
-          validator: (value) {
-            if (value == null ||
-                value.length != 10 ||
-                !RegExp(r'^[0-9]+$').hasMatch(value)) {
-              return 'Phone must be exactly 10 digits';
-            }
-            return null;
-          },
-        ),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(controller),
-      ],
-    );
-  }
-
-  Widget _buildEmailInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Contact Information',
-          'What is your email address?',
-        ),
-        Gap(24.h),
-        SurveyUIUtils.buildTextFormField(
-          controller: controller.emailController,
-          label: 'Email Address',
-          hint: 'Enter your email address',
-          icon: PhosphorIcons.envelope(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null ||
-                !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-              return 'Please enter a valid email address';
-            }
-            return null;
-          },
-        ),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(controller),
-      ],
-    );
-  }
-
-  Widget _buildGenderInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Personal Information',
-          'What is your gender?',
-        ),
-        Gap(24.h),
-        Obx(() => Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          child: DropdownButtonFormField<String>(
-            value: controller.selectedGender.value.isEmpty ? null : controller.selectedGender.value,
-            decoration: InputDecoration(
-              labelText: 'Gender',
-              hintText: 'Select your gender',
-              prefixIcon: Icon(PhosphorIcons.genderIntersex(PhosphorIconsStyle.regular)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey.shade50,
+  Widget _buildHolderVerification() {
+    return Obx(() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SurveyUIUtils.buildStepHeader(
+              'Holder Verification',
+              'Please confirm your status as the holder',
             ),
-            items: ['Male', 'Female', 'Other'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: controller.updateGender,
+            Gap(24.h),
+
+            // Question 1: Are you the holder yourself?
+            SurveyUIUtils.buildQuestionCard(
+              question: 'Note: Are you the holder yourself?',
+              selectedValue: controller.isHolderThemselves.value,
+              onChanged: (value) {
+                controller.isHolderThemselves.value = value;
+                // Reset subsequent values when this changes
+                controller.hasAuthorityOnBehalf.value = null;
+                controller.applicantNameController.clear();
+                controller.applicantPhoneController.clear();
+                controller.relationshipController.clear();
+                controller.relationshipWithApplicantController.clear();
+              },
+            ),
+
+            Gap(16.h),
+
+            // Conditional Question 2: Authority on behalf
+            if (controller.isHolderThemselves.value == false) ...[
+              SurveyUIUtils.buildQuestionCard(
+                question:
+                    'Note: Are you holding the authority on behalf of the applicant?/or are you applying as a competent Gunthewari Regularization/Gunthewari Planning Authority?',
+                selectedValue: controller.hasAuthorityOnBehalf.value,
+                onChanged: (value) async {
+                  controller.hasAuthorityOnBehalf.value = value;
+
+                  if (value == true) {
+                    // Show dialog when user selects Yes
+                    await _showAuthorityConfirmationDialog();
+                  } else {
+                    // Clear the additional fields if user selects No
+                    controller.applicantNameController.clear();
+                    controller.applicantPhoneController.clear();
+                    controller.relationshipController.clear();
+                    controller.relationshipWithApplicantController.clear();
+                  }
+                },
+              ),
+              Gap(16.h),
+            ],
+
+            // Additional fields when has authority on behalf
+            if (controller.isHolderThemselves.value == false &&
+                controller.hasAuthorityOnBehalf.value == true) ...[
+              _buildAdditionalFields(),
+              Gap(16.h),
+            ],
+            Gap(32.h),
+            SurveyUIUtils.buildNavigationButtons(controller),
+          ],
+        ));
+  }
+
+  Widget _buildEnumerationCheck() {
+    return Obx(() => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SurveyUIUtils.buildStepHeader(
+              'Enumeration Status',
+              'Has this property been enumerated before?',
+            ),
+            Gap(24.h),
+            SurveyUIUtils.buildQuestionCard(
+              question: 'Note: Has this been counted before?',
+              selectedValue: controller.hasBeenCountedBefore.value,
+              onChanged: (value) {
+                controller.hasBeenCountedBefore.value = value;
+              },
+            ),
+            Gap(32.h),
+            SurveyUIUtils.buildNavigationButtons(controller),
+          ],
+        ));
+  }
+
+  Widget _buildAdditionalFields() {
+    return Container(
+      padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+      decoration: BoxDecoration(
+        color: SetuColors.primaryGreen.withOpacity(0.05),
+        borderRadius: BorderRadius.circular(12.r * SurveyUIUtils.sizeFactor),
+        border: Border.all(color: SetuColors.primaryGreen.withOpacity(0.2)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SurveyUIUtils.buildTranslatableText(
+            text: 'Power of Attorney Details',
+            style: GoogleFonts.poppins(
+              fontSize: 18.sp * SurveyUIUtils.sizeFactor,
+              fontWeight: FontWeight.w700,
+              color: SetuColors.primaryGreen,
+            ),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Power of Attorney Registration Number
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaRegistrationNumberController, // Updated
+            label: 'Power of Attorney / Registration Number',
+            hint: 'Enter registration number',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.text,
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please select your gender';
+              if (value == null || value.trim().length < 3) {
+                return 'Registration number must be at least 3 characters';
               }
               return null;
             },
           ),
-        )),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(controller),
-      ],
-    );
-  }
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
-  Widget _buildCategoryInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Personal Information',
-          'What is your category?',
-        ),
-        Gap(24.h),
-        Obx(() => Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          child: DropdownButtonFormField<String>(
-            value: controller.selectedCategory.value.isEmpty ? null : controller.selectedCategory.value,
-            decoration: InputDecoration(
-              labelText: 'Category',
-              hintText: 'Select your category',
-              prefixIcon: Icon(PhosphorIcons.tag(PhosphorIconsStyle.regular)),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey.shade50,
-            ),
-            items: ['General', 'OBC', 'SC', 'ST', 'EWS'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: controller.updateCategory,
+          // Power of Attorney Registration Date
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaRegistrationDateController, // Updated
+            label: 'Power of Attorney Registration Date',
+            hint: 'Enter registration date',
+            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.datetime,
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please select your category';
+              if (value == null || value.trim().isEmpty) {
+                return 'Registration date is required';
               }
               return null;
             },
           ),
-        )),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(controller),
-      ],
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Name of the holder issuing the power of attorney
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaIssuerNameController, // Updated
+            label: 'Name of the holder issuing the power of attorney',
+            hint: 'Enter holder name',
+            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value == null || value.trim().length < 2) {
+                return 'Holder name must be at least 2 characters';
+              }
+              return null;
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Name of the holder of the Power of Attorney
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaHolderNameController, // Updated
+            label: 'Name of the holder of the Power of Attorney',
+            hint: 'Enter attorney holder name',
+            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value == null || value.trim().length < 2) {
+                return 'Attorney holder name must be at least 2 characters';
+              }
+              return null;
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Address holding Power of Attorney
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaHolderAddressController, // Updated
+            label: 'Address holding Power of Attorney',
+            hint: 'Enter full address',
+            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.streetAddress,
+            maxLines: 3,
+            validator: (value) {
+              if (value == null || value.trim().length < 5) {
+                return 'Address must be at least 5 characters';
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showAuthorityConfirmationDialog() async {
+    await SurveyUIUtils.showTranslatableDialog(
+      context: Get.context!,
+      title: 'Authority Confirmation',
+      message:
+          'You are applying for the enumeration as the holder of the Power of Attorney/Authority Letter or as the competent Gunthewari Regularization/Gunthewari Planning Authority on behalf of the holder of the Group No./Survey No./C. T. Survey No. for which you are applying. Fill in the necessary information.',
+      primaryButtonText: 'Understood',
+      icon: PhosphorIcons.warning(PhosphorIconsStyle.regular),
+      iconColor: SetuColors.primaryGreen,
+      onPrimaryPressed: () {
+        Navigator.of(Get.context!).pop();
+      },
+      barrierDismissible: false,
     );
   }
 }

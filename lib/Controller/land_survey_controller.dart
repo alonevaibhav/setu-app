@@ -9,12 +9,26 @@ class SurveyController extends GetxController {
   final errorMessage = ''.obs;
 
   // Form Controllers
-  final nameController = TextEditingController();
-  final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
   final remarksController = TextEditingController();
   final paymentController = TextEditingController();
+
+  ///------------------Start Controller ------------------///
+  final applicantNameController = TextEditingController();
+  final applicantPhoneController = TextEditingController();
+  final relationshipController = TextEditingController();
+  final relationshipWithApplicantController = TextEditingController();
+  final poaRegistrationNumberController = TextEditingController();
+  final poaRegistrationDateController = TextEditingController();
+  final poaIssuerNameController = TextEditingController();
+  final poaHolderNameController = TextEditingController();
+  final poaHolderAddressController = TextEditingController();
+
+// Observable boolean values for questions
+  final isHolderThemselves = Rxn<bool>();
+  final hasAuthorityOnBehalf = Rxn<bool>();
+  final hasBeenCountedBefore = Rxn<bool>();
 
   // Dropdown Values
   final selectedGender = ''.obs;
@@ -31,7 +45,7 @@ class SurveyController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['name', 'phone', 'email', 'gender', 'category'], // Start (Personal Info)
+    0: ['holder_verification', 'enumeration_check'], // Personal Info step
     1: ['address', 'state'], // Survey/CTS Information
     2: ['remarks', 'status'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
@@ -52,11 +66,14 @@ class SurveyController extends GetxController {
 
   @override
   void onClose() {
-    nameController.dispose();
-    phoneController.dispose();
     emailController.dispose();
     addressController.dispose();
     remarksController.dispose();
+    poaRegistrationNumberController.dispose();
+    poaRegistrationDateController.dispose();
+    poaIssuerNameController.dispose();
+    poaHolderNameController.dispose();
+    poaHolderAddressController.dispose();
     super.onClose();
   }
 
@@ -174,18 +191,30 @@ class SurveyController extends GetxController {
   // Validation Methods
   bool validateField(String field) {
     switch (field) {
-      case 'name':
-        return nameController.text.trim().length >= 2;
-      case 'phone':
-        return phoneController.text.trim().length == 10 &&
-            RegExp(r'^[0-9]+$').hasMatch(phoneController.text.trim());
-      case 'email':
-        return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-            .hasMatch(emailController.text.trim());
-      case 'gender':
-        return selectedGender.value.isNotEmpty;
-      case 'category':
-        return selectedCategory.value.isNotEmpty;
+      ///------------------Start Controller ------------------///
+
+      case 'holder_verification':
+        // Check if holder themselves is selected
+        if (isHolderThemselves.value == null) return false;
+
+        // If not holder themselves, check authority
+        if (isHolderThemselves.value == false) {
+          if (hasAuthorityOnBehalf.value == null) return false;
+
+          // If has authority, validate POA fields
+          if (hasAuthorityOnBehalf.value == true) {
+            return poaRegistrationNumberController.text.trim().length >= 3 &&
+                poaRegistrationDateController.text.trim().isNotEmpty &&
+                poaIssuerNameController.text.trim().length >= 2 &&
+                poaHolderNameController.text.trim().length >= 2 &&
+                poaHolderAddressController.text.trim().length >= 5;
+          }
+        }
+        return true;
+
+      case 'enumeration_check':
+        return hasBeenCountedBefore.value != null;
+
       case 'address':
         return addressController.text.trim().length >= 10;
       case 'state':
@@ -213,7 +242,8 @@ class SurveyController extends GetxController {
       case 'preview':
         return true; // Always valid for preview
       case 'payment':
-        return paymentController.text.trim().length >= 2; // Add your payment validation logic here
+        return paymentController.text.trim().length >=
+            2; // Add your payment validation logic here
       default:
         return true;
     }
@@ -221,34 +251,42 @@ class SurveyController extends GetxController {
 
   String getFieldError(String field) {
     switch (field) {
+      ///------------------Start Controller ------------------///
+
+      case 'holder_verification':
+        if (isHolderThemselves.value == null) {
+          return 'Please select if you are the holder';
+        }
+        if (isHolderThemselves.value == false &&
+            hasAuthorityOnBehalf.value == null) {
+          return 'Please select if you have authority on behalf';
+        }
+        if (isHolderThemselves.value == false &&
+            hasAuthorityOnBehalf.value == true) {
+          if (poaRegistrationNumberController.text.trim().length < 3) {
+            return 'Registration number must be at least 3 characters';
+          }
+          if (poaRegistrationDateController.text.trim().isEmpty) {
+            return 'Registration date is required';
+          }
+          if (poaIssuerNameController.text.trim().length < 2) {
+            return 'Issuer name must be at least 2 characters';
+          }
+          if (poaHolderNameController.text.trim().length < 2) {
+            return 'Holder name must be at least 2 characters';
+          }
+          if (poaHolderAddressController.text.trim().length < 5) {
+            return 'Address must be at least 5 characters';
+          }
+        }
+        return 'Please complete holder verification';
+      case 'enumeration_check':
+        return 'Please select if this has been counted before';
+
       case 'name':
         return 'Name must be at least 2 characters';
-      case 'phone':
-        return 'Phone must be exactly 10 digits';
-      case 'email':
-        return 'Please enter a valid email address';
-      case 'gender':
-        return 'Please select your gender';
       case 'category':
         return 'Please select your category';
-      case 'address':
-        return 'Address must be at least 10 characters';
-      case 'state':
-        return 'Please select your state';
-      case 'surveyType':
-        return 'Please select survey type';
-      case 'remarks':
-        return 'Remarks must be at least 5 characters';
-      case 'calculation':
-        return 'Please complete calculation information';
-      case 'applicant':
-        return 'Please complete applicant information';
-      case 'coowner':
-        return 'Please complete co-owner information';
-      case 'adjacent':
-        return 'Please complete adjacent holders information';
-      case 'payment':
-        return 'Please complete payment information';
       default:
         return 'This field is required';
     }
@@ -262,7 +300,7 @@ class SurveyController extends GetxController {
       error,
       backgroundColor: Color(0xFFDC3545),
       colorText: Colors.white,
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 1200),
     );
   }
 
@@ -271,18 +309,6 @@ class SurveyController extends GetxController {
     final currentData = Map<String, dynamic>.from(surveyData.value ?? {});
 
     switch (field) {
-      case 'name':
-        currentData['fullName'] = nameController.text.trim();
-        break;
-      case 'phone':
-        currentData['phone'] = phoneController.text.trim();
-        break;
-      case 'email':
-        currentData['email'] = emailController.text.trim();
-        break;
-      case 'gender':
-        currentData['gender'] = selectedGender.value;
-        break;
       case 'category':
         currentData['category'] = selectedCategory.value;
         break;
@@ -300,24 +326,6 @@ class SurveyController extends GetxController {
         break;
       case 'calculation':
         currentData['calculation'] = 'completed'; // Add your logic here
-        break;
-      case 'applicant':
-        currentData['applicant'] = 'completed'; // Add your logic here
-        break;
-      case 'coowner':
-        currentData['coowner'] = 'completed'; // Add your logic here
-        break;
-      case 'adjacent':
-        currentData['adjacent'] = 'completed'; // Add your logic here
-        break;
-      case 'documents':
-        currentData['documents'] = 'uploaded'; // Add your logic here
-        break;
-      case 'preview':
-        currentData['preview'] = 'reviewed'; // Add your logic here
-        break;
-      case 'payment':
-        currentData['payment'] = 'completed'; // Add your logic here
         break;
     }
 
