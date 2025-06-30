@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class SurveyController extends GetxController {
+class LandAcquisitionController extends GetxController {
   // Survey Flow State
   final currentStep = 0.obs;
   final currentSubStep = 0.obs;
@@ -15,15 +15,16 @@ class SurveyController extends GetxController {
   final paymentController = TextEditingController();
 
   ///------------------Start Controller ------------------///
-  final applicantNameController = TextEditingController();
-  final applicantPhoneController = TextEditingController();
-  final relationshipController = TextEditingController();
-  final relationshipWithApplicantController = TextEditingController();
-  final poaRegistrationNumberController = TextEditingController();
-  final poaRegistrationDateController = TextEditingController();
-  final poaIssuerNameController = TextEditingController();
-  final poaHolderNameController = TextEditingController();
-  final poaHolderAddressController = TextEditingController();
+// Add these controllers to your LandAcquisitionController class
+  final landAcquisitionOfficerController = TextEditingController();
+  final landAcquisitionBoardController = TextEditingController();
+  final landAcquisitionOrderNumberController = TextEditingController();
+  final landAcquisitionOrderDateController = TextEditingController();
+  final issuingOfficeController = TextEditingController();
+
+  final RxList<String> landAcquisitionOrderFiles = <String>[].obs;
+  final RxList<String> proposedLandSiteMapFiles = <String>[].obs;
+  final RxList<String> kmlFiles = <String>[].obs;
 
 
   ///------------------Survey_cts Controller  ------------------///
@@ -86,7 +87,7 @@ class SurveyController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['holder_verification', 'enumeration_check'], // Personal Info step
+    0: ['land_acquisition_officer', 'land_acquisition_board', 'acquisition_order_number', 'acquisition_order_date', 'issuing_office', 'order_document_upload', 'site_map_upload', 'kml_file_upload',], // Personal Info step
     1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
     2: ['remarks', 'status'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
@@ -110,11 +111,12 @@ class SurveyController extends GetxController {
     emailController.dispose();
     addressController.dispose();
     remarksController.dispose();
-    poaRegistrationNumberController.dispose();
-    poaRegistrationDateController.dispose();
-    poaIssuerNameController.dispose();
-    poaHolderNameController.dispose();
-    poaHolderAddressController.dispose();
+    // Add these controllers to your LandAcquisitionController class
+     landAcquisitionOfficerController.dispose();
+     landAcquisitionBoardController.dispose();
+     landAcquisitionOrderNumberController.dispose();
+     landAcquisitionOrderDateController.dispose();
+    issuingOfficeController.dispose();
     surveyNumberController.dispose();
 
     super.onClose();
@@ -236,26 +238,7 @@ class SurveyController extends GetxController {
     switch (field) {
       ///------------------Start Validation ------------------///
 
-      case 'holder_verification':
-        // Check if holder themselves is selected
-        if (isHolderThemselves.value == null) return false;
 
-        // If not holder themselves, check authority
-        if (isHolderThemselves.value == false) {
-          if (hasAuthorityOnBehalf.value == null) return false;
-
-          // If has authority, validate POA fields
-          if (hasAuthorityOnBehalf.value == true) {
-            return poaRegistrationNumberController.text.trim().length >= 3 &&
-                poaRegistrationDateController.text.trim().isNotEmpty &&
-                poaIssuerNameController.text.trim().length >= 2 &&
-                poaHolderNameController.text.trim().length >= 2 &&
-                poaHolderAddressController.text.trim().length >= 5;
-          }
-        }
-        return true;
-      case 'enumeration_check':
-        return hasBeenCountedBefore.value != null;
 
     ///------------------Survey_cts Validation ------------------///
 
@@ -304,33 +287,7 @@ class SurveyController extends GetxController {
     switch (field) {
       ///------------------Start Error ------------------///
 
-      case 'holder_verification':
-        if (isHolderThemselves.value == null) {
-          return 'Please select if you are the holder';
-        }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == null) {
-          return 'Please select if you have authority on behalf';
-        }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == true) {
-          if (poaRegistrationNumberController.text.trim().length < 3) {
-            return 'Registration number must be at least 3 characters';
-          }
-          if (poaRegistrationDateController.text.trim().isEmpty) {
-            return 'Registration date is required';
-          }
-          if (poaIssuerNameController.text.trim().length < 2) {
-            return 'Issuer name must be at least 2 characters';
-          }
-          if (poaHolderNameController.text.trim().length < 2) {
-            return 'Holder name must be at least 2 characters';
-          }
-          if (poaHolderAddressController.text.trim().length < 5) {
-            return 'Address must be at least 5 characters';
-          }
-        }
-        return 'Please complete holder verification';
+
       case 'enumeration_check':
         return 'Please select if this has been counted before';
 

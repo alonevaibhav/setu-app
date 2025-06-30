@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,11 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
-import '../../../Controller/land_survey_controller.dart';
 import '../../../Controller/get_translation_controller/get_translation_controller.dart';
-import '../Controller/main_controller.dart';
 
-class SurveyUIUtils {
+class TranslatedUIUtils {
   static const double sizeFactor = 0.75; // Size constant variable
 
   /// Translatable Text Widget with proper cache handling
@@ -193,24 +189,24 @@ class SurveyUIUtils {
     required Function(bool) onChanged,
   }) {
     return Container(
-      padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+      padding: EdgeInsets.all(16.w * TranslatedUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: SetuColors.background,
-        borderRadius: BorderRadius.circular(12.r * SurveyUIUtils.sizeFactor),
+        borderRadius: BorderRadius.circular(12.r * TranslatedUIUtils.sizeFactor),
         border: Border.all(color: SetuColors.lightGreen.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SurveyUIUtils.buildTranslatableText(
+          TranslatedUIUtils.buildTranslatableText(
             text: question,
             style: GoogleFonts.poppins(
-              fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+              fontSize: 16.sp * TranslatedUIUtils.sizeFactor,
               fontWeight: FontWeight.w600,
               color: SetuColors.textPrimary,
             ),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * TranslatedUIUtils.sizeFactor),
           Row(
             children: [
               Expanded(
@@ -221,7 +217,7 @@ class SurveyUIUtils {
                   icon: PhosphorIcons.check(PhosphorIconsStyle.regular),
                 ),
               ),
-              Gap(12.w * SurveyUIUtils.sizeFactor),
+              Gap(12.w * TranslatedUIUtils.sizeFactor),
               Expanded(
                 child: buildOptionButton(
                   text: 'No',
@@ -245,17 +241,17 @@ class SurveyUIUtils {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8.r * SurveyUIUtils.sizeFactor),
+      borderRadius: BorderRadius.circular(8.r * TranslatedUIUtils.sizeFactor),
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: 12.h * SurveyUIUtils.sizeFactor,
-          horizontal: 16.w * SurveyUIUtils.sizeFactor,
+          vertical: 12.h * TranslatedUIUtils.sizeFactor,
+          horizontal: 16.w * TranslatedUIUtils.sizeFactor,
         ),
         decoration: BoxDecoration(
           color: isSelected
               ? SetuColors.primaryGreen.withOpacity(0.1)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(8.r * SurveyUIUtils.sizeFactor),
+          borderRadius: BorderRadius.circular(8.r * TranslatedUIUtils.sizeFactor),
           border: Border.all(
             color: isSelected
                 ? SetuColors.primaryGreen
@@ -271,13 +267,13 @@ class SurveyUIUtils {
               color: isSelected
                   ? SetuColors.primaryGreen
                   : SetuColors.textSecondary,
-              size: 18.w * SurveyUIUtils.sizeFactor,
+              size: 18.w * TranslatedUIUtils.sizeFactor,
             ),
-            Gap(8.w * SurveyUIUtils.sizeFactor),
-            SurveyUIUtils.buildTranslatableText(
+            Gap(8.w * TranslatedUIUtils.sizeFactor),
+            TranslatedUIUtils.buildTranslatableText(
               text: text,
               style: GoogleFonts.poppins(
-                fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+                fontSize: 14.sp * TranslatedUIUtils.sizeFactor,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
                     ? SetuColors.primaryGreen
@@ -371,147 +367,6 @@ class SurveyUIUtils {
     );
   }
 
-  static Widget buildNavigationButtons(SurveyController controller) {
-    return Obx(() => Row(
-      children: [
-        // Previous Button
-        if (controller.currentStep.value > 0 || controller.currentSubStep.value > 0)
-          Expanded(
-            child: ElevatedButton(
-              onPressed: controller.previousSubStep,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: SetuColors.textSecondary,
-                padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r * sizeFactor),
-                ),
-              ),
-              child: buildTranslatableText(
-                text: 'Previous',
-                style: GoogleFonts.poppins(
-                  fontSize: 16.sp * sizeFactor,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-                sourceLanguage: 'en',
-              ),
-            ),
-          ),
-        if (controller.currentStep.value > 0 ||
-            controller.currentSubStep.value > 0)
-          Gap(16.w * sizeFactor),
-        // Next/Submit Button
-        Expanded(
-          flex: (controller.currentStep.value == 0 &&
-              controller.currentSubStep.value == 0)
-              ? 1
-              : 1,
-          child: ElevatedButton(
-            onPressed:
-            controller.isLoading.value ? null : controller.nextSubStep,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: SetuColors.primaryGreen,
-              padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r * sizeFactor),
-              ),
-            ),
-            child: controller.isLoading.value
-                ? SizedBox(
-              height: 20.h * sizeFactor,
-              width: 20.w * sizeFactor,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-                : buildTranslatableText(
-              text: controller.nextButtonText,
-              style: GoogleFonts.poppins(
-                fontSize: 16.sp * sizeFactor,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-              sourceLanguage: 'en',
-            ),
-          ),
-        ),
-      ],
-    ));
-  }
-
-  // Updated method for SurveyUIUtils class
-  static Widget buildNavigationButtonss(MainSurveyController controller) {
-    return Obx(() => Row(
-      children: [
-        // Previous Button
-        if (controller.currentStep.value > 0 || controller.currentSubStep.value > 0)
-          Expanded(
-            child: ElevatedButton(
-              onPressed: controller.isLoading.value
-                  ? null
-                  : () => controller.previousSubStep(),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: SetuColors.textSecondary,
-                padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r * sizeFactor),
-                ),
-              ),
-              child: buildTranslatableText(
-                text: 'Previous',
-                style: GoogleFonts.poppins(
-                  fontSize: 16.sp * sizeFactor,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-                sourceLanguage: 'en',
-              ),
-            ),
-          ),
-        if (controller.currentStep.value > 0 ||
-            controller.currentSubStep.value > 0)
-          Gap(16.w * sizeFactor),
-        // Next/Submit Button
-        Expanded(
-          flex: (controller.currentStep.value == 0 &&
-              controller.currentSubStep.value == 0)
-              ? 1
-              : 1,
-          child: ElevatedButton(
-            onPressed: controller.isLoading.value
-                ? null
-                : () => controller.nextSubStep(),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: SetuColors.primaryGreen,
-              padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r * sizeFactor),
-              ),
-            ),
-            child: controller.isLoading.value
-                ? SizedBox(
-              height: 20.h * sizeFactor,
-              width: 20.w * sizeFactor,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-                : buildTranslatableText(
-              text: controller.nextButtonText,
-              style: GoogleFonts.poppins(
-                fontSize: 16.sp * sizeFactor,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-              sourceLanguage: 'en',
-            ),
-          ),
-        ),
-      ],
-    ));
-  }
 
   static Widget buildStatusContainer({
     required String title,

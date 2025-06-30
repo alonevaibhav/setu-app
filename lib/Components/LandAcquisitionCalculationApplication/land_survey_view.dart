@@ -7,15 +7,15 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Constants/color_constant.dart';
 import '../../Controller/get_translation_controller/get_text_form.dart';
 import '../../Controller/land_survey_controller.dart';
-import 'Controller/main_controller.dart';
+import 'land_acquisition_calculation_controller.dart';
 import 'nevigation_route.dart';
 
-class SurveyView extends StatelessWidget {
-  const SurveyView({Key? key}) : super(key: key);
+class LandAcquisitionView extends StatelessWidget {
+  const LandAcquisitionView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(MainSurveyController());
+    final controller = Get.put(LandAcquisitionController());
     const double sizeFactor = 0.9; // Size constant variable
 
     return Scaffold(
@@ -24,7 +24,7 @@ class SurveyView extends StatelessWidget {
         backgroundColor: SetuColors.primaryGreen,
         elevation: 0,
         title: Text(
-          'Setu Survey',
+          'Land Acquisition Calculation ',
           style: GoogleFonts.poppins(
             color: Colors.white,
             fontSize: 20.sp * sizeFactor,
@@ -162,7 +162,7 @@ class SurveyView extends StatelessWidget {
   }
 
   Widget _buildStepIndicator(
-      MainSurveyController controller,
+      LandAcquisitionController controller,
       int step,
       String title,
       IconData icon,
@@ -223,7 +223,7 @@ class SurveyView extends StatelessWidget {
     });
   }
 
-  Widget _buildSubStepProgress(MainSurveyController controller, double sizeFactor) {
+  Widget _buildSubStepProgress(LandAcquisitionController controller, double sizeFactor) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 40.w * sizeFactor),
       child: Column(
@@ -262,7 +262,7 @@ class SurveyView extends StatelessWidget {
     );
   }
 
-  Widget _buildInputContainer(MainSurveyController controller, double sizeFactor) {
+  Widget _buildInputContainer(LandAcquisitionController controller, double sizeFactor) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(15.w * sizeFactor),
@@ -284,10 +284,10 @@ class SurveyView extends StatelessWidget {
       child: Column(
         children: [
           // Current Sub-step Content
-          SurveyStepWidget(
+          LandAcquisitionWidget(
             currentStep: controller.currentStep.value,
             currentSubStep: controller.currentSubStep.value,
-            mainController: controller,
+            controller: controller,
           ),
           Gap(32.h * sizeFactor),
         ],

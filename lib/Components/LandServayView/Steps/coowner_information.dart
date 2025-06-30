@@ -5,7 +5,7 @@
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
 // import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 // import '../../../Constants/color_constant.dart';
-// import '../../../Controller/land_survey_controller.dart';
+// import '../../../Controller/land_acquisition_calculation_controller.dart';
 //
 // class CoownerInformation extends StatelessWidget {
 //   final int currentSubStep;

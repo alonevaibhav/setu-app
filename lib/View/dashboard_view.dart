@@ -374,13 +374,9 @@ class DashboardView extends StatelessWidget {
     switch (cleanTitle) {
       case 'New Calculation Application':
         Get.toNamed(AppRoutes.newCalculationApplication);
-
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => NewCalculationPage()));
-        print('Navigate to: New Calculation Application Page');
         break;
       case 'Land Acquisition Calculation':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => LandAcquisitionPage()));
-        print('Navigate to: Land Acquisition Calculation Page');
+        Get.toNamed(AppRoutes.goLandAcquisitionView);
         break;
       case 'Court Commission Case':
       // Navigator.push(context, MaterialPageRoute(builder: (context) => CourtCommissionPage()));
