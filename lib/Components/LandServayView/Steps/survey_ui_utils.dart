@@ -11,7 +11,6 @@ import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
 import '../../../Controller/land_survey_controller.dart';
 import '../../../Controller/get_translation_controller/get_translation_controller.dart';
-import '../../Low/Controller/main_controller.dart';
 import '../Controller/main_controller.dart';
 
 class SurveyUIUtils {
@@ -105,7 +104,7 @@ class SurveyUIUtils {
     required String label,
     required String hint,
     required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
+    TextInputType keyboardType = TextInputType.text?? TextInputType.text, // Provide a default value,
     int maxLines = 1,
     int? maxLength,
     String? Function(String?)? validator,

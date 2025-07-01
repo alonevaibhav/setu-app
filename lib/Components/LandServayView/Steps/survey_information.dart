@@ -458,3 +458,4 @@ class CalculationInformation extends StatelessWidget {
     );
   }
 }
+
