@@ -67,7 +67,7 @@ class CalculationInformation extends StatelessWidget {
         Obx(() => _buildDynamicContent(calcController)),
 
         Gap(32.h * SurveyUIUtils.sizeFactor),
-        SurveyUIUtils.buildNavigationButtonss(controller),
+        SurveyUIUtils.buildNavigationButtons(controller),
       ],
     );
   }

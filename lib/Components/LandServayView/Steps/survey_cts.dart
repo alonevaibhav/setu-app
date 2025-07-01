@@ -255,7 +255,7 @@ class SurveyCTSStep extends StatelessWidget {
           },
         ),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -277,7 +277,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -299,7 +299,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -321,7 +321,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -343,7 +343,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -365,7 +365,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }

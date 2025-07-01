@@ -11,6 +11,7 @@ import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
 import '../../../Controller/land_survey_controller.dart';
 import '../../../Controller/get_translation_controller/get_translation_controller.dart';
+import '../../Low/Controller/main_controller.dart';
 import '../Controller/main_controller.dart';
 
 class SurveyUIUtils {
@@ -371,77 +372,77 @@ class SurveyUIUtils {
     );
   }
 
-  static Widget buildNavigationButtons(SurveyController controller) {
-    return Obx(() => Row(
-      children: [
-        // Previous Button
-        if (controller.currentStep.value > 0 || controller.currentSubStep.value > 0)
-          Expanded(
-            child: ElevatedButton(
-              onPressed: controller.previousSubStep,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: SetuColors.textSecondary,
-                padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r * sizeFactor),
-                ),
-              ),
-              child: buildTranslatableText(
-                text: 'Previous',
-                style: GoogleFonts.poppins(
-                  fontSize: 16.sp * sizeFactor,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
-                sourceLanguage: 'en',
-              ),
-            ),
-          ),
-        if (controller.currentStep.value > 0 ||
-            controller.currentSubStep.value > 0)
-          Gap(16.w * sizeFactor),
-        // Next/Submit Button
-        Expanded(
-          flex: (controller.currentStep.value == 0 &&
-              controller.currentSubStep.value == 0)
-              ? 1
-              : 1,
-          child: ElevatedButton(
-            onPressed:
-            controller.isLoading.value ? null : controller.nextSubStep,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: SetuColors.primaryGreen,
-              padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r * sizeFactor),
-              ),
-            ),
-            child: controller.isLoading.value
-                ? SizedBox(
-              height: 20.h * sizeFactor,
-              width: 20.w * sizeFactor,
-              child: CircularProgressIndicator(
-                color: Colors.white,
-                strokeWidth: 2,
-              ),
-            )
-                : buildTranslatableText(
-              text: controller.nextButtonText,
-              style: GoogleFonts.poppins(
-                fontSize: 16.sp * sizeFactor,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-              ),
-              sourceLanguage: 'en',
-            ),
-          ),
-        ),
-      ],
-    ));
-  }
+  // static Widget buildNavigationButtons(SurveyController controller) {
+  //   return Obx(() => Row(
+  //     children: [
+  //       // Previous Button
+  //       if (controller.currentStep.value > 0 || controller.currentSubStep.value > 0)
+  //         Expanded(
+  //           child: ElevatedButton(
+  //             onPressed: controller.previousSubStep,
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: SetuColors.textSecondary,
+  //               padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(12.r * sizeFactor),
+  //               ),
+  //             ),
+  //             child: buildTranslatableText(
+  //               text: 'Previous',
+  //               style: GoogleFonts.poppins(
+  //                 fontSize: 16.sp * sizeFactor,
+  //                 fontWeight: FontWeight.w600,
+  //                 color: Colors.white,
+  //               ),
+  //               sourceLanguage: 'en',
+  //             ),
+  //           ),
+  //         ),
+  //       if (controller.currentStep.value > 0 ||
+  //           controller.currentSubStep.value > 0)
+  //         Gap(16.w * sizeFactor),
+  //       // Next/Submit Button
+  //       Expanded(
+  //         flex: (controller.currentStep.value == 0 &&
+  //             controller.currentSubStep.value == 0)
+  //             ? 1
+  //             : 1,
+  //         child: ElevatedButton(
+  //           onPressed:
+  //           controller.isLoading.value ? null : controller.nextSubStep,
+  //           style: ElevatedButton.styleFrom(
+  //             backgroundColor: SetuColors.primaryGreen,
+  //             padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
+  //             shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(12.r * sizeFactor),
+  //             ),
+  //           ),
+  //           child: controller.isLoading.value
+  //               ? SizedBox(
+  //             height: 20.h * sizeFactor,
+  //             width: 20.w * sizeFactor,
+  //             child: CircularProgressIndicator(
+  //               color: Colors.white,
+  //               strokeWidth: 2,
+  //             ),
+  //           )
+  //               : buildTranslatableText(
+  //             text: controller.nextButtonText,
+  //             style: GoogleFonts.poppins(
+  //               fontSize: 16.sp * sizeFactor,
+  //               fontWeight: FontWeight.w600,
+  //               color: Colors.white,
+  //             ),
+  //             sourceLanguage: 'en',
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   ));
+  // }
 
   // Updated method for SurveyUIUtils class
-  static Widget buildNavigationButtonss(MainSurveyController controller) {
+  static Widget buildNavigationButtons(MainSurveyController controller) {
     return Obx(() => Row(
       children: [
         // Previous Button

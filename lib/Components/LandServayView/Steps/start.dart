@@ -341,7 +341,7 @@ class PersonalInfoStep extends StatelessWidget {
         ],
 
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     ));
   }
@@ -363,7 +363,7 @@ class PersonalInfoStep extends StatelessWidget {
           },
         ),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtonss(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     ));
   }
