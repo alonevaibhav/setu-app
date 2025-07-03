@@ -1,3 +1,441 @@
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:get/get.dart';
+// import 'package:gap/gap.dart';
+// import 'package:phosphor_flutter/phosphor_flutter.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+// import '../../../Constants/color_constant.dart';
+// import '../Controller/main_controller.dart';
+// import '../Controller/step_three_controller.dart';
+//
+// class CalculationInformation extends StatelessWidget {
+//   final int currentSubStep;
+//   final MainSurveyController controller;
+//
+//   const CalculationInformation({
+//     Key? key,
+//     required this.currentSubStep,
+//     required this.controller,
+//   }) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final subSteps = controller.stepConfigurations[2] ?? ['calculation'];
+//
+//     if (currentSubStep >= subSteps.length) {
+//       return _buildCalculationInput();
+//     }
+//
+//     final currentField = subSteps[currentSubStep];
+//
+//     switch (currentField) {
+//       case 'calculation':
+//         return _buildCalculationInput();
+//       default:
+//         return _buildCalculationInput();
+//     }
+//   }
+//
+//   Widget _buildCalculationInput() {
+//     final calcController = Get.put(CalculationController(), tag: 'calculation');
+//
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SurveyUIUtils.buildStepHeader(
+//           'Group No./ Survey No./ C. T. Survey No. /T. P. No. Information about the area',
+//           'Select calculation type and provide required information',
+//         ),
+//         Gap(24.h * SurveyUIUtils.sizeFactor),
+//
+//         // Calculation Type Dropdown
+//         Obx(() => SurveyUIUtils.buildDropdownField(
+//               label: 'Calculation type *',
+//               value: calcController.selectedCalculationType.value,
+//               items: calcController.calculationTypes,
+//               onChanged: (value) {
+//                 calcController.updateCalculationType(value ?? '');
+//               },
+//               icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//             )),
+//
+//         Gap(20.h * SurveyUIUtils.sizeFactor),
+//
+//         // Dynamic content based on selected calculation type
+//         Obx(() => _buildDynamicContent(calcController)),
+//
+//         Gap(32.h * SurveyUIUtils.sizeFactor),
+//         SurveyUIUtils.buildNavigationButtons(controller),
+//       ],
+//     );
+//   }
+//
+//   Widget _buildDynamicContent(CalculationController calcController) {
+//     if (calcController.selectedCalculationType.value.isEmpty) {
+//       return Container();
+//     }
+//
+//     switch (calcController.selectedCalculationType.value) {
+//       case 'Hddkayam':
+//         return _buildHddkayamFields(calcController);
+//       case 'Stomach':
+//         return _buildStomachFields(calcController);
+//       case 'Non-agricultural':
+//         return _buildNonAgriculturalFields(calcController);
+//       case 'Counting by number of knots':
+//         return _buildKnotsCountingFields(calcController);
+//       case 'Integration calculation':
+//         return _buildIntegrationCalculationFields(calcController);
+//       default:
+//         return Container();
+//     }
+//   }
+//
+//   // ================ COMMON COMPONENTS ================
+//
+//   Widget _buildEntryCard({
+//     required CalculationController calcController,
+//     required int index,
+//     required Widget child,
+//     required VoidCallback onMarkCorrect,
+//     required VoidCallback onDelete,
+//     required String entryType,
+//   }) {
+//     return Container(
+//       margin: EdgeInsets.only(bottom: 16.h * SurveyUIUtils.sizeFactor),
+//       padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         borderRadius: BorderRadius.circular(12.r),
+//         border: Border.all(
+//           color: Colors.grey.shade200,
+//           width: 1,
+//         ),
+//         boxShadow: [
+//           BoxShadow(
+//             color: Colors.grey.shade100,
+//             blurRadius: 4,
+//             offset: Offset(0, 2),
+//           ),
+//         ],
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           // Card Header
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Text(
+//                 '$entryType Entry ${index + 1}',
+//                 style: TextStyle(
+//                   fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//                   fontWeight: FontWeight.w600,
+//                   color: SetuColors.primaryGreen,
+//                 ),
+//               ),
+//               Row(
+//                 children: [
+//                   // Check Button
+//                   InkWell(
+//                     onTap: onMarkCorrect,
+//                     child: Container(
+//                       padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+//                       decoration: BoxDecoration(
+//                         color: Colors.green,
+//                         borderRadius: BorderRadius.circular(6.r),
+//                       ),
+//                       child: Icon(
+//                         PhosphorIcons.check(PhosphorIconsStyle.regular),
+//                         color: Colors.white,
+//                         size: 16.sp * SurveyUIUtils.sizeFactor,
+//                       ),
+//                     ),
+//                   ),
+//                   Gap(8.w * SurveyUIUtils.sizeFactor),
+//                   // Delete Button
+//                   InkWell(
+//                     onTap: onDelete,
+//                     child: Container(
+//                       padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+//                       decoration: BoxDecoration(
+//                         color: Colors.red,
+//                         borderRadius: BorderRadius.circular(6.r),
+//                       ),
+//                       child: Icon(
+//                         PhosphorIcons.trash(PhosphorIconsStyle.regular),
+//                         color: Colors.white,
+//                         size: 16.sp * SurveyUIUtils.sizeFactor,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           child,
+//         ],
+//       ),
+//     );
+//   }
+//
+//   Widget _buildEntryList({
+//     required String title,
+//     required List<dynamic> entries,
+//     required Widget Function(int index) itemBuilder,
+//     required VoidCallback onAddMore,
+//   }) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SurveyUIUtils.buildTranslatableText(
+//           text: title,
+//           style: TextStyle(
+//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontWeight: FontWeight.w600,
+//             color: SetuColors.primaryGreen,
+//           ),
+//         ),
+//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//         // Dynamic Entries
+//         Obx(() => Column(
+//               children: [
+//                 for (int i = 0; i < entries.length; i++) itemBuilder(i),
+//               ],
+//             )),
+//
+//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//         // Add More Button
+//         InkWell(
+//           onTap: onAddMore,
+//           child: Container(
+//             padding: EdgeInsets.symmetric(
+//               horizontal: 16.w * SurveyUIUtils.sizeFactor,
+//               vertical: 12.h * SurveyUIUtils.sizeFactor,
+//             ),
+//             decoration: BoxDecoration(
+//               border: Border.all(
+//                 color: SetuColors.primaryGreen,
+//                 width: 1,
+//               ),
+//               borderRadius: BorderRadius.circular(8.r),
+//               color: SetuColors.primaryGreen.withOpacity(0.05),
+//             ),
+//             child: Row(
+//               mainAxisAlignment: MainAxisAlignment.center,
+//               children: [
+//                 Icon(
+//                   PhosphorIcons.plus(PhosphorIconsStyle.regular),
+//                   color: SetuColors.primaryGreen,
+//                   size: 20.sp * SurveyUIUtils.sizeFactor,
+//                 ),
+//                 Gap(8.w * SurveyUIUtils.sizeFactor),
+//                 SurveyUIUtils.buildTranslatableText(
+//                   text: 'Add Another Entry',
+//                   style: TextStyle(
+//                     fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+//                     color: SetuColors.primaryGreen,
+//                     fontWeight: FontWeight.w500,
+//                   ),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   // ================ HDKAYAM SECTION ================
+//
+//   Widget _buildHddkayamFields(CalculationController calcController) {
+//     return _buildEntryList(
+//       title: 'Hddkayam Calculation Details',
+//       entries: calcController.hddkayamEntries,
+//       onAddMore: calcController.addHddkayamEntry,
+//       itemBuilder: (index) => _buildHddkayamCard(calcController, index),
+//     );
+//   }
+//
+//   Widget _buildHddkayamCard(CalculationController calcController, int index) {
+//     final entry = calcController.hddkayamEntries[index];
+//     return _buildEntryCard(
+//       calcController: calcController,
+//       index: index,
+//       onMarkCorrect: () => calcController.markHddkayamEntryCorrect(index),
+//       onDelete: () => calcController.removeHddkayamEntry(index),
+//       entryType: 'Hddkayam',
+//       child: Column(
+//         children: [
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['ctSurveyController'],
+//             label: 'CT Survey No.',
+//             hint: 'Enter CT Survey No.',
+//             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateHddkayamEntry(
+//                 index, 'ctSurveyNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           SurveyUIUtils.buildDropdownField(
+//             label: 'CT Survey/TP No.',
+//             value: entry['selectedCTSurvey'] ?? '',
+//             items: calcController.ctSurveyOptions,
+//             onChanged: (value) => calcController.updateHddkayamEntry(
+//                 index, 'selectedCTSurvey', value),
+//             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaController'],
+//             label: 'Area',
+//             hint: 'Enter area',
+//             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+//             onChanged: (value) =>
+//                 calcController.updateHddkayamEntry(index, 'area', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaSqmController'],
+//             label: 'Area (sq.m.)',
+//             hint: 'Enter area in square meters',
+//             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//             keyboardType: TextInputType.numberWithOptions(decimal: true),
+//             onChanged: (value) =>
+//                 calcController.updateHddkayamEntry(index, 'areaSqm', value),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+// // ================ STOMACH SECTION ================
+//
+//   Widget _buildStomachFields(CalculationController calcController) {
+//     return _buildEntryList(
+//       title: 'Stomach Calculation Details',
+//       entries: calcController.stomachEntries,
+//       onAddMore: calcController.addStomachEntry,
+//       itemBuilder: (index) => _buildStomachCard(calcController, index),
+//     );
+//   }
+//
+//   Widget _buildStomachCard(CalculationController calcController, int index) {
+//     final entry = calcController.stomachEntries[index];
+//     return _buildEntryCard(
+//       calcController: calcController,
+//       index: index,
+//       onMarkCorrect: () => calcController.markStomachEntryCorrect(index),
+//       onDelete: () => calcController.removeStomachEntry(index),
+//       entryType: 'Stomach',
+//       child: Column(
+//         children: [
+//           // Survey Number field (similar to CT Survey No. in Hddkayam)
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['surveyNumberController'],
+//             label: 'Survey No.',
+//             hint: 'Enter Survey No.',
+//             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+//             onChanged: (value) =>
+//                 calcController.updateStomachEntry(index, 'surveyNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Measurement Type dropdown (similar to CT Survey/TP No. dropdown)
+//           SurveyUIUtils.buildDropdownField(
+//             label: 'Measurement Type *',
+//             value: entry['selectedMeasurementType'] ?? '',
+//             items: calcController.measurementTypeOptions,
+//             onChanged: (value) => calcController.updateStomachEntry(
+//                 index, 'selectedMeasurementType', value),
+//             icon: PhosphorIcons.ruler(PhosphorIconsStyle.regular),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Total Area field (similar to Area in Hddkayam)
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['totalAreaController'],
+//             label: 'Total Area',
+//             hint: 'Enter total area',
+//             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+//             keyboardType: TextInputType.numberWithOptions(decimal: true),
+//             onChanged: (value) =>
+//                 calcController.updateStomachEntry(index, 'totalArea', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Calculated Area field (similar to Area (sq.m.) in Hddkayam)
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['calculatedAreaController'],
+//             label: 'Calculated Area (sq.m.)',
+//             hint: 'Enter calculated area in square meters',
+//             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//             keyboardType: TextInputType.numberWithOptions(decimal: true),
+//             onChanged: (value) => calcController.updateStomachEntry(
+//                 index, 'calculatedArea', value),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   // ================ OTHER CALCULATION TYPES ================
+//
+//   Widget _buildNonAgriculturalFields(CalculationController calcController) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SurveyUIUtils.buildTranslatableText(
+//           text: 'Non-Agricultural Land Details',
+//           style: TextStyle(
+//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontWeight: FontWeight.w600,
+//             color: SetuColors.primaryGreen,
+//           ),
+//         ),
+//
+//       ],
+//     );
+//   }
+//
+//   Widget _buildKnotsCountingFields(CalculationController calcController) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SurveyUIUtils.buildTranslatableText(
+//           text: 'Knots Counting Method',
+//           style: TextStyle(
+//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontWeight: FontWeight.w600,
+//             color: SetuColors.primaryGreen,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+//
+//   Widget _buildIntegrationCalculationFields(
+//       CalculationController calcController) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         SurveyUIUtils.buildTranslatableText(
+//           text: 'Integration Calculation',
+//           style: TextStyle(
+//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontWeight: FontWeight.w600,
+//             color: SetuColors.primaryGreen,
+//           ),
+//         ),
+//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//       ],
+//     );
+//   }
+// }
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,9 +460,8 @@ class CalculationInformation extends StatelessWidget {
   Widget build(BuildContext context) {
     final subSteps = controller.stepConfigurations[2] ?? ['calculation'];
 
-    // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildCalculationInput(); // Fallback
+      return _buildCalculationInput();
     }
 
     final currentField = subSteps[currentSubStep];
@@ -38,7 +475,6 @@ class CalculationInformation extends StatelessWidget {
   }
 
   Widget _buildCalculationInput() {
-    // Get or create calculation controller
     final calcController = Get.put(CalculationController(), tag: 'calculation');
 
     return Column(
@@ -93,12 +529,106 @@ class CalculationInformation extends StatelessWidget {
     }
   }
 
-  Widget _buildHddkayamFields(CalculationController calcController) {
+  // ================ COMMON COMPONENTS ================
+
+  Widget _buildEntryCard({
+    required CalculationController calcController,
+    required int index,
+    required Widget child,
+    required VoidCallback onMarkCorrect,
+    required VoidCallback onDelete,
+    required String entryType,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 16.h * SurveyUIUtils.sizeFactor),
+      padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(
+          color: Colors.grey.shade200,
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade100,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Card Header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '$entryType Entry ${index + 1}',
+                style: TextStyle(
+                  fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+                  fontWeight: FontWeight.w600,
+                  color: SetuColors.primaryGreen,
+                ),
+              ),
+              Row(
+                children: [
+                  // Check Button
+                  InkWell(
+                    onTap: onMarkCorrect,
+                    child: Container(
+                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Icon(
+                        PhosphorIcons.check(PhosphorIconsStyle.regular),
+                        color: Colors.white,
+                        size: 16.sp * SurveyUIUtils.sizeFactor,
+                      ),
+                    ),
+                  ),
+                  Gap(8.w * SurveyUIUtils.sizeFactor),
+                  // Delete Button
+                  InkWell(
+                    onTap: onDelete,
+                    child: Container(
+                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6.r),
+                      ),
+                      child: Icon(
+                        PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                        color: Colors.white,
+                        size: 16.sp * SurveyUIUtils.sizeFactor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+          child,
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEntryList({
+    required String title,
+    required List<dynamic> entries,
+    required Widget Function(int index) itemBuilder,
+    required VoidCallback onAddMore,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SurveyUIUtils.buildTranslatableText(
-          text: 'Hddkayam Calculation Details',
+          text: title,
           style: TextStyle(
             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
             fontWeight: FontWeight.w600,
@@ -107,22 +637,18 @@ class CalculationInformation extends StatelessWidget {
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
 
-        // Dynamic Entries Cards
+        // Dynamic Entries
         Obx(() => Column(
           children: [
-            ...calcController.hddkayamEntries.asMap().entries.map((entry) {
-              int index = entry.key;
-              var rowData = entry.value;
-              return _buildHddkayamCard(calcController, index, rowData);
-            }).toList(),
+            for (int i = 0; i < entries.length; i++) itemBuilder(i),
           ],
         )),
 
         Gap(16.h * SurveyUIUtils.sizeFactor),
 
-        // Add More Information Button
+        // Add More Button
         InkWell(
-          onTap: () => calcController.addHddkayamEntry(),
+          onTap: onAddMore,
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: 16.w * SurveyUIUtils.sizeFactor,
@@ -146,7 +672,7 @@ class CalculationInformation extends StatelessWidget {
                 ),
                 Gap(8.w * SurveyUIUtils.sizeFactor),
                 SurveyUIUtils.buildTranslatableText(
-                  text: 'Fill in more information',
+                  text: 'Add Another Entry',
                   style: TextStyle(
                     fontSize: 14.sp * SurveyUIUtils.sizeFactor,
                     color: SetuColors.primaryGreen,
@@ -161,258 +687,425 @@ class CalculationInformation extends StatelessWidget {
     );
   }
 
-  Widget _buildHddkayamCard(CalculationController calcController, int index, Map<String, dynamic> rowData) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h * SurveyUIUtils.sizeFactor),
-      padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: Colors.grey.shade200,
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade100,
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
+  // ================ HDKAYAM SECTION ================
+
+  Widget _buildHddkayamFields(CalculationController calcController) {
+    return _buildEntryList(
+      title: 'Hddkayam Calculation Details',
+      entries: calcController.hddkayamEntries,
+      onAddMore: calcController.addHddkayamEntry,
+      itemBuilder: (index) => _buildHddkayamCard(calcController, index),
+    );
+  }
+
+  Widget _buildHddkayamCard(CalculationController calcController, int index) {
+    final entry = calcController.hddkayamEntries[index];
+    return _buildEntryCard(
+      calcController: calcController,
+      index: index,
+      onMarkCorrect: () => calcController.markHddkayamEntryCorrect(index),
+      onDelete: () => calcController.removeHddkayamEntry(index),
+      entryType: 'Hddkayam',
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Card Header with Entry Number and Actions
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Entry ${index + 1}',
-                style: TextStyle(
-                  fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-                  fontWeight: FontWeight.w600,
-                  color: SetuColors.primaryGreen,
-                ),
-              ),
-              Row(
-                children: [
-                  // Check Button
-                  InkWell(
-                    onTap: () => calcController.markHddkayamEntryCorrect(index),
-                    child: Container(
-                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: Icon(
-                        PhosphorIcons.check(PhosphorIconsStyle.regular),
-                        color: Colors.white,
-                        size: 16.sp * SurveyUIUtils.sizeFactor,
-                      ),
-                    ),
-                  ),
-                  Gap(8.w * SurveyUIUtils.sizeFactor),
-                  // Delete Button
-                  InkWell(
-                    onTap: () => calcController.removeHddkayamEntry(index),
-                    child: Container(
-                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(6.r),
-                      ),
-                      child: Icon(
-                        PhosphorIcons.trash(PhosphorIconsStyle.regular),
-                        color: Colors.white,
-                        size: 16.sp * SurveyUIUtils.sizeFactor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // CT Survey Number Input Field
           SurveyUIUtils.buildTextFormField(
-            controller: rowData['ctSurveyController'],
+            controller: entry['ctSurveyController'],
             label: 'CT Survey No.',
             hint: 'Enter CT Survey No.',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateHddkayamEntry(index, 'ctSurveyNumber', value),
+            onChanged: (value) => calcController.updateHddkayamEntry(
+                index, 'ctSurveyNumber', value),
           ),
-
           Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // CT Survey/TP No. Dropdown
           SurveyUIUtils.buildDropdownField(
             label: 'CT Survey/TP No.',
-            value: rowData['selectedCTSurvey'] ?? '',
+            value: entry['selectedCTSurvey'] ?? '',
             items: calcController.ctSurveyOptions,
-            onChanged: (value) => calcController.updateHddkayamEntry(index, 'selectedCTSurvey', value),
+            onChanged: (value) => calcController.updateHddkayamEntry(
+                index, 'selectedCTSurvey', value),
             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
           ),
-
           Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Area Input Field
           SurveyUIUtils.buildTextFormField(
-            controller: rowData['areaController'],
+            controller: entry['areaController'],
             label: 'Area',
             hint: 'Enter area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateHddkayamEntry(index, 'area', value),
+            onChanged: (value) =>
+                calcController.updateHddkayamEntry(index, 'area', value),
           ),
-
           Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Area (sq.m.) Input Field
           SurveyUIUtils.buildTextFormField(
-            controller: rowData['areaSqmController'],
+            controller: entry['areaSqmController'],
             label: 'Area (sq.m.)',
             hint: 'Enter area in square meters',
             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => calcController.updateHddkayamEntry(index, 'areaSqm', value),
+            onChanged: (value) =>
+                calcController.updateHddkayamEntry(index, 'areaSqm', value),
           ),
         ],
       ),
     );
   }
 
+// ================ STOMACH SECTION ================
+
   Widget _buildStomachFields(CalculationController calcController) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildTranslatableText(
-          text: 'Stomach Calculation Details',
-          style: TextStyle(
-            fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-            fontWeight: FontWeight.w600,
-            color: SetuColors.primaryGreen,
-          ),
-        ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Measurement Type
-        Obx(() => SurveyUIUtils.buildDropdownField(
-          label: 'Measurement Type',
-          value: calcController.measurementType.value,
-          items: ['Square meters', 'Square feet', 'Acres'],
-          onChanged: (value) => calcController.measurementType.value = value ?? '',
-          icon: PhosphorIcons.ruler(PhosphorIconsStyle.regular),
-        )),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Total Area
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.totalAreaController,
-          label: 'Total Area',
-          hint: 'Enter total area',
-          icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-        ),
-      ],
+    return _buildEntryList(
+      title: 'Stomach Calculation Details',
+      entries: calcController.stomachEntries,
+      onAddMore: calcController.addStomachEntry,
+      itemBuilder: (index) => _buildStomachCard(calcController, index),
     );
   }
+
+  Widget _buildStomachCard(CalculationController calcController, int index) {
+    final entry = calcController.stomachEntries[index];
+    return _buildEntryCard(
+      calcController: calcController,
+      index: index,
+      onMarkCorrect: () => calcController.markStomachEntryCorrect(index),
+      onDelete: () => calcController.removeStomachEntry(index),
+      entryType: 'Stomach',
+      child: Column(
+        children: [
+          // Survey Number field (similar to CT Survey No. in Hddkayam)
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['surveyNumberController'],
+            label: 'Survey No.',
+            hint: 'Enter Survey No.',
+            icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+            onChanged: (value) =>
+                calcController.updateStomachEntry(index, 'surveyNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Measurement Type dropdown (similar to CT Survey/TP No. dropdown)
+          SurveyUIUtils.buildDropdownField(
+            label: 'Measurement Type *',
+            value: entry['selectedMeasurementType'] ?? '',
+            items: calcController.measurementTypeOptions,
+            onChanged: (value) => calcController.updateStomachEntry(
+                index, 'selectedMeasurementType', value),
+            icon: PhosphorIcons.ruler(PhosphorIconsStyle.regular),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Total Area field (similar to Area in Hddkayam)
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['totalAreaController'],
+            label: 'Total Area',
+            hint: 'Enter total area',
+            icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) =>
+                calcController.updateStomachEntry(index, 'totalArea', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Calculated Area field (similar to Area (sq.m.) in Hddkayam)
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['calculatedAreaController'],
+            label: 'Calculated Area (sq.m.)',
+            hint: 'Enter calculated area in square meters',
+            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) => calcController.updateStomachEntry(
+                index, 'calculatedArea', value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ================ OTHER CALCULATION TYPES ================
+
+// ================ NON-AGRICULTURAL SECTION ================
 
   Widget _buildNonAgriculturalFields(CalculationController calcController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildTranslatableText(
-          text: 'Non-Agricultural Land Details',
-          style: TextStyle(
-            fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-            fontWeight: FontWeight.w600,
-            color: SetuColors.primaryGreen,
-          ),
-        ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
 
-        // Land Type
-        Obx(() => SurveyUIUtils.buildDropdownField(
-          label: 'Land Type',
-          value: calcController.landType.value,
-          items: ['Residential', 'Commercial', 'Industrial', 'Institutional'],
-          onChanged: (value) => calcController.landType.value = value ?? '',
-          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-        )),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Plot Number
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.plotNumberController,
-          label: 'Plot Number',
-          hint: 'Enter plot number',
-          icon: PhosphorIcons.hash(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.text,
-        ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Built-up Area
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.builtUpAreaController,
-          label: 'Built-up Area (sq ft)',
-          hint: 'Enter built-up area',
-          icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+        // Entry list with table-like structure
+        _buildEntryList(
+          title: 'Survey number / Group No. to be used for non-agricultural census. Fill in as per your 7/12.',
+          entries: calcController.nonAgriculturalEntries,
+          onAddMore: calcController.addNonAgriculturalEntry,
+          itemBuilder: (index) => _buildNonAgriculturalCard(calcController, index),
         ),
       ],
     );
   }
+
+  Widget _buildNonAgriculturalCard(CalculationController calcController, int index) {
+    final entry = calcController.nonAgriculturalEntries[index];
+    return _buildEntryCard(
+      calcController: calcController,
+      index: index,
+      onMarkCorrect: () => calcController.markNonAgriculturalEntryCorrect(index),
+      onDelete: () => calcController.removeNonAgriculturalEntry(index),
+      entryType: 'Non-Agricultural',
+      child: Column(
+        children: [
+          // Order Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['orderNumberController'],
+            label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+            hint: 'Enter order number',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateNonAgriculturalEntry(
+                index, 'orderNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Order Date field
+          SurveyUIUtils.buildDatePickerField(
+            controller: entry['orderDateController'],
+            label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+            hint: 'dd-mm-yyyy',
+            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Order date is required';
+              }
+              return null;
+            },
+            onDateSelected: (DateTime selectedDate) {
+              calcController.updateNonAgriculturalEntry(
+                  index, 'orderDate', selectedDate.toString());
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Scheme Order Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['schemeOrderNumberController'],
+            label: 'Order number of the scheme approved by the competent authority *',
+            hint: 'Enter scheme order number',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateNonAgriculturalEntry(
+                index, 'schemeOrderNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Appointment Date field
+          SurveyUIUtils.buildDatePickerField(
+            controller: entry['appointmentDateController'],
+            label: 'Date of the order of appointment approved by the competent authority *',
+            hint: 'dd-mm-yyyy',
+            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Appointment date is required';
+              }
+              return null;
+            },
+            onDateSelected: (DateTime selectedDate) {
+              calcController.updateNonAgriculturalEntry(
+                  index, 'appointmentDate', selectedDate.toString());
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Survey Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['surveyNumberController'],
+            label: 'Survey No./Group No.',
+            hint: 'Enter Survey No./Group No.',
+            icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateNonAgriculturalEntry(
+                index, 'surveyNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Survey Type Dropdown
+          SurveyUIUtils.buildDropdownField(
+            label: 'Survey No./Group No.',
+            value: entry['selectedSurveyType'] ?? '',
+            items: calcController.surveyTypeOptions,
+            onChanged: (value) => calcController.updateNonAgriculturalEntry(
+                index, 'selectedSurveyType', value),
+            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaController'],
+            label: 'Area',
+            hint: 'Enter area',
+            icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+            onChanged: (value) =>
+                calcController.updateNonAgriculturalEntry(index, 'area', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area in Hectares field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaHectaresController'],
+            label: 'Area (hectares sq.m.)',
+            hint: 'Enter area in hectares',
+            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) => calcController.updateNonAgriculturalEntry(
+                index, 'areaHectares', value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ================ KNOTS COUNTING SECTION ================
 
   Widget _buildKnotsCountingFields(CalculationController calcController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Title
         SurveyUIUtils.buildTranslatableText(
-          text: 'Knots Counting Method',
+          text: 'Fill in the survey number/group number to be counted by gunthewari as per your 7/12.',
           style: TextStyle(
-            fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-            fontWeight: FontWeight.w600,
+            fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+            fontWeight: FontWeight.w500,
             color: SetuColors.primaryGreen,
           ),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
 
-        // Number of Knots
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.knotsCountController,
-          label: 'Number of Knots',
-          hint: 'Enter total knots count',
-          icon: PhosphorIcons.dotsSix(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.number,
+        Gap(24.h * SurveyUIUtils.sizeFactor),
+
+        // Entry list with table-like structure
+        _buildEntryList(
+          title: 'Knots Counting Method Details',
+          entries: calcController.knotsCountingEntries,
+          onAddMore: calcController.addKnotsCountingEntry,
+          itemBuilder: (index) => _buildKnotsCountingCard(calcController, index),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Knot Spacing
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.knotSpacingController,
-          label: 'Knot Spacing (meters)',
-          hint: 'Enter spacing between knots',
-          icon: PhosphorIcons.arrowsHorizontal(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-        ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Calculation Method
-        Obx(() => SurveyUIUtils.buildDropdownField(
-          label: 'Calculation Method',
-          value: calcController.calculationMethod.value,
-          items: ['Linear', 'Grid', 'Triangular'],
-          onChanged: (value) => calcController.calculationMethod.value = value ?? '',
-          icon: PhosphorIcons.triangle(PhosphorIconsStyle.regular),
-        )),
       ],
     );
   }
 
-  Widget _buildIntegrationCalculationFields(CalculationController calcController) {
+  Widget _buildKnotsCountingCard(CalculationController calcController, int index) {
+    final entry = calcController.knotsCountingEntries[index];
+    return _buildEntryCard(
+      calcController: calcController,
+      index: index,
+      onMarkCorrect: () => calcController.markKnotsCountingEntryCorrect(index),
+      onDelete: () => calcController.removeKnotsCountingEntry(index),
+      entryType: 'Knots Counting',
+      child: Column(
+        children: [
+          // Order Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['orderNumberController'],
+            label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+            hint: 'Enter order number',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateKnotsCountingEntry(
+                index, 'orderNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Order Date field
+          SurveyUIUtils.buildDatePickerField(
+            controller: entry['orderDateController'],
+            label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+            hint: 'dd-mm-yyyy',
+            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Order date is required';
+              }
+              return null;
+            },
+            onDateSelected: (DateTime selectedDate) {
+              calcController.updateKnotsCountingEntry(
+                  index, 'orderDate', selectedDate.toString());
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Scheme Order Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['schemeOrderNumberController'],
+            label: 'Order number of the scheme approved by the competent authority *',
+            hint: 'Enter scheme order number',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateKnotsCountingEntry(
+                index, 'schemeOrderNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Appointment Date field
+          SurveyUIUtils.buildDatePickerField(
+            controller: entry['appointmentDateController'],
+            label: 'Date of the order of appointment approved by the competent authority *',
+            hint: 'dd-mm-yyyy',
+            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Appointment date is required';
+              }
+              return null;
+            },
+            onDateSelected: (DateTime selectedDate) {
+              calcController.updateKnotsCountingEntry(
+                  index, 'appointmentDate', selectedDate.toString());
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Survey Number field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['surveyNumberController'],
+            label: 'Survey No./Group No.',
+            hint: 'Enter Survey No./Group No.',
+            icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateKnotsCountingEntry(
+                index, 'surveyNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Survey Type Dropdown
+          SurveyUIUtils.buildDropdownField(
+            label: 'Survey No./Group No.',
+            value: entry['selectedSurveyType'] ?? '',
+            items: calcController.surveyTypeOptions,
+            onChanged: (value) => calcController.updateKnotsCountingEntry(
+                index, 'selectedSurveyType', value),
+            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaController'],
+            label: 'Area',
+            hint: 'Enter area',
+            icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+            onChanged: (value) =>
+                calcController.updateKnotsCountingEntry(index, 'area', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area in Hectares field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaHectaresController'],
+            label: 'Area (hectares sq.m.)',
+            hint: 'Enter area in hectares',
+            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) => calcController.updateKnotsCountingEntry(
+                index, 'areaHectares', value),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIntegrationCalculationFields(
+      CalculationController calcController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -425,37 +1118,7 @@ class CalculationInformation extends StatelessWidget {
           ),
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Integration Type
-        Obx(() => SurveyUIUtils.buildDropdownField(
-          label: 'Integration Type',
-          value: calcController.integrationType.value,
-          items: ['Simpson\'s Rule', 'Trapezoidal Rule', 'Planimeter'],
-          onChanged: (value) => calcController.integrationType.value = value ?? '',
-          icon: PhosphorIcons.function(PhosphorIconsStyle.regular),
-        )),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Base Line
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.baseLineController,
-          label: 'Base Line (meters)',
-          hint: 'Enter base line measurement',
-          icon: PhosphorIcons.lineSegment(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-        ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
-
-        // Number of Ordinates
-        SurveyUIUtils.buildTextFormField(
-          controller: calcController.ordinatesController,
-          label: 'Number of Ordinates',
-          hint: 'Enter number of ordinates',
-          icon: PhosphorIcons.chartLine(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.number,
-        ),
       ],
     );
   }
 }
-

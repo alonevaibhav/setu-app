@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
@@ -96,6 +97,229 @@ class SurveyUIUtils {
           ),
         ],
       ],
+    );
+  }
+
+
+  /// Calendar Date Picker Field
+  static Widget buildDatePickerField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    String? Function(String?)? validator,
+    String sourceLanguage = 'en',
+    String? errorText,
+    DateTime? initialDate,
+    DateTime? firstDate,
+    DateTime? lastDate,
+    String dateFormat = 'dd/MM/yyyy',
+    ValueChanged<DateTime>? onDateSelected,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildTranslatableText(
+          text: label,
+          style: GoogleFonts.poppins(
+            fontSize: 16.sp * sizeFactor,
+            fontWeight: FontWeight.w600,
+            color: SetuColors.textPrimary,
+          ),
+          sourceLanguage: sourceLanguage,
+        ),
+        Gap(8.h * sizeFactor),
+        GetBuilder<TranslationController>(
+          builder: (translationController) {
+            return FutureBuilder<String>(
+              future: _getTranslatedText(hint, sourceLanguage),
+              builder: (context, snapshot) {
+                final translatedHint = snapshot.data ?? hint;
+
+                return TextFormField(
+                  controller: controller,
+                  readOnly: true,
+                  style: GoogleFonts.poppins(fontSize: 20.sp * sizeFactor),
+                  validator: validator,
+                  onTap: () async {
+                    final selectedDate = await _showCustomDatePicker(
+                      context: context,
+                      initialDate: initialDate ?? DateTime.now(),
+                      firstDate: firstDate ?? DateTime(1900),
+                      lastDate: lastDate ?? DateTime(2100),
+                    );
+
+                    if (selectedDate != null) {
+                      controller.text =
+                          DateFormat(dateFormat).format(selectedDate);
+                      if (onDateSelected != null) {
+                        onDateSelected(selectedDate);
+                      }
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: translatedHint,
+                    prefixIcon: Icon(icon,
+                        color: SetuColors.primaryGreen,
+                        size: 20.w * sizeFactor),
+                    suffixIcon: Icon(
+                      PhosphorIcons.caretDown(PhosphorIconsStyle.regular),
+                      color: SetuColors.textSecondary,
+                      size: 16.w * sizeFactor,
+                    ),
+                    filled: true,
+                    fillColor: SetuColors.background,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r * sizeFactor),
+                      borderSide: BorderSide(
+                          color: SetuColors.lightGreen.withOpacity(0.3)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r * sizeFactor),
+                      borderSide: BorderSide(
+                          color: SetuColors.lightGreen.withOpacity(0.3)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r * sizeFactor),
+                      borderSide:
+                      BorderSide(color: SetuColors.primaryGreen, width: 2),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r * sizeFactor),
+                      borderSide: BorderSide(color: SetuColors.error, width: 1),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12.r * sizeFactor),
+                      borderSide: BorderSide(color: SetuColors.error, width: 2),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16.w * sizeFactor,
+                        vertical: 16.h * sizeFactor),
+                    errorText: errorText,
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  /// Custom Date Picker with attractive design
+  static Future<DateTime?> _showCustomDatePicker({
+    required BuildContext context,
+    required DateTime initialDate,
+    required DateTime firstDate,
+    required DateTime lastDate,
+  }) async {
+    return showDialog<DateTime>(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: 350.w * sizeFactor,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.r * sizeFactor),
+              boxShadow: [
+                BoxShadow(
+                  color: SetuColors.primaryGreen.withOpacity(0.1),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Container(
+                  padding: EdgeInsets.all(20.w * sizeFactor),
+                  decoration: BoxDecoration(
+                    color: SetuColors.primaryGreen.withOpacity(0.1),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20.r * sizeFactor),
+                      topRight: Radius.circular(20.r * sizeFactor),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        PhosphorIcons.calendar(PhosphorIconsStyle.fill),
+                        color: SetuColors.primaryGreen,
+                        size: 24.w * sizeFactor,
+                      ),
+                      Gap(12.w * sizeFactor),
+                      Text(
+                        'Select Date',
+                        style: GoogleFonts.poppins(
+                          fontSize: 18.sp * sizeFactor,
+                          fontWeight: FontWeight.w600,
+                          color: SetuColors.primaryGreen,
+                        ),
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: () => Navigator.of(context).pop(),
+                        borderRadius: BorderRadius.circular(20.r * sizeFactor),
+                        child: Container(
+                          padding: EdgeInsets.all(8.w * sizeFactor),
+                          child: Icon(
+                            Icons.close,
+                            color: SetuColors.textSecondary,
+                            size: 20.w * sizeFactor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // Calendar
+                Padding(
+                  padding: EdgeInsets.all(20.w * sizeFactor),
+                  child: Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: SetuColors.primaryGreen,
+                        onPrimary: Colors.white,
+                        surface: Colors.white,
+                        onSurface: SetuColors.textPrimary,
+                      ),
+                      textTheme: TextTheme(
+                        headlineSmall: GoogleFonts.poppins(
+                          fontSize: 20.sp * sizeFactor,
+                          fontWeight: FontWeight.w600,
+                          color: SetuColors.textPrimary,
+                        ),
+                        bodyLarge: GoogleFonts.poppins(
+                          fontSize: 14.sp * sizeFactor,
+                          color: SetuColors.textPrimary,
+                        ),
+                        bodyMedium: GoogleFonts.poppins(
+                          fontSize: 12.sp * sizeFactor,
+                          color: SetuColors.textSecondary,
+                        ),
+                      ),
+                    ),
+                    child: CalendarDatePicker(
+                      initialDate: initialDate,
+                      firstDate: firstDate,
+                      lastDate: lastDate,
+                      onDateChanged: (DateTime date) {
+                        Navigator.of(context).pop(date);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
