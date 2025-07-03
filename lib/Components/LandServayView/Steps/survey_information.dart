@@ -1,3 +1,5 @@
+//
+//
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:get/get.dart';
@@ -50,14 +52,14 @@
 //
 //         // Calculation Type Dropdown
 //         Obx(() => SurveyUIUtils.buildDropdownField(
-//               label: 'Calculation type *',
-//               value: calcController.selectedCalculationType.value,
-//               items: calcController.calculationTypes,
-//               onChanged: (value) {
-//                 calcController.updateCalculationType(value ?? '');
-//               },
-//               icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-//             )),
+//           label: 'Calculation type *',
+//           value: calcController.selectedCalculationType.value,
+//           items: calcController.calculationTypes,
+//           onChanged: (value) {
+//             calcController.updateCalculationType(value ?? '');
+//           },
+//           icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//         )),
 //
 //         Gap(20.h * SurveyUIUtils.sizeFactor),
 //
@@ -201,10 +203,10 @@
 //
 //         // Dynamic Entries
 //         Obx(() => Column(
-//               children: [
-//                 for (int i = 0; i < entries.length; i++) itemBuilder(i),
-//               ],
-//             )),
+//           children: [
+//             for (int i = 0; i < entries.length; i++) itemBuilder(i),
+//           ],
+//         )),
 //
 //         Gap(16.h * SurveyUIUtils.sizeFactor),
 //
@@ -381,38 +383,287 @@
 //     );
 //   }
 //
-//   // ================ OTHER CALCULATION TYPES ================
+//
+// // ================ NON-AGRICULTURAL SECTION ================
 //
 //   Widget _buildNonAgriculturalFields(CalculationController calcController) {
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildTranslatableText(
-//           text: 'Non-Agricultural Land Details',
-//           style: TextStyle(
-//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-//             fontWeight: FontWeight.w600,
-//             color: SetuColors.primaryGreen,
-//           ),
-//         ),
 //
+//         // Entry list with table-like structure
+//         _buildEntryList(
+//           title: 'Survey number / Group No. to be used for non-agricultural census. Fill in as per your 7/12.',
+//           entries: calcController.nonAgriculturalEntries,
+//           onAddMore: calcController.addNonAgriculturalEntry,
+//           itemBuilder: (index) => _buildNonAgriculturalCard(calcController, index),
+//         ),
 //       ],
 //     );
 //   }
+//
+//   Widget _buildNonAgriculturalCard(CalculationController calcController, int index) {
+//     final entry = calcController.nonAgriculturalEntries[index];
+//     return _buildEntryCard(
+//       calcController: calcController,
+//       index: index,
+//       onMarkCorrect: () => calcController.markNonAgriculturalEntryCorrect(index),
+//       onDelete: () => calcController.removeNonAgriculturalEntry(index),
+//       entryType: 'Non-Agricultural',
+//       child: Column(
+//         children: [
+//           // Order Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['orderNumberController'],
+//             label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+//             hint: 'Enter order number',
+//             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateNonAgriculturalEntry(
+//                 index, 'orderNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Order Date field
+//           SurveyUIUtils.buildDatePickerField(
+//             controller: entry['orderDateController'],
+//             label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+//             hint: 'dd-mm-yyyy',
+//             icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+//             validator: (value) {
+//               if (value == null || value.trim().isEmpty) {
+//                 return 'Order date is required';
+//               }
+//               return null;
+//             },
+//             onDateSelected: (DateTime selectedDate) {
+//               calcController.updateNonAgriculturalEntry(
+//                   index, 'orderDate', selectedDate.toString());
+//             },
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Scheme Order Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['schemeOrderNumberController'],
+//             label: 'Order number of the scheme approved by the competent authority *',
+//             hint: 'Enter scheme order number',
+//             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateNonAgriculturalEntry(
+//                 index, 'schemeOrderNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Appointment Date field
+//           SurveyUIUtils.buildDatePickerField(
+//             controller: entry['appointmentDateController'],
+//             label: 'Date of the order of appointment approved by the competent authority *',
+//             hint: 'dd-mm-yyyy',
+//             icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+//             validator: (value) {
+//               if (value == null || value.trim().isEmpty) {
+//                 return 'Appointment date is required';
+//               }
+//               return null;
+//             },
+//             onDateSelected: (DateTime selectedDate) {
+//               calcController.updateNonAgriculturalEntry(
+//                   index, 'appointmentDate', selectedDate.toString());
+//             },
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Survey Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['surveyNumberController'],
+//             label: 'Survey No./Group No.',
+//             hint: 'Enter Survey No./Group No.',
+//             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateNonAgriculturalEntry(
+//                 index, 'surveyNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Survey Type Dropdown
+//           SurveyUIUtils.buildDropdownField(
+//             label: 'Survey No./Group No.',
+//             value: entry['selectedSurveyType'] ?? '',
+//             items: calcController.surveyTypeOptions,
+//             onChanged: (value) => calcController.updateNonAgriculturalEntry(
+//                 index, 'selectedSurveyType', value),
+//             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Area field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaController'],
+//             label: 'Area',
+//             hint: 'Enter area',
+//             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+//             onChanged: (value) =>
+//                 calcController.updateNonAgriculturalEntry(index, 'area', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Area in Hectares field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaHectaresController'],
+//             label: 'Area (hectares sq.m.)',
+//             hint: 'Enter area in hectares',
+//             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//             keyboardType: TextInputType.numberWithOptions(decimal: true),
+//             onChanged: (value) => calcController.updateNonAgriculturalEntry(
+//                 index, 'areaHectares', value),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   // ================ KNOTS COUNTING SECTION ================
 //
 //   Widget _buildKnotsCountingFields(CalculationController calcController) {
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
+//         // Title
 //         SurveyUIUtils.buildTranslatableText(
-//           text: 'Knots Counting Method',
+//           text: 'Fill in the survey number/group number to be counted by gunthewari as per your 7/12.',
 //           style: TextStyle(
-//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-//             fontWeight: FontWeight.w600,
+//             fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+//             fontWeight: FontWeight.w500,
 //             color: SetuColors.primaryGreen,
 //           ),
 //         ),
+//
+//         Gap(24.h * SurveyUIUtils.sizeFactor),
+//
+//         // Entry list with table-like structure
+//         _buildEntryList(
+//           title: 'Knots Counting Method Details',
+//           entries: calcController.knotsCountingEntries,
+//           onAddMore: calcController.addKnotsCountingEntry,
+//           itemBuilder: (index) => _buildKnotsCountingCard(calcController, index),
+//         ),
 //       ],
+//     );
+//   }
+//
+//   Widget _buildKnotsCountingCard(CalculationController calcController, int index) {
+//     final entry = calcController.knotsCountingEntries[index];
+//     return _buildEntryCard(
+//       calcController: calcController,
+//       index: index,
+//       onMarkCorrect: () => calcController.markKnotsCountingEntryCorrect(index),
+//       onDelete: () => calcController.removeKnotsCountingEntry(index),
+//       entryType: 'Knots Counting',
+//       child: Column(
+//         children: [
+//           // Order Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['orderNumberController'],
+//             label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+//             hint: 'Enter order number',
+//             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateKnotsCountingEntry(
+//                 index, 'orderNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Order Date field
+//           SurveyUIUtils.buildDatePickerField(
+//             controller: entry['orderDateController'],
+//             label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+//             hint: 'dd-mm-yyyy',
+//             icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+//             validator: (value) {
+//               if (value == null || value.trim().isEmpty) {
+//                 return 'Order date is required';
+//               }
+//               return null;
+//             },
+//             onDateSelected: (DateTime selectedDate) {
+//               calcController.updateKnotsCountingEntry(
+//                   index, 'orderDate', selectedDate.toString());
+//             },
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Scheme Order Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['schemeOrderNumberController'],
+//             label: 'Order number of the scheme approved by the competent authority *',
+//             hint: 'Enter scheme order number',
+//             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateKnotsCountingEntry(
+//                 index, 'schemeOrderNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Appointment Date field
+//           SurveyUIUtils.buildDatePickerField(
+//             controller: entry['appointmentDateController'],
+//             label: 'Date of the order of appointment approved by the competent authority *',
+//             hint: 'dd-mm-yyyy',
+//             icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+//             validator: (value) {
+//               if (value == null || value.trim().isEmpty) {
+//                 return 'Appointment date is required';
+//               }
+//               return null;
+//             },
+//             onDateSelected: (DateTime selectedDate) {
+//               calcController.updateKnotsCountingEntry(
+//                   index, 'appointmentDate', selectedDate.toString());
+//             },
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Survey Number field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['surveyNumberController'],
+//             label: 'Survey No./Group No.',
+//             hint: 'Enter Survey No./Group No.',
+//             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+//             onChanged: (value) => calcController.updateKnotsCountingEntry(
+//                 index, 'surveyNumber', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Survey Type Dropdown
+//           SurveyUIUtils.buildDropdownField(
+//             label: 'Survey No./Group No.',
+//             value: entry['selectedSurveyType'] ?? '',
+//             items: calcController.surveyTypeOptions,
+//             onChanged: (value) => calcController.updateKnotsCountingEntry(
+//                 index, 'selectedSurveyType', value),
+//             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Area field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaController'],
+//             label: 'Area',
+//             hint: 'Enter area',
+//             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+//             onChanged: (value) =>
+//                 calcController.updateKnotsCountingEntry(index, 'area', value),
+//           ),
+//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//
+//           // Area in Hectares field
+//           SurveyUIUtils.buildTextFormField(
+//             controller: entry['areaHectaresController'],
+//             label: 'Area (hectares sq.m.)',
+//             hint: 'Enter area in hectares',
+//             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+//             keyboardType: TextInputType.numberWithOptions(decimal: true),
+//             onChanged: (value) => calcController.updateKnotsCountingEntry(
+//                 index, 'areaHectares', value),
+//           ),
+//         ],
+//       ),
 //     );
 //   }
 //
@@ -436,6 +687,8 @@
 // }
 
 
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -443,6 +696,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
+import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/step_three_controller.dart';
 
@@ -819,7 +1073,6 @@ class CalculationInformation extends StatelessWidget {
     );
   }
 
-  // ================ OTHER CALCULATION TYPES ================
 
 // ================ NON-AGRICULTURAL SECTION ================
 
@@ -827,6 +1080,61 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Order Number field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.orderNumberController, // Single controller for all entries
+          label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+          hint: 'Enter order number',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateOrderNumber(value),
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Order Date field - OUTSIDE the entry list
+        SurveyUIUtils.buildDatePickerField(
+          controller: calcController.orderDateController,
+          label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            calcController.updateOrderDate(selectedDate);
+          },
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Scheme Order Number field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.schemeOrderNumberController,
+          label: 'Order number of the scheme approved by the competent authority *',
+          hint: 'Enter scheme order number',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateSchemeOrderNumber(value),
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Appointment Date field - OUTSIDE the entry list
+        SurveyUIUtils.buildDatePickerField(
+          controller: calcController.appointmentDateController,
+          label: 'Date of the order of appointment approved by the competent authority *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Appointment date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            calcController.updateAppointmentDate(selectedDate);
+          },
+        ),
+        Gap(24.h * SurveyUIUtils.sizeFactor),
 
         // Entry list with table-like structure
         _buildEntryList(
@@ -849,66 +1157,6 @@ class CalculationInformation extends StatelessWidget {
       entryType: 'Non-Agricultural',
       child: Column(
         children: [
-          // Order Number field
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['orderNumberController'],
-            label: 'Order number or number of the letter issued for counting approved by the competent authority *',
-            hint: 'Enter order number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateNonAgriculturalEntry(
-                index, 'orderNumber', value),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Order Date field
-          SurveyUIUtils.buildDatePickerField(
-            controller: entry['orderDateController'],
-            label: 'Date of order passed by the competent authority or date of letter issued for counting *',
-            hint: 'dd-mm-yyyy',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Order date is required';
-              }
-              return null;
-            },
-            onDateSelected: (DateTime selectedDate) {
-              calcController.updateNonAgriculturalEntry(
-                  index, 'orderDate', selectedDate.toString());
-            },
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Scheme Order Number field
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['schemeOrderNumberController'],
-            label: 'Order number of the scheme approved by the competent authority *',
-            hint: 'Enter scheme order number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateNonAgriculturalEntry(
-                index, 'schemeOrderNumber', value),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Appointment Date field
-          SurveyUIUtils.buildDatePickerField(
-            controller: entry['appointmentDateController'],
-            label: 'Date of the order of appointment approved by the competent authority *',
-            hint: 'dd-mm-yyyy',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Appointment date is required';
-              }
-              return null;
-            },
-            onDateSelected: (DateTime selectedDate) {
-              calcController.updateNonAgriculturalEntry(
-                  index, 'appointmentDate', selectedDate.toString());
-            },
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
           // Survey Number field
           SurveyUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
@@ -963,21 +1211,65 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title
-        SurveyUIUtils.buildTranslatableText(
-          text: 'Fill in the survey number/group number to be counted by gunthewari as per your 7/12.',
-          style: TextStyle(
-            fontSize: 14.sp * SurveyUIUtils.sizeFactor,
-            fontWeight: FontWeight.w500,
-            color: SetuColors.primaryGreen,
-          ),
+        // Order Number field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.orderNumberController, // Single controller for all entries
+          label: 'Order number or number of the letter issued for counting approved by the competent authority *',
+          hint: 'Enter order number',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateOrderNumber(value),
         ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
 
+        // Order Date field - OUTSIDE the entry list
+        SurveyUIUtils.buildDatePickerField(
+          controller: calcController.orderDateController,
+          label: 'Date of order passed by the competent authority or date of letter issued for counting *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            calcController.updateOrderDate(selectedDate);
+          },
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Scheme Order Number field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.schemeOrderNumberController,
+          label: 'Order number of the scheme approved by the competent authority *',
+          hint: 'Enter scheme order number',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateSchemeOrderNumber(value),
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Appointment Date field - OUTSIDE the entry list
+        SurveyUIUtils.buildDatePickerField(
+          controller: calcController.appointmentDateController,
+          label: 'Date of the order of appointment approved by the competent authority *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Appointment date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            calcController.updateAppointmentDate(selectedDate);
+          },
+        ),
         Gap(24.h * SurveyUIUtils.sizeFactor),
 
         // Entry list with table-like structure
         _buildEntryList(
-          title: 'Knots Counting Method Details',
+          title: 'Fill in the survey number/group number to be counted by gunthewari as per your 7/12.',
           entries: calcController.knotsCountingEntries,
           onAddMore: calcController.addKnotsCountingEntry,
           itemBuilder: (index) => _buildKnotsCountingCard(calcController, index),
@@ -996,66 +1288,6 @@ class CalculationInformation extends StatelessWidget {
       entryType: 'Knots Counting',
       child: Column(
         children: [
-          // Order Number field
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['orderNumberController'],
-            label: 'Order number or number of the letter issued for counting approved by the competent authority *',
-            hint: 'Enter order number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateKnotsCountingEntry(
-                index, 'orderNumber', value),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Order Date field
-          SurveyUIUtils.buildDatePickerField(
-            controller: entry['orderDateController'],
-            label: 'Date of order passed by the competent authority or date of letter issued for counting *',
-            hint: 'dd-mm-yyyy',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Order date is required';
-              }
-              return null;
-            },
-            onDateSelected: (DateTime selectedDate) {
-              calcController.updateKnotsCountingEntry(
-                  index, 'orderDate', selectedDate.toString());
-            },
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Scheme Order Number field
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['schemeOrderNumberController'],
-            label: 'Order number of the scheme approved by the competent authority *',
-            hint: 'Enter scheme order number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) => calcController.updateKnotsCountingEntry(
-                index, 'schemeOrderNumber', value),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Appointment Date field
-          SurveyUIUtils.buildDatePickerField(
-            controller: entry['appointmentDateController'],
-            label: 'Date of the order of appointment approved by the competent authority *',
-            hint: 'dd-mm-yyyy',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Appointment date is required';
-              }
-              return null;
-            },
-            onDateSelected: (DateTime selectedDate) {
-              calcController.updateKnotsCountingEntry(
-                  index, 'appointmentDate', selectedDate.toString());
-            },
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
           // Survey Number field
           SurveyUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
@@ -1104,21 +1336,125 @@ class CalculationInformation extends StatelessWidget {
     );
   }
 
-  Widget _buildIntegrationCalculationFields(
-      CalculationController calcController) {
+  // ================ INTEGRATION CALCULATION SECTION ================
+  Widget _buildIntegrationCalculationFields(CalculationController calcController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildTranslatableText(
-          text: 'Integration Calculation',
-          style: TextStyle(
-            fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-            fontWeight: FontWeight.w600,
-            color: SetuColors.primaryGreen,
-          ),
+        // Number of merger order field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.mergerOrderNumberController,
+          label: 'Number of the merger order approved by the competent authority *',
+          hint: 'Enter merger order number',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateMergerOrderNumber(value),
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Date of merger order field - OUTSIDE the entry list
+        SurveyUIUtils.buildDatePickerField(
+          controller: calcController.mergerOrderDateController,
+          label: 'Date of merger order approved by the competent authority *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Merger order date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            calcController.updateMergerOrderDate(selectedDate);
+          },
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Old Merger No. field - OUTSIDE the entry list
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.oldMergerNumberController,
+          label: 'Old Merger No. *',
+          hint: 'Enter old merger number',
+          icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateOldMergerNumber(value),
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
+
+        // Map of incorporation order field - OUTSIDE the entry list
+        ImagePickerUtil.buildFileUploadField(
+          label: 'Map of the order of incorporation approved by the competent authority *',
+          hint: 'Upload images or documents',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          uploadedFiles: calcController.incorporationOrderFiles,
+          onFilesSelected: (files) => calcController.incorporationOrderFiles.assignAll(files),
+        ),
+        Gap(24.h * SurveyUIUtils.sizeFactor),
+
+        // Entry list with table-like structure
+        _buildEntryList(
+          title: 'CT Survey/TP No. Information',
+          entries: calcController.integrationCalculationEntries,
+          onAddMore: calcController.addIntegrationCalculationEntry,
+          itemBuilder: (index) => _buildIntegrationCalculationCard(calcController, index),
+        ),
       ],
+    );
+  }
+
+  Widget _buildIntegrationCalculationCard(CalculationController calcController, int index) {
+    final entry = calcController.integrationCalculationEntries[index];
+    return _buildEntryCard(
+      calcController: calcController,
+      index: index,
+      onMarkCorrect: () => calcController.markIntegrationCalculationEntryCorrect(index),
+      onDelete: () => calcController.removeIntegrationCalculationEntry(index),
+      entryType: 'Integration Calculation',
+      child: Column(
+        children: [
+          // CT Survey/TP No. field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['ctSurveyController'],
+            label: 'CT Survey/TP No.',
+            hint: 'Enter CT Survey/TP No.',
+            icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateIntegrationCalculationEntry(
+                index, 'ctSurveyNumber', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // CT Survey/TP No. Dropdown
+          SurveyUIUtils.buildDropdownField(
+            label: 'CT Survey/TP No.',
+            value: entry['selectedCTSurvey'] ?? '',
+            items: calcController.ctSurveyOptions,
+            onChanged: (value) => calcController.updateIntegrationCalculationEntry(
+                index, 'selectedCTSurvey', value),
+            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaController'],
+            label: 'Area',
+            hint: 'Enter area',
+            icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+            onChanged: (value) =>
+                calcController.updateIntegrationCalculationEntry(index, 'area', value),
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          // Area in sq.m. field
+          SurveyUIUtils.buildTextFormField(
+            controller: entry['areaSqmController'],
+            label: 'Area (sq.m.)',
+            hint: 'Enter area in square meters',
+            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            onChanged: (value) => calcController.updateIntegrationCalculationEntry(
+                index, 'areaSqm', value),
+          ),
+        ],
+      ),
     );
   }
 }
