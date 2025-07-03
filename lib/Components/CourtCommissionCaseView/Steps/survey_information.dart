@@ -5,7 +5,7 @@
 // import 'package:get/get.dart';
 // import 'package:gap/gap.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
-// import 'package:setuapp/Components/LandServayView/Steps/ZLandAcquisitionUIUtils.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/ZCourtCommissionCaseUIUtils.dart';
 // import '../../../Constants/color_constant.dart';
 // import '../Controller/main_controller.dart';
 // import '../Controller/step_three_controller.dart';
@@ -44,14 +44,14 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         CourtCommissionCaseUIUtils.buildStepHeader(
 //           'Group No./ Survey No./ C. T. Survey No. /T. P. No. Information about the area',
 //           'Select calculation type and provide required information',
 //         ),
-//         Gap(24.h * SurveyUIUtils.sizeFactor),
+//         Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //         // Calculation Type Dropdown
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
 //           label: 'Calculation type *',
 //           value: calcController.selectedCalculationType.value,
 //           items: calcController.calculationTypes,
@@ -61,13 +61,13 @@
 //           icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
 //         )),
 //
-//         Gap(20.h * SurveyUIUtils.sizeFactor),
+//         Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //         // Dynamic content based on selected calculation type
 //         Obx(() => _buildDynamicContent(calcController)),
 //
-//         Gap(32.h * SurveyUIUtils.sizeFactor),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         Gap(32.h * CourtCommissionCaseUIUtils.sizeFactor),
+//         CourtCommissionCaseUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -104,8 +104,8 @@
 //     required String entryType,
 //   }) {
 //     return Container(
-//       margin: EdgeInsets.only(bottom: 16.h * SurveyUIUtils.sizeFactor),
-//       padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+//       margin: EdgeInsets.only(bottom: 16.h * CourtCommissionCaseUIUtils.sizeFactor),
+//       padding: EdgeInsets.all(16.w * CourtCommissionCaseUIUtils.sizeFactor),
 //       decoration: BoxDecoration(
 //         color: Colors.white,
 //         borderRadius: BorderRadius.circular(12.r),
@@ -131,7 +131,7 @@
 //               Text(
 //                 '$entryType Entry ${index + 1}',
 //                 style: TextStyle(
-//                   fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//                   fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //                   fontWeight: FontWeight.w600,
 //                   color: SetuColors.primaryGreen,
 //                 ),
@@ -142,7 +142,7 @@
 //                   InkWell(
 //                     onTap: onMarkCorrect,
 //                     child: Container(
-//                       padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+//                       padding: EdgeInsets.all(8.w * CourtCommissionCaseUIUtils.sizeFactor),
 //                       decoration: BoxDecoration(
 //                         color: Colors.green,
 //                         borderRadius: BorderRadius.circular(6.r),
@@ -150,16 +150,16 @@
 //                       child: Icon(
 //                         PhosphorIcons.check(PhosphorIconsStyle.regular),
 //                         color: Colors.white,
-//                         size: 16.sp * SurveyUIUtils.sizeFactor,
+//                         size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //                       ),
 //                     ),
 //                   ),
-//                   Gap(8.w * SurveyUIUtils.sizeFactor),
+//                   Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
 //                   // Delete Button
 //                   InkWell(
 //                     onTap: onDelete,
 //                     child: Container(
-//                       padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+//                       padding: EdgeInsets.all(8.w * CourtCommissionCaseUIUtils.sizeFactor),
 //                       decoration: BoxDecoration(
 //                         color: Colors.red,
 //                         borderRadius: BorderRadius.circular(6.r),
@@ -167,7 +167,7 @@
 //                       child: Icon(
 //                         PhosphorIcons.trash(PhosphorIconsStyle.regular),
 //                         color: Colors.white,
-//                         size: 16.sp * SurveyUIUtils.sizeFactor,
+//                         size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //                       ),
 //                     ),
 //                   ),
@@ -175,7 +175,7 @@
 //               ),
 //             ],
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //           child,
 //         ],
 //       ),
@@ -191,15 +191,15 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildTranslatableText(
+//         CourtCommissionCaseUIUtils.buildTranslatableText(
 //           text: title,
 //           style: TextStyle(
-//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //             fontWeight: FontWeight.w600,
 //             color: SetuColors.primaryGreen,
 //           ),
 //         ),
-//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//         Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //         // Dynamic Entries
 //         Obx(() => Column(
@@ -208,15 +208,15 @@
 //           ],
 //         )),
 //
-//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//         Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //         // Add More Button
 //         InkWell(
 //           onTap: onAddMore,
 //           child: Container(
 //             padding: EdgeInsets.symmetric(
-//               horizontal: 16.w * SurveyUIUtils.sizeFactor,
-//               vertical: 12.h * SurveyUIUtils.sizeFactor,
+//               horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
+//               vertical: 12.h * CourtCommissionCaseUIUtils.sizeFactor,
 //             ),
 //             decoration: BoxDecoration(
 //               border: Border.all(
@@ -232,13 +232,13 @@
 //                 Icon(
 //                   PhosphorIcons.plus(PhosphorIconsStyle.regular),
 //                   color: SetuColors.primaryGreen,
-//                   size: 20.sp * SurveyUIUtils.sizeFactor,
+//                   size: 20.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //                 ),
-//                 Gap(8.w * SurveyUIUtils.sizeFactor),
-//                 SurveyUIUtils.buildTranslatableText(
+//                 Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+//                 CourtCommissionCaseUIUtils.buildTranslatableText(
 //                   text: 'Add Another Entry',
 //                   style: TextStyle(
-//                     fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+//                     fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //                     color: SetuColors.primaryGreen,
 //                     fontWeight: FontWeight.w500,
 //                   ),
@@ -272,7 +272,7 @@
 //       entryType: 'Hddkayam',
 //       child: Column(
 //         children: [
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['ctSurveyController'],
 //             label: 'CT Survey No.',
 //             hint: 'Enter CT Survey No.',
@@ -280,8 +280,8 @@
 //             onChanged: (value) => calcController.updateHddkayamEntry(
 //                 index, 'ctSurveyNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
-//           SurveyUIUtils.buildDropdownField(
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+//           CourtCommissionCaseUIUtils.buildDropdownField(
 //             label: 'CT Survey/TP No.',
 //             value: entry['selectedCTSurvey'] ?? '',
 //             items: calcController.ctSurveyOptions,
@@ -289,8 +289,8 @@
 //                 index, 'selectedCTSurvey', value),
 //             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
-//           SurveyUIUtils.buildTextFormField(
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaController'],
 //             label: 'Area',
 //             hint: 'Enter area',
@@ -298,8 +298,8 @@
 //             onChanged: (value) =>
 //                 calcController.updateHddkayamEntry(index, 'area', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
-//           SurveyUIUtils.buildTextFormField(
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaSqmController'],
 //             label: 'Area (sq.m.)',
 //             hint: 'Enter area in square meters',
@@ -335,7 +335,7 @@
 //       child: Column(
 //         children: [
 //           // Survey Number field (similar to CT Survey No. in Hddkayam)
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['surveyNumberController'],
 //             label: 'Survey No.',
 //             hint: 'Enter Survey No.',
@@ -343,10 +343,10 @@
 //             onChanged: (value) =>
 //                 calcController.updateStomachEntry(index, 'surveyNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Measurement Type dropdown (similar to CT Survey/TP No. dropdown)
-//           SurveyUIUtils.buildDropdownField(
+//           CourtCommissionCaseUIUtils.buildDropdownField(
 //             label: 'Measurement Type *',
 //             value: entry['selectedMeasurementType'] ?? '',
 //             items: calcController.measurementTypeOptions,
@@ -354,10 +354,10 @@
 //                 index, 'selectedMeasurementType', value),
 //             icon: PhosphorIcons.ruler(PhosphorIconsStyle.regular),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Total Area field (similar to Area in Hddkayam)
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['totalAreaController'],
 //             label: 'Total Area',
 //             hint: 'Enter total area',
@@ -366,10 +366,10 @@
 //             onChanged: (value) =>
 //                 calcController.updateStomachEntry(index, 'totalArea', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Calculated Area field (similar to Area (sq.m.) in Hddkayam)
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['calculatedAreaController'],
 //             label: 'Calculated Area (sq.m.)',
 //             hint: 'Enter calculated area in square meters',
@@ -413,7 +413,7 @@
 //       child: Column(
 //         children: [
 //           // Order Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['orderNumberController'],
 //             label: 'Order number or number of the letter issued for counting approved by the competent authority *',
 //             hint: 'Enter order number',
@@ -421,10 +421,10 @@
 //             onChanged: (value) => calcController.updateNonAgriculturalEntry(
 //                 index, 'orderNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Order Date field
-//           SurveyUIUtils.buildDatePickerField(
+//           CourtCommissionCaseUIUtils.buildDatePickerField(
 //             controller: entry['orderDateController'],
 //             label: 'Date of order passed by the competent authority or date of letter issued for counting *',
 //             hint: 'dd-mm-yyyy',
@@ -440,10 +440,10 @@
 //                   index, 'orderDate', selectedDate.toString());
 //             },
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Scheme Order Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['schemeOrderNumberController'],
 //             label: 'Order number of the scheme approved by the competent authority *',
 //             hint: 'Enter scheme order number',
@@ -451,10 +451,10 @@
 //             onChanged: (value) => calcController.updateNonAgriculturalEntry(
 //                 index, 'schemeOrderNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Appointment Date field
-//           SurveyUIUtils.buildDatePickerField(
+//           CourtCommissionCaseUIUtils.buildDatePickerField(
 //             controller: entry['appointmentDateController'],
 //             label: 'Date of the order of appointment approved by the competent authority *',
 //             hint: 'dd-mm-yyyy',
@@ -470,10 +470,10 @@
 //                   index, 'appointmentDate', selectedDate.toString());
 //             },
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Survey Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['surveyNumberController'],
 //             label: 'Survey No./Group No.',
 //             hint: 'Enter Survey No./Group No.',
@@ -481,10 +481,10 @@
 //             onChanged: (value) => calcController.updateNonAgriculturalEntry(
 //                 index, 'surveyNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Survey Type Dropdown
-//           SurveyUIUtils.buildDropdownField(
+//           CourtCommissionCaseUIUtils.buildDropdownField(
 //             label: 'Survey No./Group No.',
 //             value: entry['selectedSurveyType'] ?? '',
 //             items: calcController.surveyTypeOptions,
@@ -492,10 +492,10 @@
 //                 index, 'selectedSurveyType', value),
 //             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Area field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaController'],
 //             label: 'Area',
 //             hint: 'Enter area',
@@ -503,10 +503,10 @@
 //             onChanged: (value) =>
 //                 calcController.updateNonAgriculturalEntry(index, 'area', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Area in Hectares field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaHectaresController'],
 //             label: 'Area (hectares sq.m.)',
 //             hint: 'Enter area in hectares',
@@ -527,16 +527,16 @@
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
 //         // Title
-//         SurveyUIUtils.buildTranslatableText(
+//         CourtCommissionCaseUIUtils.buildTranslatableText(
 //           text: 'Fill in the survey number/group number to be counted by gunthewari as per your 7/12.',
 //           style: TextStyle(
-//             fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+//             fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //             fontWeight: FontWeight.w500,
 //             color: SetuColors.primaryGreen,
 //           ),
 //         ),
 //
-//         Gap(24.h * SurveyUIUtils.sizeFactor),
+//         Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //         // Entry list with table-like structure
 //         _buildEntryList(
@@ -560,7 +560,7 @@
 //       child: Column(
 //         children: [
 //           // Order Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['orderNumberController'],
 //             label: 'Order number or number of the letter issued for counting approved by the competent authority *',
 //             hint: 'Enter order number',
@@ -568,10 +568,10 @@
 //             onChanged: (value) => calcController.updateKnotsCountingEntry(
 //                 index, 'orderNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Order Date field
-//           SurveyUIUtils.buildDatePickerField(
+//           CourtCommissionCaseUIUtils.buildDatePickerField(
 //             controller: entry['orderDateController'],
 //             label: 'Date of order passed by the competent authority or date of letter issued for counting *',
 //             hint: 'dd-mm-yyyy',
@@ -587,10 +587,10 @@
 //                   index, 'orderDate', selectedDate.toString());
 //             },
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Scheme Order Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['schemeOrderNumberController'],
 //             label: 'Order number of the scheme approved by the competent authority *',
 //             hint: 'Enter scheme order number',
@@ -598,10 +598,10 @@
 //             onChanged: (value) => calcController.updateKnotsCountingEntry(
 //                 index, 'schemeOrderNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Appointment Date field
-//           SurveyUIUtils.buildDatePickerField(
+//           CourtCommissionCaseUIUtils.buildDatePickerField(
 //             controller: entry['appointmentDateController'],
 //             label: 'Date of the order of appointment approved by the competent authority *',
 //             hint: 'dd-mm-yyyy',
@@ -617,10 +617,10 @@
 //                   index, 'appointmentDate', selectedDate.toString());
 //             },
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Survey Number field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['surveyNumberController'],
 //             label: 'Survey No./Group No.',
 //             hint: 'Enter Survey No./Group No.',
@@ -628,10 +628,10 @@
 //             onChanged: (value) => calcController.updateKnotsCountingEntry(
 //                 index, 'surveyNumber', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Survey Type Dropdown
-//           SurveyUIUtils.buildDropdownField(
+//           CourtCommissionCaseUIUtils.buildDropdownField(
 //             label: 'Survey No./Group No.',
 //             value: entry['selectedSurveyType'] ?? '',
 //             items: calcController.surveyTypeOptions,
@@ -639,10 +639,10 @@
 //                 index, 'selectedSurveyType', value),
 //             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Area field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaController'],
 //             label: 'Area',
 //             hint: 'Enter area',
@@ -650,10 +650,10 @@
 //             onChanged: (value) =>
 //                 calcController.updateKnotsCountingEntry(index, 'area', value),
 //           ),
-//           Gap(16.h * SurveyUIUtils.sizeFactor),
+//           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //
 //           // Area in Hectares field
-//           SurveyUIUtils.buildTextFormField(
+//           CourtCommissionCaseUIUtils.buildTextFormField(
 //             controller: entry['areaHectaresController'],
 //             label: 'Area (hectares sq.m.)',
 //             hint: 'Enter area in hectares',
@@ -672,15 +672,15 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildTranslatableText(
+//         CourtCommissionCaseUIUtils.buildTranslatableText(
 //           text: 'Integration Calculation',
 //           style: TextStyle(
-//             fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+//             fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
 //             fontWeight: FontWeight.w600,
 //             color: SetuColors.primaryGreen,
 //           ),
 //         ),
-//         Gap(16.h * SurveyUIUtils.sizeFactor),
+//         Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 //       ],
 //     );
 //   }
@@ -694,15 +694,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:setuapp/Components/LandSurvey%20View/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/step_three_controller.dart';
+import 'ZLandAcquisitionUIUtils.dart';
 
 class CalculationInformation extends StatelessWidget {
   final int currentSubStep;
-  final MainSurveyController controller;
+  final CourtCommissionCaseController controller;
 
   const CalculationInformation({
     Key? key,
@@ -734,14 +734,14 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        CourtCommissionCaseUIUtils.buildStepHeader(
           'Group No./ Survey No./ C. T. Survey No. /T. P. No. Information about the area',
           'Select calculation type and provide required information',
         ),
-        Gap(24.h * SurveyUIUtils.sizeFactor),
+        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Calculation Type Dropdown
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
           label: 'Calculation type *',
           value: calcController.selectedCalculationType.value,
           items: calcController.calculationTypes,
@@ -751,13 +751,13 @@ class CalculationInformation extends StatelessWidget {
           icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
         )),
 
-        Gap(20.h * SurveyUIUtils.sizeFactor),
+        Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Dynamic content based on selected calculation type
         Obx(() => _buildDynamicContent(calcController)),
 
-        Gap(32.h * SurveyUIUtils.sizeFactor),
-        SurveyUIUtils.buildNavigationButtons(controller),
+        Gap(32.h * CourtCommissionCaseUIUtils.sizeFactor),
+        CourtCommissionCaseUIUtils.buildNavigationButtons(controller),
       ],
     );
   }
@@ -794,8 +794,8 @@ class CalculationInformation extends StatelessWidget {
     required String entryType,
   }) {
     return Container(
-      margin: EdgeInsets.only(bottom: 16.h * SurveyUIUtils.sizeFactor),
-      padding: EdgeInsets.all(16.w * SurveyUIUtils.sizeFactor),
+      margin: EdgeInsets.only(bottom: 16.h * CourtCommissionCaseUIUtils.sizeFactor),
+      padding: EdgeInsets.all(16.w * CourtCommissionCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12.r),
@@ -821,7 +821,7 @@ class CalculationInformation extends StatelessWidget {
               Text(
                 '$entryType Entry ${index + 1}',
                 style: TextStyle(
-                  fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+                  fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
                   fontWeight: FontWeight.w600,
                   color: SetuColors.primaryGreen,
                 ),
@@ -832,7 +832,7 @@ class CalculationInformation extends StatelessWidget {
                   InkWell(
                     onTap: onMarkCorrect,
                     child: Container(
-                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+                      padding: EdgeInsets.all(8.w * CourtCommissionCaseUIUtils.sizeFactor),
                       decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(6.r),
@@ -840,16 +840,16 @@ class CalculationInformation extends StatelessWidget {
                       child: Icon(
                         PhosphorIcons.check(PhosphorIconsStyle.regular),
                         color: Colors.white,
-                        size: 16.sp * SurveyUIUtils.sizeFactor,
+                        size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
                       ),
                     ),
                   ),
-                  Gap(8.w * SurveyUIUtils.sizeFactor),
+                  Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
                   // Delete Button
                   InkWell(
                     onTap: onDelete,
                     child: Container(
-                      padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
+                      padding: EdgeInsets.all(8.w * CourtCommissionCaseUIUtils.sizeFactor),
                       decoration: BoxDecoration(
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(6.r),
@@ -857,7 +857,7 @@ class CalculationInformation extends StatelessWidget {
                       child: Icon(
                         PhosphorIcons.trash(PhosphorIconsStyle.regular),
                         color: Colors.white,
-                        size: 16.sp * SurveyUIUtils.sizeFactor,
+                        size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
                       ),
                     ),
                   ),
@@ -865,7 +865,7 @@ class CalculationInformation extends StatelessWidget {
               ),
             ],
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
           child,
         ],
       ),
@@ -881,15 +881,15 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildTranslatableText(
+        CourtCommissionCaseUIUtils.buildTranslatableText(
           text: title,
           style: TextStyle(
-            fontSize: 16.sp * SurveyUIUtils.sizeFactor,
+            fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
             fontWeight: FontWeight.w600,
             color: SetuColors.primaryGreen,
           ),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Dynamic Entries
         Obx(() => Column(
@@ -898,15 +898,15 @@ class CalculationInformation extends StatelessWidget {
           ],
         )),
 
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Add More Button
         InkWell(
           onTap: onAddMore,
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: 16.w * SurveyUIUtils.sizeFactor,
-              vertical: 12.h * SurveyUIUtils.sizeFactor,
+              horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
+              vertical: 12.h * CourtCommissionCaseUIUtils.sizeFactor,
             ),
             decoration: BoxDecoration(
               border: Border.all(
@@ -922,13 +922,13 @@ class CalculationInformation extends StatelessWidget {
                 Icon(
                   PhosphorIcons.plus(PhosphorIconsStyle.regular),
                   color: SetuColors.primaryGreen,
-                  size: 20.sp * SurveyUIUtils.sizeFactor,
+                  size: 20.sp * CourtCommissionCaseUIUtils.sizeFactor,
                 ),
-                Gap(8.w * SurveyUIUtils.sizeFactor),
-                SurveyUIUtils.buildTranslatableText(
+                Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                CourtCommissionCaseUIUtils.buildTranslatableText(
                   text: 'Add Another Entry',
                   style: TextStyle(
-                    fontSize: 14.sp * SurveyUIUtils.sizeFactor,
+                    fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
                     color: SetuColors.primaryGreen,
                     fontWeight: FontWeight.w500,
                   ),
@@ -962,7 +962,7 @@ class CalculationInformation extends StatelessWidget {
       entryType: 'Hddkayam',
       child: Column(
         children: [
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['ctSurveyController'],
             label: 'CT Survey No.',
             hint: 'Enter CT Survey No.',
@@ -970,8 +970,8 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateHddkayamEntry(
                 index, 'ctSurveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-          SurveyUIUtils.buildDropdownField(
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          CourtCommissionCaseUIUtils.buildDropdownField(
             label: 'CT Survey/TP No.',
             value: entry['selectedCTSurvey'] ?? '',
             items: calcController.ctSurveyOptions,
@@ -979,8 +979,8 @@ class CalculationInformation extends StatelessWidget {
                 index, 'selectedCTSurvey', value),
             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-          SurveyUIUtils.buildTextFormField(
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaController'],
             label: 'Area',
             hint: 'Enter area',
@@ -988,8 +988,8 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateHddkayamEntry(index, 'area', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-          SurveyUIUtils.buildTextFormField(
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaSqmController'],
             label: 'Area (sq.m.)',
             hint: 'Enter area in square meters',
@@ -1025,7 +1025,7 @@ class CalculationInformation extends StatelessWidget {
       child: Column(
         children: [
           // Survey Number field (similar to CT Survey No. in Hddkayam)
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
             label: 'Survey No.',
             hint: 'Enter Survey No.',
@@ -1033,10 +1033,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateStomachEntry(index, 'surveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Measurement Type dropdown (similar to CT Survey/TP No. dropdown)
-          SurveyUIUtils.buildDropdownField(
+          CourtCommissionCaseUIUtils.buildDropdownField(
             label: 'Measurement Type *',
             value: entry['selectedMeasurementType'] ?? '',
             items: calcController.measurementTypeOptions,
@@ -1044,10 +1044,10 @@ class CalculationInformation extends StatelessWidget {
                 index, 'selectedMeasurementType', value),
             icon: PhosphorIcons.ruler(PhosphorIconsStyle.regular),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Total Area field (similar to Area in Hddkayam)
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['totalAreaController'],
             label: 'Total Area',
             hint: 'Enter total area',
@@ -1056,10 +1056,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateStomachEntry(index, 'totalArea', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Calculated Area field (similar to Area (sq.m.) in Hddkayam)
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['calculatedAreaController'],
             label: 'Calculated Area (sq.m.)',
             hint: 'Enter calculated area in square meters',
@@ -1081,17 +1081,17 @@ class CalculationInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Order Number field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.orderNumberController, // Single controller for all entries
           label: 'Order number or number of the letter issued for counting approved by the competent authority *',
           hint: 'Enter order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateOrderNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Order Date field - OUTSIDE the entry list
-        SurveyUIUtils.buildDatePickerField(
+        CourtCommissionCaseUIUtils.buildDatePickerField(
           controller: calcController.orderDateController,
           label: 'Date of order passed by the competent authority or date of letter issued for counting *',
           hint: 'dd-mm-yyyy',
@@ -1106,20 +1106,20 @@ class CalculationInformation extends StatelessWidget {
             calcController.updateOrderDate(selectedDate);
           },
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Scheme Order Number field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.schemeOrderNumberController,
           label: 'Order number of the scheme approved by the competent authority *',
           hint: 'Enter scheme order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateSchemeOrderNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Appointment Date field - OUTSIDE the entry list
-        SurveyUIUtils.buildDatePickerField(
+        CourtCommissionCaseUIUtils.buildDatePickerField(
           controller: calcController.appointmentDateController,
           label: 'Date of the order of appointment approved by the competent authority *',
           hint: 'dd-mm-yyyy',
@@ -1134,7 +1134,7 @@ class CalculationInformation extends StatelessWidget {
             calcController.updateAppointmentDate(selectedDate);
           },
         ),
-        Gap(24.h * SurveyUIUtils.sizeFactor),
+        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Entry list with table-like structure
         _buildEntryList(
@@ -1158,7 +1158,7 @@ class CalculationInformation extends StatelessWidget {
       child: Column(
         children: [
           // Survey Number field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
             label: 'Survey No./Group No.',
             hint: 'Enter Survey No./Group No.',
@@ -1166,10 +1166,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateNonAgriculturalEntry(
                 index, 'surveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Survey Type Dropdown
-          SurveyUIUtils.buildDropdownField(
+          CourtCommissionCaseUIUtils.buildDropdownField(
             label: 'Survey No./Group No.',
             value: entry['selectedSurveyType'] ?? '',
             items: calcController.surveyTypeOptions,
@@ -1177,10 +1177,10 @@ class CalculationInformation extends StatelessWidget {
                 index, 'selectedSurveyType', value),
             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaController'],
             label: 'Area',
             hint: 'Enter area',
@@ -1188,10 +1188,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateNonAgriculturalEntry(index, 'area', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area in Hectares field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaHectaresController'],
             label: 'Area (hectares sq.m.)',
             hint: 'Enter area in hectares',
@@ -1212,17 +1212,17 @@ class CalculationInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Order Number field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.orderNumberController, // Single controller for all entries
           label: 'Order number or number of the letter issued for counting approved by the competent authority *',
           hint: 'Enter order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateOrderNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Order Date field - OUTSIDE the entry list
-        SurveyUIUtils.buildDatePickerField(
+        CourtCommissionCaseUIUtils.buildDatePickerField(
           controller: calcController.orderDateController,
           label: 'Date of order passed by the competent authority or date of letter issued for counting *',
           hint: 'dd-mm-yyyy',
@@ -1237,20 +1237,20 @@ class CalculationInformation extends StatelessWidget {
             calcController.updateOrderDate(selectedDate);
           },
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Scheme Order Number field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.schemeOrderNumberController,
           label: 'Order number of the scheme approved by the competent authority *',
           hint: 'Enter scheme order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateSchemeOrderNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Appointment Date field - OUTSIDE the entry list
-        SurveyUIUtils.buildDatePickerField(
+        CourtCommissionCaseUIUtils.buildDatePickerField(
           controller: calcController.appointmentDateController,
           label: 'Date of the order of appointment approved by the competent authority *',
           hint: 'dd-mm-yyyy',
@@ -1265,7 +1265,7 @@ class CalculationInformation extends StatelessWidget {
             calcController.updateAppointmentDate(selectedDate);
           },
         ),
-        Gap(24.h * SurveyUIUtils.sizeFactor),
+        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Entry list with table-like structure
         _buildEntryList(
@@ -1289,7 +1289,7 @@ class CalculationInformation extends StatelessWidget {
       child: Column(
         children: [
           // Survey Number field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
             label: 'Survey No./Group No.',
             hint: 'Enter Survey No./Group No.',
@@ -1297,10 +1297,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateKnotsCountingEntry(
                 index, 'surveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Survey Type Dropdown
-          SurveyUIUtils.buildDropdownField(
+          CourtCommissionCaseUIUtils.buildDropdownField(
             label: 'Survey No./Group No.',
             value: entry['selectedSurveyType'] ?? '',
             items: calcController.surveyTypeOptions,
@@ -1308,10 +1308,10 @@ class CalculationInformation extends StatelessWidget {
                 index, 'selectedSurveyType', value),
             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaController'],
             label: 'Area',
             hint: 'Enter area',
@@ -1319,10 +1319,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateKnotsCountingEntry(index, 'area', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area in Hectares field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaHectaresController'],
             label: 'Area (hectares sq.m.)',
             hint: 'Enter area in hectares',
@@ -1342,17 +1342,17 @@ class CalculationInformation extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Number of merger order field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.mergerOrderNumberController,
           label: 'Number of the merger order approved by the competent authority *',
           hint: 'Enter merger order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateMergerOrderNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Date of merger order field - OUTSIDE the entry list
-        SurveyUIUtils.buildDatePickerField(
+        CourtCommissionCaseUIUtils.buildDatePickerField(
           controller: calcController.mergerOrderDateController,
           label: 'Date of merger order approved by the competent authority *',
           hint: 'dd-mm-yyyy',
@@ -1367,17 +1367,17 @@ class CalculationInformation extends StatelessWidget {
             calcController.updateMergerOrderDate(selectedDate);
           },
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Old Merger No. field - OUTSIDE the entry list
-        SurveyUIUtils.buildTextFormField(
+        CourtCommissionCaseUIUtils.buildTextFormField(
           controller: calcController.oldMergerNumberController,
           label: 'Old Merger No. *',
           hint: 'Enter old merger number',
           icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateOldMergerNumber(value),
         ),
-        Gap(16.h * SurveyUIUtils.sizeFactor),
+        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Map of incorporation order field - OUTSIDE the entry list
         ImagePickerUtil.buildFileUploadField(
@@ -1387,7 +1387,7 @@ class CalculationInformation extends StatelessWidget {
           uploadedFiles: calcController.incorporationOrderFiles,
           onFilesSelected: (files) => calcController.incorporationOrderFiles.assignAll(files),
         ),
-        Gap(24.h * SurveyUIUtils.sizeFactor),
+        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
 
         // Entry list with table-like structure
         _buildEntryList(
@@ -1411,7 +1411,7 @@ class CalculationInformation extends StatelessWidget {
       child: Column(
         children: [
           // CT Survey/TP No. field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['ctSurveyController'],
             label: 'CT Survey/TP No.',
             hint: 'Enter CT Survey/TP No.',
@@ -1419,10 +1419,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateIntegrationCalculationEntry(
                 index, 'ctSurveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // CT Survey/TP No. Dropdown
-          SurveyUIUtils.buildDropdownField(
+          CourtCommissionCaseUIUtils.buildDropdownField(
             label: 'CT Survey/TP No.',
             value: entry['selectedCTSurvey'] ?? '',
             items: calcController.ctSurveyOptions,
@@ -1430,10 +1430,10 @@ class CalculationInformation extends StatelessWidget {
                 index, 'selectedCTSurvey', value),
             icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaController'],
             label: 'Area',
             hint: 'Enter area',
@@ -1441,10 +1441,10 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) =>
                 calcController.updateIntegrationCalculationEntry(index, 'area', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Area in sq.m. field
-          SurveyUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['areaSqmController'],
             label: 'Area (sq.m.)',
             hint: 'Enter area in square meters',

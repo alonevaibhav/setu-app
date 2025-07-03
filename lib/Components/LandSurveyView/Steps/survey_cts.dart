@@ -185,7 +185,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:setuapp/Components/LandSurvey%20View/Steps/survey_ui_utils.dart';
+import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/survey_cts.dart';
 

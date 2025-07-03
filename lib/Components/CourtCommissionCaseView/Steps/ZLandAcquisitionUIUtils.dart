@@ -4,15 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
 import '../../../Controller/get_translation_controller/get_translation_controller.dart';
-import '../land_acquisition_calculation_controller.dart';
-import 'package:intl/intl.dart';
+import '../Controller/main_controller.dart';
 
-class LandAqUIUtils {
-
+class CourtCommissionCaseUIUtils {
   static const double sizeFactor = 0.75; // Size constant variable
 
   /// Translatable Text Widget with proper cache handling
@@ -69,9 +68,34 @@ class LandAqUIUtils {
     );
   }
 
-  // Add this import at the top
-
-// Add these methods to your LandAqUIUtils class:
+  static Widget buildStepHeader(String title, [String? subtitle]) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildTranslatableText(
+          text: title,
+          style: GoogleFonts.poppins(
+            fontSize: 22.sp * sizeFactor,
+            fontWeight: FontWeight.w700,
+            color: SetuColors.primaryGreen,
+          ),
+          sourceLanguage: 'en',
+        ),
+        if (subtitle != null && subtitle.trim().isNotEmpty) ...[
+          Gap(6.h * sizeFactor),
+          buildTranslatableText(
+            text: subtitle,
+            style: GoogleFonts.poppins(
+              fontSize: 14.sp * sizeFactor,
+              color: SetuColors.textSecondary,
+              fontWeight: FontWeight.w400,
+            ),
+            sourceLanguage: 'en',
+          ),
+        ],
+      ],
+    );
+  }
 
   /// Calendar Date Picker Field
   static Widget buildDatePickerField({
@@ -295,41 +319,13 @@ class LandAqUIUtils {
     );
   }
 
-  static Widget buildStepHeader(String title, [String? subtitle]) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildTranslatableText(
-          text: title,
-          style: GoogleFonts.poppins(
-            fontSize: 22.sp * sizeFactor,
-            fontWeight: FontWeight.w700,
-            color: SetuColors.primaryGreen,
-          ),
-          sourceLanguage: 'en',
-        ),
-        if (subtitle != null && subtitle.trim().isNotEmpty) ...[
-          Gap(6.h * sizeFactor),
-          buildTranslatableText(
-            text: subtitle,
-            style: GoogleFonts.poppins(
-              fontSize: 14.sp * sizeFactor,
-              color: SetuColors.textSecondary,
-              fontWeight: FontWeight.w400,
-            ),
-            sourceLanguage: 'en',
-          ),
-        ],
-      ],
-    );
-  }
-
   static Widget buildTextFormField({
     required TextEditingController controller,
     required String label,
     required String hint,
     required IconData icon,
-    TextInputType keyboardType = TextInputType.text,
+    TextInputType keyboardType =
+        TextInputType.text ?? TextInputType.text, // Provide a default value,
     int maxLines = 1,
     int? maxLength,
     String? Function(String?)? validator,
@@ -418,24 +414,24 @@ class LandAqUIUtils {
     required Function(bool) onChanged,
   }) {
     return Container(
-      padding: EdgeInsets.all(16.w * LandAqUIUtils.sizeFactor),
+      padding: EdgeInsets.all(16.w * CourtCommissionCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: SetuColors.background,
-        borderRadius: BorderRadius.circular(12.r * LandAqUIUtils.sizeFactor),
+        borderRadius: BorderRadius.circular(12.r * CourtCommissionCaseUIUtils.sizeFactor),
         border: Border.all(color: SetuColors.lightGreen.withOpacity(0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LandAqUIUtils.buildTranslatableText(
+          CourtCommissionCaseUIUtils.buildTranslatableText(
             text: question,
             style: GoogleFonts.poppins(
-              fontSize: 16.sp * LandAqUIUtils.sizeFactor,
+              fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
               fontWeight: FontWeight.w600,
               color: SetuColors.textPrimary,
             ),
           ),
-          Gap(16.h * LandAqUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
           Row(
             children: [
               Expanded(
@@ -446,7 +442,7 @@ class LandAqUIUtils {
                   icon: PhosphorIcons.check(PhosphorIconsStyle.regular),
                 ),
               ),
-              Gap(12.w * LandAqUIUtils.sizeFactor),
+              Gap(12.w * CourtCommissionCaseUIUtils.sizeFactor),
               Expanded(
                 child: buildOptionButton(
                   text: 'No',
@@ -470,17 +466,17 @@ class LandAqUIUtils {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(8.r * LandAqUIUtils.sizeFactor),
+      borderRadius: BorderRadius.circular(8.r * CourtCommissionCaseUIUtils.sizeFactor),
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: 12.h * LandAqUIUtils.sizeFactor,
-          horizontal: 16.w * LandAqUIUtils.sizeFactor,
+          vertical: 12.h * CourtCommissionCaseUIUtils.sizeFactor,
+          horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
         ),
         decoration: BoxDecoration(
           color: isSelected
               ? SetuColors.primaryGreen.withOpacity(0.1)
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(8.r * LandAqUIUtils.sizeFactor),
+          borderRadius: BorderRadius.circular(8.r * CourtCommissionCaseUIUtils.sizeFactor),
           border: Border.all(
             color: isSelected
                 ? SetuColors.primaryGreen
@@ -496,13 +492,13 @@ class LandAqUIUtils {
               color: isSelected
                   ? SetuColors.primaryGreen
                   : SetuColors.textSecondary,
-              size: 18.w * LandAqUIUtils.sizeFactor,
+              size: 18.w * CourtCommissionCaseUIUtils.sizeFactor,
             ),
-            Gap(8.w * LandAqUIUtils.sizeFactor),
-            LandAqUIUtils.buildTranslatableText(
+            Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+            CourtCommissionCaseUIUtils.buildTranslatableText(
               text: text,
               style: GoogleFonts.poppins(
-                fontSize: 14.sp * LandAqUIUtils.sizeFactor,
+                fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
                 color: isSelected
                     ? SetuColors.primaryGreen
@@ -596,7 +592,7 @@ class LandAqUIUtils {
     );
   }
 
-  static Widget buildNavigationButtons(LandAcquisitionController controller) {
+  static Widget buildNavigationButtons(CourtCommissionCaseController controller) {
     return Obx(() => Row(
           children: [
             // Previous Button
@@ -604,7 +600,9 @@ class LandAqUIUtils {
                 controller.currentSubStep.value > 0)
               Expanded(
                 child: ElevatedButton(
-                  onPressed: controller.previousSubStep,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : () => controller.previousSubStep(),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: SetuColors.textSecondary,
                     padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
@@ -633,8 +631,9 @@ class LandAqUIUtils {
                   ? 1
                   : 1,
               child: ElevatedButton(
-                onPressed:
-                    controller.isLoading.value ? null : controller.nextSubStep,
+                onPressed: controller.isLoading.value
+                    ? null
+                    : () => controller.nextSubStep(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: SetuColors.primaryGreen,
                   padding: EdgeInsets.symmetric(vertical: 16.h * sizeFactor),
@@ -709,41 +708,6 @@ class LandAqUIUtils {
                   sourceLanguage: sourceLanguage,
                 ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  static Widget buildSectionHeader({
-    required String title,
-    required IconData icon,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 16.w * sizeFactor,
-        vertical: 12.h * sizeFactor,
-      ),
-      decoration: BoxDecoration(
-        color: SetuColors.primaryGreen.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8.r * sizeFactor),
-        border: Border.all(color: SetuColors.primaryGreen.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            color: SetuColors.primaryGreen,
-            size: 20.sp * sizeFactor,
-          ),
-          Gap(8.w * sizeFactor),
-          buildTranslatableText(
-            text: title,
-            style: GoogleFonts.poppins(
-              fontSize: 16.sp * sizeFactor,
-              fontWeight: FontWeight.w600,
-              color: SetuColors.primaryGreen,
             ),
           ),
         ],

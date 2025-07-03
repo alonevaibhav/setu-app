@@ -1,95 +1,36 @@
+
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class LandAcquisitionController extends GetxController {
-  // Survey Flow State
+import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
+import '../../CourtCommissionCaseView/Controller/step_three_controller.dart';
+import '../../CourtCommissionCaseView/Controller/survey_cts.dart';
+
+// Import all step controllers
+
+class CourtCommissionCaseController extends GetxController {
+  // Navigation State
   final currentStep = 0.obs;
   final currentSubStep = 0.obs;
   final isLoading = false.obs;
   final errorMessage = ''.obs;
 
-  // Form Controllers
-  final emailController = TextEditingController();
-  final addressController = TextEditingController();
-  final remarksController = TextEditingController();
-  final paymentController = TextEditingController();
+  // Step Controllers - Initialize them here
+  late final PersonalInfoController personalInfoController;
+  late final SurveyCTSController surveyCTSController;
+  late final CalculationController calculationController; // Add this line
 
-  ///------------------Start Controller ------------------///
-// Add these controllers to your LandAcquisitionController class
-  final landAcquisitionOfficerController = TextEditingController();
-  final landAcquisitionBoardController = TextEditingController();
-  final landAcquisitionOrderNumberController = TextEditingController();
-  final landAcquisitionOrderDateController = TextEditingController();
-  final issuingOfficeController = TextEditingController();
-
-  final RxList<String> landAcquisitionOrderFiles = <String>[].obs;
-  final RxList<String> proposedLandSiteMapFiles = <String>[].obs;
-  final RxList<String> kmlFiles = <String>[].obs;
-
-
-  ///------------------Survey_cts Controller  ------------------///
-
-  final surveyNumberController = TextEditingController();
-  final selectedDepartment = ''.obs;
-  final selectedDistrict = ''.obs;
-  final selectedTaluka = ''.obs;
-  final selectedVillage = ''.obs;
-  final selectedOffice = ''.obs;
-
-  void updateDepartment(String? value) {
-    if (value != null) {
-      selectedDepartment.value = value;
-    }
-  }
-
-  void updateDistrict(String? value) {
-    if (value != null) {
-      selectedDistrict.value = value;
-    }
-  }
-
-  void updateTaluka(String? value) {
-    if (value != null) {
-      selectedTaluka.value = value;
-    }
-  }
-
-  void updateVillage(String? value) {
-    if (value != null) {
-      selectedVillage.value = value;
-    }
-  }
-
-  void updateOffice(String? value) {
-    if (value != null) {
-      selectedOffice.value = value;
-    }
-  }
-
-
-// Observable boolean values for questions
-  final isHolderThemselves = Rxn<bool>();
-  final hasAuthorityOnBehalf = Rxn<bool>();
-  final hasBeenCountedBefore = Rxn<bool>();
-
-  // Dropdown Values
-  final selectedGender = ''.obs;
-  final selectedCategory = ''.obs;
-  final selectedState = ''.obs;
-  final selectedSurveyType = ''.obs;
-
-  // Validation States
-  final validationErrors = <String, String>{}.obs;
-  final isStepValid = <int, bool>{}.obs;
+  // Add more controllers as needed
 
   // Survey Data Storage
   final surveyData = Rxn<Map<String, dynamic>>();
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['land_acquisition_officer', 'land_acquisition_board', 'acquisition_order_number', 'acquisition_order_date', 'issuing_office', 'order_document_upload', 'site_map_upload', 'kml_file_upload',], // Personal Info step
+    0: ['holder_verification', 'enumeration_check'], // Personal Info step
     1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
-    2: ['remarks', 'status'], // Survey Information
+    2: ['calculation'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
     4: ['applicant', 'status'], // Applicant Information
     5: ['coowner', 'status'], // Co-owner Information
@@ -99,26 +40,27 @@ class LandAcquisitionController extends GetxController {
     9: ['payment', 'status'], // Payment
   };
 
+  // Validation States
+  final isStepValid = <int, bool>{}.obs;
+
   @override
   void onInit() {
     super.onInit();
+    _initializeControllers();
     initializeSurveyData();
     initializeValidationStates();
   }
 
+  void _initializeControllers() {
+    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
+    surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
+    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    // Initialize more controllers as needed
+  }
+
   @override
   void onClose() {
-    emailController.dispose();
-    addressController.dispose();
-    remarksController.dispose();
-    // Add these controllers to your LandAcquisitionController class
-     landAcquisitionOfficerController.dispose();
-     landAcquisitionBoardController.dispose();
-     landAcquisitionOrderNumberController.dispose();
-     landAcquisitionOrderDateController.dispose();
-    issuingOfficeController.dispose();
-    surveyNumberController.dispose();
-
+    // Controllers will be disposed automatically by GetX
     super.onClose();
   }
 
@@ -150,21 +92,50 @@ class LandAcquisitionController extends GetxController {
     return '';
   }
 
+  // Get the appropriate step controller for current step
+  GetxController get currentStepController {
+    switch (currentStep.value) {
+      case 0:
+        return personalInfoController;
+      case 1:
+        return surveyCTSController;
+      case 2: // Add this case for calculation step
+        return calculationController;
+    // Add more cases as you create more controllers
+      default:
+        return this; // Fallback to main controller
+    }
+  }
+
   // Check if current sub-step is valid
   bool get isCurrentSubStepValid {
-    final field = currentSubStepField;
-    return validateField(field);
+    final stepController = currentStepController;
+    if (stepController is StepValidationMixin) {
+      return stepController.validateCurrentSubStep(currentSubStepField);
+    }
+    return true; // Default to true if controller doesn't implement validation
   }
 
   // Check if entire main step is completed
   bool isMainStepCompleted(int step) {
     final fields = stepConfigurations[step];
     if (fields == null) return false;
-
-    for (String field in fields) {
-      if (!validateField(field)) return false;
+    GetxController? stepController;
+    switch (step) {
+      case 0:
+        stepController = personalInfoController;
+        break;
+      case 1:
+        stepController = surveyCTSController;
+        break;
+      case 2: // Add this case
+        stepController = calculationController;
+    // Add more cases
     }
-    return true;
+    if (stepController is StepValidationMixin) {
+      return stepController.isStepCompleted(fields);
+    }
+    return false;
   }
 
   // Navigation Methods
@@ -173,13 +144,14 @@ class LandAcquisitionController extends GetxController {
       _showValidationError();
       return;
     }
-
     _saveCurrentSubStepData();
+
+    // Print the current survey data to the console
+    print('Current Survey Data: ${surveyData.value}');
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
     final totalSubSteps = currentStepSubSteps?.length ?? 1;
-
     if (currentSubStep.value < totalSubSteps - 1) {
       // Move to next substep within current main step
       currentSubStep.value++;
@@ -218,7 +190,6 @@ class LandAcquisitionController extends GetxController {
           break;
         }
       }
-
       if (canNavigate || step <= currentStep.value) {
         currentStep.value = step;
         currentSubStep.value = 0;
@@ -233,76 +204,12 @@ class LandAcquisitionController extends GetxController {
     }
   }
 
-  // Validation Methods
-  bool validateField(String field) {
-    switch (field) {
-      ///------------------Start Validation ------------------///
-
-
-
-    ///------------------Survey_cts Validation ------------------///
-
-      case 'survey_number':
-        return true;
-        case 'office':
-        return true;
-        case 'village':
-        return true;
-        case 'taluka':
-        return true;
-      case 'district':
-        return true;
-      case 'department':
-        return true;
-
-
-      case 'documents':
-        return true; // Optional for now
-      case 'remarks':
-        return remarksController.text.trim().length >= 5;
-      case 'status':
-        return true; // Always valid
-      case 'images':
-        return true; // Optional
-      case 'summary':
-        return true; // Always valid
-      case 'calculation':
-        return true; // Add your calculation validation logic here
-      case 'applicant':
-        return true; // Add your applicant validation logic here
-      case 'coowner':
-        return true; // Add your co-owner validation logic here
-      case 'adjacent':
-        return true; // Add your adjacent holders validation logic here
-      case 'preview':
-        return true; // Always valid for preview
-      case 'payment':
-        return paymentController.text.trim().length >= 2; // Add your payment validation logic here
-      default:
-        return true;
-    }
-  }
-
-  String getFieldError(String field) {
-    switch (field) {
-      ///------------------Start Error ------------------///
-
-
-      case 'enumeration_check':
-        return 'Please select if this has been counted before';
-
-      case 'name':
-        return 'Name must be at least 2 characters';
-      case 'category':
-        return 'Please select your category';
-      default:
-        return 'This field is required';
-    }
-  }
-
   void _showValidationError() {
-    final field = currentSubStepField;
-    final error = getFieldError(field);
+    final stepController = currentStepController;
+    String error = 'This field is required';
+    if (stepController is StepValidationMixin) {
+      error = stepController.getFieldError(currentSubStepField);
+    }
     Get.snackbar(
       'Validation Error',
       error,
@@ -313,30 +220,16 @@ class LandAcquisitionController extends GetxController {
   }
 
   void _saveCurrentSubStepData() {
-    final field = currentSubStepField;
-    final currentData = Map<String, dynamic>.from(surveyData.value ?? {});
-
-    switch (field) {
-      case 'category':
-        currentData['category'] = selectedCategory.value;
-        break;
-      case 'address':
-        currentData['address'] = addressController.text.trim();
-        break;
-      case 'state':
-        currentData['state'] = selectedState.value;
-        break;
-      case 'surveyType':
-        currentData['surveyType'] = selectedSurveyType.value;
-        break;
-      case 'remarks':
-        currentData['remarks'] = remarksController.text.trim();
-        break;
-      case 'calculation':
-        currentData['calculation'] = 'completed'; // Add your logic here
-        break;
+    final stepController = currentStepController;
+    if (stepController is StepDataMixin) {
+      final stepData = stepController.getStepData();
+      _mergeStepData(stepData);
     }
+  }
 
+  void _mergeStepData(Map<String, dynamic> stepData) {
+    final currentData = Map<String, dynamic>.from(surveyData.value ?? {});
+    currentData.addAll(stepData);
     surveyData.value = currentData;
   }
 
@@ -376,41 +269,12 @@ class LandAcquisitionController extends GetxController {
     surveyData.value = currentData;
   }
 
-  // Update dropdown values
-  void updateGender(String? value) {
-    selectedGender.value = value ?? '';
-  }
-
-  void updateCategory(String? value) {
-    selectedCategory.value = value ?? '';
-  }
-
-  void updateState(String? value) {
-    selectedState.value = value ?? '';
-  }
-
-  void updateSurveyType(String? value) {
-    selectedSurveyType.value = value ?? '';
-  }
-
   // API Submit Method
   Future<void> submitSurvey() async {
     try {
       isLoading.value = true;
-
       // Final validation - check all required steps
-      List<int> requiredSteps = [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ]; // Add more required steps as needed
+      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       for (int step in requiredSteps) {
         if (!isMainStepCompleted(step)) {
           Get.snackbar(
@@ -422,29 +286,23 @@ class LandAcquisitionController extends GetxController {
           return;
         }
       }
-
-      // Save final data
-      _saveCurrentSubStepData();
-
+      // Save final data from all controllers
+      _saveAllStepsData();
       // Mock API call
       await Future.delayed(Duration(seconds: 2));
-
       final response = {
         'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
         'status': 'submitted',
         'timestamp': DateTime.now().toIso8601String(),
         'surveyData': surveyData.value,
       };
-
       surveyData.value = response;
-
       Get.snackbar(
         'Success',
         'Your survey has been submitted successfully',
         backgroundColor: Color(0xFF52B788),
         colorText: Colors.white,
       );
-
       // Navigate to confirmation page
       Get.toNamed('/confirmation');
     } catch (e) {
@@ -459,4 +317,31 @@ class LandAcquisitionController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  void _saveAllStepsData() {
+    // Collect data from all step controllers
+    final allControllers = [
+      personalInfoController,
+      surveyCTSController,
+      calculationController
+      // Add more controllers
+    ];
+    for (final controller in allControllers) {
+      if (controller is StepDataMixin) {
+        final stepData = controller.getStepData();
+        _mergeStepData(stepData);
+      }
+    }
+  }
+}
+
+// Mixins for step controllers to implement
+mixin StepValidationMixin on GetxController {
+  bool validateCurrentSubStep(String field);
+  bool isStepCompleted(List<String> fields);
+  String getFieldError(String field);
+}
+
+mixin StepDataMixin on GetxController {
+  Map<String, dynamic> getStepData();
 }

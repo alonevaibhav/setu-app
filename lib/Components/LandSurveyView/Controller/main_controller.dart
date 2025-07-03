@@ -363,9 +363,9 @@ import 'package:flutter/material.dart';
 
 
 
-import '../../LandSurvey View/Controller/personal_info_controller.dart';
-import '../../LandSurvey View/Controller/step_three_controller.dart';
-import '../../LandSurvey View/Controller/survey_cts.dart';
+import '../../LandSurveyView/Controller/personal_info_controller.dart';
+import '../../LandSurveyView/Controller/step_three_controller.dart';
+import '../../LandSurveyView/Controller/survey_cts.dart';
 
 
 // Import all step controllers

@@ -253,7 +253,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import 'package:setuapp/Components/LandSurvey%20View/Steps/survey_ui_utils.dart';
+import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import 'package:google_fonts/google_fonts.dart';
 

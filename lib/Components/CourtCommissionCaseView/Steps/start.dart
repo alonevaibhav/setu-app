@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
 import '../../../Constants/color_constant.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
+import 'ZLandAcquisitionUIUtils.dart';
 
 class PersonalInfoStep extends StatelessWidget {
   final int currentSubStep;
-  final MainLandAcquisitionController mainController;
+  final CourtCommissionCaseController mainController;
 
   const PersonalInfoStep({
     Key? key,
@@ -51,14 +51,14 @@ class PersonalInfoStep extends StatelessWidget {
     return Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LandAcquisitionUIUtils.buildStepHeader(
+            CourtCommissionCaseUIUtils.buildStepHeader(
               'Holder Verification',
               'Please confirm your status as the holder',
             ),
             Gap(24.h),
 
             // Question 1: Are you the holder yourself?
-            LandAcquisitionUIUtils.buildQuestionCard(
+            CourtCommissionCaseUIUtils.buildQuestionCard(
               question: 'Note: Are you the holder yourself?',
               selectedValue: controller.isHolderThemselves.value,
               onChanged: (value) {
@@ -70,7 +70,7 @@ class PersonalInfoStep extends StatelessWidget {
 
             // Conditional Question 2: Authority on behalf
             if (controller.shouldShowAuthorityQuestion) ...[
-              LandAcquisitionUIUtils.buildQuestionCard(
+              CourtCommissionCaseUIUtils.buildQuestionCard(
                 question:
                     'Note: Are you holding the authority on behalf of the applicant?/or are you applying as a competent Gunthewari Regularization/Gunthewari Planning Authority?',
                 selectedValue: controller.hasAuthorityOnBehalf.value,
@@ -93,7 +93,7 @@ class PersonalInfoStep extends StatelessWidget {
             ],
 
             Gap(32.h),
-            LandAcquisitionUIUtils.buildNavigationButtons(mainController),
+            CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
           ],
         ));
   }
@@ -102,12 +102,12 @@ class PersonalInfoStep extends StatelessWidget {
     return Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LandAcquisitionUIUtils.buildStepHeader(
+            CourtCommissionCaseUIUtils.buildStepHeader(
               'Enumeration Status',
               'Has this property been enumerated before?',
             ),
             Gap(24.h),
-            LandAcquisitionUIUtils.buildQuestionCard(
+            CourtCommissionCaseUIUtils.buildQuestionCard(
               question: 'Note: Has this been counted before?',
               selectedValue: controller.hasBeenCountedBefore.value,
               onChanged: (value) {
@@ -115,35 +115,35 @@ class PersonalInfoStep extends StatelessWidget {
               },
             ),
             Gap(32.h),
-            LandAcquisitionUIUtils.buildNavigationButtons(mainController),
+            CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
           ],
         ));
   }
 
   Widget _buildAdditionalFields() {
     return Container(
-      padding: EdgeInsets.all(16.w * LandAcquisitionUIUtils.sizeFactor),
+      padding: EdgeInsets.all(16.w * CourtCommissionCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: SetuColors.primaryGreen.withOpacity(0.05),
         borderRadius:
-            BorderRadius.circular(12.r * LandAcquisitionUIUtils.sizeFactor),
+            BorderRadius.circular(12.r * CourtCommissionCaseUIUtils.sizeFactor),
         border: Border.all(color: SetuColors.primaryGreen.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          LandAcquisitionUIUtils.buildTranslatableText(
+          CourtCommissionCaseUIUtils.buildTranslatableText(
             text: 'Power of Attorney Details',
             style: GoogleFonts.poppins(
-              fontSize: 18.sp * LandAcquisitionUIUtils.sizeFactor,
+              fontSize: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
               fontWeight: FontWeight.w700,
               color: SetuColors.primaryGreen,
             ),
           ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Power of Attorney Registration Number
-          LandAcquisitionUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: controller.poaRegistrationNumberController,
             label: 'Power of Attorney / Registration Number',
             hint: 'Enter registration number',
@@ -156,10 +156,10 @@ class PersonalInfoStep extends StatelessWidget {
               return null;
             },
           ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Power of Attorney Registration Date
-          LandAcquisitionUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: controller.poaRegistrationDateController,
             label: 'Power of Attorney Registration Date',
             hint: 'Enter registration date',
@@ -172,10 +172,10 @@ class PersonalInfoStep extends StatelessWidget {
               return null;
             },
           ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Name of the holder issuing the power of attorney
-          LandAcquisitionUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: controller.poaIssuerNameController,
             label: 'Name of the holder issuing the power of attorney',
             hint: 'Enter holder name',
@@ -188,10 +188,10 @@ class PersonalInfoStep extends StatelessWidget {
               return null;
             },
           ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Name of the holder of the Power of Attorney
-          LandAcquisitionUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: controller.poaHolderNameController,
             label: 'Name of the holder of the Power of Attorney',
             hint: 'Enter attorney holder name',
@@ -204,10 +204,10 @@ class PersonalInfoStep extends StatelessWidget {
               return null;
             },
           ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Address holding Power of Attorney
-          LandAcquisitionUIUtils.buildTextFormField(
+          CourtCommissionCaseUIUtils.buildTextFormField(
             controller: controller.poaHolderAddressController,
             label: 'Address holding Power of Attorney',
             hint: 'Enter full address',
@@ -227,7 +227,7 @@ class PersonalInfoStep extends StatelessWidget {
   }
 
   Future<void> _showAuthorityConfirmationDialog() async {
-    await LandAcquisitionUIUtils.showTranslatableDialog(
+    await CourtCommissionCaseUIUtils.showTranslatableDialog(
       context: Get.context!,
       title: 'Authority Confirmation',
       message:
