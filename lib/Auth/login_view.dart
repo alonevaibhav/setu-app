@@ -423,7 +423,7 @@ class NewLoginView extends StatelessWidget {
       width: double.infinity,
       child: OutlinedButton(
         onPressed: () {
-          Get.toNamed(AppRoutes.jsidelead , arguments: {'isSiteLead': true}
+          Get.toNamed(AppRoutes.siteLeadApplication , arguments: {'isSiteLead': true}
           ); // Also requires slash
         },
 

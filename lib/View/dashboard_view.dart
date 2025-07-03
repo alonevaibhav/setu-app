@@ -132,7 +132,8 @@ class DashboardView extends StatelessWidget {
         'color': SetuColors.success,
       },
       {
-        'icon': PhosphorIcons.clockCountdown, // Represents something pending or waiting
+        'icon': PhosphorIcons
+            .clockCountdown, // Represents something pending or waiting
         'title': 'Pending Application',
         'color': SetuColors.warning,
       },
@@ -148,7 +149,6 @@ class DashboardView extends StatelessWidget {
       },
     ];
 
-
     return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
@@ -161,7 +161,8 @@ class DashboardView extends StatelessWidget {
       itemCount: actions.length,
       itemBuilder: (context, index) {
         final action = actions[index];
-        final iconBuilder = action['icon'] as PhosphorIconData Function(PhosphorIconsStyle);
+        final iconBuilder =
+            action['icon'] as PhosphorIconData Function(PhosphorIconsStyle);
         final color = action['color'] as Color;
 
         return Container(
@@ -226,7 +227,8 @@ class DashboardView extends StatelessWidget {
         'icon': PhosphorIcons.calculator,
         'title': 'New Calculation\nApplication',
         'color': SetuColors.success,
-        'description': 'Permanent, Sub-share, Non-farm, Gunthewari & Integration'
+        'description':
+            'Permanent, Sub-share, Non-farm, Gunthewari & Integration'
       },
       {
         'icon': PhosphorIcons.mapPin,
@@ -258,7 +260,8 @@ class DashboardView extends StatelessWidget {
       children: schemes.asMap().entries.map((entry) {
         final index = entry.key;
         final scheme = entry.value;
-        final iconBuilder = scheme['icon'] as PhosphorIconData Function(PhosphorIconsStyle);
+        final iconBuilder =
+            scheme['icon'] as PhosphorIconData Function(PhosphorIconsStyle);
         final color = scheme['color'] as Color;
 
         return Container(
@@ -342,23 +345,24 @@ class DashboardView extends StatelessWidget {
       }).toList(),
     );
   }
+
   // Navigation handlers for Quick Actions
   void _handleQuickActionTap(BuildContext context, String actionTitle) {
     switch (actionTitle) {
       case 'New Registration':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => NewRegistrationPage()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => NewRegistrationPage()));
         print('Navigate to: New Registration Page');
         break;
       case 'View Documents':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDocumentsPage()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDocumentsPage()));
         print('Navigate to: View Documents Page');
         break;
       case 'Upload Photos':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => UploadPhotosPage()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => UploadPhotosPage()));
         print('Navigate to: Upload Photos Page');
         break;
       case 'Contact Support':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => ContactSupportPage()));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => ContactSupportPage()));
         print('Navigate to: Contact Support Page');
         break;
       default:
@@ -377,21 +381,22 @@ class DashboardView extends StatelessWidget {
         Get.toNamed(AppRoutes.newCalculationApplication);
         break;
       case 'Land Acquisition Calculation':
-        Get.toNamed(AppRoutes.goLandAcquisitionView);
+        Get.toNamed(AppRoutes.landAcquisitionCalculationApplication);
         break;
       case 'Court Commission Case':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => CourtCommissionPage()));
-        print('Navigate to: Court Commission Case Page');
+        Get.toNamed(AppRoutes.courtCommissionCase);
+
         break;
       case 'Court Allocation Case':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => CourtAllocationPage()));
-        print('Navigate to: Court Allocation Case Page');
+        Get.toNamed(AppRoutes.courtAllocationCase);
+
         break;
       case 'Government Census':
-      // Navigator.push(context, MaterialPageRoute(builder: (context) => GovernmentCensusPage()));
-        print('Navigate to: Government Census Page');
+        Get.toNamed(AppRoutes.governmentCensus);
+
         break;
       default:
         print('Unknown scheme: $cleanTitle');
     }
-  }}
+  }
+}

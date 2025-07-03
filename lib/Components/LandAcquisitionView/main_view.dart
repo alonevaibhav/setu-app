@@ -9,8 +9,8 @@ import '../../Controller/get_translation_controller/get_text_form.dart';
 import 'Controller/main_controller.dart';
 import 'nevigation_route.dart';
 
-class SurveyView extends StatelessWidget {
-  const SurveyView({Key? key}) : super(key: key);
+class LandAcquisitionView extends StatelessWidget {
+  const LandAcquisitionView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
