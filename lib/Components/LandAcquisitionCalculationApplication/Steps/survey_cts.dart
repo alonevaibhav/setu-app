@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:setuapp/Components/LandAcquisitionCalculationApplication/Steps/survey_ui_utils.dart';
-import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
 import '../../../Controller/land_survey_controller.dart';
 import '../land_acquisition_calculation_controller.dart';
 

@@ -3,15 +3,15 @@
 // import 'package:get/get.dart';
 // import 'package:gap/gap.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
-// import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/ZLandAcquisitionUIUtils.dart';
 // import '../../../Constants/color_constant.dart';
 // import '../../../Controller/land_survey_controller.dart';
 //
-// class Payment extends StatelessWidget {
+// class InformationAbout extends StatelessWidget {
 //   final int currentSubStep;
 //   final SurveyController controller;
 //
-//   const Payment({
+//   const InformationAbout({
 //     Key? key,
 //     required this.currentSubStep,
 //     required this.controller,
@@ -23,7 +23,7 @@
 //
 //
 //     // final currentField = subSteps[currentSubStep];
-//     final subSteps = controller.stepConfigurations[9] ?? ['address'];
+//     final subSteps = controller.stepConfigurations[6] ?? ['address'];
 //
 //     // Ensure currentSubStep is within bounds
 //     if (currentSubStep >= subSteps.length) {
@@ -33,7 +33,7 @@
 //     final currentField = subSteps[currentSubStep];
 //
 //     switch (currentField) {
-//       case 'payment':
+//       case 'adjacent':
 //         return _buildAddressInput();
 //       case 'status':
 //         return _buildStateInput();
@@ -52,7 +52,7 @@
 //         ),
 //         Gap(24.h),
 //         SurveyUIUtils.buildTextFormField(
-//           controller: controller.paymentController,
+//           controller: controller.addressController,
 //           label: 'Property Address',
 //           hint: 'Enter complete property address',
 //           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),

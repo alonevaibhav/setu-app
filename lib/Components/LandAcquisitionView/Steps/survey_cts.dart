@@ -4,7 +4,7 @@
 // import 'package:get/get.dart';
 // import 'package:gap/gap.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
-// import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/ZLandAcquisitionUIUtils.dart';
 // import '../../../Controller/land_survey_controller.dart';
 //
 // class SurveyCTSStep extends StatelessWidget {
@@ -49,12 +49,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Group No./ Survey No./ C. T. Survey No./T. P. No. Information',
 //           'Enter Survey No./Gat No./CTS No.',
 //         ),
 //         Gap(24.h),
-//         SurveyUIUtils.buildTextFormField(
+//         LandAcquisitionUIUtils.buildTextFormField(
 //           controller: controller.surveyNumberController,
 //           label: 'Survey No./Gat No./CTS No.*',
 //           hint: 'Enter survey number',
@@ -63,7 +63,7 @@
 //
 //         ),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -72,12 +72,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Department Information',
 //           'Select your department',
 //         ),
 //         Gap(24.h),
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => LandAcquisitionUIUtils.buildDropdownField(
 //           label: 'Department*',
 //
 //           value: controller.selectedDepartment.value,
@@ -86,7 +86,7 @@
 //           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
 //         )),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -95,12 +95,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Location Details',
 //           'Select your district',
 //         ),
 //         Gap(24.h),
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => LandAcquisitionUIUtils.buildDropdownField(
 //           label: 'District*',
 //           value: controller.selectedDistrict.value,
 //           items: ['Pune', 'Mumbai', 'Nagpur', 'Thane'],
@@ -108,7 +108,7 @@
 //           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
 //         )),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -117,12 +117,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Location Details',
 //           'Select your taluka',
 //         ),
 //         Gap(24.h),
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => LandAcquisitionUIUtils.buildDropdownField(
 //           label: 'Taluka*',
 //           value: controller.selectedTaluka.value,
 //           items: ['Haveli', 'Mulshi', 'Pune City', 'Bhor'],
@@ -130,7 +130,7 @@
 //           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
 //         )),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -139,12 +139,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Location Details',
 //           'Select your village',
 //         ),
 //         Gap(24.h),
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => LandAcquisitionUIUtils.buildDropdownField(
 //           label: 'Village*',
 //           value: controller.selectedVillage.value,
 //           items: ['Khadakwasla', 'Sinhagad', 'Panshet', 'Lavasa'],
@@ -152,7 +152,7 @@
 //           icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
 //         )),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -161,12 +161,12 @@
 //     return Column(
 //       crossAxisAlignment: CrossAxisAlignment.start,
 //       children: [
-//         SurveyUIUtils.buildStepHeader(
+//         LandAcquisitionUIUtils.buildStepHeader(
 //           'Office Information',
 //           'Select your office',
 //         ),
 //         Gap(24.h),
-//         Obx(() => SurveyUIUtils.buildDropdownField(
+//         Obx(() => LandAcquisitionUIUtils.buildDropdownField(
 //           label: 'Office*',
 //           value: controller.selectedOffice.value,
 //           items: ['Tahsildar Office', 'Collector Office', 'Sub-Registrar Office'],
@@ -174,7 +174,7 @@
 //           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
 //         )),
 //         Gap(32.h),
-//         SurveyUIUtils.buildNavigationButtons(controller),
+//         LandAcquisitionUIUtils.buildNavigationButtons(controller),
 //       ],
 //     );
 //   }
@@ -185,13 +185,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/survey_cts.dart';
 
 class SurveyCTSStep extends StatelessWidget {
   final int currentSubStep;
-  final MainSurveyController mainController;
+  final MainLandAcquisitionController mainController;
 
   const SurveyCTSStep({
     Key? key,
@@ -236,12 +236,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Group No./ Survey No./ C. T. Survey No./T. P. No. Information',
           'Enter Survey No./Gat No./CTS No.',
         ),
         Gap(24.h),
-        SurveyUIUtils.buildTextFormField(
+        LandAcquisitionUIUtils.buildTextFormField(
           controller: controller.surveyNumberController,
           label: 'Survey No./Gat No./CTS No.*',
           hint: 'Enter survey number',
@@ -255,7 +255,7 @@ class SurveyCTSStep extends StatelessWidget {
           },
         ),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -264,12 +264,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Department Information',
           'Select your department',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'Department*',
           value: controller.selectedDepartment.value,
           items: controller.departmentOptions,
@@ -277,7 +277,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -286,12 +286,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Location Details',
           'Select your district',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'District*',
           value: controller.selectedDistrict.value,
           items: controller.districtOptions,
@@ -299,7 +299,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -308,12 +308,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Location Details',
           'Select your taluka',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'Taluka*',
           value: controller.selectedTaluka.value,
           items: controller.getTalukaOptions(),
@@ -321,7 +321,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -330,12 +330,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Location Details',
           'Select your village',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'Village*',
           value: controller.selectedVillage.value,
           items: controller.getVillageOptions(),
@@ -343,7 +343,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
@@ -352,12 +352,12 @@ class SurveyCTSStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SurveyUIUtils.buildStepHeader(
+        LandAcquisitionUIUtils.buildStepHeader(
           'Office Information',
           'Select your office',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'Office*',
           value: controller.selectedOffice.value,
           items: controller.officeOptions,
@@ -365,7 +365,7 @@ class SurveyCTSStep extends StatelessWidget {
           icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }

@@ -5,7 +5,7 @@
 // import 'package:get/get.dart';
 // import 'package:gap/gap.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
-// import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/ZLandAcquisitionUIUtils.dart';
 // import '../../../Constants/color_constant.dart';
 // import '../Controller/main_controller.dart';
 // import '../Controller/step_three_controller.dart';
@@ -694,7 +694,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+import 'package:setuapp/Components/LandSurvey%20View/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';

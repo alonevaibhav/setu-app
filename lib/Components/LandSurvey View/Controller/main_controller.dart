@@ -360,9 +360,13 @@
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:setuapp/Components/LandServayView/Controller/personal_info_controller.dart';
-import 'package:setuapp/Components/LandServayView/Controller/step_three_controller.dart';
-import 'package:setuapp/Components/LandServayView/Controller/survey_cts.dart';
+
+
+
+import '../../LandSurvey View/Controller/personal_info_controller.dart';
+import '../../LandSurvey View/Controller/step_three_controller.dart';
+import '../../LandSurvey View/Controller/survey_cts.dart';
+
 
 // Import all step controllers
 

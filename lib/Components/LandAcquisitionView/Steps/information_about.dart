@@ -3,16 +3,15 @@
 // import 'package:get/get.dart';
 // import 'package:gap/gap.dart';
 // import 'package:phosphor_flutter/phosphor_flutter.dart';
-// import 'package:setuapp/Components/LandServayView/Steps/survey_ui_utils.dart';
+// import 'package:setuapp/Components/LandServayView/Steps/ZLandAcquisitionUIUtils.dart';
 // import '../../../Constants/color_constant.dart';
 // import '../../../Controller/land_survey_controller.dart';
-// import '../Controller/main_controller.dart';
 //
-// class Preview extends StatelessWidget {
+// class InformationAbout extends StatelessWidget {
 //   final int currentSubStep;
-//   final MainSurveyController controller;
+//   final SurveyController controller;
 //
-//   const Preview({
+//   const InformationAbout({
 //     Key? key,
 //     required this.currentSubStep,
 //     required this.controller,
@@ -24,7 +23,7 @@
 //
 //
 //     // final currentField = subSteps[currentSubStep];
-//     final subSteps = controller.stepConfigurations[8] ?? ['address'];
+//     final subSteps = controller.stepConfigurations[6] ?? ['address'];
 //
 //     // Ensure currentSubStep is within bounds
 //     if (currentSubStep >= subSteps.length) {
@@ -34,7 +33,7 @@
 //     final currentField = subSteps[currentSubStep];
 //
 //     switch (currentField) {
-//       case 'preview':
+//       case 'adjacent':
 //         return _buildAddressInput();
 //       case 'status':
 //         return _buildStateInput();

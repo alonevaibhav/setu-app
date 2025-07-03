@@ -127,26 +127,27 @@ class DashboardView extends StatelessWidget {
   Widget _buildQuickActions() {
     final actions = [
       {
-        'icon': PhosphorIcons.clipboard,
-        'title': 'New Registration',
-        'color': SetuColors.success
+        'icon': PhosphorIcons.fileText, // Represents a document or form
+        'title': 'My Application',
+        'color': SetuColors.success,
       },
       {
-        'icon': PhosphorIcons.fileText,
-        'title': 'View Documents',
-        'color': SetuColors.warning
+        'icon': PhosphorIcons.clockCountdown, // Represents something pending or waiting
+        'title': 'Pending Application',
+        'color': SetuColors.warning,
       },
       {
-        'icon': PhosphorIcons.camera,
-        'title': 'Upload Photos',
-        'color': SetuColors.skyBlue
-      },
-      {
-        'icon': PhosphorIcons.phone,
+        'icon': PhosphorIcons.headset, // Better suited for support
         'title': 'Contact Support',
-        'color': SetuColors.earthBrown
+        'color': SetuColors.skyBlue,
+      },
+      {
+        'icon': PhosphorIcons.checkCircle, // Represents something verified
+        'title': 'Verified Applications',
+        'color': SetuColors.earthBrown,
       },
     ];
+
 
     return GridView.builder(
       shrinkWrap: true,

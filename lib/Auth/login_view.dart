@@ -50,10 +50,10 @@ class NewLoginView extends StatelessWidget {
                       .animate()
                       .fadeIn(duration: 800.ms, delay: 600.ms),
                   Gap(20.h * 0.8),
-                  _buildSiteLeadButton()
-                      .animate()
-                      .fadeIn(duration: 800.ms, delay: 800.ms),
-                  Gap(20.h * 0.8),
+                  // _buildSiteLeadButton()
+                  //     .animate()
+                  //     .fadeIn(duration: 800.ms, delay: 800.ms),
+                  // Gap(20.h * 0.8),
                 ],
               ),
             ),
@@ -246,7 +246,6 @@ class NewLoginView extends StatelessWidget {
               size: 24.sp * 0.8,
             ),
           ),
-          validator: controller.validateUsername,
           textInputAction: TextInputAction.next,
         ),
       ],
@@ -317,7 +316,6 @@ class NewLoginView extends StatelessWidget {
                   ),
                 ),
               ),
-              validator: controller.validatePassword,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (value) => controller.login(),
             )),

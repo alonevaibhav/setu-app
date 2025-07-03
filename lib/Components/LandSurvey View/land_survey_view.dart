@@ -6,7 +6,6 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Constants/color_constant.dart';
 import '../../Controller/get_translation_controller/get_text_form.dart';
-import '../../Controller/land_survey_controller.dart';
 import 'Controller/main_controller.dart';
 import 'nevigation_route.dart';
 
