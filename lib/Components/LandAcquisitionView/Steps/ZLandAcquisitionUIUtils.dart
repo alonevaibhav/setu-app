@@ -324,8 +324,7 @@ class LandAcquisitionUIUtils {
     required String label,
     required String hint,
     required IconData icon,
-    TextInputType keyboardType =
-        TextInputType.text ?? TextInputType.text, // Provide a default value,
+    TextInputType keyboardType = TextInputType.text ?? TextInputType.text, // Provide a default value,
     int maxLines = 1,
     int? maxLength,
     String? Function(String?)? validator,

@@ -1,8 +1,6 @@
 
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 import '../../LandAcquisitionView/Controller/step_three_controller.dart';
 import '../../LandAcquisitionView/Controller/survey_cts.dart';
@@ -28,7 +26,7 @@ class MainLandAcquisitionController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['holder_verification', 'enumeration_check'], // Personal Info step
+    0: ['land_acquisition_details',], // Personal Info step
     1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
     2: ['calculation'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information

@@ -4,9 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
-import '../../../Constants/color_constant.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 
@@ -27,218 +25,187 @@ class PersonalInfoStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
-    final subSteps =
-        mainController.stepConfigurations[0] ?? ['holder_verification'];
+    final subSteps = mainController.stepConfigurations[0] ?? ['holder_verification'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildHolderVerification(); // Fallback
+      return _buildLandAcquisitionDetails(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
-      case 'holder_verification':
-        return _buildHolderVerification();
-      case 'enumeration_check':
-        return _buildEnumerationCheck();
+      case 'land_acquisition_details':
+        return _buildLandAcquisitionDetails();
       default:
-        return _buildHolderVerification();
+        return _buildLandAcquisitionDetails();
     }
   }
 
-  Widget _buildHolderVerification() {
-    return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LandAcquisitionUIUtils.buildStepHeader(
-              'Holder Verification',
-              'Please confirm your status as the holder',
-            ),
-            Gap(24.h),
+  Widget _buildLandAcquisitionDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        LandAcquisitionUIUtils.buildStepHeader(
+          'Land Acquisition Details',
+          'Please provide land acquisition information',
+        ),
+        Gap(24.h),
 
-            // Question 1: Are you the holder yourself?
-            LandAcquisitionUIUtils.buildQuestionCard(
-              question: 'Note: Are you the holder yourself?',
-              selectedValue: controller.isHolderThemselves.value,
-              onChanged: (value) {
-                controller.updateHolderThemselves(value);
-              },
-            ),
+        // Name of Land Acquisition Officer/Office
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.landAcquisitionOfficerController,
+          label: 'Name of Land Acquisition Officer/Office *',
+          hint: 'Enter officer/office name',
+          icon: PhosphorIcons.userCircle(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Land Acquisition Officer name is required';
+            }
+            if (value.trim().length < 2) {
+              return 'Name must be at least 3 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            Gap(16.h),
+        // Name and address of Land Acquisition Board
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.landAcquisitionBoardController,
+          label: 'Name and address of Land Acquisition Board *',
+          hint: 'Enter board name and address',
+          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+          maxLines: 3,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Land Acquisition Board details are required';
+            }
+            if (value.trim().length < 2) {
+              return 'Details must be at least 5 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            // Conditional Question 2: Authority on behalf
-            if (controller.shouldShowAuthorityQuestion) ...[
-              LandAcquisitionUIUtils.buildQuestionCard(
-                question:
-                    'Note: Are you holding the authority on behalf of the applicant?/or are you applying as a competent Gunthewari Regularization/Gunthewari Planning Authority?',
-                selectedValue: controller.hasAuthorityOnBehalf.value,
-                onChanged: (value) async {
-                  controller.updateAuthorityOnBehalf(value);
+        // Land acquisition details
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.landAcquisitionDetailsController,
+          label: 'Land acquisition details *',
+          hint: 'Enter detailed land acquisition information',
+          icon: PhosphorIcons.info(PhosphorIconsStyle.regular),
+          maxLines: 4,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Land acquisition details are required';
+            }
+            if (value.trim().length < 2) {
+              return 'Details must be at least 10 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-                  if (value == true) {
-                    // Show dialog when user selects Yes
-                    await _showAuthorityConfirmationDialog();
-                  }
-                },
-              ),
-              Gap(16.h),
-            ],
+        // Land Acquisition Order/Proposal Number
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.landAcquisitionOrderNumberController,
+          label: 'Land Acquisition Order/Proposal Number *',
+          hint: 'Enter order/proposal number',
+          icon: PhosphorIcons.hash(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order/Proposal number is required';
+            }
+            if (value.trim().length < 2) {
+              return 'Number must be at least 3 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            // Additional fields when has authority on behalf
-            if (controller.shouldShowPOAFields) ...[
-              _buildAdditionalFields(),
-              Gap(16.h),
-            ],
+        // Date of Land Acquisition Order/Proposal
+        LandAcquisitionUIUtils.buildDatePickerField(
+          controller: controller.landAcquisitionOrderDateController,
+          label: 'Date of Land Acquisition Order/Proposal *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order/Proposal date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            controller.updateLandAcquisitionOrderDate(selectedDate);
+          },
+        ),
+        Gap(16.h),
 
-            Gap(32.h),
-            LandAcquisitionUIUtils.buildNavigationButtons(mainController),
-          ],
-        ));
-  }
+        // Name and address of the office issuing the land acquisition order
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.landAcquisitionOfficeAddressController,
+          label:
+              'Name and address of the office issuing the land acquisition order *',
+          hint: 'Enter issuing office name and address',
+          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+          maxLines: 3,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Issuing office details are required';
+            }
+            if (value.trim().length < 2) {
+              return 'Details must be at least 2 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-  Widget _buildEnumerationCheck() {
-    return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LandAcquisitionUIUtils.buildStepHeader(
-              'Enumeration Status',
-              'Has this property been enumerated before?',
-            ),
-            Gap(24.h),
-            LandAcquisitionUIUtils.buildQuestionCard(
-              question: 'Note: Has this been counted before?',
-              selectedValue: controller.hasBeenCountedBefore.value,
-              onChanged: (value) {
-                controller.updateEnumerationCheck(value);
-              },
-            ),
-            Gap(32.h),
-            LandAcquisitionUIUtils.buildNavigationButtons(mainController),
-          ],
-        ));
-  }
+        // Upload Land Acquisition Order/Proposal
+        ImagePickerUtil.buildFileUploadField(
+          label: 'Upload Land Acquisition Order/Proposal *',
+          hint: 'Upload order/proposal document',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          uploadedFiles: controller.landAcquisitionOrderFiles,
+          onFilesSelected: (files) =>
+              controller.landAcquisitionOrderFiles.assignAll(files),
+        ),
+        Gap(16.h),
 
-  Widget _buildAdditionalFields() {
-    return Container(
-      padding: EdgeInsets.all(16.w * LandAcquisitionUIUtils.sizeFactor),
-      decoration: BoxDecoration(
-        color: SetuColors.primaryGreen.withOpacity(0.05),
-        borderRadius:
-            BorderRadius.circular(12.r * LandAcquisitionUIUtils.sizeFactor),
-        border: Border.all(color: SetuColors.primaryGreen.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LandAcquisitionUIUtils.buildTranslatableText(
-            text: 'Power of Attorney Details',
-            style: GoogleFonts.poppins(
-              fontSize: 18.sp * LandAcquisitionUIUtils.sizeFactor,
-              fontWeight: FontWeight.w700,
-              color: SetuColors.primaryGreen,
-            ),
-          ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+        // Proposed Land Acquisition Simankan Map
+        ImagePickerUtil.buildFileUploadField(
+          label: 'Proposed Land Acquisition Simankan Map *',
+          hint: 'Upload simankan map',
+          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+          uploadedFiles: controller.landAcquisitionMapFiles,
+          onFilesSelected: (files) =>
+              controller.landAcquisitionMapFiles.assignAll(files),
+        ),
+        Gap(16.h),
 
-          // Power of Attorney Registration Number
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: controller.poaRegistrationNumberController,
-            label: 'Power of Attorney / Registration Number',
-            hint: 'Enter registration number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value == null || value.trim().length < 3) {
-                return 'Registration number must be at least 3 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+        // KML File of proposed land acquisition scheme
+        ImagePickerUtil.buildFileUploadField(
+          label: 'KML File of proposed land acquisition scheme *',
+          hint: 'Upload KML file',
+          icon: PhosphorIcons.fileCode(PhosphorIconsStyle.regular),
+          uploadedFiles: controller.kmlFiles,
+          onFilesSelected: (files) => controller.kmlFiles.assignAll(files),
+        ),
+        Gap(32.h),
 
-          // Power of Attorney Registration Date
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: controller.poaRegistrationDateController,
-            label: 'Power of Attorney Registration Date',
-            hint: 'Enter registration date',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.datetime,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Registration date is required';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+        // Obx(() => LandAcquisitionUIUtils.buildDropdownField(
+        //       label: 'Department*',
+        //       value: controller.selectedDepartment.value,
+        //       items: controller.departmentOptions,
+        //       onChanged: controller.updateDepartment,
+        //       icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+        //     )),
 
-          // Name of the holder issuing the power of attorney
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: controller.poaIssuerNameController,
-            label: 'Name of the holder issuing the power of attorney',
-            hint: 'Enter holder name',
-            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value == null || value.trim().length < 2) {
-                return 'Holder name must be at least 2 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
-
-          // Name of the holder of the Power of Attorney
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: controller.poaHolderNameController,
-            label: 'Name of the holder of the Power of Attorney',
-            hint: 'Enter attorney holder name',
-            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value == null || value.trim().length < 2) {
-                return 'Attorney holder name must be at least 2 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
-
-          // Address holding Power of Attorney
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: controller.poaHolderAddressController,
-            label: 'Address holding Power of Attorney',
-            hint: 'Enter full address',
-            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.streetAddress,
-            maxLines: 3,
-            validator: (value) {
-              if (value == null || value.trim().length < 5) {
-                return 'Address must be at least 5 characters';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _showAuthorityConfirmationDialog() async {
-    await LandAcquisitionUIUtils.showTranslatableDialog(
-      context: Get.context!,
-      title: 'Authority Confirmation',
-      message:
-          'You are applying for the enumeration as the holder of the Power of Attorney/Authority Letter or as the competent Gunthewari Regularization/Gunthewari Planning Authority on behalf of the holder of the Group No./Survey No./C. T. Survey No. for which you are applying. Fill in the necessary information.',
-      primaryButtonText: 'Understood',
-      icon: PhosphorIcons.warning(PhosphorIconsStyle.regular),
-      iconColor: SetuColors.primaryGreen,
-      onPrimaryPressed: () {
-        Navigator.of(Get.context!).pop();
-      },
-      barrierDismissible: false,
+        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
+      ],
     );
   }
 }

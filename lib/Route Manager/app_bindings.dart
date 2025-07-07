@@ -6,14 +6,9 @@ import '../Controller/login_view_controller.dart';
 class AppBindings extends Bindings {
   @override
   void dependencies() {
-
-
     // Register all controllers here
     Get.lazyPut(() => TranslationController());
-
-
     Get.lazyPut<LoginController>(() => LoginController(), fenix: true);
     Get.lazyPut<LoginViewController>(() => LoginViewController(), fenix: true);
-
   }
 }
