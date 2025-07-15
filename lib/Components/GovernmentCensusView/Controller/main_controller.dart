@@ -1,12 +1,8 @@
-
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
 import '../../GovernmentCensusView/Controller/personal_info_controller.dart';
 import '../../GovernmentCensusView/Controller/step_three_controller.dart';
 import '../../GovernmentCensusView/Controller/survey_cts.dart';
-
 // Import all step controllers
 
 class GovernmentCensusController extends GetxController {
@@ -28,9 +24,16 @@ class GovernmentCensusController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['holder_verification', 'enumeration_check'], // Personal Info step
-    1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
-    2: ['calculation'], // Survey Information
+    0: ['government_counting_details', ], // Personal Info step
+    1: [
+      'survey_number',
+      'department',
+      'district',
+      'taluka',
+      'village',
+      'office'
+    ],
+    2: ['government_survey'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
     4: ['applicant', 'status'], // Applicant Information
     5: ['coowner', 'status'], // Co-owner Information
@@ -52,9 +55,11 @@ class GovernmentCensusController extends GetxController {
   }
 
   void _initializeControllers() {
-    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
+    personalInfoController =
+        Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
-    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    calculationController =
+        Get.put(CalculationController(), tag: 'calculation'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -101,7 +106,7 @@ class GovernmentCensusController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
-    // Add more cases as you create more controllers
+      // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
     }
@@ -130,7 +135,7 @@ class GovernmentCensusController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
-    // Add more cases
+      // Add more cases
     }
     if (stepController is StepValidationMixin) {
       return stepController.isStepCompleted(fields);

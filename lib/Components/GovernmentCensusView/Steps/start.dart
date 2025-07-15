@@ -3,9 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import '../../../Constants/color_constant.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
@@ -27,218 +25,169 @@ class PersonalInfoStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
-    final subSteps =
-        mainController.stepConfigurations[0] ?? ['holder_verification'];
+    final subSteps = mainController.stepConfigurations[0] ?? ['government_counting_details'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildHolderVerification(); // Fallback
+      return _buildGovernmentCountingDetails(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
-      case 'holder_verification':
-        return _buildHolderVerification();
-      case 'enumeration_check':
-        return _buildEnumerationCheck();
+      case 'government_counting_details':
+        return _buildGovernmentCountingDetails();
       default:
-        return _buildHolderVerification();
+        return _buildGovernmentCountingDetails();
     }
   }
 
-  Widget _buildHolderVerification() {
-    return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GovernmentCensusUIUtils.buildStepHeader(
-              'Holder Verification',
-              'Please confirm your status as the holder',
-            ),
-            Gap(24.h),
+  Widget _buildGovernmentCountingDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GovernmentCensusUIUtils.buildStepHeader(
+          'Government Counting Details',
+          'Please provide government counting information',
+        ),
+        Gap(24.h),
 
-            // Question 1: Are you the holder yourself?
-            GovernmentCensusUIUtils.buildQuestionCard(
-              question: 'Note: Are you the holder yourself?',
-              selectedValue: controller.isHolderThemselves.value,
-              onChanged: (value) {
-                controller.updateHolderThemselves(value);
-              },
-            ),
+        // Name of the officer who issued the order regarding the government count
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.governmentCountingOfficerController,
+          label: 'Name of the officer who issued the order regarding the government count *',
+          hint: 'Enter officer name',
+          icon: PhosphorIcons.userCircle(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Officer name is required';
+            }
+            if (value.trim().length < 2) {
+              return 'Name must be at least 2 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            Gap(16.h),
+        // Address of the officer giving orders regarding government counting
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.governmentCountingOfficerAddressController,
+          label: 'Address of the officer giving orders regarding government counting *',
+          hint: 'Enter officer address',
+          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+          maxLines: 3,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Officer address is required';
+            }
+            if (value.trim().length < 5) {
+              return 'Address must be at least 5 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            // Conditional Question 2: Authority on behalf
-            if (controller.shouldShowAuthorityQuestion) ...[
-              GovernmentCensusUIUtils.buildQuestionCard(
-                question:
-                    'Note: Are you holding the authority on behalf of the applicant?/or are you applying as a competent Gunthewari Regularization/Gunthewari Planning Authority?',
-                selectedValue: controller.hasAuthorityOnBehalf.value,
-                onChanged: (value) async {
-                  controller.updateAuthorityOnBehalf(value);
+        // Government Counting Order Number
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.governmentCountingOrderNumberController,
+          label: 'Government Counting Order Number *',
+          hint: 'Enter order number',
+          icon: PhosphorIcons.hash(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order number is required';
+            }
+            if (value.trim().length < 3) {
+              return 'Order number must be at least 3 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-                  if (value == true) {
-                    // Show dialog when user selects Yes
-                    await _showAuthorityConfirmationDialog();
-                  }
-                },
-              ),
-              Gap(16.h),
-            ],
+        // Date of Government Counting Order
+        GovernmentCensusUIUtils.buildDatePickerField(
+          controller: controller.governmentCountingOrderDateController,
+          label: 'Date of Government Counting Order *',
+          hint: 'dd-mm-yyyy',
+          icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Order date is required';
+            }
+            return null;
+          },
+          onDateSelected: (DateTime selectedDate) {
+            controller.updateGovernmentCountingOrderDate(selectedDate);
+          },
+        ),
+        Gap(16.h),
 
-            // Additional fields when has authority on behalf
-            if (controller.shouldShowPOAFields) ...[
-              _buildAdditionalFields(),
-              Gap(16.h),
-            ],
+        // Counting Applicant Name
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.countingApplicantNameController,
+          label: 'Counting Applicant Name',
+          hint: 'Enter applicant name',
+          icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
+          validator: (value) {
+            if (value != null && value.trim().isNotEmpty && value.trim().length < 2) {
+              return 'Name must be at least 2 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-            Gap(32.h),
-            GovernmentCensusUIUtils.buildNavigationButtons(mainController),
-          ],
-        ));
-  }
+        // Address of the applicant for the census
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.countingApplicantAddressController,
+          label: 'Address of the applicant for the census',
+          hint: 'Enter applicant address',
+          icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
+          maxLines: 3,
+          validator: (value) {
+            if (value != null && value.trim().isNotEmpty && value.trim().length < 5) {
+              return 'Address must be at least 5 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-  Widget _buildEnumerationCheck() {
-    return Obx(() => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GovernmentCensusUIUtils.buildStepHeader(
-              'Enumeration Status',
-              'Has this property been enumerated before?',
-            ),
-            Gap(24.h),
-            GovernmentCensusUIUtils.buildQuestionCard(
-              question: 'Note: Has this been counted before?',
-              selectedValue: controller.hasBeenCountedBefore.value,
-              onChanged: (value) {
-                controller.updateEnumerationCheck(value);
-              },
-            ),
-            Gap(32.h),
-            GovernmentCensusUIUtils.buildNavigationButtons(mainController),
-          ],
-        ));
-  }
+        // Details regarding government counting
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.governmentCountingDetailsController,
+          label: 'Details regarding government counting *',
+          hint: 'Enter detailed government counting information',
+          icon: PhosphorIcons.info(PhosphorIconsStyle.regular),
+          maxLines: 4,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Government counting details are required';
+            }
+            if (value.trim().length < 10) {
+              return 'Details must be at least 10 characters';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
-  Widget _buildAdditionalFields() {
-    return Container(
-      padding: EdgeInsets.all(16.w * GovernmentCensusUIUtils.sizeFactor),
-      decoration: BoxDecoration(
-        color: SetuColors.primaryGreen.withOpacity(0.05),
-        borderRadius:
-            BorderRadius.circular(12.r * GovernmentCensusUIUtils.sizeFactor),
-        border: Border.all(color: SetuColors.primaryGreen.withOpacity(0.2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          GovernmentCensusUIUtils.buildTranslatableText(
-            text: 'Power of Attorney Details',
-            style: GoogleFonts.poppins(
-              fontSize: 18.sp * GovernmentCensusUIUtils.sizeFactor,
-              fontWeight: FontWeight.w700,
-              color: SetuColors.primaryGreen,
-            ),
-          ),
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
+        // Upload Government Counting Order
+        ImagePickerUtil.buildFileUploadField(
+          label: 'Upload Government Counting Order *',
+          hint: 'Upload counting order document',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          uploadedFiles: controller.governmentCountingOrderFiles,
+          onFilesSelected: (files) =>
+              controller.governmentCountingOrderFiles.assignAll(files),
+        ),
+        Gap(32.h),
 
-          // Power of Attorney Registration Number
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: controller.poaRegistrationNumberController,
-            label: 'Power of Attorney / Registration Number',
-            hint: 'Enter registration number',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.text,
-            validator: (value) {
-              if (value == null || value.trim().length < 3) {
-                return 'Registration number must be at least 3 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
-
-          // Power of Attorney Registration Date
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: controller.poaRegistrationDateController,
-            label: 'Power of Attorney Registration Date',
-            hint: 'Enter registration date',
-            icon: PhosphorIcons.calendar(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.datetime,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Registration date is required';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
-
-          // Name of the holder issuing the power of attorney
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: controller.poaIssuerNameController,
-            label: 'Name of the holder issuing the power of attorney',
-            hint: 'Enter holder name',
-            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value == null || value.trim().length < 2) {
-                return 'Holder name must be at least 2 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
-
-          // Name of the holder of the Power of Attorney
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: controller.poaHolderNameController,
-            label: 'Name of the holder of the Power of Attorney',
-            hint: 'Enter attorney holder name',
-            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.name,
-            validator: (value) {
-              if (value == null || value.trim().length < 2) {
-                return 'Attorney holder name must be at least 2 characters';
-              }
-              return null;
-            },
-          ),
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
-
-          // Address holding Power of Attorney
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: controller.poaHolderAddressController,
-            label: 'Address holding Power of Attorney',
-            hint: 'Enter full address',
-            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.streetAddress,
-            maxLines: 3,
-            validator: (value) {
-              if (value == null || value.trim().length < 5) {
-                return 'Address must be at least 5 characters';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _showAuthorityConfirmationDialog() async {
-    await GovernmentCensusUIUtils.showTranslatableDialog(
-      context: Get.context!,
-      title: 'Authority Confirmation',
-      message:
-          'You are applying for the enumeration as the holder of the Power of Attorney/Authority Letter or as the competent Gunthewari Regularization/Gunthewari Planning Authority on behalf of the holder of the Group No./Survey No./C. T. Survey No. for which you are applying. Fill in the necessary information.',
-      primaryButtonText: 'Understood',
-      icon: PhosphorIcons.warning(PhosphorIconsStyle.regular),
-      iconColor: SetuColors.primaryGreen,
-      onPrimaryPressed: () {
-        Navigator.of(Get.context!).pop();
-      },
-      barrierDismissible: false,
+        GovernmentCensusUIUtils.buildNavigationButtons(mainController),
+      ],
     );
   }
 }

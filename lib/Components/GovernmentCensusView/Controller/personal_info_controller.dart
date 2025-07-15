@@ -1,116 +1,93 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'main_controller.dart';
+import '../../CourtAllocationCaseView/Controller/main_controller.dart';
 
 class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
-  // Form Controllers
-  final applicantNameController = TextEditingController();
-  final applicantPhoneController = TextEditingController();
-  final relationshipController = TextEditingController();
-  final relationshipWithApplicantController = TextEditingController();
-  final poaRegistrationNumberController = TextEditingController();
-  final poaRegistrationDateController = TextEditingController();
-  final poaIssuerNameController = TextEditingController();
-  final poaHolderNameController = TextEditingController();
-  final poaHolderAddressController = TextEditingController();
 
-  // Observable boolean values for questions
-  final isHolderThemselves = Rxn<bool>();
-  final hasAuthorityOnBehalf = Rxn<bool>();
-  final hasBeenCountedBefore = Rxn<bool>();
+  // Text Controllers for Government Counting
+  final governmentCountingOfficerController = TextEditingController();
+  final governmentCountingOfficerAddressController = TextEditingController();
+  final governmentCountingOrderNumberController = TextEditingController();
+  final governmentCountingOrderDateController = TextEditingController();
+  final countingApplicantNameController = TextEditingController();
+  final countingApplicantAddressController = TextEditingController();
+  final governmentCountingDetailsController = TextEditingController();
+
+
+  // Date storage
+  final governmentCountingOrderDate = Rxn<DateTime>();
+
+  // File storage
+  final governmentCountingOrderFiles = <String>[].obs;
+
+  // Validation states
+  final formKey = GlobalKey<FormState>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initializeListeners();
+  }
 
   @override
   void onClose() {
-    // Dispose all controllers
-    applicantNameController.dispose();
-    applicantPhoneController.dispose();
-    relationshipController.dispose();
-    relationshipWithApplicantController.dispose();
-    poaRegistrationNumberController.dispose();
-    poaRegistrationDateController.dispose();
-    poaIssuerNameController.dispose();
-    poaHolderNameController.dispose();
-    poaHolderAddressController.dispose();
+    // Dispose controllers
+    governmentCountingOfficerController.dispose();
+    governmentCountingOfficerAddressController.dispose();
+    governmentCountingOrderNumberController.dispose();
+    governmentCountingOrderDateController.dispose();
+    countingApplicantNameController.dispose();
+    countingApplicantAddressController.dispose();
+    governmentCountingDetailsController.dispose();
     super.onClose();
   }
 
-  // Reset methods for dependent fields
-  void resetAuthorityFields() {
-    hasAuthorityOnBehalf.value = null;
-    applicantNameController.clear();
-    applicantPhoneController.clear();
-    relationshipController.clear();
-    relationshipWithApplicantController.clear();
-    clearPOAFields();
+  void _initializeListeners() {
+    // Add listeners if needed for real-time validation
   }
 
-  void clearPOAFields() {
-    poaRegistrationNumberController.clear();
-    poaRegistrationDateController.clear();
-    poaIssuerNameController.clear();
-    poaHolderNameController.clear();
-    poaHolderAddressController.clear();
+  // Date update methods
+  void updateGovernmentCountingOrderDate(DateTime date) {
+    governmentCountingOrderDate.value = date;
+    governmentCountingOrderDateController.text =
+    '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}-${date.year}';
   }
 
-  // Handle holder themselves selection
-  void updateHolderThemselves(bool? value) {
-    isHolderThemselves.value = value;
-    if (value == true) {
-      resetAuthorityFields();
-    }
-  }
-
-  // Handle authority on behalf selection
-  void updateAuthorityOnBehalf(bool? value) {
-    hasAuthorityOnBehalf.value = value;
-    if (value != true) {
-      clearPOAFields();
-    }
-  }
-
-  // Handle enumeration check
-  void updateEnumerationCheck(bool? value) {
-    hasBeenCountedBefore.value = value;
-  }
-
+  // Validation Methods (StepValidationMixin implementation)
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'holder_verification':
-      // Check if holder themselves is selected
-        if (isHolderThemselves.value == null) return false;
-
-        // If not holder themselves, check authority
-        if (isHolderThemselves.value == false) {
-          if (hasAuthorityOnBehalf.value == null) return false;
-
-          // If has authority, validate POA fields
-          if (hasAuthorityOnBehalf.value == true) {
-            return _validatePOAFields();
-          }
-        }
-        return true;
-
-      case 'enumeration_check':
-        return hasBeenCountedBefore.value != null;
-
+      case 'government_counting_details':
+        return _validateGovernmentCountingDetails();
       default:
         return true;
     }
   }
 
-  bool _validatePOAFields() {
-    return poaRegistrationNumberController.text.trim().length >= 3 &&
-        poaRegistrationDateController.text.trim().isNotEmpty &&
-        poaIssuerNameController.text.trim().length >= 2 &&
-        poaHolderNameController.text.trim().length >= 2 &&
-        poaHolderAddressController.text.trim().length >= 5;
+  bool _validateGovernmentCountingDetails() {
+    // Validate required fields
+    if (governmentCountingOfficerController.text.trim().isEmpty) return false;
+    if (governmentCountingOfficerAddressController.text.trim().isEmpty) return false;
+    if (governmentCountingOrderNumberController.text.trim().isEmpty) return false;
+    if (governmentCountingOrderDateController.text.trim().isEmpty) return false;
+    if (governmentCountingDetailsController.text.trim().isEmpty) return false;
+    if (governmentCountingOrderFiles.isEmpty) return false;
+
+    // Additional validation
+    if (governmentCountingOfficerController.text.trim().length < 2) return false;
+    if (governmentCountingOfficerAddressController.text.trim().length < 5) return false;
+    if (governmentCountingOrderNumberController.text.trim().length < 3) return false;
+    if (governmentCountingDetailsController.text.trim().length < 10) return false;
+
+    return true;
   }
 
   @override
   bool isStepCompleted(List<String> fields) {
     for (String field in fields) {
-      if (!validateCurrentSubStep(field)) return false;
+      if (!validateCurrentSubStep(field)) {
+        return false;
+      }
     }
     return true;
   }
@@ -118,75 +95,99 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   @override
   String getFieldError(String field) {
     switch (field) {
-      case 'holder_verification':
-        if (isHolderThemselves.value == null) {
-          return 'Please select if you are the holder';
-        }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == null) {
-          return 'Please select if you have authority on behalf';
-        }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == true) {
-          return _getPOAValidationError();
-        }
-        return 'Please complete holder verification';
-
-      case 'enumeration_check':
-        return 'Please select if this has been counted before';
-
+      case 'government_counting_details':
+        return _getGovernmentCountingDetailsError();
       default:
         return 'This field is required';
     }
   }
 
-  String _getPOAValidationError() {
-    if (poaRegistrationNumberController.text.trim().length < 3) {
-      return 'Registration number must be at least 3 characters';
+  String _getGovernmentCountingDetailsError() {
+    if (governmentCountingOfficerController.text.trim().isEmpty) {
+      return 'Officer name is required';
     }
-    if (poaRegistrationDateController.text.trim().isEmpty) {
-      return 'Registration date is required';
+    if (governmentCountingOfficerController.text.trim().length < 2) {
+      return 'Officer name must be at least 2 characters';
     }
-    if (poaIssuerNameController.text.trim().length < 2) {
-      return 'Issuer name must be at least 2 characters';
+    if (governmentCountingOfficerAddressController.text.trim().isEmpty) {
+      return 'Officer address is required';
     }
-    if (poaHolderNameController.text.trim().length < 2) {
-      return 'Holder name must be at least 2 characters';
+    if (governmentCountingOfficerAddressController.text.trim().length < 5) {
+      return 'Officer address must be at least 5 characters';
     }
-    if (poaHolderAddressController.text.trim().length < 5) {
-      return 'Address must be at least 5 characters';
+    if (governmentCountingOrderNumberController.text.trim().isEmpty) {
+      return 'Order number is required';
     }
-    return 'Please complete all Power of Attorney fields';
+    if (governmentCountingOrderNumberController.text.trim().length < 3) {
+      return 'Order number must be at least 3 characters';
+    }
+    if (governmentCountingOrderDateController.text.trim().isEmpty) {
+      return 'Order date is required';
+    }
+    if (governmentCountingDetailsController.text.trim().isEmpty) {
+      return 'Government counting details are required';
+    }
+    if (governmentCountingDetailsController.text.trim().length < 10) {
+      return 'Details must be at least 10 characters';
+    }
+    if (governmentCountingOrderFiles.isEmpty) {
+      return 'Government counting order document is required';
+    }
+    return 'Please complete all required fields';
   }
 
+  // Data Methods (StepDataMixin implementation)
   @override
   Map<String, dynamic> getStepData() {
     return {
-      'personal_info': {
-        'is_holder_themselves': isHolderThemselves.value,
-        'has_authority_on_behalf': hasAuthorityOnBehalf.value,
-        'has_been_counted_before': hasBeenCountedBefore.value,
-        'applicant_name': applicantNameController.text.trim(),
-        'applicant_phone': applicantPhoneController.text.trim(),
-        'relationship': relationshipController.text.trim(),
-        'relationship_with_applicant': relationshipWithApplicantController.text.trim(),
-        'poa_registration_number': poaRegistrationNumberController.text.trim(),
-        'poa_registration_date': poaRegistrationDateController.text.trim(),
-        'poa_issuer_name': poaIssuerNameController.text.trim(),
-        'poa_holder_name': poaHolderNameController.text.trim(),
-        'poa_holder_address': poaHolderAddressController.text.trim(),
-      }
+      'government_counting_officer': governmentCountingOfficerController.text.trim(),
+      'government_counting_officer_address': governmentCountingOfficerAddressController.text.trim(),
+      'government_counting_order_number': governmentCountingOrderNumberController.text.trim(),
+      'government_counting_order_date': governmentCountingOrderDateController.text.trim(),
+      'government_counting_order_date_object': governmentCountingOrderDate.value?.toIso8601String(),
+      'counting_applicant_name': countingApplicantNameController.text.trim(),
+      'counting_applicant_address': countingApplicantAddressController.text.trim(),
+      'government_counting_details': governmentCountingDetailsController.text.trim(),
+      'government_counting_order_files': governmentCountingOrderFiles.toList(),
     };
   }
 
-  // Utility method to check if POA fields should be shown
-  bool get shouldShowPOAFields {
-    return isHolderThemselves.value == false &&
-        hasAuthorityOnBehalf.value == true;
+  // Utility Methods
+  void clearForm() {
+    governmentCountingOfficerController.clear();
+    governmentCountingOfficerAddressController.clear();
+    governmentCountingOrderNumberController.clear();
+    governmentCountingOrderDateController.clear();
+    countingApplicantNameController.clear();
+    countingApplicantAddressController.clear();
+    governmentCountingDetailsController.clear();
+    governmentCountingOrderDate.value = null;
+    governmentCountingOrderFiles.clear();
   }
 
-  // Utility method to check if authority question should be shown
-  bool get shouldShowAuthorityQuestion {
-    return isHolderThemselves.value == false;
+  void loadData(Map<String, dynamic> data) {
+    governmentCountingOfficerController.text = data['government_counting_officer'] ?? '';
+    governmentCountingOfficerAddressController.text = data['government_counting_officer_address'] ?? '';
+    governmentCountingOrderNumberController.text = data['government_counting_order_number'] ?? '';
+    governmentCountingOrderDateController.text = data['government_counting_order_date'] ?? '';
+    countingApplicantNameController.text = data['counting_applicant_name'] ?? '';
+    countingApplicantAddressController.text = data['counting_applicant_address'] ?? '';
+    governmentCountingDetailsController.text = data['government_counting_details'] ?? '';
+
+    // Load date object if exists
+    if (data['government_counting_order_date_object'] != null) {
+      try {
+        governmentCountingOrderDate.value = DateTime.parse(data['government_counting_order_date_object']);
+      } catch (e) {
+        print('Error parsing date: $e');
+      }
+    }
+
+    // Load files if exists
+    if (data['government_counting_order_files'] != null) {
+      governmentCountingOrderFiles.assignAll(
+          List<String>.from(data['government_counting_order_files'])
+      );
+    }
   }
 }

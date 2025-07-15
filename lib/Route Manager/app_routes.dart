@@ -19,8 +19,8 @@ class AppRoutes {
   static const newCalculationApplication = '/newCalculationApplication';
   static const landAcquisitionCalculationApplication = '/LandAcquisitionCalculationApplication';
   static const courtCommissionCase = '/CourtCommissionCase';
-  static const courtAllocationCase = '/CourtCommissionCase';
-  static const governmentCensus = '/CourtCommissionCase';
+  static const courtAllocationCase = '/courtAllocationCase';
+  static const governmentCensus = '/governmentCensus';
 
   static const cleaner = '/cleaner/dashboard';
   static const inspector = '/inspector/dashboard';
