@@ -1,116 +1,111 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'main_controller.dart';
+import '../Controller/main_controller.dart';
 
-class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
-  // Form Controllers
-  final applicantNameController = TextEditingController();
-  final applicantPhoneController = TextEditingController();
-  final relationshipController = TextEditingController();
-  final relationshipWithApplicantController = TextEditingController();
-  final poaRegistrationNumberController = TextEditingController();
-  final poaRegistrationDateController = TextEditingController();
-  final poaIssuerNameController = TextEditingController();
-  final poaHolderNameController = TextEditingController();
-  final poaHolderAddressController = TextEditingController();
+class PersonalInfoController extends GetxController
+    with StepValidationMixin, StepDataMixin {
 
-  // Observable boolean values for questions
-  final isHolderThemselves = Rxn<bool>();
-  final hasAuthorityOnBehalf = Rxn<bool>();
-  final hasBeenCountedBefore = Rxn<bool>();
+  // Text Controllers
+  final courtNameController = TextEditingController();
+  final courtAddressController = TextEditingController();
+  final courtOrderNumberController = TextEditingController();
+  final courtAllotmentDateController = TextEditingController();
+  final claimNumberYearController = TextEditingController();
+  final specialOrderCommentsController = TextEditingController();
+
+  // File Upload Lists
+  final courtOrderFiles = <String>[].obs;
+
+  // Date Selection
+  final courtAllotmentDate = Rxn<DateTime>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _initializeControllers();
+  }
+
+  void _initializeControllers() {
+    // Initialize any default values if needed
+  }
 
   @override
   void onClose() {
-    // Dispose all controllers
-    applicantNameController.dispose();
-    applicantPhoneController.dispose();
-    relationshipController.dispose();
-    relationshipWithApplicantController.dispose();
-    poaRegistrationNumberController.dispose();
-    poaRegistrationDateController.dispose();
-    poaIssuerNameController.dispose();
-    poaHolderNameController.dispose();
-    poaHolderAddressController.dispose();
+    // Dispose text controllers
+    courtNameController.dispose();
+    courtAddressController.dispose();
+    courtOrderNumberController.dispose();
+    courtAllotmentDateController.dispose();
+    claimNumberYearController.dispose();
+    specialOrderCommentsController.dispose();
     super.onClose();
   }
 
-  // Reset methods for dependent fields
-  void resetAuthorityFields() {
-    hasAuthorityOnBehalf.value = null;
-    applicantNameController.clear();
-    applicantPhoneController.clear();
-    relationshipController.clear();
-    relationshipWithApplicantController.clear();
-    clearPOAFields();
+  // Date Update Methods
+  void updateCourtAllotmentDate(DateTime selectedDate) {
+    courtAllotmentDate.value = selectedDate;
+    courtAllotmentDateController.text =
+    "${selectedDate.day.toString().padLeft(2, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.year}";
   }
 
-  void clearPOAFields() {
-    poaRegistrationNumberController.clear();
-    poaRegistrationDateController.clear();
-    poaIssuerNameController.clear();
-    poaHolderNameController.clear();
-    poaHolderAddressController.clear();
+  // Field Validation Methods
+  bool _validateCourtName() {
+    return courtNameController.text.trim().isNotEmpty &&
+        courtNameController.text.trim().length >= 3;
   }
 
-  // Handle holder themselves selection
-  void updateHolderThemselves(bool? value) {
-    isHolderThemselves.value = value;
-    if (value == true) {
-      resetAuthorityFields();
-    }
+  bool _validateCourtAddress() {
+    return courtAddressController.text.trim().isNotEmpty &&
+        courtAddressController.text.trim().length >= 10;
   }
 
-  // Handle authority on behalf selection
-  void updateAuthorityOnBehalf(bool? value) {
-    hasAuthorityOnBehalf.value = value;
-    if (value != true) {
-      clearPOAFields();
-    }
+  bool _validateCourtOrderNumber() {
+    return courtOrderNumberController.text.trim().isNotEmpty &&
+        courtOrderNumberController.text.trim().length >= 3;
   }
 
-  // Handle enumeration check
-  void updateEnumerationCheck(bool? value) {
-    hasBeenCountedBefore.value = value;
+  bool _validateCourtAllotmentDate() {
+    return courtAllotmentDateController.text.trim().isNotEmpty &&
+        courtAllotmentDate.value != null;
   }
 
+  bool _validateClaimNumberYear() {
+    return claimNumberYearController.text.trim().isNotEmpty &&
+        claimNumberYearController.text.trim().length >= 4;
+  }
+
+  bool _validateCourtOrderFiles() {
+    return courtOrderFiles.isNotEmpty;
+  }
+
+  bool _validateSpecialOrderComments() {
+    return specialOrderCommentsController.text.trim().isNotEmpty &&
+        specialOrderCommentsController.text.trim().length >= 10;
+  }
+
+  // Step Validation Mixin Implementation
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'holder_verification':
-      // Check if holder themselves is selected
-        if (isHolderThemselves.value == null) return false;
-
-        // If not holder themselves, check authority
-        if (isHolderThemselves.value == false) {
-          if (hasAuthorityOnBehalf.value == null) return false;
-
-          // If has authority, validate POA fields
-          if (hasAuthorityOnBehalf.value == true) {
-            return _validatePOAFields();
-          }
-        }
-        return true;
-
-      case 'enumeration_check':
-        return hasBeenCountedBefore.value != null;
-
+      case 'calculation':
+        return _validateCourtName() &&
+            _validateCourtAddress() &&
+            _validateCourtOrderNumber() &&
+            _validateCourtAllotmentDate() &&
+            _validateClaimNumberYear() &&
+            _validateCourtOrderFiles() &&
+            _validateSpecialOrderComments();
       default:
         return true;
     }
   }
 
-  bool _validatePOAFields() {
-    return poaRegistrationNumberController.text.trim().length >= 3 &&
-        poaRegistrationDateController.text.trim().isNotEmpty &&
-        poaIssuerNameController.text.trim().length >= 2 &&
-        poaHolderNameController.text.trim().length >= 2 &&
-        poaHolderAddressController.text.trim().length >= 5;
-  }
-
   @override
   bool isStepCompleted(List<String> fields) {
     for (String field in fields) {
-      if (!validateCurrentSubStep(field)) return false;
+      if (!validateCurrentSubStep(field)) {
+        return false;
+      }
     }
     return true;
   }
@@ -118,75 +113,92 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   @override
   String getFieldError(String field) {
     switch (field) {
-      case 'holder_verification':
-        if (isHolderThemselves.value == null) {
-          return 'Please select if you are the holder';
+      case 'calculation':
+        if (!_validateCourtName()) {
+          return 'Court name is required (minimum 3 characters)';
         }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == null) {
-          return 'Please select if you have authority on behalf';
+        if (!_validateCourtAddress()) {
+          return 'Court address is required (minimum 10 characters)';
         }
-        if (isHolderThemselves.value == false &&
-            hasAuthorityOnBehalf.value == true) {
-          return _getPOAValidationError();
+        if (!_validateCourtOrderNumber()) {
+          return 'Court order number is required (minimum 3 characters)';
         }
-        return 'Please complete holder verification';
-
-      case 'enumeration_check':
-        return 'Please select if this has been counted before';
-
+        if (!_validateCourtAllotmentDate()) {
+          return 'Court allotment date is required';
+        }
+        if (!_validateClaimNumberYear()) {
+          return 'Claim number and year is required (minimum 4 characters)';
+        }
+        if (!_validateCourtOrderFiles()) {
+          return 'Court allocation order document is required';
+        }
+        if (!_validateSpecialOrderComments()) {
+          return 'Special order or comments are required (minimum 10 characters)';
+        }
+        return 'Please fill all required fields';
       default:
         return 'This field is required';
     }
   }
 
-  String _getPOAValidationError() {
-    if (poaRegistrationNumberController.text.trim().length < 3) {
-      return 'Registration number must be at least 3 characters';
-    }
-    if (poaRegistrationDateController.text.trim().isEmpty) {
-      return 'Registration date is required';
-    }
-    if (poaIssuerNameController.text.trim().length < 2) {
-      return 'Issuer name must be at least 2 characters';
-    }
-    if (poaHolderNameController.text.trim().length < 2) {
-      return 'Holder name must be at least 2 characters';
-    }
-    if (poaHolderAddressController.text.trim().length < 5) {
-      return 'Address must be at least 5 characters';
-    }
-    return 'Please complete all Power of Attorney fields';
-  }
-
+  // Step Data Mixin Implementation
   @override
   Map<String, dynamic> getStepData() {
     return {
-      'personal_info': {
-        'is_holder_themselves': isHolderThemselves.value,
-        'has_authority_on_behalf': hasAuthorityOnBehalf.value,
-        'has_been_counted_before': hasBeenCountedBefore.value,
-        'applicant_name': applicantNameController.text.trim(),
-        'applicant_phone': applicantPhoneController.text.trim(),
-        'relationship': relationshipController.text.trim(),
-        'relationship_with_applicant': relationshipWithApplicantController.text.trim(),
-        'poa_registration_number': poaRegistrationNumberController.text.trim(),
-        'poa_registration_date': poaRegistrationDateController.text.trim(),
-        'poa_issuer_name': poaIssuerNameController.text.trim(),
-        'poa_holder_name': poaHolderNameController.text.trim(),
-        'poa_holder_address': poaHolderAddressController.text.trim(),
-      }
+      'courtName': courtNameController.text.trim(),
+      'courtAddress': courtAddressController.text.trim(),
+      'courtOrderNumber': courtOrderNumberController.text.trim(),
+      'courtAllotmentDate': courtAllotmentDateController.text.trim(),
+      'courtAllotmentDateValue': courtAllotmentDate.value?.toIso8601String(),
+      'claimNumberYear': claimNumberYearController.text.trim(),
+      'courtOrderFiles': courtOrderFiles.toList(),
+      'specialOrderComments': specialOrderCommentsController.text.trim(),
+      'stepCompleted': isStepCompleted(['calculation']),
+      'timestamp': DateTime.now().toIso8601String(),
     };
   }
 
-  // Utility method to check if POA fields should be shown
-  bool get shouldShowPOAFields {
-    return isHolderThemselves.value == false &&
-        hasAuthorityOnBehalf.value == true;
+  // Helper Methods
+  void clearAllFields() {
+    courtNameController.clear();
+    courtAddressController.clear();
+    courtOrderNumberController.clear();
+    courtAllotmentDateController.clear();
+    claimNumberYearController.clear();
+    specialOrderCommentsController.clear();
+    courtOrderFiles.clear();
+    courtAllotmentDate.value = null;
   }
 
-  // Utility method to check if authority question should be shown
-  bool get shouldShowAuthorityQuestion {
-    return isHolderThemselves.value == false;
+  // Load data from saved state
+  void loadStepData(Map<String, dynamic> data) {
+    courtNameController.text = data['courtName'] ?? '';
+    courtAddressController.text = data['courtAddress'] ?? '';
+    courtOrderNumberController.text = data['courtOrderNumber'] ?? '';
+    courtAllotmentDateController.text = data['courtAllotmentDate'] ?? '';
+    claimNumberYearController.text = data['claimNumberYear'] ?? '';
+    specialOrderCommentsController.text = data['specialOrderComments'] ?? '';
+
+    if (data['courtOrderFiles'] != null) {
+      courtOrderFiles.assignAll(List<String>.from(data['courtOrderFiles']));
+    }
+
+    if (data['courtAllotmentDateValue'] != null) {
+      courtAllotmentDate.value = DateTime.parse(data['courtAllotmentDateValue']);
+    }
+  }
+
+  // Print current data for debugging
+  void printCurrentData() {
+    print('=== Court Allocation Data ===');
+    print('Court Name: ${courtNameController.text}');
+    print('Court Address: ${courtAddressController.text}');
+    print('Court Order Number: ${courtOrderNumberController.text}');
+    print('Court Allotment Date: ${courtAllotmentDateController.text}');
+    print('Claim Number & Year: ${claimNumberYearController.text}');
+    print('Special Order/Comments: ${specialOrderCommentsController.text}');
+    print('Court Order Files: ${courtOrderFiles.length} files');
+    print('Step Completed: ${isStepCompleted(['calculation'])}');
+    print('=============================');
   }
 }
