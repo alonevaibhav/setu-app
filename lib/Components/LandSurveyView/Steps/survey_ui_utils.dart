@@ -332,7 +332,8 @@ class SurveyUIUtils {
     String sourceLanguage = 'en',
     String? errorText, // Add errorText parameter
     ValueChanged<String>? onChanged, // Add onChanged parameter
-    GestureTapCallback? onTap, // Add onTap parameter
+    GestureTapCallback? onTap,
+    bool? readOnly, // Add onTap parameter
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

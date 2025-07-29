@@ -1,0 +1,199 @@
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import '../Controller/main_controller.dart';
+
+class StepFourController extends GetxController with StepValidationMixin, StepDataMixin {
+  // Text Controllers
+  final calculationFeeController = TextEditingController();
+
+  // Dropdown Values
+  final selectedCalculationType = RxnString();
+  final selectedDuration = RxnString();
+  final selectedHolderType = RxnString();
+  final selectedLocationCategory = RxnString();
+
+  // Dropdown Options
+  final calculationTypeOptions = ['Hddkayam'].obs;
+
+  final durationOptions = [
+    'Regular',
+    'Fast pace'
+  ].obs;
+
+  final holderTypeOptions = [
+    'Holder (farmer)',
+    'Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)'
+  ].obs;
+
+  final locationCategoryOptions = [
+    'म.न.पा./न.पा. अंतर्गत',
+    'म.न.पा./न.पा. बाहेरील'
+  ].obs;
+
+  // Fee calculation map
+  final Map<String, int> feeCalculationMap = {
+    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'Hddkayam_Regular_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 2000,
+    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 8000,
+    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. बाहेरील': 8000,
+  };
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Set default calculation type
+    selectedCalculationType.value = 'Hddkayam';
+    _setupListeners();
+  }
+
+  @override
+  void onClose() {
+    calculationFeeController.dispose();
+    super.onClose();
+  }
+
+  void _setupListeners() {
+    // Listen for changes in any dropdown to recalculate fee
+    ever(selectedCalculationType, (_) => _calculateFee());
+    ever(selectedDuration, (_) => _calculateFee());
+    ever(selectedHolderType, (_) => _calculateFee());
+    ever(selectedLocationCategory, (_) => _calculateFee());
+  }
+
+  void updateCalculationType(String? value) {
+    selectedCalculationType.value = value;
+  }
+
+  void updateDuration(String? value) {
+    selectedDuration.value = value;
+  }
+
+  void updateHolderType(String? value) {
+    selectedHolderType.value = value;
+  }
+
+  void updateLocationCategory(String? value) {
+    selectedLocationCategory.value = value;
+  }
+
+  void _calculateFee() {
+    final calculationType = selectedCalculationType.value;
+    final duration = selectedDuration.value;
+    final holderType = selectedHolderType.value;
+    final locationCategory = selectedLocationCategory.value;
+
+    if (calculationType != null &&
+        duration != null &&
+        holderType != null &&
+        locationCategory != null) {
+
+      final key = '${calculationType}_${duration}_${holderType}_${locationCategory}';
+      final fee = feeCalculationMap[key];
+
+      if (fee != null) {
+        calculationFeeController.text = '${fee}₹';
+      } else {
+        calculationFeeController.text = '0₹';
+      }
+    } else {
+      calculationFeeController.text = '';
+    }
+  }
+
+  // StepValidationMixin implementation
+  @override
+  bool validateCurrentSubStep(String field) {
+    switch (field) {
+      case 'calculation':
+        return _validateCalculationFields();
+      case 'status':
+        return true; // Status field validation if needed
+      default:
+        return false;
+    }
+  }
+
+  bool _validateCalculationFields() {
+    return selectedCalculationType.value != null &&
+        selectedDuration.value != null &&
+        selectedHolderType.value != null &&
+        selectedLocationCategory.value != null &&
+        calculationFeeController.text.isNotEmpty;
+  }
+
+  @override
+  bool isStepCompleted(List<String> fields) {
+    for (String field in fields) {
+      if (!validateCurrentSubStep(field)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  String getFieldError(String field) {
+    switch (field) {
+      case 'calculation':
+        if (selectedCalculationType.value == null) {
+          return 'Please select calculation type';
+        }
+        if (selectedDuration.value == null) {
+          return 'Please select duration';
+        }
+        if (selectedHolderType.value == null) {
+          return 'Please select holder type';
+        }
+        if (selectedLocationCategory.value == null) {
+          return 'Please select location category';
+        }
+        if (calculationFeeController.text.isEmpty) {
+          return 'Calculation fee is required';
+        }
+        return 'Please complete all calculation fields';
+      default:
+        return 'This field is required';
+    }
+  }
+
+  // StepDataMixin implementation
+  @override
+  Map<String, dynamic> getStepData() {
+    return {
+      'calculation_type': selectedCalculationType.value,
+      'duration': selectedDuration.value,
+      'holder_type': selectedHolderType.value,
+      'location_category': selectedLocationCategory.value,
+      'calculation_fee': calculationFeeController.text,
+      'calculation_fee_numeric': _extractNumericFee(),
+    };
+  }
+
+  int? _extractNumericFee() {
+    final text = calculationFeeController.text.replaceAll('₹', '').trim();
+    return int.tryParse(text);
+  }
+
+  // Helper method to get short holder type display
+  String getShortHolderType(String holderType) {
+    if (holderType == 'Holder (farmer)') {
+      return 'Holder (farmer)';
+    } else if (holderType.contains('Companies')) {
+      return 'Companies/Other Institutions';
+    } else {
+      return holderType; // Return as-is if it doesn't match expected patterns
+    }
+  }
+
+  // Reset all fields
+  void resetFields() {
+    selectedCalculationType.value = 'Hddkayam';
+    selectedDuration.value = null;
+    selectedHolderType.value = null;
+    selectedLocationCategory.value = null;
+    calculationFeeController.clear();
+  }
+}

@@ -94,13 +94,10 @@
 import 'package:flutter/material.dart';
 import '../../Controller/land_survey_controller.dart';
 import 'Controller/main_controller.dart';
-import 'Steps/applicant_information.dart';
-import 'Steps/coowner_information.dart';
-import 'Steps/document_upload.dart';
-import 'Steps/information_about.dart';
-import 'Steps/payment.dart';
+
 import 'Steps/preview.dart';
 import 'Steps/start.dart';
+import 'Steps/step_four_view.dart';
 import 'Steps/survey_cts.dart';
 import 'Steps/survey_information.dart';
 
@@ -140,7 +137,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           controller: widget.mainController,
         );
       case 3:
-        return PersonalInfoStep(
+        return StepFourView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

@@ -6,11 +6,11 @@ import 'package:get/get.dart';
 import '../../../Constants/color_constant.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
-import 'ZLandAcquisitionUIUtils.dart';
+import 'ZSurveyUIUtils.dart';
 
 class PersonalInfoStep extends StatelessWidget {
   final int currentSubStep;
-  final MainLandAcquisitionController mainController;
+  final MainSurveyController mainController;
 
   const PersonalInfoStep({
     Key? key,
@@ -46,14 +46,14 @@ class PersonalInfoStep extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LandAcquisitionUIUtils.buildStepHeader(
+        SurveyUIUtils.buildStepHeader(
           'Land Acquisition Details',
           'Please provide land acquisition information',
         ),
         Gap(24.h),
 
         // Name of Land Acquisition Officer/Office
-        LandAcquisitionUIUtils.buildTextFormField(
+        SurveyUIUtils.buildTextFormField(
           controller: controller.landAcquisitionOfficerController,
           label: 'Name of Land Acquisition Officer/Office *',
           hint: 'Enter officer/office name',
@@ -71,7 +71,7 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(16.h),
 
         // Name and address of Land Acquisition Board
-        LandAcquisitionUIUtils.buildTextFormField(
+        SurveyUIUtils.buildTextFormField(
           controller: controller.landAcquisitionBoardController,
           label: 'Name and address of Land Acquisition Board *',
           hint: 'Enter board name and address',
@@ -90,7 +90,7 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(16.h),
 
         // Land acquisition details
-        LandAcquisitionUIUtils.buildTextFormField(
+        SurveyUIUtils.buildTextFormField(
           controller: controller.landAcquisitionDetailsController,
           label: 'Land acquisition details *',
           hint: 'Enter detailed land acquisition information',
@@ -109,7 +109,7 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(16.h),
 
         // Land Acquisition Order/Proposal Number
-        LandAcquisitionUIUtils.buildTextFormField(
+        SurveyUIUtils.buildTextFormField(
           controller: controller.landAcquisitionOrderNumberController,
           label: 'Land Acquisition Order/Proposal Number *',
           hint: 'Enter order/proposal number',
@@ -127,7 +127,7 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(16.h),
 
         // Date of Land Acquisition Order/Proposal
-        LandAcquisitionUIUtils.buildDatePickerField(
+        SurveyUIUtils.buildDatePickerField(
           controller: controller.landAcquisitionOrderDateController,
           label: 'Date of Land Acquisition Order/Proposal *',
           hint: 'dd-mm-yyyy',
@@ -145,7 +145,7 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(16.h),
 
         // Name and address of the office issuing the land acquisition order
-        LandAcquisitionUIUtils.buildTextFormField(
+        SurveyUIUtils.buildTextFormField(
           controller: controller.landAcquisitionOfficeAddressController,
           label:
               'Name and address of the office issuing the land acquisition order *',
@@ -196,7 +196,7 @@ class PersonalInfoStep extends StatelessWidget {
         ),
         Gap(32.h),
 
-        // Obx(() => LandAcquisitionUIUtils.buildDropdownField(
+        // Obx(() => SurveyUIUtils.buildDropdownField(
         //       label: 'Department*',
         //       value: controller.selectedDepartment.value,
         //       items: controller.departmentOptions,
@@ -204,7 +204,7 @@ class PersonalInfoStep extends StatelessWidget {
         //       icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         //     )),
 
-        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
+        SurveyUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
