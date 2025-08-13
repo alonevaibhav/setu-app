@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 import '../../LandAcquisitionView/Controller/step_three_controller.dart';
 import '../../LandAcquisitionView/Controller/survey_cts.dart';
+import 'land_fouth_controller.dart';
 
 // Import all step controllers
 
@@ -18,6 +19,7 @@ class MainLandAcquisitionController extends GetxController {
   late final PersonalInfoController personalInfoController;
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
+  late final LandFouthController landFouthController; // Add this line
 
   // Add more controllers as needed
 
@@ -29,7 +31,7 @@ class MainLandAcquisitionController extends GetxController {
     0: ['land_acquisition_details',], // Personal Info step
     1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
     2: ['calculation'], // Survey Information
-    3: ['calculation', 'status'], // Calculation Information
+    3: ['fouth_step',], // Calculation Information
     4: ['applicant', 'status'], // Applicant Information
     5: ['coowner', 'status'], // Co-owner Information
     6: ['adjacent', 'status'], // Information about Adjacent Holders
@@ -53,6 +55,7 @@ class MainLandAcquisitionController extends GetxController {
     personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    landFouthController = Get.put(LandFouthController(), tag: 'land_fouth'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -99,6 +102,8 @@ class MainLandAcquisitionController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
+        case 3: // Add this case for calculation step
+        return landFouthController;
     // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -128,6 +133,8 @@ class MainLandAcquisitionController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
+        case 3: // Add this case
+        stepController = landFouthController;
     // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -321,7 +328,8 @@ class MainLandAcquisitionController extends GetxController {
     final allControllers = [
       personalInfoController,
       surveyCTSController,
-      calculationController
+      calculationController,
+      landFouthController,
       // Add more controllers
     ];
     for (final controller in allControllers) {

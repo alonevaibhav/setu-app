@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -8,7 +9,7 @@ import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 
-class PersonalInfoStep extends StatelessWidget {
+class DummyViewToUse extends StatelessWidget {
   final int currentSubStep;
   final MainLandAcquisitionController mainController;
 
@@ -19,7 +20,8 @@ class PersonalInfoStep extends StatelessWidget {
   }) : super(key: key);
 
   // Get the PersonalInfoController
-  PersonalInfoController get controller => Get.find<PersonalInfoController>(tag: 'personal_info');
+  PersonalInfoController get controller =>
+      Get.find<PersonalInfoController>(tag: 'personal_info');
 
   @override
   Widget build(BuildContext context) {
