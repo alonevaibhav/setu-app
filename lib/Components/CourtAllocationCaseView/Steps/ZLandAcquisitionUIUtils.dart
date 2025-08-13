@@ -146,8 +146,7 @@ class CourtAllocationCaseUIUtils {
                     );
 
                     if (selectedDate != null) {
-                      controller.text =
-                          DateFormat(dateFormat).format(selectedDate);
+                      controller.text = DateFormat(dateFormat).format(selectedDate);
                       if (onDateSelected != null) {
                         onDateSelected(selectedDate);
                       }
@@ -202,7 +201,7 @@ class CourtAllocationCaseUIUtils {
     );
   }
 
-  /// Custom Date Picker with attractive design
+//// Custom Date Picker with attractive design - WORKING VERSION
   static Future<DateTime?> _showCustomDatePicker({
     required BuildContext context,
     required DateTime initialDate,
@@ -274,40 +273,61 @@ class CourtAllocationCaseUIUtils {
                   ),
                 ),
 
-                // Calendar
+                // Calendar - FIXED: Use fresh ThemeData instead of copyWith
                 Padding(
                   padding: EdgeInsets.all(20.w * sizeFactor),
-                  child: Theme(
-                    data: Theme.of(context).copyWith(
-                      colorScheme: ColorScheme.light(
-                        primary: SetuColors.primaryGreen,
-                        onPrimary: Colors.white,
-                        surface: Colors.white,
-                        onSurface: SetuColors.textPrimary,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Theme(
+                      // KEY FIX: Use ThemeData.light() instead of Theme.of(context).copyWith()
+                      data: ThemeData.light().copyWith(
+                        colorScheme: ColorScheme.light(
+                          primary: SetuColors.primaryGreen,
+                          onPrimary: Colors.white,
+                          surface: Colors.white,
+                          onSurface: Colors.black87, // Force black text for dates
+                          surfaceVariant: Colors.grey.shade50,
+                          onSurfaceVariant: Colors.black87, // Force black for date numbers
+                          outline: Colors.grey.shade300,
+                          secondary: SetuColors.primaryGreen,
+                          onSecondary: Colors.white,
+                        ),
+                        textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+                          headlineSmall: GoogleFonts.poppins(
+                            fontSize: 20.sp * sizeFactor,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
+                          ),
+                          bodyLarge: GoogleFonts.poppins(
+                            fontSize: 14.sp * sizeFactor,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87, // This is crucial for date numbers
+                          ),
+                          bodyMedium: GoogleFonts.poppins(
+                            fontSize: 14.sp * sizeFactor,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                          bodySmall: GoogleFonts.poppins(
+                            fontSize: 12.sp * sizeFactor,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black54,
+                          ),
+                          labelLarge: GoogleFonts.poppins(
+                            fontSize: 14.sp * sizeFactor,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
                       ),
-                      textTheme: TextTheme(
-                        headlineSmall: GoogleFonts.poppins(
-                          fontSize: 20.sp * sizeFactor,
-                          fontWeight: FontWeight.w600,
-                          color: SetuColors.textPrimary,
-                        ),
-                        bodyLarge: GoogleFonts.poppins(
-                          fontSize: 14.sp * sizeFactor,
-                          color: SetuColors.textPrimary,
-                        ),
-                        bodyMedium: GoogleFonts.poppins(
-                          fontSize: 12.sp * sizeFactor,
-                          color: SetuColors.textSecondary,
-                        ),
+                      child: CalendarDatePicker(
+                        initialDate: initialDate,
+                        firstDate: firstDate,
+                        lastDate: lastDate,
+                        onDateChanged: (DateTime date) {
+                          Navigator.of(context).pop(date);
+                        },
                       ),
-                    ),
-                    child: CalendarDatePicker(
-                      initialDate: initialDate,
-                      firstDate: firstDate,
-                      lastDate: lastDate,
-                      onDateChanged: (DateTime date) {
-                        Navigator.of(context).pop(date);
-                      },
                     ),
                   ),
                 ),

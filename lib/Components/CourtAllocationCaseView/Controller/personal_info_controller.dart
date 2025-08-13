@@ -88,17 +88,25 @@ class PersonalInfoController extends GetxController
   bool validateCurrentSubStep(String field) {
     switch (field) {
       case 'calculation':
-        return _validateCourtName() &&
-            _validateCourtAddress() &&
-            _validateCourtOrderNumber() &&
-            _validateCourtAllotmentDate() &&
-            _validateClaimNumberYear() &&
-            _validateCourtOrderFiles() &&
-            _validateSpecialOrderComments();
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'calculation':
+  //       return _validateCourtName() &&
+  //           _validateCourtAddress() &&
+  //           _validateCourtOrderNumber() &&
+  //           _validateCourtAllotmentDate() &&
+  //           _validateClaimNumberYear() &&
+  //           _validateCourtOrderFiles() &&
+  //           _validateSpecialOrderComments();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {

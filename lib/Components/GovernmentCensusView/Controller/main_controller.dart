@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../GovernmentCensusView/Controller/personal_info_controller.dart';
 import '../../GovernmentCensusView/Controller/step_three_controller.dart';
 import '../../GovernmentCensusView/Controller/survey_cts.dart';
+import 'census_fourth_controller.dart';
 // Import all step controllers
 
 class GovernmentCensusController extends GetxController {
@@ -16,6 +17,7 @@ class GovernmentCensusController extends GetxController {
   late final PersonalInfoController personalInfoController;
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
+  late final CensusFourthController censusFourthController; // Add this line
 
   // Add more controllers as needed
 
@@ -55,11 +57,10 @@ class GovernmentCensusController extends GetxController {
   }
 
   void _initializeControllers() {
-    personalInfoController =
-        Get.put(PersonalInfoController(), tag: 'personal_info');
+    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
-    calculationController =
-        Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    censusFourthController = Get.put(CensusFourthController(), tag: 'census_fourth'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -106,6 +107,8 @@ class GovernmentCensusController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
+        case 3: // Add this case for calculation step
+        return censusFourthController;
       // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -135,6 +138,8 @@ class GovernmentCensusController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
+        case 3: // Add this case
+        stepController = censusFourthController;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -328,7 +333,8 @@ class GovernmentCensusController extends GetxController {
     final allControllers = [
       personalInfoController,
       surveyCTSController,
-      calculationController
+      calculationController,
+      censusFourthController
       // Add more controllers
     ];
     for (final controller in allControllers) {

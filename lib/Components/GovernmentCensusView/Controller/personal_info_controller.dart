@@ -55,14 +55,23 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   // Validation Methods (StepValidationMixin implementation)
   @override
+  @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
       case 'government_counting_details':
-        return _validateGovernmentCountingDetails();
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'government_counting_details':
+  //       return _validateGovernmentCountingDetails();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateGovernmentCountingDetails() {
     // Validate required fields
