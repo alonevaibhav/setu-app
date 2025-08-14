@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
+import 'package:get/get.dart';
+import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../Controller/main_controller.dart';
-import '../Controller/step_three_controller.dart';
+import '../Controller/personal_info_controller.dart';
 
 class CalculationInformation extends StatelessWidget {
   final int currentSubStep;
-  final MainLandAcquisitionController controller;
+  final MainSurveyController controller;
 
   const CalculationInformation({
     Key? key,
@@ -20,7 +21,7 @@ class CalculationInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps = controller.stepConfigurations[2] ?? ['calculation'];
+    final subSteps = controller.stepConfigurations[4] ?? ['calculation'];
 
     if (currentSubStep >= subSteps.length) {
       return _buildCalculationInput();
@@ -42,17 +43,17 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LandAcquisitionUIUtils.buildStepHeader(
+        SurveyUIUtils.buildStepHeader(
           'Land Acquisition Survey Information',
           'Enter survey details and area calculations for land acquisition',
         ),
-        Gap(24.h * LandAcquisitionUIUtils.sizeFactor),
+        Gap(24.h * SurveyUIUtils.sizeFactor),
 
         // Survey Entries Section
         _buildSurveyEntries(calcController),
 
-        Gap(32.h * LandAcquisitionUIUtils.sizeFactor),
-        LandAcquisitionUIUtils.buildNavigationButtons(controller),
+        Gap(32.h * SurveyUIUtils.sizeFactor),
+        SurveyUIUtils.buildNavigationButtons(controller),
       ],
     );
   }
@@ -61,16 +62,16 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        LandAcquisitionUIUtils.buildTranslatableText(
+        SurveyUIUtils.buildTranslatableText(
           text: 'Survey Entries',
           style: TextStyle(
-            fontSize: 18.sp * LandAcquisitionUIUtils.sizeFactor,
+            fontSize: 18.sp * SurveyUIUtils.sizeFactor,
             fontWeight: FontWeight.w600,
             color: SetuColors.primaryGreen,
           ),
         ),
 
-        Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
+        Gap(20.h * SurveyUIUtils.sizeFactor),
 
         // Survey Entries List
         Obx(() => Column(
@@ -80,7 +81,7 @@ class CalculationInformation extends StatelessWidget {
               ],
             )),
 
-        Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
 
         // Add Another Entry Button
         InkWell(
@@ -88,8 +89,8 @@ class CalculationInformation extends StatelessWidget {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              horizontal: 16.w * LandAcquisitionUIUtils.sizeFactor,
-              vertical: 16.h * LandAcquisitionUIUtils.sizeFactor,
+              horizontal: 16.w * SurveyUIUtils.sizeFactor,
+              vertical: 16.h * SurveyUIUtils.sizeFactor,
             ),
             decoration: BoxDecoration(
               border: Border.all(
@@ -105,13 +106,13 @@ class CalculationInformation extends StatelessWidget {
                 Icon(
                   PhosphorIcons.plus(PhosphorIconsStyle.bold),
                   color: SetuColors.primaryGreen,
-                  size: 24.sp * LandAcquisitionUIUtils.sizeFactor,
+                  size: 24.sp * SurveyUIUtils.sizeFactor,
                 ),
-                Gap(12.w * LandAcquisitionUIUtils.sizeFactor),
-                LandAcquisitionUIUtils.buildTranslatableText(
+                Gap(12.w * SurveyUIUtils.sizeFactor),
+                SurveyUIUtils.buildTranslatableText(
                   text: 'Add Another Entry',
                   style: TextStyle(
-                    fontSize: 16.sp * LandAcquisitionUIUtils.sizeFactor,
+                    fontSize: 16.sp * SurveyUIUtils.sizeFactor,
                     color: SetuColors.primaryGreen,
                     fontWeight: FontWeight.w600,
                   ),
@@ -129,8 +130,8 @@ class CalculationInformation extends StatelessWidget {
     final entry = calcController.surveyEntries[index];
 
     return Container(
-      margin: EdgeInsets.only(bottom: 20.h * LandAcquisitionUIUtils.sizeFactor),
-      padding: EdgeInsets.all(20.w * LandAcquisitionUIUtils.sizeFactor),
+      margin: EdgeInsets.only(bottom: 20.h * SurveyUIUtils.sizeFactor),
+      padding: EdgeInsets.all(20.w * SurveyUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
@@ -155,8 +156,8 @@ class CalculationInformation extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 12.w * LandAcquisitionUIUtils.sizeFactor,
-                  vertical: 8.h * LandAcquisitionUIUtils.sizeFactor,
+                  horizontal: 12.w * SurveyUIUtils.sizeFactor,
+                  vertical: 8.h * SurveyUIUtils.sizeFactor,
                 ),
                 decoration: BoxDecoration(
                   color: SetuColors.primaryGreen,
@@ -165,7 +166,7 @@ class CalculationInformation extends StatelessWidget {
                 child: Text(
                   'Entry ${index + 1}',
                   style: TextStyle(
-                    fontSize: 14.sp * LandAcquisitionUIUtils.sizeFactor,
+                    fontSize: 14.sp * SurveyUIUtils.sizeFactor,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -176,7 +177,7 @@ class CalculationInformation extends StatelessWidget {
                   onTap: () => calcController.removeSurveyEntry(index),
                   child: Container(
                     padding:
-                        EdgeInsets.all(8.w * LandAcquisitionUIUtils.sizeFactor),
+                        EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -184,16 +185,16 @@ class CalculationInformation extends StatelessWidget {
                     child: Icon(
                       PhosphorIcons.trash(PhosphorIconsStyle.regular),
                       color: Colors.red,
-                      size: 18.sp * LandAcquisitionUIUtils.sizeFactor,
+                      size: 18.sp * SurveyUIUtils.sizeFactor,
                     ),
                   ),
                 ),
             ],
           ),
-          Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(20.h * SurveyUIUtils.sizeFactor),
 
           // Village Dropdown - Now inside the survey entries section
-          Obx(() => LandAcquisitionUIUtils.buildDropdownField(
+          Obx(() => SurveyUIUtils.buildDropdownField(
                 label: 'Village *',
                 value: calcController.selectedVillage.value,
                 items: calcController.villageOptions,
@@ -203,10 +204,10 @@ class CalculationInformation extends StatelessWidget {
                 icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
               )),
 
-          Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(20.h * SurveyUIUtils.sizeFactor),
 
           // Survey No./Group No. Input
-          LandAcquisitionUIUtils.buildTextFormField(
+          SurveyUIUtils.buildTextFormField(
             controller: entry['surveyNoController'],
             label: 'Survey No./Group No. *',
             hint: 'Enter survey or group number',
@@ -215,10 +216,10 @@ class CalculationInformation extends StatelessWidget {
                 calcController.updateSurveyEntry(index, 'surveyNo', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Share Input
-          LandAcquisitionUIUtils.buildTextFormField(
+          SurveyUIUtils.buildTextFormField(
             controller: entry['shareController'],
             label: 'Share *',
             hint: 'Enter share value',
@@ -228,10 +229,10 @@ class CalculationInformation extends StatelessWidget {
                 calcController.updateSurveyEntry(index, 'share', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Area Input
-          LandAcquisitionUIUtils.buildTextFormField(
+          SurveyUIUtils.buildTextFormField(
             controller: entry['areaController'],
             label: 'Area *',
             hint: 'Enter total area',
@@ -241,10 +242,10 @@ class CalculationInformation extends StatelessWidget {
                 calcController.updateSurveyEntry(index, 'area', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Land Acquisition Area Input
-          LandAcquisitionUIUtils.buildTextFormField(
+          SurveyUIUtils.buildTextFormField(
             controller: entry['landAcquisitionAreaController'],
             label: 'Land Acquisition Area *',
             hint: 'Enter land acquisition area',
@@ -254,10 +255,10 @@ class CalculationInformation extends StatelessWidget {
                 index, 'landAcquisitionArea', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Abdominal Section Input
-          LandAcquisitionUIUtils.buildTextFormField(
+          SurveyUIUtils.buildTextFormField(
             controller: entry['abdominalSectionController'],
             label: 'Abdominal Section *',
             hint: 'Enter abdominal section details',
@@ -267,11 +268,11 @@ class CalculationInformation extends StatelessWidget {
                 index, 'abdominalSection', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Summary Row
           Container(
-            padding: EdgeInsets.all(12.w * LandAcquisitionUIUtils.sizeFactor),
+            padding: EdgeInsets.all(12.w * SurveyUIUtils.sizeFactor),
             decoration: BoxDecoration(
               color: SetuColors.primaryGreen.withOpacity(0.05),
               borderRadius: BorderRadius.circular(8.r),
@@ -285,14 +286,14 @@ class CalculationInformation extends StatelessWidget {
                 Icon(
                   PhosphorIcons.info(PhosphorIconsStyle.regular),
                   color: SetuColors.primaryGreen,
-                  size: 16.sp * LandAcquisitionUIUtils.sizeFactor,
+                  size: 16.sp * SurveyUIUtils.sizeFactor,
                 ),
-                Gap(8.w * LandAcquisitionUIUtils.sizeFactor),
+                Gap(8.w * SurveyUIUtils.sizeFactor),
                 Expanded(
                   child: Text(
                     'Entry ${index + 1} - Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
                     style: TextStyle(
-                      fontSize: 12.sp * LandAcquisitionUIUtils.sizeFactor,
+                      fontSize: 12.sp * SurveyUIUtils.sizeFactor,
                       color: SetuColors.primaryGreen,
                       fontWeight: FontWeight.w500,
                     ),

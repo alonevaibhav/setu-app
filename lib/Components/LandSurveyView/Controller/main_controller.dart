@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/step_four.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/survey_fifth_controller.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/survey_sixth_controller.dart';
 import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
@@ -19,6 +21,8 @@ class MainSurveyController extends GetxController {
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController;
   late final StepFourController stepFourController;
+  late final SurveyFifthController surveyFifthController;
+  late final SurveySixthController surveySixthController;
 
   // Add more controllers as needed
 
@@ -31,8 +35,8 @@ class MainSurveyController extends GetxController {
     1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
     2: ['calculation'], // Survey Information
     3: ['calculation'], // Calculation Information
-    4: ['applicant', 'status'], // Applicant Information
-    5: ['coowner', 'status'], // Co-owner Information
+    4: ['applicant',], // Applicant Information
+    5: ['coowner', ], // Co-owner Information
     6: ['adjacent', 'status'], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
@@ -55,6 +59,8 @@ class MainSurveyController extends GetxController {
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
     stepFourController = Get.put(StepFourController(), tag: 'step_four'); // Add this line
+    surveyFifthController = Get.put(SurveyFifthController(), tag: 'survey_fifth'); // Add this line
+    surveySixthController = Get.put(SurveySixthController(), tag: 'survey_sixth'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -103,6 +109,10 @@ class MainSurveyController extends GetxController {
         return calculationController;
         case 3: // Add this case for calculation step
         return stepFourController;
+        case 4: // Add this case for calculation step
+        return surveyFifthController;
+        case 5: // Add this case for calculation step
+        return surveySixthController;
       // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -134,6 +144,10 @@ class MainSurveyController extends GetxController {
         stepController = calculationController;
         case 3: // Add this case
         stepController = stepFourController;
+        case 4: // Add this case
+        stepController = surveyFifthController;
+        case 5: // Add this case
+        stepController = surveySixthController;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -329,6 +343,8 @@ class MainSurveyController extends GetxController {
       surveyCTSController,
       calculationController,
       stepFourController,
+      surveyFifthController,
+      surveySixthController,
       // Add more controllers
     ];
     for (final controller in allControllers) {

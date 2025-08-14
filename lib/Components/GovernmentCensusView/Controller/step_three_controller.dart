@@ -187,7 +187,6 @@ class CalculationController extends GetxController
 
   // Implementation of StepValidationMixin
   @override
-  @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
       case 'government_survey':
