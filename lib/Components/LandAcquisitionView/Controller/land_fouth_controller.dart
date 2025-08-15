@@ -120,12 +120,20 @@ class LandFouthController extends GetxController with StepValidationMixin, StepD
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'calculation':
-        return _validateDuration() && _validateHolderType();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'calculation':
+  //       return _validateDuration() && _validateHolderType();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {

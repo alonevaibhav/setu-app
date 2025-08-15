@@ -116,31 +116,39 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'holder_verification':
-      // Check if holder themselves is selected
-        if (isHolderThemselves.value == null) return false;
-
-        // If not holder themselves, check authority
-        if (isHolderThemselves.value == false) {
-          if (hasAuthorityOnBehalf.value == null) return false;
-
-          // If has authority, validate POA fields
-          if (hasAuthorityOnBehalf.value == true) {
-            return _validatePOAFields();
-          }
-        }
-        return true;
-
-      case 'enumeration_check':
-        return hasBeenCountedBefore.value != null;
-
-      case 'land_acquisition_details':
-        return _validateLandAcquisitionFields();
-
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'holder_verification':
+  //     // Check if holder themselves is selected
+  //       if (isHolderThemselves.value == null) return false;
+  //
+  //       // If not holder themselves, check authority
+  //       if (isHolderThemselves.value == false) {
+  //         if (hasAuthorityOnBehalf.value == null) return false;
+  //
+  //         // If has authority, validate POA fields
+  //         if (hasAuthorityOnBehalf.value == true) {
+  //           return _validatePOAFields();
+  //         }
+  //       }
+  //       return true;
+  //
+  //     case 'enumeration_check':
+  //       return hasBeenCountedBefore.value != null;
+  //
+  //     case 'land_acquisition_details':
+  //       return _validateLandAcquisitionFields();
+  //
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validatePOAFields() {
     return poaRegistrationNumberController.text.trim().length >= 3 &&
@@ -171,6 +179,7 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   }
 
   @override
+
   String getFieldError(String field) {
     switch (field) {
       case 'holder_verification':

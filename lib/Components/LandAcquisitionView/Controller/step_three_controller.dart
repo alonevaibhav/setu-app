@@ -170,12 +170,20 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'calculation':
-        return validateCalculationStep();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'calculation':
+  //       return validateCalculationStep();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {

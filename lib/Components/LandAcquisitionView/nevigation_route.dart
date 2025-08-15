@@ -94,6 +94,7 @@
 import 'package:flutter/material.dart';
 import '../../Controller/land_survey_controller.dart';
 import 'Controller/main_controller.dart';
+import 'Steps/land_fifth_view.dart';
 import 'Steps/land_fouth_view.dart';
 import 'Steps/start.dart';
 import 'Steps/survey_cts.dart';
@@ -140,7 +141,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 4:
-        return PersonalInfoStep(
+        return LandFifthView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );
