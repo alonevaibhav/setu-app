@@ -3,8 +3,10 @@ import 'Controller/main_controller.dart';
 import 'Steps/start.dart';
 import 'Steps/step_four_view.dart';
 import 'Steps/survey_cts.dart';
+import 'Steps/survey_eight_view.dart';
 import 'Steps/survey_fifth_view.dart';
 import 'Steps/survey_information.dart';
+import 'Steps/survey_seventh_view.dart';
 import 'Steps/survey_sixth_view.dart';
 
 class SurveyStepWidget extends StatefulWidget {
@@ -58,12 +60,12 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 6:
-        return PersonalInfoStep(
+        return SurveySeventhView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );
       case 7:
-        return PersonalInfoStep(
+        return SurveyEightView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

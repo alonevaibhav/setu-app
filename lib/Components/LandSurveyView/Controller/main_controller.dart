@@ -37,7 +37,7 @@ class MainSurveyController extends GetxController {
     3: ['calculation'], // Calculation Information
     4: ['applicant',], // Applicant Information
     5: ['coowner', ], // Co-owner Information
-    6: ['adjacent', 'status'], // Information about Adjacent Holders
+    6: ['next_of_kin', ], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment

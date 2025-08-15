@@ -21,7 +21,7 @@ class CalculationInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps = controller.stepConfigurations[4] ?? ['calculation'];
+    final subSteps = controller.stepConfigurations[7] ?? ['calculation'];
 
     if (currentSubStep >= subSteps.length) {
       return _buildCalculationInput();

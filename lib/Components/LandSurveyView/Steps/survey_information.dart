@@ -713,8 +713,7 @@ class CalculationInformation extends StatelessWidget {
           hint: 'Upload images or documents',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           uploadedFiles: calcController.incorporationOrderFiles,
-          onFilesSelected: (files) =>
-              calcController.incorporationOrderFiles.assignAll(files),
+          onFilesSelected: (files) => calcController.incorporationOrderFiles.assignAll(files),
         ),
         Gap(24.h * SurveyUIUtils.sizeFactor),
 

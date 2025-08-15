@@ -514,7 +514,7 @@ class SurveyUIUtils {
 
   static Widget buildDropdownField({
     required String label,
-    required String value,
+    required String? value,
     required List<String> items,
     required ValueChanged<String?> onChanged,
     required IconData icon,
@@ -546,7 +546,7 @@ class SurveyUIUtils {
                     snapshot.data ?? Map.fromIterables(items, items);
 
                 return DropdownButtonFormField<String>(
-                  value: value.isEmpty ? null : value,
+                  value: value != null ? null : value,
                   items: items.map((item) {
                     final translatedText = translatedItems[item] ?? item;
                     return DropdownMenuItem(

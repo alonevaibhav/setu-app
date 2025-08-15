@@ -152,58 +152,66 @@ class SurveyFifthController extends GetxController with StepValidationMixin, Ste
   // Validation methods
   @override
   bool validateCurrentSubStep(String field) {
-    validationErrors.clear();
-    bool isValid = true;
-
-    for (int i = 0; i < applicantEntries.length; i++) {
-      final entry = applicantEntries[i];
-
-      // Check required fields
-      if ((entry['agreementController'] as TextEditingController).text.isEmpty) {
-        validationErrors['${i}_agreement'] = 'Agreement is required';
-        isValid = false;
-      }
-
-      if ((entry['accountHolderNameController'] as TextEditingController).text.isEmpty) {
-        validationErrors['${i}_accountHolderName'] = 'Account holder name is required';
-        isValid = false;
-      }
-
-      if ((entry['accountNumberController'] as TextEditingController).text.isEmpty) {
-        validationErrors['${i}_accountNumber'] = 'Account number is required';
-        isValid = false;
-      }
-
-      if ((entry['mobileNumberController'] as TextEditingController).text.isEmpty) {
-        validationErrors['${i}_mobileNumber'] = 'Mobile number is required';
-        isValid = false;
-      }
-
-      // Validate address data
-      final addressData = entry['address'] as RxMap<String, dynamic>;
-      if ((addressData['address'] ?? '').isEmpty) {
-        validationErrors['${i}_address'] = 'Address is required';
-        isValid = false;
-      }
-
-      if ((addressData['pincode'] ?? '').isEmpty) {
-        validationErrors['${i}_pincode'] = 'Pincode is required';
-        isValid = false;
-      }
-
-      if ((addressData['village'] ?? '').isEmpty) {
-        validationErrors['${i}_village'] = 'Village is required';
-        isValid = false;
-      }
-
-      if ((addressData['postOffice'] ?? '').isEmpty) {
-        validationErrors['${i}_postOffice'] = 'Post Office is required';
-        isValid = false;
-      }
+    switch (field) {
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
+      default:
+        return true;
     }
-
-    return isValid;
   }
+  // bool validateCurrentSubStep(String field) {
+  //   validationErrors.clear();
+  //   bool isValid = true;
+  //
+  //   for (int i = 0; i < applicantEntries.length; i++) {
+  //     final entry = applicantEntries[i];
+  //
+  //     // Check required fields
+  //     if ((entry['agreementController'] as TextEditingController).text.isEmpty) {
+  //       validationErrors['${i}_agreement'] = 'Agreement is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((entry['accountHolderNameController'] as TextEditingController).text.isEmpty) {
+  //       validationErrors['${i}_accountHolderName'] = 'Account holder name is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((entry['accountNumberController'] as TextEditingController).text.isEmpty) {
+  //       validationErrors['${i}_accountNumber'] = 'Account number is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((entry['mobileNumberController'] as TextEditingController).text.isEmpty) {
+  //       validationErrors['${i}_mobileNumber'] = 'Mobile number is required';
+  //       isValid = false;
+  //     }
+  //
+  //     // Validate address data
+  //     final addressData = entry['address'] as RxMap<String, dynamic>;
+  //     if ((addressData['address'] ?? '').isEmpty) {
+  //       validationErrors['${i}_address'] = 'Address is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((addressData['pincode'] ?? '').isEmpty) {
+  //       validationErrors['${i}_pincode'] = 'Pincode is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((addressData['village'] ?? '').isEmpty) {
+  //       validationErrors['${i}_village'] = 'Village is required';
+  //       isValid = false;
+  //     }
+  //
+  //     if ((addressData['postOffice'] ?? '').isEmpty) {
+  //       validationErrors['${i}_postOffice'] = 'Post Office is required';
+  //       isValid = false;
+  //     }
+  //   }
+  //
+  //   return isValid;
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {
