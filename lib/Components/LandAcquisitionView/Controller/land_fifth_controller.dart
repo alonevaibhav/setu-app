@@ -2,7 +2,8 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../Controller/main_controller.dart';
 
-class LandFifthController extends GetxController with StepValidationMixin, StepDataMixin {
+class LandFifthController extends GetxController
+    with StepValidationMixin, StepDataMixin {
   // Observable list for holder entries
   final holderEntries = <Map<String, dynamic>>[].obs;
 
@@ -24,6 +25,14 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       'potKharabaAreaController': TextEditingController(),
       'totalAreaController': TextEditingController(),
       'villageController': TextEditingController(),
+
+      // Address popup controllers
+      'plotNoController': TextEditingController(),
+      'emailController': TextEditingController(),
+      'pincodeController': TextEditingController(),
+      'districtController': TextEditingController(),
+      'postOfficeController': TextEditingController(),
+
       // Store values for validation and data collection
       'holderName': '',
       'address': '',
@@ -34,6 +43,11 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       'potKharabaArea': '',
       'totalArea': '',
       'village': '',
+      'plotNo': '',
+      'email': '',
+      'pincode': '',
+      'district': '',
+      'postOffice': '',
     };
     holderEntries.add(newEntry);
   }
@@ -51,7 +65,13 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       entry['potKharabaAreaController']?.dispose();
       entry['totalAreaController']?.dispose();
       entry['villageController']?.dispose();
-      entry['villageController']?.dispose();
+
+      // Address popup controllers
+      entry['plotNoController']?.dispose();
+      entry['emailController']?.dispose();
+      entry['pincodeController']?.dispose();
+      entry['districtController']?.dispose();
+      entry['postOfficeController']?.dispose();
 
       holderEntries.removeAt(index);
     }
@@ -71,6 +91,38 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
     }
   }
 
+  Map<String, TextEditingController> getAddressControllers(int index) {
+    if (index < holderEntries.length) {
+      final entry = holderEntries[index];
+      return {
+        'plotNoController': entry['plotNoController'],
+        'addressController': entry['addressController'],
+        'mobileNumberController': entry['mobileNumberController'],
+        'emailController': entry['emailController'],
+        'pincodeController': entry['pincodeController'],
+        'districtController': entry['districtController'],
+        'villageController': entry['villageController'],
+        'postOfficeController': entry['postOfficeController'],
+      };
+    }
+    return {};
+  }
+
+  void saveAddressData(int index) {
+    if (index < holderEntries.length) {
+      final entry = holderEntries[index];
+      entry['plotNo'] = entry['plotNoController'].text;
+      entry['address'] = entry['addressController'].text;
+      entry['mobileNumber'] = entry['mobileNumberController'].text;
+      entry['email'] = entry['emailController'].text;
+      entry['pincode'] = entry['pincodeController'].text;
+      entry['district'] = entry['districtController'].text;
+      entry['village'] = entry['villageController'].text;
+      entry['postOffice'] = entry['postOfficeController'].text;
+      holderEntries.refresh();
+    }
+  }
+
   @override
   bool validateCurrentSubStep(String field) {
     // Validate all holder entries
@@ -85,6 +137,8 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       if (entry['potKharabaArea']?.isEmpty ?? true) return false;
       if (entry['totalArea']?.isEmpty ?? true) return false;
       if (entry['village']?.isEmpty ?? true) return false;
+      if (entry['pincode']?.isEmpty ?? true) return false;
+      if (entry['postOffice']?.isEmpty ?? true) return false;
 
       // Validate mobile number format (10 digits)
       final mobileNumber = entry['mobileNumber'] ?? '';
@@ -141,6 +195,12 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       if (entry['village']?.isEmpty ?? true) {
         return 'Village is required in entry ${i + 1}';
       }
+      if (entry['pincode']?.isEmpty ?? true) {
+        return 'Pincode is required in entry ${i + 1}';
+      }
+      if (entry['postOffice']?.isEmpty ?? true) {
+        return 'Post Office is required in entry ${i + 1}';
+      }
     }
     return 'Please fill all required fields';
   }
@@ -161,6 +221,11 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
         'potKharabaArea': entry['potKharabaArea'] ?? '',
         'totalArea': entry['totalArea'] ?? '',
         'village': entry['village'] ?? '',
+        'plotNo': entry['plotNo'] ?? '',
+        'email': entry['email'] ?? '',
+        'pincode': entry['pincode'] ?? '',
+        'district': entry['district'] ?? '',
+        'postOffice': entry['postOffice'] ?? '',
       });
     }
 
@@ -182,6 +247,14 @@ class LandFifthController extends GetxController with StepValidationMixin, StepD
       entry['areaController']?.dispose();
       entry['potKharabaAreaController']?.dispose();
       entry['totalAreaController']?.dispose();
+      entry['villageController']?.dispose();
+
+      // Address popup controllers
+      entry['plotNoController']?.dispose();
+      entry['emailController']?.dispose();
+      entry['pincodeController']?.dispose();
+      entry['districtController']?.dispose();
+      entry['postOfficeController']?.dispose();
     }
     super.onClose();
   }

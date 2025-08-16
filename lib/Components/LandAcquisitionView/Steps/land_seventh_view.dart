@@ -1,21 +1,19 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Utils/custimize_image_picker.dart';
+import '../Controller/land_seventh_controller.dart';
 import '../Controller/main_controller.dart';
-import '../Controller/survey_eight_controller.dart';
+import 'ZLandAcquisitionUIUtils.dart';
 
-class SurveyEightView extends StatelessWidget {
+class LandSeventhView extends StatelessWidget {
   final int currentSubStep;
-  final MainSurveyController mainController;
+  final MainLandAcquisitionController mainController;
 
-  const SurveyEightView({
+  const LandSeventhView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
@@ -23,7 +21,7 @@ class SurveyEightView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docController = Get.put(SurveyEightController(), tag: 'survey_eight');
+    final docController = Get.put(LandSeventhController(), tag: 'survey_eight');
 
     return SingleChildScrollView(
       child: Column(
@@ -63,44 +61,45 @@ class SurveyEightView extends StatelessWidget {
 
           // Progress
           Obx(() => Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Row(
-              children: [
-                CircularProgressIndicator(
-                  value: _getUploadProgress(docController),
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: AlwaysStoppedAnimation<Color>(SetuColors.primaryGreen),
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Colors.grey.shade200),
                 ),
-                Gap(16.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Upload Progress',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                child: Row(
+                  children: [
+                    CircularProgressIndicator(
+                      value: _getUploadProgress(docController),
+                      backgroundColor: Colors.grey.shade200,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          SetuColors.primaryGreen),
+                    ),
+                    Gap(16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Upload Progress',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '${_getUploadedCount(docController)} of 7 documents uploaded',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${_getUploadedCount(docController)} of 7 documents uploaded',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
 
           Gap(24.h),
 
@@ -110,21 +109,24 @@ class SurveyEightView extends StatelessWidget {
             child: Column(
               children: [
                 // Dropdown
-                SurveyUIUtils.buildDropdownField(
+                LandAcquisitionUIUtils.buildDropdownField(
                   label: 'Select Identity Card Type',
                   value: docController.selectedIdentityType.value,
                   items: docController.identityCardOptions,
                   onChanged: docController.updateSelectedIdentityType,
-                  icon: PhosphorIcons.identificationBadge(PhosphorIconsStyle.regular),
+                  icon: PhosphorIcons.identificationBadge(
+                      PhosphorIconsStyle.regular),
                 ),
                 Gap(16.h),
                 // Upload using ImagePickerUtil
                 ImagePickerUtil.buildFileUploadField(
                   label: 'Upload Identity Card *',
                   hint: 'Upload identity card document',
-                  icon: PhosphorIcons.identificationCard(PhosphorIconsStyle.regular),
+                  icon: PhosphorIcons.identificationCard(
+                      PhosphorIconsStyle.regular),
                   uploadedFiles: docController.identityCardFiles,
-                  onFilesSelected: (files) => docController.identityCardFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.identityCardFiles.assignAll(files),
                 ),
               ],
             ),
@@ -143,17 +145,19 @@ class SurveyEightView extends StatelessWidget {
                   hint: 'Upload 7/12 document',
                   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.sevenTwelveFiles,
-                  onFilesSelected: (files) => docController.sevenTwelveFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.sevenTwelveFiles.assignAll(files),
                 ),
                 Gap(16.h),
 
                 // Note
-             ImagePickerUtil.buildFileUploadField(
+                ImagePickerUtil.buildFileUploadField(
                   label: 'Note *',
                   hint: 'Upload note document',
                   icon: PhosphorIcons.note(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.noteFiles,
-                  onFilesSelected: (files) => docController.noteFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.noteFiles.assignAll(files),
                 ),
                 Gap(16.h),
 
@@ -163,37 +167,42 @@ class SurveyEightView extends StatelessWidget {
                   hint: 'Upload partition document',
                   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.partitionFiles,
-                  onFilesSelected: (files) => docController.partitionFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.partitionFiles.assignAll(files),
                 ),
                 Gap(16.h),
 
                 // Scheme Sheet
-           ImagePickerUtil.buildFileUploadField(
+                ImagePickerUtil.buildFileUploadField(
                   label: 'Scheme Sheet Uttrakhand/ 9(3)-9(4) *',
                   hint: 'Upload scheme sheet document',
                   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.schemeSheetFiles,
-                  onFilesSelected: (files) => docController.schemeSheetFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.schemeSheetFiles.assignAll(files),
                 ),
                 Gap(16.h),
 
                 // Old Census Map
-                 ImagePickerUtil.buildFileUploadField(
+                ImagePickerUtil.buildFileUploadField(
                   label: 'Old census map *',
                   hint: 'Upload census map',
                   icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.oldCensusMapFiles,
-                  onFilesSelected: (files) => docController.oldCensusMapFiles.assignAll(files),
+                  onFilesSelected: (files) =>
+                      docController.oldCensusMapFiles.assignAll(files),
                 ),
                 Gap(16.h),
 
                 // Demarcation Certificate
-             ImagePickerUtil.buildFileUploadField(
+                ImagePickerUtil.buildFileUploadField(
                   label: 'Demarcation certificate *',
                   hint: 'Upload demarcation certificate',
                   icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.demarcationCertificateFiles,
-                  onFilesSelected: (files) => docController.demarcationCertificateFiles.assignAll(files),
+                  onFilesSelected: (files) => docController
+                      .demarcationCertificateFiles
+                      .assignAll(files),
                 ),
               ],
             ),
@@ -202,8 +211,7 @@ class SurveyEightView extends StatelessWidget {
           Gap(32.h),
 
           // Navigation Buttons
-          SurveyUIUtils.buildNavigationButtons(mainController),
-
+          LandAcquisitionUIUtils.buildNavigationButtons(mainController),
 
           Gap(40.h),
         ],
@@ -279,10 +287,12 @@ class SurveyEightView extends StatelessWidget {
               value: value.isEmpty ? null : value,
               hint: Text('Select option'),
               isExpanded: true,
-              items: items.map((item) => DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              )).toList(),
+              items: items
+                  .map((item) => DropdownMenuItem(
+                        value: item,
+                        child: Text(item),
+                      ))
+                  .toList(),
               onChanged: (newValue) {
                 if (newValue != null) onChanged(newValue);
               },
@@ -304,13 +314,14 @@ class SurveyEightView extends StatelessWidget {
     );
   }
 
-  double _getUploadProgress(SurveyEightController docController) {
+  double _getUploadProgress(LandSeventhController docController) {
     return _getUploadedCount(docController) / 7.0;
   }
 
-  int _getUploadedCount(SurveyEightController docController) {
+  int _getUploadedCount(LandSeventhController docController) {
     int count = 0;
-    if (docController.selectedIdentityType.value.isNotEmpty && docController.identityCardFiles.isNotEmpty) count++;
+    if (docController.selectedIdentityType.value.isNotEmpty &&
+        docController.identityCardFiles.isNotEmpty) count++;
     if (docController.sevenTwelveFiles.isNotEmpty) count++;
     if (docController.noteFiles.isNotEmpty) count++;
     if (docController.partitionFiles.isNotEmpty) count++;

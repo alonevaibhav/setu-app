@@ -1,5 +1,3 @@
-
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
@@ -27,8 +25,17 @@ class CourtCommissionCaseController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['court_commission_details', ], // Personal Info step
-    1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
+    0: [
+      'court_commission_details',
+    ], // Personal Info step
+    1: [
+      'survey_number',
+      'department',
+      'district',
+      'taluka',
+      'village',
+      'office'
+    ],
     2: ['calculation'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
     4: ['applicant', 'status'], // Applicant Information
@@ -51,9 +58,11 @@ class CourtCommissionCaseController extends GetxController {
   }
 
   void _initializeControllers() {
-    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
+    personalInfoController =
+        Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
-    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    calculationController =
+        Get.put(CalculationController(), tag: 'calculation'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -100,7 +109,7 @@ class CourtCommissionCaseController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
-    // Add more cases as you create more controllers
+      // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
     }
@@ -129,7 +138,7 @@ class CourtCommissionCaseController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
-    // Add more cases
+      // Add more cases
     }
     if (stepController is StepValidationMixin) {
       return stepController.isStepCompleted(fields);

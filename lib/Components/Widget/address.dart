@@ -1,9 +1,6 @@
-
-// Address Popup Widget
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
 import '../LandSurveyView/Steps/survey_ui_utils.dart';
 
 class AddressPopup extends StatelessWidget {
@@ -24,7 +21,8 @@ class AddressPopup extends StatelessWidget {
       insetPadding: EdgeInsets.all(16),
       child: Container(
         width: double.infinity,
-        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -87,7 +85,6 @@ class AddressPopup extends StatelessWidget {
                       icon: Icons.phone_outlined,
                       keyboardType: TextInputType.phone,
                       hint: 'Enter mobile number',
-
                     ),
                     SizedBox(height: 16),
                     SurveyUIUtils.buildTextFormField(

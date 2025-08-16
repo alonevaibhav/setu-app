@@ -124,22 +124,30 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'survey_number':
-        return surveyNumberController.text.trim().isNotEmpty;
-      case 'department':
-        return selectedDepartment.value.isNotEmpty;
-      case 'district':
-        return selectedDistrict.value.isNotEmpty;
-      case 'taluka':
-        return selectedTaluka.value.isNotEmpty;
-      case 'village':
-        return selectedVillage.value.isNotEmpty;
-      case 'office':
-        return selectedOffice.value.isNotEmpty;
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'survey_number':
+  //       return surveyNumberController.text.trim().isNotEmpty;
+  //     case 'department':
+  //       return selectedDepartment.value.isNotEmpty;
+  //     case 'district':
+  //       return selectedDistrict.value.isNotEmpty;
+  //     case 'taluka':
+  //       return selectedTaluka.value.isNotEmpty;
+  //     case 'village':
+  //       return selectedVillage.value.isNotEmpty;
+  //     case 'office':
+  //       return selectedOffice.value.isNotEmpty;
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {

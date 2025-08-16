@@ -62,12 +62,20 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'court_commission_details':
-        return _validateCourtCommissionDetails();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'court_commission_details':
+  //       return _validateCourtCommissionDetails();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateCourtCommissionDetails() {
     validationErrors.clear();

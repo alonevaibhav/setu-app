@@ -94,6 +94,7 @@
 import 'package:flutter/material.dart';
 import '../CourtCommissionCaseView/Steps/start.dart';
 import 'Controller/main_controller.dart';
+import 'Steps/court_fifth_view.dart';
 import 'Steps/couurt_fourt_view.dart';
 import 'Steps/survey_cts.dart';
 import 'Steps/survey_information.dart';
@@ -139,7 +140,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 4:
-        return PersonalInfoStep(
+        return CourtFifthView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

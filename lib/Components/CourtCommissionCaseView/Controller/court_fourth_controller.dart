@@ -30,22 +30,22 @@ class CourtFourthController extends GetxController with StepValidationMixin, Ste
     'म.न.पा./न.पा. बाहेरील'
   ].obs;
 
-  // Fee calculation map
+  // Fee calculation map - Updated to use 'court commission case' instead of 'Hddkayam'
   final Map<String, int> feeCalculationMap = {
-    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 3000,
-    'Hddkayam_Regular_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 3000,
-    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 2000,
-    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 12000,
-    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 8000,
-    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 12000,
-    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. बाहेरील': 8000,
+    'court commission case_Regular_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'court commission case_Regular_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'court commission case_Regular_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 2000,
+    'court commission case_Fast pace_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'court commission case_Fast pace_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 8000,
+    'court commission case_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'court commission case_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. बाहेरील': 8000,
   };
 
   @override
   void onInit() {
     super.onInit();
-    // Set default calculation type
-    selectedCalculationType.value = 'Hddkayam';
+    // FIXED: Don't set a default value, let user select
+    // selectedCalculationType.value = null; // This is already null by default
     _setupListeners();
   }
 
@@ -190,7 +190,7 @@ class CourtFourthController extends GetxController with StepValidationMixin, Ste
 
   // Reset all fields
   void resetFields() {
-    selectedCalculationType.value = 'Hddkayam';
+    selectedCalculationType.value = null; // FIXED: Don't set to 'Hddkayam'
     selectedDuration.value = null;
     selectedHolderType.value = null;
     selectedLocationCategory.value = null;
