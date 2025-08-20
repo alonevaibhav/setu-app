@@ -58,12 +58,6 @@ class LandFouthView extends StatelessWidget {
               items: controller.calculationTypeOptions,
               onChanged: controller.updateCalculationType,
               icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-              // validator: (value) {
-              //   if (value == null || value.trim().isEmpty) {
-              //     return 'Calculation type is required';
-              //   }
-              //   return null;
-              // },
             )),
         Gap(16.h),
 
@@ -79,12 +73,6 @@ class LandFouthView extends StatelessWidget {
                   items: controller.durationOptions,
                   onChanged: controller.updateDuration,
                   icon: PhosphorIcons.clock(PhosphorIconsStyle.regular),
-                  // validator: (value) {
-                  //   if (value == null || value.trim().isEmpty) {
-                  //     return 'Duration is required';
-                  //   }
-                  //   return null;
-                  // },
                 ),
                 if (controller.durationError.value.isNotEmpty)
                   Padding(
@@ -113,12 +101,6 @@ class LandFouthView extends StatelessWidget {
                   items: controller.holderTypeOptions,
                   onChanged: controller.updateHolderType,
                   icon: PhosphorIcons.users(PhosphorIconsStyle.regular),
-                  // validator: (value) {
-                  //   if (value == null || value.trim().isEmpty) {
-                  //     return 'Holder type is required';
-                  //   }
-                  //   return null;
-                  // },
                 ),
                 if (controller.holderTypeError.value.isNotEmpty)
                   Padding(
