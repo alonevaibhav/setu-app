@@ -30,22 +30,22 @@ class CourtAlloFouthController extends GetxController with StepValidationMixin, 
     'म.न.पा./न.पा. बाहेरील'
   ].obs;
 
-  // Fee calculation map
+  // Fee calculation map - Updated keys to match the new calculation type
   final Map<String, int> feeCalculationMap = {
-    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 3000,
-    'Hddkayam_Regular_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 3000,
-    'Hddkayam_Regular_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 2000,
-    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 12000,
-    'Hddkayam_Fast pace_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 8000,
-    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 12000,
-    'Hddkayam_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. बाहेरील': 8000,
+    'Court allocation case_Regular_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'Court allocation case_Regular_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 3000,
+    'Court allocation case_Regular_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 2000,
+    'Court allocation case_Fast pace_Holder (farmer)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'Court allocation case_Fast pace_Holder (farmer)_म.न.पा./न.पा. बाहेरील': 8000,
+    'Court allocation case_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. अंतर्गत': 12000,
+    'Court allocation case_Fast pace_Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)_म.न.पा./न.पा. बाहेरील': 8000,
   };
 
   @override
   void onInit() {
     super.onInit();
-    // Set default calculation type
-    selectedCalculationType.value = 'Hddkayam';
+    // Set default calculation type to match the dropdown options
+    selectedCalculationType.value = 'Court allocation case';
     _setupListeners();
   }
 
@@ -190,7 +190,7 @@ class CourtAlloFouthController extends GetxController with StepValidationMixin, 
 
   // Reset all fields
   void resetFields() {
-    selectedCalculationType.value = 'Hddkayam';
+    selectedCalculationType.value = 'Court allocation case';
     selectedDuration.value = null;
     selectedHolderType.value = null;
     selectedLocationCategory.value = null;
