@@ -1,18 +1,19 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Constants/color_constant.dart';
-import '../Controller/court_sixth_controller.dart';
+import '../Controller/census_seventh_controller.dart';
 import '../Controller/main_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
 
-class CourtSixthView extends StatelessWidget {
+class CensusSeventhView extends StatelessWidget {
   final int currentSubStep;
-  final CourtCommissionCaseController mainController;
+  final GovernmentCensusController mainController;
 
-  const CourtSixthView({
+  const CensusSeventhView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
@@ -20,7 +21,7 @@ class CourtSixthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps = mainController.stepConfigurations[5] ?? ['next_of_kin'];
+    final subSteps = mainController.stepConfigurations[6] ?? ['next_of_kin'];
 
     if (currentSubStep >= subSteps.length) {
       return _buildNextOfKinInput();
@@ -37,52 +38,50 @@ class CourtSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController =
-        Get.put(CourtSixthController(), tag: 'survey_eight');
+    final surveyEightController = Get.put(CensusSeventhController(), tag: 'survey_eight');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CourtCommissionCaseUIUtils.buildStepHeader(
+        GovernmentCensusUIUtils.buildStepHeader(
           'Name and Address of the Next of Kin',
           'Enter details of next of kin with location and natural resources information',
         ),
-        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(24.h * GovernmentCensusUIUtils.sizeFactor),
 
         // Next of Kin Entries Section
         _buildNextOfKinEntries(surveyEightController),
 
-        Gap(32.h * CourtCommissionCaseUIUtils.sizeFactor),
-        CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
+        Gap(32.h * GovernmentCensusUIUtils.sizeFactor),
+        GovernmentCensusUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
 
-  Widget _buildNextOfKinEntries(CourtSixthController surveyEightController) {
+  Widget _buildNextOfKinEntries(CensusSeventhController surveyEightController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CourtCommissionCaseUIUtils.buildTranslatableText(
+        GovernmentCensusUIUtils.buildTranslatableText(
           text: 'Next of Kin Information',
           style: TextStyle(
-            fontSize: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
+            fontSize: 18.sp * GovernmentCensusUIUtils.sizeFactor,
             fontWeight: FontWeight.w600,
             color: SetuColors.primaryGreen,
           ),
         ),
 
-        Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(20.h * GovernmentCensusUIUtils.sizeFactor),
 
         // Next of Kin Entries List
         Obx(() => Column(
-              children: [
-                for (int i = 0;
-                    i < surveyEightController.nextOfKinEntries.length; i++)
-                  _buildNextOfKinEntryCard(surveyEightController, i),
-              ],
-            )),
+          children: [
+            for (int i = 0; i < surveyEightController.nextOfKinEntries.length; i++)
+              _buildNextOfKinEntryCard(surveyEightController, i),
+          ],
+        )),
 
-        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
         // Add Another Entry Button
         InkWell(
@@ -90,8 +89,8 @@ class CourtSixthView extends StatelessWidget {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
-              vertical: 16.h * CourtCommissionCaseUIUtils.sizeFactor,
+              horizontal: 16.w * GovernmentCensusUIUtils.sizeFactor,
+              vertical: 16.h * GovernmentCensusUIUtils.sizeFactor,
             ),
             decoration: BoxDecoration(
               border: Border.all(
@@ -107,13 +106,13 @@ class CourtSixthView extends StatelessWidget {
                 Icon(
                   PhosphorIcons.plus(PhosphorIconsStyle.bold),
                   color: SetuColors.primaryGreen,
-                  size: 24.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                  size: 24.sp * GovernmentCensusUIUtils.sizeFactor,
                 ),
-                Gap(12.w * CourtCommissionCaseUIUtils.sizeFactor),
-                CourtCommissionCaseUIUtils.buildTranslatableText(
+                Gap(12.w * GovernmentCensusUIUtils.sizeFactor),
+                GovernmentCensusUIUtils.buildTranslatableText(
                   text: 'Add Another Entry',
                   style: TextStyle(
-                    fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                    fontSize: 16.sp * GovernmentCensusUIUtils.sizeFactor,
                     color: SetuColors.primaryGreen,
                     fontWeight: FontWeight.w600,
                   ),
@@ -127,13 +126,12 @@ class CourtSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinEntryCard(
-      CourtSixthController surveyEightController, int index) {
+      CensusSeventhController surveyEightController, int index) {
     final entry = surveyEightController.nextOfKinEntries[index];
 
     return Container(
-      margin:
-          EdgeInsets.only(bottom: 20.h * CourtCommissionCaseUIUtils.sizeFactor),
-      padding: EdgeInsets.all(20.w * CourtCommissionCaseUIUtils.sizeFactor),
+      margin: EdgeInsets.only(bottom: 20.h * GovernmentCensusUIUtils.sizeFactor),
+      padding: EdgeInsets.all(20.w * GovernmentCensusUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
@@ -158,8 +156,8 @@ class CourtSixthView extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 12.w * CourtCommissionCaseUIUtils.sizeFactor,
-                  vertical: 8.h * CourtCommissionCaseUIUtils.sizeFactor,
+                  horizontal: 12.w * GovernmentCensusUIUtils.sizeFactor,
+                  vertical: 8.h * GovernmentCensusUIUtils.sizeFactor,
                 ),
                 decoration: BoxDecoration(
                   color: SetuColors.primaryGreen,
@@ -168,7 +166,7 @@ class CourtSixthView extends StatelessWidget {
                 child: Text(
                   'Next of Kin ${index + 1}',
                   style: TextStyle(
-                    fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                    fontSize: 14.sp * GovernmentCensusUIUtils.sizeFactor,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -176,11 +174,9 @@ class CourtSixthView extends StatelessWidget {
               ),
               if (surveyEightController.nextOfKinEntries.length > 1)
                 InkWell(
-                  onTap: () =>
-                      surveyEightController.removeNextOfKinEntry(index),
+                  onTap: () => surveyEightController.removeNextOfKinEntry(index),
                   child: Container(
-                    padding: EdgeInsets.all(
-                        8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                    padding: EdgeInsets.all(8.w * GovernmentCensusUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -188,18 +184,18 @@ class CourtSixthView extends StatelessWidget {
                     child: Icon(
                       PhosphorIcons.trash(PhosphorIconsStyle.regular),
                       color: Colors.red,
-                      size: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                      size: 18.sp * GovernmentCensusUIUtils.sizeFactor,
                     ),
                   ),
                 ),
             ],
           ),
-          Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(20.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Direction Dropdown
-          CourtCommissionCaseUIUtils.buildDropdownField(
+          GovernmentCensusUIUtils.buildDropdownField(
             label: 'Direction *',
-            value: (entry['direction'] as String? ?? ''),
+            value: entry['direction'] as String? ?? '',
             items: surveyEightController.directionOptions,
             onChanged: (value) {
               surveyEightController.updateDirection(index, value ?? '');
@@ -207,10 +203,10 @@ class CourtSixthView extends StatelessWidget {
             icon: PhosphorIcons.compass(PhosphorIconsStyle.regular),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Natural Resources Dropdown
-          CourtCommissionCaseUIUtils.buildDropdownField(
+          GovernmentCensusUIUtils.buildDropdownField(
             label: 'Natural Resources *',
             value: entry['naturalResources'] as String? ?? '',
             items: surveyEightController.naturalResourcesOptions,
@@ -220,51 +216,53 @@ class CourtSixthView extends StatelessWidget {
             icon: PhosphorIcons.tree(PhosphorIconsStyle.regular),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Address Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          GovernmentCensusUIUtils.buildTextFormField(
             controller: entry['addressController'] as TextEditingController,
             label: 'Address *',
             hint: 'Enter complete address',
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             maxLines: 3,
-            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
-                index, 'address', value),
+            onChanged: (value) =>
+                surveyEightController.updateNextOfKinEntry(index, 'address', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Mobile Number Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          GovernmentCensusUIUtils.buildTextFormField(
             controller: entry['mobileController'] as TextEditingController,
             label: 'Mobile Number *',
             hint: 'Enter 10-digit mobile number',
             icon: PhosphorIcons.phone(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.phone,
             maxLength: 10,
-            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
-                index, 'mobile', value),
+            onChanged: (value) =>
+                surveyEightController.updateNextOfKinEntry(index, 'mobile', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Survey No./Group No. Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          GovernmentCensusUIUtils.buildTextFormField(
             controller: entry['surveyNoController'] as TextEditingController,
             label: 'Survey No./Group No. *',
             hint: 'Enter survey or group number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
-                index, 'surveyNo', value),
+            onChanged: (value) =>
+                surveyEightController.updateNextOfKinEntry(index, 'surveyNo', value),
           ),
 
-          Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(20.h * GovernmentCensusUIUtils.sizeFactor),
+
+
+
 
           // Summary Row
           Container(
-            padding:
-                EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+            padding: EdgeInsets.all(12.w * GovernmentCensusUIUtils.sizeFactor),
             decoration: BoxDecoration(
               color: SetuColors.primaryGreen.withOpacity(0.05),
               borderRadius: BorderRadius.circular(8.r),
@@ -278,14 +276,14 @@ class CourtSixthView extends StatelessWidget {
                 Icon(
                   PhosphorIcons.info(PhosphorIconsStyle.regular),
                   color: SetuColors.primaryGreen,
-                  size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                  size: 16.sp * GovernmentCensusUIUtils.sizeFactor,
                 ),
-                Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                Gap(8.w * GovernmentCensusUIUtils.sizeFactor),
                 Expanded(
                   child: Text(
                     'Next of Kin ${index + 1} - ${(entry['name'] as String? ?? '').isEmpty ? 'Name not entered' : entry['name']} | ${(entry['direction'] as String? ?? '').isEmpty ? 'Direction not selected' : entry['direction']}',
                     style: TextStyle(
-                      fontSize: 12.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                      fontSize: 12.sp * GovernmentCensusUIUtils.sizeFactor,
                       color: SetuColors.primaryGreen,
                       fontWeight: FontWeight.w500,
                     ),

@@ -1,9 +1,9 @@
 
-import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'main_controller.dart';
 
-class CourtSixthController extends GetxController with StepValidationMixin, StepDataMixin {
+class CensusSeventhController extends GetxController with StepValidationMixin, StepDataMixin {
   // Observable list for next of kin entries
   final nextOfKinEntries = <Map<String, dynamic>>[].obs;
 
@@ -47,6 +47,22 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
       'mobile': '',
       'surveyNo': '',
     });
+  }
+
+  String? getDirectionValue(int index) {
+    if (index < nextOfKinEntries.length) {
+      final value = nextOfKinEntries[index]['direction'];
+      return (value == null || value == '') ? null : value.toString();
+    }
+    return null;
+  }
+
+  String? getNaturalResourcesValue(int index) {
+    if (index < nextOfKinEntries.length) {
+      final value = nextOfKinEntries[index]['naturalResources'];
+      return (value == null || value == '') ? null : value.toString();
+    }
+    return null;
   }
 
   void removeNextOfKinEntry(int index) {

@@ -3,17 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Utils/custimize_image_picker.dart';
+import '../Controller/census_eighth_controller.dart';
 import '../Controller/main_controller.dart';
-import '../Controller/survey_eight_controller.dart';
+import 'ZLandAcquisitionUIUtils.dart';
 
-class SurveyEightView extends StatelessWidget {
+class CensusEighthView extends StatelessWidget {
   final int currentSubStep;
-  final MainSurveyController mainController;
+  final GovernmentCensusController mainController;
 
-  const SurveyEightView({
+  const CensusEighthView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
@@ -21,7 +21,7 @@ class SurveyEightView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docController = Get.put(SurveyEightController(), tag: 'survey_eight');
+    final docController = Get.put(CensusEighthController(), tag: 'survey_eight');
 
     return SingleChildScrollView(
       child: Column(
@@ -61,45 +61,45 @@ class SurveyEightView extends StatelessWidget {
 
           // Progress
           Obx(() => Container(
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.grey.shade200),
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child: Row(
+              children: [
+                CircularProgressIndicator(
+                  value: _getUploadProgress(docController),
+                  backgroundColor: Colors.grey.shade200,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                      SetuColors.primaryGreen),
                 ),
-                child: Row(
-                  children: [
-                    CircularProgressIndicator(
-                      value: _getUploadProgress(docController),
-                      backgroundColor: Colors.grey.shade200,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                          SetuColors.primaryGreen),
-                    ),
-                    Gap(16.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Upload Progress',
-                            style: TextStyle(
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            '${_getUploadedCount(docController)} of 7 documents uploaded',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.grey.shade600,
-                            ),
-                          ),
-                        ],
+                Gap(16.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Upload Progress',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        '${_getUploadedCount(docController)} of 7 documents uploaded',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              )),
+              ],
+            ),
+          )),
 
           Gap(24.h),
 
@@ -109,7 +109,7 @@ class SurveyEightView extends StatelessWidget {
             child: Column(
               children: [
                 // Dropdown
-                SurveyUIUtils.buildDropdownField(
+                GovernmentCensusUIUtils.buildDropdownField(
                   label: 'Select Identity Card Type',
                   value: docController.selectedIdentityType.value,
                   items: docController.identityCardOptions,
@@ -211,7 +211,7 @@ class SurveyEightView extends StatelessWidget {
           Gap(32.h),
 
           // Navigation Buttons
-          SurveyUIUtils.buildNavigationButtons(mainController),
+          GovernmentCensusUIUtils.buildNavigationButtons(mainController),
 
           Gap(40.h),
         ],
@@ -289,9 +289,9 @@ class SurveyEightView extends StatelessWidget {
               isExpanded: true,
               items: items
                   .map((item) => DropdownMenuItem(
-                        value: item,
-                        child: Text(item),
-                      ))
+                value: item,
+                child: Text(item),
+              ))
                   .toList(),
               onChanged: (newValue) {
                 if (newValue != null) onChanged(newValue);
@@ -314,11 +314,11 @@ class SurveyEightView extends StatelessWidget {
     );
   }
 
-  double _getUploadProgress(SurveyEightController docController) {
+  double _getUploadProgress(CensusEighthController docController) {
     return _getUploadedCount(docController) / 7.0;
   }
 
-  int _getUploadedCount(SurveyEightController docController) {
+  int _getUploadedCount(CensusEighthController docController) {
     int count = 0;
     if (docController.selectedIdentityType.value.isNotEmpty &&
         docController.identityCardFiles.isNotEmpty) count++;

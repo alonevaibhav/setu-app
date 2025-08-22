@@ -4,15 +4,15 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Constants/color_constant.dart';
+import '../Controller/allocation_fifth_controller.dart';
 import '../Controller/main_controller.dart';
-import '../Controller/court_fifth_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
 
-class CourtFifthView extends StatelessWidget {
+class AllocationFifthView extends StatelessWidget {
   final int currentSubStep;
-  final CourtCommissionCaseController mainController;
+  final CourtAllocationCaseController mainController;
 
-  const CourtFifthView({
+  const AllocationFifthView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
@@ -39,53 +39,53 @@ class CourtFifthView extends StatelessWidget {
 
   Widget _buildPlaintiffDefendantInput() {
     final courtFifthController =
-        Get.put(CourtFifthController(), tag: 'court_fifth');
+    Get.put(AllocationFifthController(), tag: 'court_fifth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CourtCommissionCaseUIUtils.buildStepHeader(
+        CourtAllocationCaseUIUtils.buildStepHeader(
           'Plaintiff and Defendant Information',
           'Enter name and address details for plaintiffs and defendants',
         ),
-        Gap(24.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(24.h * CourtAllocationCaseUIUtils.sizeFactor),
 
         // Plaintiff/Defendant Entries Section
         _buildPlaintiffDefendantEntries(courtFifthController),
 
-        Gap(32.h * CourtCommissionCaseUIUtils.sizeFactor),
-        CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
+        Gap(32.h * CourtAllocationCaseUIUtils.sizeFactor),
+        CourtAllocationCaseUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
 
   Widget _buildPlaintiffDefendantEntries(
-      CourtFifthController courtFifthController) {
+      AllocationFifthController courtFifthController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CourtCommissionCaseUIUtils.buildTranslatableText(
+        CourtAllocationCaseUIUtils.buildTranslatableText(
           text: 'Plaintiff and Defendant Details',
           style: TextStyle(
-            fontSize: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
+            fontSize: 18.sp * CourtAllocationCaseUIUtils.sizeFactor,
             fontWeight: FontWeight.w600,
             color: SetuColors.primaryGreen,
           ),
         ),
 
-        Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(20.h * CourtAllocationCaseUIUtils.sizeFactor),
 
         // Plaintiff/Defendant Entries List
         Obx(() => Column(
-              children: [
-                for (int i = 0;
-                    i < courtFifthController.plaintiffDefendantEntries.length;
-                    i++)
-                  _buildPlaintiffDefendantEntryCard(courtFifthController, i),
-              ],
-            )),
+          children: [
+            for (int i = 0;
+            i < courtFifthController.plaintiffDefendantEntries.length;
+            i++)
+              _buildPlaintiffDefendantEntryCard(courtFifthController, i),
+          ],
+        )),
 
-        Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+        Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
         // Add Another Entry Button
         InkWell(
@@ -93,8 +93,8 @@ class CourtFifthView extends StatelessWidget {
           child: Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
-              vertical: 16.h * CourtCommissionCaseUIUtils.sizeFactor,
+              horizontal: 16.w * CourtAllocationCaseUIUtils.sizeFactor,
+              vertical: 16.h * CourtAllocationCaseUIUtils.sizeFactor,
             ),
             decoration: BoxDecoration(
               border: Border.all(
@@ -110,13 +110,13 @@ class CourtFifthView extends StatelessWidget {
                 Icon(
                   PhosphorIcons.plus(PhosphorIconsStyle.bold),
                   color: SetuColors.primaryGreen,
-                  size: 24.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                  size: 24.sp * CourtAllocationCaseUIUtils.sizeFactor,
                 ),
-                Gap(12.w * CourtCommissionCaseUIUtils.sizeFactor),
-                CourtCommissionCaseUIUtils.buildTranslatableText(
+                Gap(12.w * CourtAllocationCaseUIUtils.sizeFactor),
+                CourtAllocationCaseUIUtils.buildTranslatableText(
                   text: 'Add Another Entry',
                   style: TextStyle(
-                    fontSize: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                    fontSize: 16.sp * CourtAllocationCaseUIUtils.sizeFactor,
                     color: SetuColors.primaryGreen,
                     fontWeight: FontWeight.w600,
                   ),
@@ -130,13 +130,13 @@ class CourtFifthView extends StatelessWidget {
   }
 
   Widget _buildPlaintiffDefendantEntryCard(
-      CourtFifthController courtFifthController, int index) {
+      AllocationFifthController courtFifthController, int index) {
     final entry = courtFifthController.plaintiffDefendantEntries[index];
 
     return Container(
       margin:
-          EdgeInsets.only(bottom: 20.h * CourtCommissionCaseUIUtils.sizeFactor),
-      padding: EdgeInsets.all(20.w * CourtCommissionCaseUIUtils.sizeFactor),
+      EdgeInsets.only(bottom: 20.h * CourtAllocationCaseUIUtils.sizeFactor),
+      padding: EdgeInsets.all(20.w * CourtAllocationCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
@@ -161,8 +161,8 @@ class CourtFifthView extends StatelessWidget {
             children: [
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: 12.w * CourtCommissionCaseUIUtils.sizeFactor,
-                  vertical: 8.h * CourtCommissionCaseUIUtils.sizeFactor,
+                  horizontal: 12.w * CourtAllocationCaseUIUtils.sizeFactor,
+                  vertical: 8.h * CourtAllocationCaseUIUtils.sizeFactor,
                 ),
                 decoration: BoxDecoration(
                   color: SetuColors.primaryGreen,
@@ -171,7 +171,7 @@ class CourtFifthView extends StatelessWidget {
                 child: Text(
                   'Entry ${index + 1}',
                   style: TextStyle(
-                    fontSize: 14.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                    fontSize: 14.sp * CourtAllocationCaseUIUtils.sizeFactor,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -183,7 +183,7 @@ class CourtFifthView extends StatelessWidget {
                       courtFifthController.removePlaintiffDefendantEntry(index),
                   child: Container(
                     padding: EdgeInsets.all(
-                        8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                        8.w * CourtAllocationCaseUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -191,31 +191,31 @@ class CourtFifthView extends StatelessWidget {
                     child: Icon(
                       PhosphorIcons.trash(PhosphorIconsStyle.regular),
                       color: Colors.red,
-                      size: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                      size: 18.sp * CourtAllocationCaseUIUtils.sizeFactor,
                     ),
                   ),
                 ),
             ],
           ),
-          Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(20.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Type Dropdown (Plaintiff/Defendant)
-          Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-                label: 'Select Type *',
-                value: entry['selectedType'].value.isEmpty
-                    ? ''
-                    : entry['selectedType'].value,
-                items: courtFifthController.typeOptions,
-                onChanged: (value) {
-                  courtFifthController.updateSelectedType(index, value ?? '');
-                },
-                icon: PhosphorIcons.userCheck(PhosphorIconsStyle.regular),
-              )),
+          Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
+            label: 'Select Type *',
+            value: entry['selectedType'].value.isEmpty
+                ? ''
+                : entry['selectedType'].value,
+            items: courtFifthController.typeOptions,
+            onChanged: (value) {
+              courtFifthController.updateSelectedType(index, value ?? '');
+            },
+            icon: PhosphorIcons.userCheck(PhosphorIconsStyle.regular),
+          )),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Name Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          CourtAllocationCaseUIUtils.buildTextFormField(
             controller: entry['nameController'],
             label: 'Full Name *',
             hint: 'Enter full name',
@@ -224,15 +224,15 @@ class CourtFifthView extends StatelessWidget {
                 .updatePlaintiffDefendantEntry(index, 'name', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Enhanced Address Input with Popup
           _buildAddressFieldWithPopup(courtFifthController, entry, index),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Mobile Number Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          CourtAllocationCaseUIUtils.buildTextFormField(
             controller: entry['mobileController'],
             label: 'Mobile Number *',
             hint: 'Enter 10-digit mobile number',
@@ -242,10 +242,10 @@ class CourtFifthView extends StatelessWidget {
                 .updatePlaintiffDefendantEntry(index, 'mobile', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Survey Number/Group Number Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
+          CourtAllocationCaseUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
             label: 'Survey Number/Group Number *',
             hint: 'Enter survey or group number',
@@ -254,12 +254,12 @@ class CourtFifthView extends StatelessWidget {
                 .updatePlaintiffDefendantEntry(index, 'surveyNumber', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Summary Row
           Container(
             padding:
-                EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+            EdgeInsets.all(12.w * CourtAllocationCaseUIUtils.sizeFactor),
             decoration: BoxDecoration(
               color: SetuColors.primaryGreen.withOpacity(0.05),
               borderRadius: BorderRadius.circular(8.r),
@@ -273,19 +273,19 @@ class CourtFifthView extends StatelessWidget {
                 Icon(
                   PhosphorIcons.info(PhosphorIconsStyle.regular),
                   color: SetuColors.primaryGreen,
-                  size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                  size: 16.sp * CourtAllocationCaseUIUtils.sizeFactor,
                 ),
-                Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                Gap(8.w * CourtAllocationCaseUIUtils.sizeFactor),
                 Expanded(
                   child: Obx(() => Text(
-                        'Entry ${index + 1} - ${entry['selectedType'].value.isEmpty ? 'Type not selected' : entry['selectedType'].value}: ${entry['nameController']?.text?.isEmpty ?? true ? 'Name not entered' : entry['nameController']?.text}',
-                        style: TextStyle(
-                          fontSize:
-                              12.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
+                    'Entry ${index + 1} - ${entry['selectedType'].value.isEmpty ? 'Type not selected' : entry['selectedType'].value}: ${entry['nameController']?.text?.isEmpty ?? true ? 'Name not entered' : entry['nameController']?.text}',
+                    style: TextStyle(
+                      fontSize:
+                      12.sp * CourtAllocationCaseUIUtils.sizeFactor,
+                      color: SetuColors.primaryGreen,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )),
                 ),
               ],
             ),
@@ -295,7 +295,7 @@ class CourtFifthView extends StatelessWidget {
     );
   }
 
-  Widget _buildAddressFieldWithPopup(CourtFifthController courtFifthController,
+  Widget _buildAddressFieldWithPopup(AllocationFifthController courtFifthController,
       Map<String, dynamic> entry, int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,8 +307,8 @@ class CourtFifthView extends StatelessWidget {
                 onTap: () => courtFifthController.openAddressPopup(index),
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 16.w * CourtCommissionCaseUIUtils.sizeFactor,
-                    vertical: 12.h * CourtCommissionCaseUIUtils.sizeFactor,
+                    horizontal: 16.w * CourtAllocationCaseUIUtils.sizeFactor,
+                    vertical: 12.h * CourtAllocationCaseUIUtils.sizeFactor,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
@@ -324,14 +324,14 @@ class CourtFifthView extends StatelessWidget {
                       Icon(
                         PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
                         color: SetuColors.primaryGreen,
-                        size: 18.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                        size: 18.sp * CourtAllocationCaseUIUtils.sizeFactor,
                       ),
-                      Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+                      Gap(8.w * CourtAllocationCaseUIUtils.sizeFactor),
                       Text(
                         'Detailed Address',
                         style: TextStyle(
                           fontSize:
-                              14.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                          14.sp * CourtAllocationCaseUIUtils.sizeFactor,
                           color: SetuColors.primaryGreen,
                           fontWeight: FontWeight.w500,
                         ),
@@ -341,29 +341,29 @@ class CourtFifthView extends StatelessWidget {
                 ),
               ),
             ),
-            Gap(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+            Gap(12.w * CourtAllocationCaseUIUtils.sizeFactor),
             // Status indicator
             Obx(() => Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 8.w * CourtCommissionCaseUIUtils.sizeFactor,
-                    vertical: 6.h * CourtCommissionCaseUIUtils.sizeFactor,
-                  ),
-                  decoration: BoxDecoration(
-                    color: courtFifthController.hasDetailedAddress(index)
-                        ? SetuColors.primaryGreen.withOpacity(0.1)
-                        : Colors.grey.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(6.r),
-                  ),
-                  child: Icon(
-                    courtFifthController.hasDetailedAddress(index)
-                        ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                        : PhosphorIcons.circle(PhosphorIconsStyle.regular),
-                    color: courtFifthController.hasDetailedAddress(index)
-                        ? SetuColors.primaryGreen
-                        : Colors.grey,
-                    size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                  ),
-                )),
+              padding: EdgeInsets.symmetric(
+                horizontal: 8.w * CourtAllocationCaseUIUtils.sizeFactor,
+                vertical: 6.h * CourtAllocationCaseUIUtils.sizeFactor,
+              ),
+              decoration: BoxDecoration(
+                color: courtFifthController.hasDetailedAddress(index)
+                    ? SetuColors.primaryGreen.withOpacity(0.1)
+                    : Colors.grey.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(6.r),
+              ),
+              child: Icon(
+                courtFifthController.hasDetailedAddress(index)
+                    ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
+                    : PhosphorIcons.circle(PhosphorIconsStyle.regular),
+                color: courtFifthController.hasDetailedAddress(index)
+                    ? SetuColors.primaryGreen
+                    : Colors.grey,
+                size: 16.sp * CourtAllocationCaseUIUtils.sizeFactor,
+              ),
+            )),
           ],
         ),
       ],

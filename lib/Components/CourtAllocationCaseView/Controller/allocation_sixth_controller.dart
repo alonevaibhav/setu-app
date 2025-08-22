@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'main_controller.dart';
 
-class CourtSixthController extends GetxController with StepValidationMixin, StepDataMixin {
+class AllocationSixthController extends GetxController with StepValidationMixin, StepDataMixin {
   // Observable list for next of kin entries
   final nextOfKinEntries = <Map<String, dynamic>>[].obs;
 

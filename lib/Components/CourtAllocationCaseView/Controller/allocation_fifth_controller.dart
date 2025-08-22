@@ -1,10 +1,9 @@
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../CourtAllocationCaseView/Controller/main_controller.dart';
 import '../../Widget/address.dart';
+import '../Controller/main_controller.dart';
 
-class CourtFifthController extends GetxController with StepValidationMixin, StepDataMixin {
+class AllocationFifthController extends GetxController with StepValidationMixin, StepDataMixin {
   // Plaintiff and Defendant entries
   final plaintiffDefendantEntries = <Map<String, dynamic>>[].obs;
 

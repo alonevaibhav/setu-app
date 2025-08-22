@@ -18,8 +18,6 @@ class CourtFouthView extends StatelessWidget {
     required this.mainController,
   }) : super(key: key);
 
-  // Get the CalculationController
-  // CourtAlloFouthController get controller =>   Get.put(CourtAlloFouthController(), tag: 'step_four');
   CourtAlloFouthController get controller => Get.find<CourtAlloFouthController>(tag: 'census_fourth');
 
   @override
@@ -54,42 +52,42 @@ class CourtFouthView extends StatelessWidget {
 
         // Calculation Type Dropdown
         Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
-          label: 'Calculation type *',
-          value: controller.selectedCalculationType.value ?? '',
-          items: controller.calculationTypeOptions,
-          onChanged: controller.updateCalculationType,
-          icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-        )),
+              label: 'Calculation type *',
+              value: controller.selectedCalculationType.value ?? '',
+              items: controller.calculationTypeOptions,
+              onChanged: controller.updateCalculationType,
+              icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            )),
         Gap(16.h),
 
         // Duration Dropdown
         Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
-          label: 'Duration *',
-          value: controller.selectedDuration.value ?? '',
-          items: controller.durationOptions,
-          onChanged: controller.updateDuration,
-          icon: PhosphorIcons.clock(PhosphorIconsStyle.regular),
-        )),
+              label: 'Duration *',
+              value: controller.selectedDuration.value ?? '',
+              items: controller.durationOptions,
+              onChanged: controller.updateDuration,
+              icon: PhosphorIcons.clock(PhosphorIconsStyle.regular),
+            )),
         Gap(16.h),
 
         // Holder Type Dropdown
         Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
-          label: 'Holder type *',
-          value: controller.selectedHolderType.value ?? '',
-          items: controller.holderTypeOptions,
-          onChanged: controller.updateHolderType,
-          icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
-        )),
+              label: 'Holder type *',
+              value: controller.selectedHolderType.value ?? '',
+              items: controller.holderTypeOptions,
+              onChanged: controller.updateHolderType,
+              icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
+            )),
         Gap(16.h),
 
         // Location Category Dropdown
         Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
-          label: 'म.न.पा./न.पा.अंतर्गत / म.न.पा./न.पा.बाहेरील *',
-          value: controller.selectedLocationCategory.value ?? '',
-          items: controller.locationCategoryOptions,
-          onChanged: controller.updateLocationCategory,
-          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-        )),
+              label: 'म.न.पा./न.पा.अंतर्गत / म.न.पा./न.पा.बाहेरील *',
+              value: controller.selectedLocationCategory.value ?? '',
+              items: controller.locationCategoryOptions,
+              onChanged: controller.updateLocationCategory,
+              icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            )),
         Gap(16.h),
 
         // Calculation Fee (Auto-calculated, read-only)
@@ -115,7 +113,6 @@ class CourtFouthView extends StatelessWidget {
       ],
     );
   }
-
 
   Widget _buildFeeBreakdownCard() {
     if (controller.selectedCalculationType.value == null ||
@@ -157,10 +154,16 @@ class CourtFouthView extends StatelessWidget {
             ],
           ),
           Gap(12.h),
-          _buildBreakdownRow('Calculation Type:', controller.selectedCalculationType.value ?? ''),
-          _buildBreakdownRow('Duration:', controller.selectedDuration.value ?? ''),
-          _buildBreakdownRow('Holder Type:', controller.getShortHolderType(controller.selectedHolderType.value ?? '')),
-          _buildBreakdownRow('Location:', controller.selectedLocationCategory.value ?? ''),
+          _buildBreakdownRow('Calculation Type:',
+              controller.selectedCalculationType.value ?? ''),
+          _buildBreakdownRow(
+              'Duration:', controller.selectedDuration.value ?? ''),
+          _buildBreakdownRow(
+              'Holder Type:',
+              controller.getShortHolderType(
+                  controller.selectedHolderType.value ?? '')),
+          _buildBreakdownRow(
+              'Location:', controller.selectedLocationCategory.value ?? ''),
           Divider(color: SetuColors.lightGreen.withOpacity(0.3)),
           _buildBreakdownRow(
             'Total Fee:',
@@ -172,7 +175,8 @@ class CourtFouthView extends StatelessWidget {
     );
   }
 
-  Widget _buildBreakdownRow(String label, String value, {bool isTotal = false}) {
+  Widget _buildBreakdownRow(String label, String value,
+      {bool isTotal = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4.h),
       child: Row(
@@ -199,106 +203,6 @@ class CourtFouthView extends StatelessWidget {
                 fontWeight: isTotal ? FontWeight.w700 : FontWeight.w500,
                 color: isTotal ? SetuColors.primaryGreen : Colors.grey[800],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCalculationSummaryCard() {
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Calculation Summary',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.w600,
-              color: SetuColors.primaryGreen,
-            ),
-          ),
-          Gap(16.h),
-          _buildSummaryRow(
-            'Calculation Type:',
-            controller.selectedCalculationType.value ?? 'Not selected',
-            PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-          ),
-          _buildSummaryRow(
-            'Duration:',
-            controller.selectedDuration.value ?? 'Not selected',
-            PhosphorIcons.clock(PhosphorIconsStyle.regular),
-          ),
-          _buildSummaryRow(
-            'Holder Type:',
-            controller.getShortHolderType(controller.selectedHolderType.value ?? 'Not selected'),
-            PhosphorIcons.user(PhosphorIconsStyle.regular),
-          ),
-          _buildSummaryRow(
-            'Location Category:',
-            controller.selectedLocationCategory.value ?? 'Not selected',
-            PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-          ),
-          Divider(thickness: 1, color: Colors.grey[300]),
-          _buildSummaryRow(
-            'Total Calculation Fee:',
-            controller.calculationFeeController.text.isEmpty
-                ? '₹0'
-                : controller.calculationFeeController.text,
-            PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
-            isHighlighted: true,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSummaryRow(String label, String value, IconData icon, {bool isHighlighted = false}) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        children: [
-          Icon(
-            icon,
-            size: 20.sp,
-            color: isHighlighted ? SetuColors.primaryGreen : Colors.grey[600],
-          ),
-          Gap(12.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[600],
-                  ),
-                ),
-                Gap(2.h),
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: isHighlighted ? 16.sp : 14.sp,
-                    fontWeight: isHighlighted ? FontWeight.w700 : FontWeight.w600,
-                    color: isHighlighted ? SetuColors.primaryGreen : Colors.grey[800],
-                  ),
-                ),
-              ],
             ),
           ),
         ],
