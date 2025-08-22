@@ -1,10 +1,12 @@
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 import '../../LandAcquisitionView/Controller/step_three_controller.dart';
 import '../../LandAcquisitionView/Controller/survey_cts.dart';
+import 'land_fifth_controller.dart';
 import 'land_fouth_controller.dart';
+import 'land_seventh_controller.dart';
+import 'land_sixth_controller.dart';
 
 // Import all step controllers
 
@@ -20,6 +22,9 @@ class MainLandAcquisitionController extends GetxController {
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
   late final LandFouthController landFouthController; // Add this line
+  late final LandFifthController landFifthController; // Add this line
+  late final landSixthController laandSixthController; // Add this line
+  late final LandSeventhController landSeventhController; // Add this line
 
   // Add more controllers as needed
 
@@ -28,8 +33,17 @@ class MainLandAcquisitionController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['land_acquisition_details',], // Personal Info step
-    1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
+    0: [
+      'land_acquisition_details',
+    ], // Personal Info step
+    1: [
+      'survey_number',
+      'department',
+      'district',
+      'taluka',
+      'village',
+      'office'
+    ],
     2: ['calculation'], // Survey Information
     3: ['fouth_step',], // Calculation Information
     4: ['applicant', 'status'], // Applicant Information
@@ -56,7 +70,9 @@ class MainLandAcquisitionController extends GetxController {
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
     landFouthController = Get.put(LandFouthController(), tag: 'land_fouth'); // Add this line
-    // Initialize more controllers as needed
+    landFifthController = Get.put(LandFifthController(), tag: 'land_fifth'); // Add this line
+    laandSixthController = Get.put(landSixthController(), tag: 'next_of_kin'); // Add this line
+    landSeventhController = Get.put(LandSeventhController(), tag: 'survey_seven'); // Add this line
   }
 
   @override
@@ -102,9 +118,15 @@ class MainLandAcquisitionController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
-        case 3: // Add this case for calculation step
+      case 3: // Add this case for calculation step
         return landFouthController;
-    // Add more cases as you create more controllers
+      case 4: // Add this case for calculation step
+        return landFifthController;
+      case 5: // Add this case for calculation step
+        return laandSixthController;
+      case 6: // Add this case for calculation step
+        return landSeventhController;
+      // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
     }
@@ -133,9 +155,20 @@ class MainLandAcquisitionController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
-        case 3: // Add this case
+        break;
+      case 3: // Add this case
         stepController = landFouthController;
-    // Add more cases
+        break;
+      case 4: // Add this case
+        stepController = landFifthController;
+        break;
+      case 5: // Add this case
+        stepController = laandSixthController;
+        break;
+      case 6: // Add this case
+        stepController = landSeventhController;
+        break;
+      // Add more cases
     }
     if (stepController is StepValidationMixin) {
       return stepController.isStepCompleted(fields);
@@ -330,6 +363,9 @@ class MainLandAcquisitionController extends GetxController {
       surveyCTSController,
       calculationController,
       landFouthController,
+      landFifthController,
+      laandSixthController,
+      landSeventhController,
       // Add more controllers
     ];
     for (final controller in allControllers) {

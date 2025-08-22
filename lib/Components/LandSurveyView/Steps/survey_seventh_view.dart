@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -38,7 +37,7 @@ class SurveySeventhView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController = Get.put(SurveySeventhController(), tag: 'survey_eight');
+    final surveySevenController = Get.put(SurveySeventhController(), tag: 'survey_seventh');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -50,7 +49,7 @@ class SurveySeventhView extends StatelessWidget {
         Gap(24.h * SurveyUIUtils.sizeFactor),
 
         // Next of Kin Entries Section
-        _buildNextOfKinEntries(surveyEightController),
+        _buildNextOfKinEntries(surveySevenController),
 
         Gap(32.h * SurveyUIUtils.sizeFactor),
         SurveyUIUtils.buildNavigationButtons(mainController),
@@ -75,11 +74,13 @@ class SurveySeventhView extends StatelessWidget {
 
         // Next of Kin Entries List
         Obx(() => Column(
-          children: [
-            for (int i = 0; i < surveyEightController.nextOfKinEntries.length; i++)
-              _buildNextOfKinEntryCard(surveyEightController, i),
-          ],
-        )),
+              children: [
+                for (int i = 0;
+                    i < surveyEightController.nextOfKinEntries.length;
+                    i++)
+                  _buildNextOfKinEntryCard(surveyEightController, i),
+              ],
+            )),
 
         Gap(16.h * SurveyUIUtils.sizeFactor),
 
@@ -174,7 +175,8 @@ class SurveySeventhView extends StatelessWidget {
               ),
               if (surveyEightController.nextOfKinEntries.length > 1)
                 InkWell(
-                  onTap: () => surveyEightController.removeNextOfKinEntry(index),
+                  onTap: () =>
+                      surveyEightController.removeNextOfKinEntry(index),
                   child: Container(
                     padding: EdgeInsets.all(8.w * SurveyUIUtils.sizeFactor),
                     decoration: BoxDecoration(
@@ -195,7 +197,7 @@ class SurveySeventhView extends StatelessWidget {
           // Direction Dropdown
           SurveyUIUtils.buildDropdownField(
             label: 'Direction *',
-            value: (entry['direction'] as String? ?? '').isEmpty ? null : entry['direction'] as String?,
+            value: entry['direction'] as String? ?? '',
             items: surveyEightController.directionOptions,
             onChanged: (value) {
               surveyEightController.updateDirection(index, value ?? '');
@@ -208,7 +210,7 @@ class SurveySeventhView extends StatelessWidget {
           // Natural Resources Dropdown
           SurveyUIUtils.buildDropdownField(
             label: 'Natural Resources *',
-            value: (entry['naturalResources'] as String? ?? '').isEmpty ? null : entry['naturalResources'] as String?,
+            value: entry['naturalResources'] as String? ?? '',
             items: surveyEightController.naturalResourcesOptions,
             onChanged: (value) {
               surveyEightController.updateNaturalResources(index, value ?? '');
@@ -225,8 +227,8 @@ class SurveySeventhView extends StatelessWidget {
             hint: 'Enter complete address',
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             maxLines: 3,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'address', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'address', value),
           ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
@@ -239,8 +241,8 @@ class SurveySeventhView extends StatelessWidget {
             icon: PhosphorIcons.phone(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.phone,
             maxLength: 10,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'mobile', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'mobile', value),
           ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
@@ -251,14 +253,11 @@ class SurveySeventhView extends StatelessWidget {
             label: 'Survey No./Group No. *',
             hint: 'Enter survey or group number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'surveyNo', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'surveyNo', value),
           ),
 
           Gap(20.h * SurveyUIUtils.sizeFactor),
-
-
-
 
           // Summary Row
           Container(

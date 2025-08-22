@@ -2,8 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../Controller/main_controller.dart';
 
-class LandFifthController extends GetxController
-    with StepValidationMixin, StepDataMixin {
+class LandFifthController extends GetxController with StepValidationMixin, StepDataMixin {
   // Observable list for holder entries
   final holderEntries = <Map<String, dynamic>>[].obs;
 

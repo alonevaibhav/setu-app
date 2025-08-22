@@ -24,7 +24,7 @@ class PersonalInfoStep extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
-    final subSteps = mainController.stepConfigurations[0] ?? ['holder_verification'];
+    final subSteps = mainController.stepConfigurations[0] ?? ['land_acquisition_details'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {

@@ -37,7 +37,7 @@ class CalculationInformation extends StatelessWidget {
   }
 
   Widget _buildCalculationInput() {
-    final calcController = Get.put(CalculationController(), tag: 'calculation');
+    final calcController = Get.find<CalculationController>(tag: 'calculation');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/step_four.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/survey_eight_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_fifth_controller.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/survey_seventh_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_sixth_controller.dart';
 import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
@@ -23,6 +25,8 @@ class MainSurveyController extends GetxController {
   late final StepFourController stepFourController;
   late final SurveyFifthController surveyFifthController;
   late final SurveySixthController surveySixthController;
+  late final SurveySeventhController surveySeventhController;
+  late final SurveyEightController surveyEightController;
 
   // Add more controllers as needed
 
@@ -32,12 +36,25 @@ class MainSurveyController extends GetxController {
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
     0: ['holder_verification', 'enumeration_check'], // Personal Info step
-    1: ['survey_number', 'department', 'district', 'taluka', 'village', 'office'],
+    1: [
+      'survey_number',
+      'department',
+      'district',
+      'taluka',
+      'village',
+      'office'
+    ],
     2: ['calculation'], // Survey Information
     3: ['calculation'], // Calculation Information
-    4: ['applicant',], // Applicant Information
-    5: ['coowner', ], // Co-owner Information
-    6: ['next_of_kin', ], // Information about Adjacent Holders
+    4: [
+      'applicant',
+    ], // Applicant Information
+    5: [
+      'coowner',
+    ], // Co-owner Information
+    6: [
+      'next_of_kin',
+    ], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment
@@ -55,13 +72,21 @@ class MainSurveyController extends GetxController {
   }
 
   void _initializeControllers() {
-    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
+    personalInfoController =
+        Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
-    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
-    stepFourController = Get.put(StepFourController(), tag: 'step_four'); // Add this line
-    surveyFifthController = Get.put(SurveyFifthController(), tag: 'survey_fifth'); // Add this line
-    surveySixthController = Get.put(SurveySixthController(), tag: 'survey_sixth'); // Add this line
-    // Initialize more controllers as needed
+    calculationController =
+        Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    stepFourController =
+        Get.put(StepFourController(), tag: 'step_four'); // Add this line
+    surveyFifthController =
+        Get.put(SurveyFifthController(), tag: 'survey_fifth'); // Add this line
+    surveySixthController =
+        Get.put(SurveySixthController(), tag: 'survey_sixth'); // Add this line
+    surveySeventhController = Get.put(SurveySeventhController(),
+        tag: 'survey_seventh'); // Add this line
+    surveyEightController =
+        Get.put(SurveyEightController(), tag: 'survey_eight'); // Add this line
   }
 
   @override
@@ -107,13 +132,17 @@ class MainSurveyController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
-        case 3: // Add this case for calculation step
+      case 3: // Add this case for calculation step
         return stepFourController;
-        case 4: // Add this case for calculation step
+      case 4: // Add this case for calculation step
         return surveyFifthController;
-        case 5: // Add this case for calculation step
+      case 5: // Add this case for calculation step
         return surveySixthController;
-      // Add more cases as you create more controllers
+      case 6: // Add this case for calculation step
+        return surveySeventhController;
+      case 7: // Add this case for calculation step
+        return surveyEightController;
+
       default:
         return this; // Fallback to main controller
     }
@@ -142,12 +171,22 @@ class MainSurveyController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
-        case 3: // Add this case
+        break;
+      case 3: // Add this case
         stepController = stepFourController;
-        case 4: // Add this case
+        break;
+      case 4: // Add this case
         stepController = surveyFifthController;
-        case 5: // Add this case
+        break;
+      case 5: // Add this case
         stepController = surveySixthController;
+        break;
+      case 6: // Add this case
+        stepController = surveySeventhController;
+        break;
+      case 7: // Add this case
+        stepController = surveyEightController;
+        break;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -345,6 +384,8 @@ class MainSurveyController extends GetxController {
       stepFourController,
       surveyFifthController,
       surveySixthController,
+      surveySeventhController,
+      surveyEightController,
       // Add more controllers
     ];
     for (final controller in allControllers) {

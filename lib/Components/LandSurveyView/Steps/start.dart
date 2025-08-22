@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 
@@ -21,14 +20,12 @@ class PersonalInfoStep extends StatelessWidget {
   }) : super(key: key);
 
   // Get the PersonalInfoController
-  PersonalInfoController get controller =>
-      Get.find<PersonalInfoController>(tag: 'personal_info');
+  PersonalInfoController get controller => Get.find<PersonalInfoController>(tag: 'personal_info');
 
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
-    final subSteps =
-        mainController.stepConfigurations[0] ?? ['holder_verification'];
+    final subSteps = mainController.stepConfigurations[0] ?? ['holder_verification'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
