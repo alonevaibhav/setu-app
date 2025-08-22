@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/allocation_seventh_controller.dart';
-import '../Controller/allocation_sixth_controller.dart';
 import '../Controller/main_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
 
@@ -22,7 +21,7 @@ class AllocationSeventhView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docController = Get.put(AllocationSeventhController(), tag: 'survey_seven');
+    final docController = Get.put(AllocationSeventhController(), tag: 'court_seven');
 
     return SingleChildScrollView(
       child: Column(

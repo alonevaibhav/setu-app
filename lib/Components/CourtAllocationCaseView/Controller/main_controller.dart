@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../CourtAllocationCaseView/Controller/personal_info_controller.dart';
 import '../../CourtAllocationCaseView/Controller/step_three_controller.dart';
 import '../../CourtAllocationCaseView/Controller/survey_cts.dart';
+import 'allocation_fifth_controller.dart';
+import 'allocation_seventh_controller.dart';
+import 'allocation_sixth_controller.dart';
 import 'court_fouth_controller.dart';
 
 // Import all step controllers
@@ -19,6 +22,9 @@ class CourtAllocationCaseController extends GetxController {
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
   late final CourtAlloFouthController courtAlloFouthController; // Add this line
+  late final AllocationFifthController allocationFifthController; // Add this line
+  late final AllocationSixthController allocationSixthController; // Add this line
+  late final AllocationSeventhController allocationSeventhController; // Add this line
 
   // Add more controllers as needed
 
@@ -38,8 +44,8 @@ class CourtAllocationCaseController extends GetxController {
     ],
     2: ['calculation'], // Survey Information
     3: ['calculation'], // Calculation Information
-    4: ['applicant', 'status'], // Applicant Information
-    5: ['coowner', 'status'], // Co-owner Information
+    4: ['plaintiff_defendant'], // Applicant Information
+    5: ['next_of_kin'], // Co-owner Information
     6: ['adjacent', 'status'], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
@@ -61,7 +67,10 @@ class CourtAllocationCaseController extends GetxController {
     personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
-    courtAlloFouthController = Get.put(CourtAlloFouthController(), tag: 'census_fourth'); // Add this line
+    courtAlloFouthController = Get.put(CourtAlloFouthController(), tag: 'court_fourth'); // Add this line
+    allocationFifthController = Get.put(AllocationFifthController(), tag: 'court_fifth'); // Add this line
+    allocationSixthController = Get.put(AllocationSixthController(), tag: 'court_sixth'); // Add this line
+    allocationSeventhController = Get.put(AllocationSeventhController(), tag: 'court_seven'); // Add this line
     // Initialize more controllers as needed
   }
 

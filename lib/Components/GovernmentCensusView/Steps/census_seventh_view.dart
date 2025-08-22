@@ -38,7 +38,7 @@ class CensusSeventhView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController = Get.put(CensusSeventhController(), tag: 'survey_eight');
+    final surveyEightController = Get.put(CensusSeventhController(), tag: 'census_seventh');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

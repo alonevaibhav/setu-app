@@ -38,7 +38,7 @@ class AllocationSixthView extends StatelessWidget {
 
   Widget _buildNextOfKinInput() {
     final surveyEightController =
-    Get.put(AllocationSixthController(), tag: 'survey_eight');
+    Get.put(AllocationSixthController(), tag: 'court_sixth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

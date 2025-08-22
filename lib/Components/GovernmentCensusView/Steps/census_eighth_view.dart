@@ -21,7 +21,7 @@ class CensusEighthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docController = Get.put(CensusEighthController(), tag: 'survey_eight');
+    final docController = Get.put(CensusEighthController(), tag: 'census_eighth');
 
     return SingleChildScrollView(
       child: Column(

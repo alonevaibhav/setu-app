@@ -20,8 +20,7 @@ class AllocationFifthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subSteps =
-        mainController.stepConfigurations[4] ?? ['plaintiff_defendant'];
+    final subSteps = mainController.stepConfigurations[4] ?? ['plaintiff_defendant'];
 
     if (currentSubStep >= subSteps.length) {
       return _buildPlaintiffDefendantInput();

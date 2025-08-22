@@ -37,7 +37,7 @@ class CensusFifthView extends StatelessWidget {
   }
 
   Widget _buildApplicantInput() {
-    final fifthController = Get.put(CensusFifthController(), tag: 'survey_fifth');
+    final fifthController = Get.put(CensusFifthController(), tag: 'census_fifth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

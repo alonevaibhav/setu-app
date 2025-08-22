@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import '../../GovernmentCensusView/Controller/personal_info_controller.dart';
 import '../../GovernmentCensusView/Controller/step_three_controller.dart';
 import '../../GovernmentCensusView/Controller/survey_cts.dart';
+import 'census_eighth_controller.dart';
+import 'census_fifth_controller.dart';
 import 'census_fourth_controller.dart';
+import 'census_seventh_controller.dart';
+import 'census_sixth_controller.dart';
 // Import all step controllers
 
 class GovernmentCensusController extends GetxController {
@@ -18,6 +22,10 @@ class GovernmentCensusController extends GetxController {
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
   late final CensusFourthController censusFourthController; // Add this line
+  late final CensusFifthController censusFifthController; // Add this line
+  late final CensusSixthController censusSixthController; // Add this line
+  late final CensusSeventhController censusSeventhController; // Add this line
+  late final CensusEighthController censusEighthController; // Add this line
 
   // Add more controllers as needed
 
@@ -61,6 +69,10 @@ class GovernmentCensusController extends GetxController {
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
     censusFourthController = Get.put(CensusFourthController(), tag: 'census_fourth'); // Add this line
+    censusFifthController = Get.put(CensusFifthController(), tag: 'census_fifth'); // Add this line
+    censusSixthController = Get.put(CensusSixthController(), tag: 'census_sixth'); // Add this line
+    censusSeventhController = Get.put(CensusSeventhController(), tag: 'census_seventh'); // Add this line
+    censusEighthController = Get.put(CensusEighthController(), tag: 'census_eighth'); // Add this line
     // Initialize more controllers as needed
   }
 

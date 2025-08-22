@@ -38,8 +38,7 @@ class CourtFifthView extends StatelessWidget {
   }
 
   Widget _buildPlaintiffDefendantInput() {
-    final courtFifthController =
-        Get.put(CourtFifthController(), tag: 'court_fifth');
+    final courtFifthController = Get.put(CourtFifthController(), tag: 'court_fifth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

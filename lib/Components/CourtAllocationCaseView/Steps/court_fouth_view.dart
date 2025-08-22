@@ -18,7 +18,7 @@ class CourtFouthView extends StatelessWidget {
     required this.mainController,
   }) : super(key: key);
 
-  CourtAlloFouthController get controller => Get.find<CourtAlloFouthController>(tag: 'census_fourth');
+  CourtAlloFouthController get controller => Get.find<CourtAlloFouthController>(tag: 'court_fourth');
 
   @override
   Widget build(BuildContext context) {

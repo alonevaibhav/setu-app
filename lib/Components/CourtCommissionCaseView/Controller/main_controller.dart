@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
 import '../../CourtCommissionCaseView/Controller/step_three_controller.dart';
 import '../../CourtCommissionCaseView/Controller/survey_cts.dart';
+import 'court_fifth_controller.dart';
+import 'court_fourth_controller.dart';
+import 'court_seventh_controller.dart';
+import 'court_sixth_controller.dart';
 
 // Import all step controllers
 
@@ -17,6 +21,10 @@ class CourtCommissionCaseController extends GetxController {
   late final PersonalInfoController personalInfoController;
   late final SurveyCTSController surveyCTSController;
   late final CalculationController calculationController; // Add this line
+  late final CourtFourthController courtFourthController; // Add this line
+  late final CourtFifthController courtFifthController; // Add this line
+  late final CourtSixthController courtSixthController; // Add this line
+  late final CourtSeventhController courtSeventhController; // Add this line
 
   // Add more controllers as needed
 
@@ -37,8 +45,8 @@ class CourtCommissionCaseController extends GetxController {
       'office'
     ],
     2: ['calculation'], // Survey Information
-    3: ['calculation', 'status'], // Calculation Information
-    4: ['applicant', 'status'], // Applicant Information
+    3: ['calculation'], // Calculation Information
+    4: ['plaintiff_defendant', ], // Applicant Information
     5: ['coowner', 'status'], // Co-owner Information
     6: ['adjacent', 'status'], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
@@ -58,11 +66,13 @@ class CourtCommissionCaseController extends GetxController {
   }
 
   void _initializeControllers() {
-    personalInfoController =
-        Get.put(PersonalInfoController(), tag: 'personal_info');
+    personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
     surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
-    calculationController =
-        Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
+    courtFourthController = Get.put(CourtFourthController(), tag: 'step_four'); // Add this line
+    courtFifthController = Get.put(CourtFifthController(), tag: 'court_fifth'); // Add this line
+    courtSixthController = Get.put(CourtSixthController(), tag: 'survey_sixth'); // Add this line
+    courtSeventhController = Get.put(CourtSeventhController(), tag: 'survey_seven'); // Add this line
     // Initialize more controllers as needed
   }
 
@@ -109,6 +119,14 @@ class CourtCommissionCaseController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
+      case 3: // Add this case for calculation step
+        return courtFourthController;
+      case 4: // Add this case for calculation step
+        return courtFifthController;
+      case 5: // Add this case for calculation step
+        return courtSixthController;
+        case 6: // Add this case for calculation step
+        return courtSeventhController;
       // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -138,6 +156,19 @@ class CourtCommissionCaseController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
+        break;
+      case 3: // Add this case
+        stepController = courtFourthController;
+        break;
+      case 4: // Add this case
+        stepController = courtFifthController;
+        break;
+      case 5: // Add this case
+        stepController = courtSixthController;
+        break;
+      case 6: // Add this case
+        stepController = courtSeventhController;
+        break;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -331,7 +362,11 @@ class CourtCommissionCaseController extends GetxController {
     final allControllers = [
       personalInfoController,
       surveyCTSController,
-      calculationController
+      calculationController,
+      courtFourthController,
+      courtFifthController,
+      courtSixthController,
+      courtSeventhController,
       // Add more controllers
     ];
     for (final controller in allControllers) {
