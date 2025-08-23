@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../CourtAllocationCaseView/Controller/main_controller.dart';
+import '../../GovernmentCensusView/Controller/main_controller.dart';
 
 class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
 
@@ -56,12 +56,20 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'government_counting_details':
-        return _validateGovernmentCountingDetails();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'government_counting_details':
+  //       return _validateGovernmentCountingDetails();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateGovernmentCountingDetails() {
     // Validate required fields

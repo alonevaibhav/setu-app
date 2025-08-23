@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -75,11 +74,13 @@ class CensusSeventhView extends StatelessWidget {
 
         // Next of Kin Entries List
         Obx(() => Column(
-          children: [
-            for (int i = 0; i < surveyEightController.nextOfKinEntries.length; i++)
-              _buildNextOfKinEntryCard(surveyEightController, i),
-          ],
-        )),
+              children: [
+                for (int i = 0;
+                    i < surveyEightController.nextOfKinEntries.length;
+                    i++)
+                  _buildNextOfKinEntryCard(surveyEightController, i),
+              ],
+            )),
 
         Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
@@ -130,7 +131,8 @@ class CensusSeventhView extends StatelessWidget {
     final entry = surveyEightController.nextOfKinEntries[index];
 
     return Container(
-      margin: EdgeInsets.only(bottom: 20.h * GovernmentCensusUIUtils.sizeFactor),
+      margin:
+          EdgeInsets.only(bottom: 20.h * GovernmentCensusUIUtils.sizeFactor),
       padding: EdgeInsets.all(20.w * GovernmentCensusUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -174,9 +176,11 @@ class CensusSeventhView extends StatelessWidget {
               ),
               if (surveyEightController.nextOfKinEntries.length > 1)
                 InkWell(
-                  onTap: () => surveyEightController.removeNextOfKinEntry(index),
+                  onTap: () =>
+                      surveyEightController.removeNextOfKinEntry(index),
                   child: Container(
-                    padding: EdgeInsets.all(8.w * GovernmentCensusUIUtils.sizeFactor),
+                    padding: EdgeInsets.all(
+                        8.w * GovernmentCensusUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -225,8 +229,8 @@ class CensusSeventhView extends StatelessWidget {
             hint: 'Enter complete address',
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             maxLines: 3,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'address', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'address', value),
           ),
 
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
@@ -239,8 +243,8 @@ class CensusSeventhView extends StatelessWidget {
             icon: PhosphorIcons.phone(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.phone,
             maxLength: 10,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'mobile', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'mobile', value),
           ),
 
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
@@ -251,14 +255,11 @@ class CensusSeventhView extends StatelessWidget {
             label: 'Survey No./Group No. *',
             hint: 'Enter survey or group number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'surveyNo', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'surveyNo', value),
           ),
 
           Gap(20.h * GovernmentCensusUIUtils.sizeFactor),
-
-
-
 
           // Summary Row
           Container(

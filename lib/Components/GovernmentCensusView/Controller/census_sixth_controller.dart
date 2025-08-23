@@ -742,34 +742,42 @@ class CensusSixthController extends GetxController with StepValidationMixin, Ste
 
   // StepValidationMixin implementation
   @override
-    bool validateCurrentSubStep(String field) {
-    clearValidationErrors();
-    bool isValid = true;
-
-    for (int i = 0; i < coownerEntries.length; i++) {
-      final entry = coownerEntries[i];
-
-      // Validate required fields
-      final name = (entry['nameController'] as TextEditingController).text;
-      final mobileNumber = (entry['mobileNumberController'] as TextEditingController).text;
-      final consent = (entry['consentController'] as TextEditingController).text;
-      final address = entry['address'] as Map<String, String>;
-
-      _validateField(i, 'name', name);
-      _validateField(i, 'mobileNumber', mobileNumber);
-      _validateField(i, 'consent', consent);
-      _validateAddressFields(i, address);
-
-      // Update the entry data
-      entry['name'] = name;
-      entry['mobileNumber'] = mobileNumber;
-      entry['consent'] = consent;
-      entry['serverNumber'] = (entry['serverNumberController'] as TextEditingController).text;
+  bool validateCurrentSubStep(String field) {
+    switch (field) {
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
+      default:
+        return true;
     }
-
-    isValid = validationErrors.isEmpty;
-    return isValid;
   }
+  //   bool validateCurrentSubStep(String field) {
+  //   clearValidationErrors();
+  //   bool isValid = true;
+  //
+  //   for (int i = 0; i < coownerEntries.length; i++) {
+  //     final entry = coownerEntries[i];
+  //
+  //     // Validate required fields
+  //     final name = (entry['nameController'] as TextEditingController).text;
+  //     final mobileNumber = (entry['mobileNumberController'] as TextEditingController).text;
+  //     final consent = (entry['consentController'] as TextEditingController).text;
+  //     final address = entry['address'] as Map<String, String>;
+  //
+  //     _validateField(i, 'name', name);
+  //     _validateField(i, 'mobileNumber', mobileNumber);
+  //     _validateField(i, 'consent', consent);
+  //     _validateAddressFields(i, address);
+  //
+  //     // Update the entry data
+  //     entry['name'] = name;
+  //     entry['mobileNumber'] = mobileNumber;
+  //     entry['consent'] = consent;
+  //     entry['serverNumber'] = (entry['serverNumberController'] as TextEditingController).text;
+  //   }
+  //
+  //   isValid = validationErrors.isEmpty;
+  //   return isValid;
+  // }
 
   // Complete validation method (commented but fixed for future use)
   bool validateAllFields() {

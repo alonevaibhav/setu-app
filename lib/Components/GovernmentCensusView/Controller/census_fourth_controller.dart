@@ -134,17 +134,27 @@ class CensusFourthController extends GetxController with StepValidationMixin, St
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'calculation':
-        return _validateCalculationType() &&
-            _validateDuration() &&
-            _validateHolderType() &&
-            _validateCalculationFeeRate();
-      case 'status':
-        return true; // Status step is always valid for now
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+
+
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'calculation':
+  //       return _validateCalculationType() &&
+  //           _validateDuration() &&
+  //           _validateHolderType() &&
+  //           _validateCalculationFeeRate();
+  //     case 'status':
+  //       return true; // Status step is always valid for now
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {

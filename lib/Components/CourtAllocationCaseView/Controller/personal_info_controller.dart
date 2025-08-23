@@ -84,28 +84,28 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   // Step Validation Mixin Implementation
   @override
-  // bool validateCurrentSubStep(String field) {
-  //   switch (field) {
-  //     case 'calculation':
-  //       return true; // Temporarily return true to bypass validation
-  //     default:
-  //       return true;
-  //   }
-  // }
   bool validateCurrentSubStep(String field) {
     switch (field) {
       case 'calculation':
-        return _validateCourtName() &&
-            _validateCourtAddress() &&
-            _validateCourtOrderNumber() &&
-            _validateCourtAllotmentDate() &&
-            _validateClaimNumberYear() &&
-            _validateCourtOrderFiles() &&
-            _validateSpecialOrderComments();
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'calculation':
+  //       return _validateCourtName() &&
+  //           _validateCourtAddress() &&
+  //           _validateCourtOrderNumber() &&
+  //           _validateCourtAllotmentDate() &&
+  //           _validateClaimNumberYear() &&
+  //           _validateCourtOrderFiles() &&
+  //           _validateSpecialOrderComments();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   @override
   bool isStepCompleted(List<String> fields) {
@@ -195,17 +195,4 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
     }
   }
 
-  // Print current data for debugging
-  void printCurrentData() {
-    print('=== Court Allocation Data ===');
-    print('Court Name: ${courtNameController.text}');
-    print('Court Address: ${courtAddressController.text}');
-    print('Court Order Number: ${courtOrderNumberController.text}');
-    print('Court Allotment Date: ${courtAllotmentDateController.text}');
-    print('Claim Number & Year: ${claimNumberYearController.text}');
-    print('Special Order/Comments: ${specialOrderCommentsController.text}');
-    print('Court Order Files: ${courtOrderFiles.length} files');
-    print('Step Completed: ${isStepCompleted(['calculation'])}');
-    print('=============================');
-  }
 }

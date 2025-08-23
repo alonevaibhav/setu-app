@@ -102,14 +102,22 @@ class CensusSeventhController extends GetxController with StepValidationMixin, S
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'next_of_kin':
-        return _validateNextOfKinEntries();
       case 'government_survey':
         return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'next_of_kin':
+  //       return _validateNextOfKinEntries();
+  //     case 'government_survey':
+  //       return true; // Temporarily return true to bypass validation
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateNextOfKinEntries() {
     if (nextOfKinEntries.isEmpty) return false;
