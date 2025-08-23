@@ -339,8 +339,7 @@ class AllocationSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController =
-    Get.put(AllocationSixthController(), tag: 'court_sixth');
+    final surveyEightController = Get.put(AllocationSixthController(), tag: 'court_sixth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -428,7 +427,8 @@ class AllocationSixthView extends StatelessWidget {
     );
   }
 
-  Widget _buildNextOfKinEntryCard(AllocationSixthController surveyEightController, int index) {
+  Widget _buildNextOfKinEntryCard(
+      AllocationSixthController surveyEightController, int index) {
     final entry = surveyEightController.nextOfKinEntries[index];
 
     return Container(

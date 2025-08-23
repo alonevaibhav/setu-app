@@ -2,8 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../Controller/main_controller.dart';
 
-class PersonalInfoController extends GetxController
-    with StepValidationMixin, StepDataMixin {
+class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
 
   // Text Controllers
   final courtNameController = TextEditingController();
@@ -85,28 +84,28 @@ class PersonalInfoController extends GetxController
 
   // Step Validation Mixin Implementation
   @override
-  bool validateCurrentSubStep(String field) {
-    switch (field) {
-      case 'calculation':
-        return true; // Temporarily return true to bypass validation
-      default:
-        return true;
-    }
-  }
   // bool validateCurrentSubStep(String field) {
   //   switch (field) {
   //     case 'calculation':
-  //       return _validateCourtName() &&
-  //           _validateCourtAddress() &&
-  //           _validateCourtOrderNumber() &&
-  //           _validateCourtAllotmentDate() &&
-  //           _validateClaimNumberYear() &&
-  //           _validateCourtOrderFiles() &&
-  //           _validateSpecialOrderComments();
+  //       return true; // Temporarily return true to bypass validation
   //     default:
   //       return true;
   //   }
   // }
+  bool validateCurrentSubStep(String field) {
+    switch (field) {
+      case 'calculation':
+        return _validateCourtName() &&
+            _validateCourtAddress() &&
+            _validateCourtOrderNumber() &&
+            _validateCourtAllotmentDate() &&
+            _validateClaimNumberYear() &&
+            _validateCourtOrderFiles() &&
+            _validateSpecialOrderComments();
+      default:
+        return true;
+    }
+  }
 
   @override
   bool isStepCompleted(List<String> fields) {

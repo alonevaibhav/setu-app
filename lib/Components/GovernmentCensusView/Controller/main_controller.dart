@@ -34,7 +34,9 @@ class GovernmentCensusController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: ['government_counting_details', ], // Personal Info step
+    0: [
+      'government_counting_details',
+    ], // Personal Info step
     1: [
       'survey_number',
       'department',
@@ -45,9 +47,11 @@ class GovernmentCensusController extends GetxController {
     ],
     2: ['government_survey'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
-    4: ['applicant', 'status'], // Applicant Information
-    5: ['coowner', 'status'], // Co-owner Information
-    6: ['adjacent', 'status'], // Information about Adjacent Holders
+    4: [
+      'applicant',
+    ], // Applicant Information
+    5: ['coowner', ], // Co-owner Information
+    6: ['next_of_kin', ], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment
@@ -119,7 +123,15 @@ class GovernmentCensusController extends GetxController {
         return surveyCTSController;
       case 2: // Add this case for calculation step
         return calculationController;
-        case 3: // Add this case for calculation step
+      case 3: // Add this case for calculation step
+        return censusFourthController;
+      case 4: // Add this case for calculation step
+        return censusFifthController;
+      case 5: // Add this case for calculation step
+        return censusSixthController;
+      case 6: // Add this case for calculation step
+        return censusEighthController;
+      case 7: // Add this case for calculation step
         return censusFourthController;
       // Add more cases as you create more controllers
       default:
@@ -150,8 +162,22 @@ class GovernmentCensusController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
-        case 3: // Add this case
+        break;
+      case 3: // Add this case
         stepController = censusFourthController;
+        break;
+      case 4: // Add this case
+        stepController = censusFifthController;
+        break;
+      case 5: // Add this case
+        stepController = censusSixthController;
+        break;
+      case 6: // Add this case
+        stepController = censusSeventhController;
+        break;
+      case 7: // Add this case
+        stepController = censusEighthController;
+        break;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -346,7 +372,11 @@ class GovernmentCensusController extends GetxController {
       personalInfoController,
       surveyCTSController,
       calculationController,
-      censusFourthController
+      censusFourthController,
+      censusFifthController,
+      censusSixthController,
+      censusSeventhController,
+      censusEighthController,
       // Add more controllers
     ];
     for (final controller in allControllers) {
