@@ -47,7 +47,7 @@ class CourtCommissionCaseController extends GetxController {
     2: ['calculation'], // Survey Information
     3: ['calculation'], // Calculation Information
     4: ['plaintiff_defendant', ], // Applicant Information
-    5: ['coowner', 'status'], // Co-owner Information
+    5: ['next_of_kin', ], // Co-owner Information
     6: ['adjacent', 'status'], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview

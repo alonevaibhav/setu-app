@@ -148,7 +148,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 5:
-        return landSixthView(
+        return LandSixthView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

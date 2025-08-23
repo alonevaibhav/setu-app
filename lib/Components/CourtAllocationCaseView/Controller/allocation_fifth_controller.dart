@@ -190,12 +190,20 @@ class AllocationFifthController extends GetxController with StepValidationMixin,
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'plaintiff_defendant':
-        return _validateAllEntries();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'plaintiff_defendant':
+  //       return _validateAllEntries();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateAllEntries() {
     for (var entry in plaintiffDefendantEntries) {

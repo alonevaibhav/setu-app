@@ -1,19 +1,14 @@
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'main_controller.dart';
 
-class CourtSixthController extends GetxController with StepValidationMixin, StepDataMixin {
+class CourtSixthController extends GetxController
+    with StepValidationMixin, StepDataMixin {
   // Observable list for next of kin entries
   final nextOfKinEntries = <Map<String, dynamic>>[].obs;
 
   // Dropdown options
-  final List<String> directionOptions = [
-    'East',
-    'West',
-    'North',
-    'South'
-  ];
+  final List<String> directionOptions = ['East', 'West', 'North', 'South'];
 
   final List<String> naturalResourcesOptions = [
     'Road',
@@ -36,13 +31,11 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
 
   void addNextOfKinEntry() {
     nextOfKinEntries.add({
-      'nameController': TextEditingController(),
       'addressController': TextEditingController(),
       'mobileController': TextEditingController(),
       'surveyNoController': TextEditingController(),
       'direction': '', // Initialize as empty string, not null
       'naturalResources': '', // Initialize as empty string, not null
-      'name': '',
       'address': '',
       'mobile': '',
       'surveyNo': '',
@@ -53,7 +46,6 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
     if (nextOfKinEntries.length > 1 && index < nextOfKinEntries.length) {
       // Dispose controllers
       final entry = nextOfKinEntries[index];
-      (entry['nameController'] as TextEditingController?)?.dispose();
       (entry['addressController'] as TextEditingController?)?.dispose();
       (entry['mobileController'] as TextEditingController?)?.dispose();
       (entry['surveyNoController'] as TextEditingController?)?.dispose();
@@ -86,22 +78,29 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'next_of_kin':
-        return _validateNextOfKinEntries();
       case 'government_survey':
         return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'next_of_kin':
+  //       return _validateNextOfKinEntries();
+  //     case 'government_survey':
+  //       return true; // Temporarily return true to bypass validation
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateNextOfKinEntries() {
     if (nextOfKinEntries.isEmpty) return false;
 
     for (final entry in nextOfKinEntries) {
-      // Check required fields with proper null handling
-      if ((entry['name'] as String? ?? '').trim().isEmpty ||
-          (entry['address'] as String? ?? '').trim().isEmpty ||
+      // Check required fields with proper null handling (removed 'name' field)
+      if ((entry['address'] as String? ?? '').trim().isEmpty ||
           (entry['mobile'] as String? ?? '').trim().isEmpty ||
           (entry['surveyNo'] as String? ?? '').trim().isEmpty ||
           (entry['direction'] as String? ?? '').trim().isEmpty ||
@@ -137,9 +136,7 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
         }
         for (int i = 0; i < nextOfKinEntries.length; i++) {
           final entry = nextOfKinEntries[i];
-          if ((entry['name'] as String? ?? '').trim().isEmpty) {
-            return 'Name is required in entry ${i + 1}';
-          }
+          // Removed name field validation
           if ((entry['address'] as String? ?? '').trim().isEmpty) {
             return 'Address is required in entry ${i + 1}';
           }
@@ -173,7 +170,7 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
 
     for (final entry in nextOfKinEntries) {
       entriesData.add({
-        'name': entry['name'] as String? ?? '',
+        // Removed 'name' field from data export
         'address': entry['address'] as String? ?? '',
         'mobile': entry['mobile'] as String? ?? '',
         'surveyNo': entry['surveyNo'] as String? ?? '',
@@ -190,9 +187,8 @@ class CourtSixthController extends GetxController with StepValidationMixin, Step
 
   @override
   void onClose() {
-    // Dispose all controllers
+    // Dispose all controllers (removed nameController)
     for (final entry in nextOfKinEntries) {
-      (entry['nameController'] as TextEditingController?)?.dispose();
       (entry['addressController'] as TextEditingController?)?.dispose();
       (entry['mobileController'] as TextEditingController?)?.dispose();
       (entry['surveyNoController'] as TextEditingController?)?.dispose();

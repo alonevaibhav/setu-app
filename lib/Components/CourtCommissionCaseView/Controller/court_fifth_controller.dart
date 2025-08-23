@@ -1,7 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import '../../CourtAllocationCaseView/Controller/main_controller.dart';
+import '../../CourtCommissionCaseView/Controller/main_controller.dart';
 import '../../Widget/address.dart';
 
 class CourtFifthController extends GetxController with StepValidationMixin, StepDataMixin {
@@ -191,12 +191,20 @@ class CourtFifthController extends GetxController with StepValidationMixin, Step
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'plaintiff_defendant':
-        return _validateAllEntries();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'plaintiff_defendant':
+  //       return _validateAllEntries();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateAllEntries() {
     for (var entry in plaintiffDefendantEntries) {

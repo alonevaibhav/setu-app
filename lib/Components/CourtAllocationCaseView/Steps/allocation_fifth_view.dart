@@ -37,8 +37,7 @@ class AllocationFifthView extends StatelessWidget {
   }
 
   Widget _buildPlaintiffDefendantInput() {
-    final courtFifthController =
-    Get.put(AllocationFifthController(), tag: 'court_fifth');
+    final courtFifthController = Get.put(AllocationFifthController(), tag: 'court_fifth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,9 +76,7 @@ class AllocationFifthView extends StatelessWidget {
         // Plaintiff/Defendant Entries List
         Obx(() => Column(
           children: [
-            for (int i = 0;
-            i < courtFifthController.plaintiffDefendantEntries.length;
-            i++)
+            for (int i = 0; i < courtFifthController.plaintiffDefendantEntries.length; i++)
               _buildPlaintiffDefendantEntryCard(courtFifthController, i),
           ],
         )),

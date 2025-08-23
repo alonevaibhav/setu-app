@@ -119,6 +119,12 @@ class CourtAllocationCaseController extends GetxController {
         return calculationController;
         case 3: // Add this case for calculation step
         return courtAlloFouthController;
+        case 4: // Add this case for calculation step
+        return allocationFifthController;
+        case 5: // Add this case for calculation step
+        return allocationSixthController;
+        case 6: // Add this case for calculation step
+        return allocationSeventhController;
       // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -148,8 +154,22 @@ class CourtAllocationCaseController extends GetxController {
         break;
       case 2: // Add this case
         stepController = calculationController;
+        break;
         case 3: // Add this case
         stepController = courtAlloFouthController;
+        break;
+        case 4: // Add this case
+        stepController = allocationFifthController;
+        break;
+        case 5: // Add this case
+        stepController = allocationSixthController;
+        break;
+        case 6: // Add this case
+        stepController = allocationSeventhController;
+        break;
+        case 7: // Add this case
+        stepController = courtAlloFouthController;
+        break;
       // Add more cases
     }
     if (stepController is StepValidationMixin) {
@@ -344,7 +364,10 @@ class CourtAllocationCaseController extends GetxController {
       personalInfoController,
       surveyCTSController,
       calculationController,
-      courtAlloFouthController
+      courtAlloFouthController,
+      allocationFifthController,
+      allocationSixthController,
+      allocationSeventhController,
       // Add more controllers
     ];
     for (final controller in allControllers) {

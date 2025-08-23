@@ -414,7 +414,7 @@ class MainLandAcquisitionController extends GetxController {
   late final CalculationController calculationController; // Add this line
   late final LandFouthController landFouthController; // Add this line
   late final LandFifthController landFifthController; // Add this line
-  late final landSixthController laandSixthController; // Add this line
+  late final LandSixthController laandSixthController; // Add this line
   late final LandSeventhController landSeventhController; // Add this line
 
 
@@ -461,7 +461,7 @@ class MainLandAcquisitionController extends GetxController {
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
     landFouthController = Get.put(LandFouthController(), tag: 'land_fouth'); // Add this line
     landFifthController = Get.put(LandFifthController(), tag: 'land_fifth'); // Add this line
-    laandSixthController = Get.put(landSixthController(), tag: 'next_of_kin'); // Add this line
+    laandSixthController = Get.put(LandSixthController(), tag: 'land_sixth'); // Add this line
     landSeventhController = Get.put(LandSeventhController(), tag: 'survey_seven'); // Add this line
   }
 

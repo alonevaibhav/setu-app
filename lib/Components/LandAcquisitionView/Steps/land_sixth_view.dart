@@ -3,16 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
-import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
 import '../../../Constants/color_constant.dart';
 import '../Controller/land_sixth_controller.dart';
 import '../Controller/main_controller.dart';
+import 'ZLandAcquisitionUIUtils.dart';
 
-class landSixthView extends StatelessWidget {
+class LandSixthView extends StatelessWidget {
   final int currentSubStep;
   final MainLandAcquisitionController mainController;
 
-  const landSixthView({
+  const LandSixthView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
@@ -37,8 +37,7 @@ class landSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController =
-        Get.put(landSixthController(), tag: 'survey_eight');
+    final surveyEightController = Get.put(LandSixthController(), tag: 'land_sixth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,7 +57,7 @@ class landSixthView extends StatelessWidget {
     );
   }
 
-  Widget _buildNextOfKinEntries(landSixthController surveyEightController) {
+  Widget _buildNextOfKinEntries(LandSixthController surveyEightController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -128,7 +127,7 @@ class landSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinEntryCard(
-      landSixthController surveyEightController, int index) {
+      LandSixthController surveyEightController, int index) {
     final entry = surveyEightController.nextOfKinEntries[index];
 
     return Container(
@@ -298,4 +297,3 @@ class landSixthView extends StatelessWidget {
     );
   }
 }
-
