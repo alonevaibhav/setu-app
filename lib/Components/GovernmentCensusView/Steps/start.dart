@@ -19,8 +19,7 @@ class PersonalInfoStep extends StatelessWidget {
   }) : super(key: key);
 
   // Get the PersonalInfoController
-  PersonalInfoController get controller =>
-      Get.find<PersonalInfoController>(tag: 'personal_info');
+  PersonalInfoController get controller => Get.find<PersonalInfoController>(tag: 'personal_info');
 
   @override
   Widget build(BuildContext context) {

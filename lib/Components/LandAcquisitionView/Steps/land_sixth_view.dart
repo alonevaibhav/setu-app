@@ -37,7 +37,8 @@ class landSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveyEightController = Get.put(landSixthController(), tag: 'survey_eight');
+    final surveyEightController =
+        Get.put(landSixthController(), tag: 'survey_eight');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,11 +75,13 @@ class landSixthView extends StatelessWidget {
 
         // Next of Kin Entries List
         Obx(() => Column(
-          children: [
-            for (int i = 0; i < surveyEightController.nextOfKinEntries.length; i++)
-              _buildNextOfKinEntryCard(surveyEightController, i),
-          ],
-        )),
+              children: [
+                for (int i = 0;
+                    i < surveyEightController.nextOfKinEntries.length;
+                    i++)
+                  _buildNextOfKinEntryCard(surveyEightController, i),
+              ],
+            )),
 
         Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
@@ -173,9 +176,11 @@ class landSixthView extends StatelessWidget {
               ),
               if (surveyEightController.nextOfKinEntries.length > 1)
                 InkWell(
-                  onTap: () => surveyEightController.removeNextOfKinEntry(index),
+                  onTap: () =>
+                      surveyEightController.removeNextOfKinEntry(index),
                   child: Container(
-                    padding: EdgeInsets.all(8.w * LandAcquisitionUIUtils.sizeFactor),
+                    padding:
+                        EdgeInsets.all(8.w * LandAcquisitionUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -224,8 +229,8 @@ class landSixthView extends StatelessWidget {
             hint: 'Enter complete address',
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             maxLines: 3,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'address', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'address', value),
           ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
@@ -238,8 +243,8 @@ class landSixthView extends StatelessWidget {
             icon: PhosphorIcons.phone(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.phone,
             maxLength: 10,
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'mobile', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'mobile', value),
           ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
@@ -250,14 +255,11 @@ class landSixthView extends StatelessWidget {
             label: 'Survey No./Group No. *',
             hint: 'Enter survey or group number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                surveyEightController.updateNextOfKinEntry(index, 'surveyNo', value),
+            onChanged: (value) => surveyEightController.updateNextOfKinEntry(
+                index, 'surveyNo', value),
           ),
 
           Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
-
-
-
 
           // Summary Row
           Container(
@@ -296,3 +298,4 @@ class landSixthView extends StatelessWidget {
     );
   }
 }
+
