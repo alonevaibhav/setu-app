@@ -19,19 +19,9 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
     'Land Records Department'
   ];
 
-  final List<String> districtOptions = [
-    'Pune',
-    'Mumbai',
-    'Nagpur',
-    'Thane'
-  ];
+  final List<String> districtOptions = ['Pune', 'Mumbai', 'Nagpur', 'Thane'];
 
-  final List<String> talukaOptions = [
-    'Haveli',
-    'Mulshi',
-    'Pune City',
-    'Bhor'
-  ];
+  final List<String> talukaOptions = ['Haveli', 'Mulshi', 'Pune City', 'Bhor'];
 
   final List<String> villageOptions = [
     'Khadakwasla',
@@ -93,18 +83,18 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   void _resetDependentFields(String changedField) {
     switch (changedField) {
       case 'department':
-      // Reset district and all subsequent fields
+        // Reset district and all subsequent fields
         selectedDistrict.value = '';
         selectedTaluka.value = '';
         selectedVillage.value = '';
         break;
       case 'district':
-      // Reset taluka and subsequent fields
+        // Reset taluka and subsequent fields
         selectedTaluka.value = '';
         selectedVillage.value = '';
         break;
       case 'taluka':
-      // Reset village
+        // Reset village
         selectedVillage.value = '';
         break;
     }

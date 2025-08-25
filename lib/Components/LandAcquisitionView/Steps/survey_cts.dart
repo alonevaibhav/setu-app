@@ -5,20 +5,20 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
 import '../Controller/main_controller.dart';
-import '../Controller/survey_cts.dart';
+import '../Controller/survey_cts_controller.dart';
 
-class SurveyCTSStep extends StatelessWidget {
+class LandSecondView extends StatelessWidget {
   final int currentSubStep;
   final MainLandAcquisitionController mainController;
 
-  const SurveyCTSStep({
+  const LandSecondView({
     Key? key,
     required this.currentSubStep,
     required this.mainController,
   }) : super(key: key);
 
   // Get the SurveyCTSController
-  SurveyCTSController get controller => Get.find<SurveyCTSController>(tag: 'survey_cts');
+  LandSecondController get controller => Get.find<LandSecondController>(tag: 'survey_cts');
 
   @override
   Widget build(BuildContext context) {

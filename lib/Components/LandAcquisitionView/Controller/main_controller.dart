@@ -2,7 +2,7 @@
 // import 'package:flutter/material.dart';
 // import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 // import '../../LandAcquisitionView/Controller/step_three_controller.dart';
-// import '../../LandAcquisitionView/Controller/survey_cts.dart';
+// import '../../LandAcquisitionView/Controller/survey_cts_controller.dart';
 // import 'land_fifth_controller.dart';
 // import 'land_fouth_controller.dart';
 // import 'land_seventh_controller.dart';
@@ -393,7 +393,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 import '../../LandAcquisitionView/Controller/step_three_controller.dart';
-import '../../LandAcquisitionView/Controller/survey_cts.dart';
+import '../../LandAcquisitionView/Controller/survey_cts_controller.dart';
 import 'land_fifth_controller.dart';
 import 'land_fouth_controller.dart';
 import 'land_seventh_controller.dart';
@@ -410,7 +410,7 @@ class MainLandAcquisitionController extends GetxController {
 
   // Step Controllers - Initialize them here
   late final PersonalInfoController personalInfoController;
-  late final SurveyCTSController surveyCTSController;
+  late final LandSecondController surveyCTSController;
   late final CalculationController calculationController; // Add this line
   late final LandFouthController landFouthController; // Add this line
   late final LandFifthController landFifthController; // Add this line
@@ -457,7 +457,7 @@ class MainLandAcquisitionController extends GetxController {
 
   void _initializeControllers() {
     personalInfoController = Get.put(PersonalInfoController(), tag: 'personal_info');
-    surveyCTSController = Get.put(SurveyCTSController(), tag: 'survey_cts');
+    surveyCTSController = Get.put(LandSecondController(), tag: 'survey_cts');
     calculationController = Get.put(CalculationController(), tag: 'calculation'); // Add this line
     landFouthController = Get.put(LandFouthController(), tag: 'land_fouth'); // Add this line
     landFifthController = Get.put(LandFifthController(), tag: 'land_fifth'); // Add this line

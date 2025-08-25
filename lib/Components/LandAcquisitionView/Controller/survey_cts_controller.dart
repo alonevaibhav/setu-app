@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'main_controller.dart';
 
-class SurveyCTSController extends GetxController with StepValidationMixin, StepDataMixin {
+class LandSecondController extends GetxController with StepValidationMixin, StepDataMixin {
   // Form Controllers
   final surveyNumberController = TextEditingController();
 

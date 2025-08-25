@@ -9,7 +9,7 @@
 // import 'Steps/payment.dart';
 // import 'Steps/preview.dart';
 // import 'Steps/start.dart';
-// import 'Steps/survey_cts.dart';
+// import 'Steps/survey_cts_controller.dart';
 // import 'Steps/survey_information.dart';
 //
 // class SurveyStepWidget extends StatefulWidget {
@@ -128,7 +128,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 1:
-        return SurveyCTSStep(
+        return LandSecondView(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

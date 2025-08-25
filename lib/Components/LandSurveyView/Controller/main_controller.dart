@@ -9,7 +9,6 @@ import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
 
-// Import all step controllers
 
 class MainSurveyController extends GetxController {
   // Navigation State
@@ -55,7 +54,7 @@ class MainSurveyController extends GetxController {
     6: [
       'next_of_kin',
     ], // Information about Adjacent Holders
-    7: ['documents', 'status'], // Document Upload
+    7: ['documents', ], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment
   };
@@ -204,7 +203,8 @@ class MainSurveyController extends GetxController {
     _saveCurrentSubStepData();
 
     // Print the current survey data to the console
-    print('Current Survey Data: ${surveyData.value}');
+    // print('Current Survey Data: ${surveyData.value}');
+    debugPrintInfo();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -325,6 +325,346 @@ class MainSurveyController extends GetxController {
     currentData[key] = value;
     surveyData.value = currentData;
   }
+
+
+
+  /// Collect data from PersonalInfoController
+  Map<String, dynamic> getPersonalInfoData() {
+    try {
+      if (personalInfoController is StepDataMixin) {
+        return personalInfoController.getStepData();
+      }
+      return {
+        'personal_info': {
+          'is_holder_themselves': personalInfoController.isHolderThemselves.value,
+          'has_authority_on_behalf': personalInfoController.hasAuthorityOnBehalf.value,
+          'has_been_counted_before': personalInfoController.hasBeenCountedBefore.value,
+          'poa_registration_number': personalInfoController.poaRegistrationNumberController.text.trim(),
+          'poa_registration_date': personalInfoController.poaRegistrationDateController.text.trim(),
+          'poa_issuer_name': personalInfoController.poaIssuerNameController.text.trim(),
+          'poa_holder_name': personalInfoController.poaHolderNameController.text.trim(),
+          'poa_holder_address': personalInfoController.poaHolderAddressController.text.trim(),
+        }
+      };
+    } catch (e) {
+      print('Error getting PersonalInfo data: $e');
+      return {'personal_info': {}};
+    }
+  }
+
+
+
+  /// Collect data from SurveyCTSController
+  Map<String, dynamic> getSurveyInfoData() {
+    try {
+      if (surveyCTSController is StepDataMixin) {
+        return surveyCTSController.getStepData();
+      }
+
+      // Fallback: manually collect data from SurveyCTSController
+      return {
+        'survey_cts': {
+          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
+          'department': surveyCTSController.selectedDepartment.value,
+          'district': surveyCTSController.selectedDistrict.value,
+          'taluka': surveyCTSController.selectedTaluka.value,
+          'village': surveyCTSController.selectedVillage.value,
+          'office': surveyCTSController.selectedOffice.value,
+        }
+      };
+    } catch (e) {
+      print('Error getting SurveyInfo data: $e');
+      return {
+        'survey_cts': {
+          'survey_number': '',
+          'department': '',
+          'district': '',
+          'taluka': '',
+          'village': '',
+          'office': '',
+        }
+      };
+    }
+  }
+
+  Map<String, dynamic> getCalculationData() {
+    try {
+      if (calculationController is StepDataMixin) {
+        return calculationController.getStepData();
+      }
+
+      // Fallback: manually collect data from CalculationController
+      return {
+        'calculations': {
+          'calculationType': calculationController.selectedCalculationType.value,
+          'isCalculationComplete': calculationController.isCalculationComplete.value,
+          'notes': calculationController.notesController.text.trim(),
+          'date': calculationController.datecontroller.text.trim(),
+
+          // Common fields for Non-agricultural and Knots counting
+          'orderNumber': calculationController.orderNumberController.text.trim(),
+          'orderDate': calculationController.orderDateController.text.trim(),
+          'schemeOrderNumber': calculationController.schemeOrderNumberController.text.trim(),
+          'appointmentDate': calculationController.appointmentDateController.text.trim(),
+
+          // Type-specific fields
+          'landType': calculationController.landType.value,
+          'plotNumber': calculationController.plotNumberController.text.trim(),
+          'builtUpArea': calculationController.builtUpAreaController.text.trim(),
+          'knotsCount': calculationController.knotsCountController.text.trim(),
+          'knotSpacing': calculationController.knotSpacingController.text.trim(),
+          'calculationMethod': calculationController.calculationMethod.value,
+          'integrationType': calculationController.integrationType.value,
+          'baseLine': calculationController.baseLineController.text.trim(),
+          'ordinates': calculationController.ordinatesController.text.trim(),
+          'mergerOrderNumber': calculationController.mergerOrderNumberController.text.trim(),
+          'mergerOrderDate': calculationController.mergerOrderDateController.text.trim(),
+          'oldMergerNumber': calculationController.oldMergerNumberController.text.trim(),
+          'incorporationOrderFiles': calculationController.incorporationOrderFiles.toList(),
+
+          // Survey number and area from common controllers
+          'surveyNumber': calculationController.surveyNumberController.text.trim(),
+          'area': calculationController.areaController.text.trim(),
+          'subdivision': calculationController.subdivisionController.text.trim(),
+
+          // Entries data
+          'hddkayamEntriesCount': calculationController.hddkayamEntries.length,
+          'stomachEntriesCount': calculationController.stomachEntries.length,
+          'nonAgriculturalEntriesCount': calculationController.nonAgriculturalEntries.length,
+          'knotsCountingEntriesCount': calculationController.knotsCountingEntries.length,
+          'integrationCalculationEntriesCount': calculationController.integrationCalculationEntries.length,
+        }
+      };
+    } catch (e) {
+      print('Error getting Calculation data: $e');
+      return {'calculations': {}};
+    }
+  }
+  /// Collect data from StepFourController
+  Map<String, dynamic> getStepFourData() {
+    try {
+      if (stepFourController is StepDataMixin) {
+        return stepFourController.getStepData();
+      }
+      return {'step_four': {}};
+    } catch (e) {
+      print('Error getting StepFour data: $e');
+      return {'step_four': {}};
+    }
+  }
+
+  /// Collect data from SurveyFifthController (Applicant)
+  Map<String, dynamic> getApplicantData() {
+    try {
+      if (surveyFifthController is StepDataMixin) {
+        return surveyFifthController.getStepData();
+      }
+      return {'applicant': {}};
+    } catch (e) {
+      print('Error getting Applicant data: $e');
+      return {'applicant': {}};
+    }
+  }
+
+  /// Collect data from SurveySixthController (Co-owner)
+  Map<String, dynamic> getCoOwnerData() {
+    try {
+      if (surveySixthController is StepDataMixin) {
+        return surveySixthController.getStepData();
+      }
+      return {'co_owner': {}};
+    } catch (e) {
+      print('Error getting CoOwner data: $e');
+      return {'co_owner': {}};
+    }
+  }
+
+  /// Collect data from SurveySeventhController (Next of Kin)
+  Map<String, dynamic> getNextOfKinData() {
+    try {
+      if (surveySeventhController is StepDataMixin) {
+        return surveySeventhController.getStepData();
+      }
+      return {'next_of_kin': {}};
+    } catch (e) {
+      print('Error getting NextOfKin data: $e');
+      return {'next_of_kin': {}};
+    }
+  }
+
+  /// Collect data from SurveyEightController (Documents)
+  Map<String, dynamic> getDocumentsData() {
+    try {
+      if (surveyEightController is StepDataMixin) {
+        return surveyEightController.getStepData();
+      }
+      return {'documents': {}};
+    } catch (e) {
+      print('Error getting Documents data: $e');
+      return {'documents': {}};
+    }
+  }
+
+
+  void debugPrintInfo() {
+    print('=== PERSONAL INFO DEBUG ===');
+
+    print('Is holder themselves: ${personalInfoController.isHolderThemselves.value}');
+    print('Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}');
+    print('Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}');
+    print('POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"');
+    print('POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"');
+    print('POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"');
+    print('POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"');
+    print('POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"');
+
+    print('=== SURVEY INFO DATA DEBUG ===');
+
+    // Get survey data using the existing method
+    final surveyData = getSurveyInfoData();
+    final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
+
+    if (surveyInfo != null) {
+      print('Survey Number: "${surveyInfo['survey_number']}"');
+      print('Department: "${surveyInfo['department']}"');
+      print('District: "${surveyInfo['district']}"');
+      print('Taluka: "${surveyInfo['taluka']}"');
+      print('Village: "${surveyInfo['village']}"');
+      print('Office: "${surveyInfo['office']}"');
+    } else {
+      print('Survey info data is null');
+    }
+
+    print('=== CALCULATION DATA DEBUG ===');
+
+    // Get calculation data using the existing method
+    final calculationData = getCalculationData();
+    final calculations = calculationData['calculations'] as Map<String, dynamic>?;
+
+    if (calculations != null) {
+      print('Calculation Type: "${calculations['calculationType']}"');
+      print('Is Calculation Complete: ${calculations['isCalculationComplete']}');
+      print('Notes: "${calculations['notes']}"');
+      print('Date: "${calculations['date']}"');
+
+      // Print common fields if they exist
+      if (calculations['orderNumber']?.toString().isNotEmpty ?? false) {
+        print('Order Number: "${calculations['orderNumber']}"');
+      }
+      if (calculations['orderDate']?.toString().isNotEmpty ?? false) {
+        print('Order Date: "${calculations['orderDate']}"');
+      }
+      if (calculations['schemeOrderNumber']?.toString().isNotEmpty ?? false) {
+        print('Scheme Order Number: "${calculations['schemeOrderNumber']}"');
+      }
+      if (calculations['appointmentDate']?.toString().isNotEmpty ?? false) {
+        print('Appointment Date: "${calculations['appointmentDate']}"');
+      }
+
+      // Print type-specific fields based on calculation type
+      String calcType = calculations['calculationType']?.toString() ?? '';
+
+      switch (calcType) {
+        case 'Hddkayam':
+          print('Survey Number: "${calculations['surveyNumber']}"');
+          print('Area: "${calculations['area']}"');
+          print('Subdivision: "${calculations['subdivision']}"');
+          print('Hddkayam Entries Count: ${calculations['hddkayamEntriesCount']}');
+
+          // Print detailed entries
+          for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+            final entry = calculationController.hddkayamEntries[i];
+            print('  Entry ${i + 1}:');
+            print('    CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"');
+            print('    Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"');
+            print('    Area: "${entry['area'] ?? ''}"');
+            print('    Area Sqm: "${entry['areaSqm'] ?? ''}"');
+            print('    Is Correct: ${entry['isCorrect'] ?? false}');
+          }
+          break;
+
+        case 'Stomach':
+          print('Stomach Entries Count: ${calculations['stomachEntriesCount']}');
+
+          // Print detailed entries
+          for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+            final entry = calculationController.stomachEntries[i];
+            print('  Entry ${i + 1}:');
+            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
+            print('    Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"');
+            print('    Total Area: "${entry['totalArea'] ?? ''}"');
+            print('    Calculated Area: "${entry['calculatedArea'] ?? ''}"');
+            print('    Is Correct: ${entry['isCorrect'] ?? false}');
+          }
+          break;
+
+        case 'Non-agricultural':
+          print('Land Type: "${calculations['landType']}"');
+          print('Plot Number: "${calculations['plotNumber']}"');
+          print('Built Up Area: "${calculations['builtUpArea']}"');
+          print('Non-Agricultural Entries Count: ${calculations['nonAgriculturalEntriesCount']}');
+
+          // Print detailed entries
+          for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+            final entry = calculationController.nonAgriculturalEntries[i];
+            print('  Entry ${i + 1}:');
+            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
+            print('    Survey Type: "${entry['selectedSurveyType'] ?? ''}"');
+            print('    Area: "${entry['area'] ?? ''}"');
+            print('    Area Hectares: "${entry['areaHectares'] ?? ''}"');
+            print('    Is Correct: ${entry['isCorrect'] ?? false}');
+          }
+          break;
+
+        case 'Counting by number of knots':
+          print('Knots Count: "${calculations['knotsCount']}"');
+          print('Knot Spacing: "${calculations['knotSpacing']}"');
+          print('Calculation Method: "${calculations['calculationMethod']}"');
+          print('Knots Counting Entries Count: ${calculations['knotsCountingEntriesCount']}');
+
+          // Print detailed entries
+          for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+            final entry = calculationController.knotsCountingEntries[i];
+            print('  Entry ${i + 1}:');
+            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
+            print('    Survey Type: "${entry['selectedSurveyType'] ?? ''}"');
+            print('    Area: "${entry['area'] ?? ''}"');
+            print('    Area Hectares: "${entry['areaHectares'] ?? ''}"');
+            print('    Is Correct: ${entry['isCorrect'] ?? false}');
+          }
+          break;
+
+        case 'Integration calculation':
+          print('Integration Type: "${calculations['integrationType']}"');
+          print('Base Line: "${calculations['baseLine']}"');
+          print('Ordinates: "${calculations['ordinates']}"');
+          print('Merger Order Number: "${calculations['mergerOrderNumber']}"');
+          print('Merger Order Date: "${calculations['mergerOrderDate']}"');
+          print('Old Merger Number: "${calculations['oldMergerNumber']}"');
+          print('Incorporation Order Files Count: ${calculations['incorporationOrderFiles']?.length ?? 0}');
+          print('Integration Calculation Entries Count: ${calculations['integrationCalculationEntriesCount']}');
+
+          // Print detailed entries
+          for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+            final entry = calculationController.integrationCalculationEntries[i];
+            print('  Entry ${i + 1}:');
+            print('    CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"');
+            print('    Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"');
+            print('    Area: "${entry['area'] ?? ''}"');
+            print('    Area Sqm: "${entry['areaSqm'] ?? ''}"');
+            print('    Is Correct: ${entry['isCorrect'] ?? false}');
+          }
+          break;
+      }
+    } else {
+      print('Calculation data is null');
+    }
+
+    print('=== END DEBUG INFO ===');
+  }
+
+
+
 
   // API Submit Method
   Future<void> submitSurvey() async {

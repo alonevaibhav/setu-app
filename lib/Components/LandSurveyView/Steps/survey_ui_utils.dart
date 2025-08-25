@@ -546,7 +546,7 @@ class SurveyUIUtils {
                     snapshot.data ?? Map.fromIterables(items, items);
 
                 return DropdownButtonFormField<String>(
-                  value: value != null ? null : value,
+                  value: value == null || value.isEmpty ? null : value, // Handle both null and empty
                   items: items.map((item) {
                     final translatedText = translatedItems[item] ?? item;
                     return DropdownMenuItem(

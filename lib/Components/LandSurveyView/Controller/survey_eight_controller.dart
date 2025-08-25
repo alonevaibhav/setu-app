@@ -5,6 +5,7 @@ import '../Controller/main_controller.dart';
 class SurveyEightController extends GetxController with StepValidationMixin, StepDataMixin {
   // Identity Card
   final selectedIdentityType = ''.obs;
+
   final identityCardFiles = <String>[].obs; // Changed from File to String
 
   // Document Files - Changed from List<File> to List<String>
