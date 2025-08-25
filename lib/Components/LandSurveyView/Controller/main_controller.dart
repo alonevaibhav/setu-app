@@ -8,6 +8,8 @@ import 'package:setuapp/Components/LandSurveyView/Controller/survey_sixth_contro
 import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
+import 'dart:developer' as developer;
+
 
 
 class MainSurveyController extends GetxController {
@@ -326,6 +328,9 @@ class MainSurveyController extends GetxController {
     surveyData.value = currentData;
   }
 
+  ///////////////////////////////////
+  // ALL DATA COLLECTION METHODS
+  ///////////////////////////////////
 
 
   /// Collect data from PersonalInfoController
@@ -390,105 +395,195 @@ class MainSurveyController extends GetxController {
   Map<String, dynamic> getCalculationData() {
     try {
       if (calculationController is StepDataMixin) {
+        // Return data directly from getStepData() without nesting
         return calculationController.getStepData();
       }
 
       // Fallback: manually collect data from CalculationController
       return {
-        'calculations': {
-          'calculationType': calculationController.selectedCalculationType.value,
-          'isCalculationComplete': calculationController.isCalculationComplete.value,
-          'notes': calculationController.notesController.text.trim(),
-          'date': calculationController.datecontroller.text.trim(),
+        'calculationType': calculationController.selectedCalculationType.value,
+        'isCalculationComplete': calculationController.isCalculationComplete.value,
+        'notes': calculationController.notesController.text.trim(),
+        'date': calculationController.datecontroller.text.trim(),
 
-          // Common fields for Non-agricultural and Knots counting
-          'orderNumber': calculationController.orderNumberController.text.trim(),
-          'orderDate': calculationController.orderDateController.text.trim(),
-          'schemeOrderNumber': calculationController.schemeOrderNumberController.text.trim(),
-          'appointmentDate': calculationController.appointmentDateController.text.trim(),
+        // Common fields for Non-agricultural and Knots counting
+        'orderNumber': calculationController.orderNumberController.text.trim(),
+        'orderDate': calculationController.orderDateController.text.trim(),
+        'schemeOrderNumber': calculationController.schemeOrderNumberController.text.trim(),
+        'appointmentDate': calculationController.appointmentDateController.text.trim(),
 
-          // Type-specific fields
-          'landType': calculationController.landType.value,
-          'plotNumber': calculationController.plotNumberController.text.trim(),
-          'builtUpArea': calculationController.builtUpAreaController.text.trim(),
-          'knotsCount': calculationController.knotsCountController.text.trim(),
-          'knotSpacing': calculationController.knotSpacingController.text.trim(),
-          'calculationMethod': calculationController.calculationMethod.value,
-          'integrationType': calculationController.integrationType.value,
-          'baseLine': calculationController.baseLineController.text.trim(),
-          'ordinates': calculationController.ordinatesController.text.trim(),
-          'mergerOrderNumber': calculationController.mergerOrderNumberController.text.trim(),
-          'mergerOrderDate': calculationController.mergerOrderDateController.text.trim(),
-          'oldMergerNumber': calculationController.oldMergerNumberController.text.trim(),
-          'incorporationOrderFiles': calculationController.incorporationOrderFiles.toList(),
+        // Type-specific fields
+        'landType': calculationController.landType.value,
+        'plotNumber': calculationController.plotNumberController.text.trim(),
+        'builtUpArea': calculationController.builtUpAreaController.text.trim(),
+        'knotsCount': calculationController.knotsCountController.text.trim(),
+        'knotSpacing': calculationController.knotSpacingController.text.trim(),
+        'calculationMethod': calculationController.calculationMethod.value,
+        'integrationType': calculationController.integrationType.value,
+        'baseLine': calculationController.baseLineController.text.trim(),
+        'ordinates': calculationController.ordinatesController.text.trim(),
+        'mergerOrderNumber': calculationController.mergerOrderNumberController.text.trim(),
+        'mergerOrderDate': calculationController.mergerOrderDateController.text.trim(),
+        'oldMergerNumber': calculationController.oldMergerNumberController.text.trim(),
+        'incorporationOrderFiles': calculationController.incorporationOrderFiles.toList(),
 
-          // Survey number and area from common controllers
-          'surveyNumber': calculationController.surveyNumberController.text.trim(),
-          'area': calculationController.areaController.text.trim(),
-          'subdivision': calculationController.subdivisionController.text.trim(),
+        // Survey number and area from common controllers
+        'surveyNumber': calculationController.surveyNumberController.text.trim(),
+        'area': calculationController.areaController.text.trim(),
+        'subdivision': calculationController.subdivisionController.text.trim(),
 
-          // Entries data
-          'hddkayamEntriesCount': calculationController.hddkayamEntries.length,
-          'stomachEntriesCount': calculationController.stomachEntries.length,
-          'nonAgriculturalEntriesCount': calculationController.nonAgriculturalEntries.length,
-          'knotsCountingEntriesCount': calculationController.knotsCountingEntries.length,
-          'integrationCalculationEntriesCount': calculationController.integrationCalculationEntries.length,
-        }
+        // Entries data
+        'hddkayamEntriesCount': calculationController.hddkayamEntries.length,
+        'stomachEntriesCount': calculationController.stomachEntries.length,
+        'nonAgriculturalEntriesCount': calculationController.nonAgriculturalEntries.length,
+        'knotsCountingEntriesCount': calculationController.knotsCountingEntries.length,
+        'integrationCalculationEntriesCount': calculationController.integrationCalculationEntries.length,
       };
     } catch (e) {
       print('Error getting Calculation data: $e');
-      return {'calculations': {}};
+      return {};
     }
   }
+
+
   /// Collect data from StepFourController
   Map<String, dynamic> getStepFourData() {
     try {
       if (stepFourController is StepDataMixin) {
         return stepFourController.getStepData();
       }
-      return {'step_four': {}};
+
+      return {
+        'calculation_type': stepFourController.selectedCalculationType.value,
+        'duration': stepFourController.selectedDuration.value,
+        'holder_type': stepFourController.selectedHolderType.value,
+        'location_category': stepFourController.selectedLocationCategory.value,
+        'calculation_fee': stepFourController.calculationFeeController.text,
+        'calculation_fee_numeric': stepFourController.extractNumericFee(),
+      };
     } catch (e) {
       print('Error getting StepFour data: $e');
-      return {'step_four': {}};
+      return {
+        'calculation_type': null,
+        'duration': null,
+        'holder_type': null,
+        'location_category': null,
+        'calculation_fee': '',
+        'calculation_fee_numeric': null,
+      };
     }
   }
+
 
   /// Collect data from SurveyFifthController (Applicant)
-  Map<String, dynamic> getApplicantData() {
+  Map<String, dynamic> getFifthController() {
     try {
       if (surveyFifthController is StepDataMixin) {
+        // Return data directly from getStepData() without extra nesting
         return surveyFifthController.getStepData();
       }
-      return {'applicant': {}};
+
+      // Fallback: manually collect data from SurveyFifthController
+      final data = <String, dynamic>{};
+
+      for (int i = 0; i < surveyFifthController.applicantEntries.length; i++) {
+        final entry = surveyFifthController.applicantEntries[i];
+        final addressData = entry['address'] as RxMap<String, dynamic>;
+
+        data['applicant_$i'] = {
+          'agreement': (entry['agreementController'] as TextEditingController).text,
+          'accountHolderName': (entry['accountHolderNameController'] as TextEditingController).text,
+          'accountNumber': (entry['accountNumberController'] as TextEditingController).text,
+          'mobileNumber': (entry['mobileNumberController'] as TextEditingController).text,
+          'serverNumber': (entry['serverNumberController'] as TextEditingController).text,
+          'area': (entry['areaController'] as TextEditingController).text,
+          'potkaharabaArea': (entry['potkaharabaAreaController'] as TextEditingController).text,
+          'totalArea': (entry['totalAreaController'] as TextEditingController).text,
+          'address': Map<String, dynamic>.from(addressData),
+        };
+      }
+
+      data['applicantCount'] = surveyFifthController.applicantEntries.length;
+      return data;
     } catch (e) {
       print('Error getting Applicant data: $e');
-      return {'applicant': {}};
+      return {
+        'applicantCount': 0,
+        'error': e.toString(),
+      };
     }
   }
+
 
   /// Collect data from SurveySixthController (Co-owner)
-  Map<String, dynamic> getCoOwnerData() {
+  Map<String, dynamic> getSixthController() {
     try {
       if (surveySixthController is StepDataMixin) {
+        // Return data directly from getStepData() without extra nesting
         return surveySixthController.getStepData();
       }
-      return {'co_owner': {}};
+
+      // Fallback: manually collect data from SurveySixthController
+      final List<Map<String, dynamic>> coownerData = [];
+
+      for (int i = 0; i < surveySixthController.coownerEntries.length; i++) {
+        final entry = surveySixthController.coownerEntries[i];
+        coownerData.add({
+          'name': (entry['nameController'] as TextEditingController).text,
+          'mobileNumber': (entry['mobileNumberController'] as TextEditingController).text,
+          'serverNumber': (entry['serverNumberController'] as TextEditingController).text,
+          'consent': (entry['consentController'] as TextEditingController).text,
+          'address': Map<String, String>.from(entry['address'] as Map? ?? {}),
+        });
+      }
+
+      return {
+        'coowners': coownerData,
+        'coownerCount': surveySixthController.coownerEntries.length,
+      };
     } catch (e) {
       print('Error getting CoOwner data: $e');
-      return {'co_owner': {}};
+      return {
+        'coowners': [],
+        'coownerCount': 0,
+        'error': e.toString(),
+      };
     }
   }
 
+
   /// Collect data from SurveySeventhController (Next of Kin)
-  Map<String, dynamic> getNextOfKinData() {
+  Map<String, dynamic> getSeventhController() {
     try {
       if (surveySeventhController is StepDataMixin) {
+        // Return data directly from getStepData() without extra nesting
         return surveySeventhController.getStepData();
       }
-      return {'next_of_kin': {}};
+
+      // Fallback: manually collect data from SurveySeventhController
+      final List<Map<String, dynamic>> entriesData = [];
+
+      for (final entry in surveySeventhController.nextOfKinEntries) {
+        entriesData.add({
+          'address': (entry['addressController'] as TextEditingController).text,
+          'mobile': (entry['mobileController'] as TextEditingController).text,
+          'surveyNo': (entry['surveyNoController'] as TextEditingController).text,
+          'direction': entry['direction'] as String? ?? '',
+          'naturalResources': entry['naturalResources'] as String? ?? '',
+        });
+      }
+
+      return {
+        'nextOfKinEntries': entriesData,
+        'totalNextOfKinEntries': entriesData.length,
+      };
     } catch (e) {
       print('Error getting NextOfKin data: $e');
-      return {'next_of_kin': {}};
+      return {
+        'nextOfKinEntries': [],
+        'totalNextOfKinEntries': 0,
+        'error': e.toString(),
+      };
     }
   }
 
@@ -496,174 +591,684 @@ class MainSurveyController extends GetxController {
   Map<String, dynamic> getDocumentsData() {
     try {
       if (surveyEightController is StepDataMixin) {
+        // Return data directly from getStepData() without extra nesting
         return surveyEightController.getStepData();
       }
-      return {'documents': {}};
+
+      // Fallback: manually collect data from SurveyEightController
+      return {
+        'identityCardType': surveyEightController.selectedIdentityType.value,
+        'identityCardFiles': surveyEightController.identityCardFiles.toList(),
+        'sevenTwelveFiles': surveyEightController.sevenTwelveFiles.toList(),
+        'noteFiles': surveyEightController.noteFiles.toList(),
+        'partitionFiles': surveyEightController.partitionFiles.toList(),
+        'schemeSheetFiles': surveyEightController.schemeSheetFiles.toList(),
+        'oldCensusMapFiles': surveyEightController.oldCensusMapFiles.toList(),
+        'demarcationCertificateFiles': surveyEightController.demarcationCertificateFiles.toList(),
+      };
     } catch (e) {
       print('Error getting Documents data: $e');
-      return {'documents': {}};
+      return {
+        'identityCardType': '',
+        'identityCardFiles': <String>[],
+        'sevenTwelveFiles': <String>[],
+        'noteFiles': <String>[],
+        'partitionFiles': <String>[],
+        'schemeSheetFiles': <String>[],
+        'oldCensusMapFiles': <String>[],
+        'demarcationCertificateFiles': <String>[],
+        'error': e.toString(),
+      };
     }
   }
 
 
+  ///////////////////////////////////
+  // DEBUG PRINT METHOD
+  ///////////////////////////////////
+
   void debugPrintInfo() {
-    print('=== PERSONAL INFO DEBUG ===');
+    developer.log('=== PERSONAL INFO DEBUG ===', name: 'DebugInfo');
 
-    print('Is holder themselves: ${personalInfoController.isHolderThemselves.value}');
-    print('Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}');
-    print('Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}');
-    print('POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"');
-    print('POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"');
-    print('POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"');
-    print('POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"');
-    print('POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"');
+    developer.log('Is holder themselves: ${personalInfoController.isHolderThemselves.value}', name: 'PersonalInfo');
+    developer.log('Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}', name: 'PersonalInfo');
+    developer.log('Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}', name: 'PersonalInfo');
+    developer.log('POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"', name: 'PersonalInfo');
 
-    print('=== SURVEY INFO DATA DEBUG ===');
+    developer.log('=== SURVEY INFO DATA DEBUG ===', name: 'DebugInfo');
 
-    // Get survey data using the existing method
     final surveyData = getSurveyInfoData();
     final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
 
     if (surveyInfo != null) {
-      print('Survey Number: "${surveyInfo['survey_number']}"');
-      print('Department: "${surveyInfo['department']}"');
-      print('District: "${surveyInfo['district']}"');
-      print('Taluka: "${surveyInfo['taluka']}"');
-      print('Village: "${surveyInfo['village']}"');
-      print('Office: "${surveyInfo['office']}"');
+      developer.log('Survey Number: "${surveyInfo['survey_number']}"', name: 'SurveyInfo');
+      developer.log('Department: "${surveyInfo['department']}"', name: 'SurveyInfo');
+      developer.log('District: "${surveyInfo['district']}"', name: 'SurveyInfo');
+      developer.log('Taluka: "${surveyInfo['taluka']}"', name: 'SurveyInfo');
+      developer.log('Village: "${surveyInfo['village']}"', name: 'SurveyInfo');
+      developer.log('Office: "${surveyInfo['office']}"', name: 'SurveyInfo');
     } else {
-      print('Survey info data is null');
+      developer.log('Survey info data is null', name: 'SurveyInfo', level: 900); // Warning level
     }
 
-    print('=== CALCULATION DATA DEBUG ===');
+    developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
 
-    // Get calculation data using the existing method
-    final calculationData = getCalculationData();
-    final calculations = calculationData['calculations'] as Map<String, dynamic>?;
+    try {
+      // Get calculation data using the fixed method
+      final calculationData = getCalculationData();
 
-    if (calculations != null) {
-      print('Calculation Type: "${calculations['calculationType']}"');
-      print('Is Calculation Complete: ${calculations['isCalculationComplete']}');
-      print('Notes: "${calculations['notes']}"');
-      print('Date: "${calculations['date']}"');
+      developer.log('calculationController null check: ${calculationController == null}', name: 'CalculationData');
+      developer.log('calculationData null check: ${calculationData == null}', name: 'CalculationData');
+      developer.log('calculationData isEmpty: ${calculationData.isEmpty}', name: 'CalculationData');
+      developer.log('selectedCalculationType: "${calculationController.selectedCalculationType.value}"', name: 'CalculationData');
 
-      // Print common fields if they exist
-      if (calculations['orderNumber']?.toString().isNotEmpty ?? false) {
-        print('Order Number: "${calculations['orderNumber']}"');
+      if (calculationData.isNotEmpty) {
+        developer.log('Calculation Type: "${calculationData['calculationType']}"', name: 'CalculationData');
+        developer.log('Is Calculation Complete: ${calculationData['isCalculationComplete']}', name: 'CalculationData');
+        developer.log('Notes: "${calculationData['notes']}"', name: 'CalculationData');
+        developer.log('Date: "${calculationData['date']}"', name: 'CalculationData');
+
+        // Print common fields if they exist
+        if (calculationData['orderNumber']?.toString().isNotEmpty ?? false) {
+          developer.log('Order Number: "${calculationData['orderNumber']}"', name: 'CalculationData');
+        }
+        if (calculationData['orderDate']?.toString().isNotEmpty ?? false) {
+          developer.log('Order Date: "${calculationData['orderDate']}"', name: 'CalculationData');
+        }
+        if (calculationData['schemeOrderNumber']?.toString().isNotEmpty ?? false) {
+          developer.log('Scheme Order Number: "${calculationData['schemeOrderNumber']}"', name: 'CalculationData');
+        }
+        if (calculationData['appointmentDate']?.toString().isNotEmpty ?? false) {
+          developer.log('Appointment Date: "${calculationData['appointmentDate']}"', name: 'CalculationData');
+        }
+
+        // Print type-specific fields based on calculation type
+        String calcType = calculationData['calculationType']?.toString() ?? '';
+
+        switch (calcType) {
+          case 'Hddkayam':
+            developer.log('Survey Number: "${calculationData['surveyNumber']}"', name: 'Hddkayam');
+            developer.log('Area: "${calculationData['area']}"', name: 'Hddkayam');
+            developer.log('Subdivision: "${calculationData['subdivision']}"', name: 'Hddkayam');
+            developer.log('Hddkayam Entries Count: ${calculationData['hddkayamEntriesCount'] ?? 0}', name: 'Hddkayam');
+
+            // Print detailed entries
+            for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+              final entry = calculationController.hddkayamEntries[i];
+              developer.log('Entry ${i + 1}:', name: 'HddkayamEntry');
+              developer.log('  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"', name: 'HddkayamEntry');
+              developer.log('  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"', name: 'HddkayamEntry');
+              developer.log('  Area: "${entry['area'] ?? ''}"', name: 'HddkayamEntry');
+              developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"', name: 'HddkayamEntry');
+              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}', name: 'HddkayamEntry');
+            }
+            break;
+
+          case 'Stomach':
+            developer.log('Stomach Entries Count: ${calculationData['stomachEntriesCount'] ?? 0}', name: 'Stomach');
+
+            // Print detailed entries
+            for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+              final entry = calculationController.stomachEntries[i];
+              developer.log('Entry ${i + 1}:', name: 'StomachEntry');
+              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"', name: 'StomachEntry');
+              developer.log('  Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"', name: 'StomachEntry');
+              developer.log('  Total Area: "${entry['totalArea'] ?? ''}"', name: 'StomachEntry');
+              developer.log('  Calculated Area: "${entry['calculatedArea'] ?? ''}"', name: 'StomachEntry');
+              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}', name: 'StomachEntry');
+            }
+            break;
+
+          case 'Non-agricultural':
+            developer.log('Land Type: "${calculationData['landType']}"', name: 'NonAgricultural');
+            developer.log('Plot Number: "${calculationData['plotNumber']}"', name: 'NonAgricultural');
+            developer.log('Built Up Area: "${calculationData['builtUpArea']}"', name: 'NonAgricultural');
+            developer.log('Non-Agricultural Entries Count: ${calculationData['nonAgriculturalEntriesCount'] ?? 0}', name: 'NonAgricultural');
+
+            // Print detailed entries
+            for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+              final entry = calculationController.nonAgriculturalEntries[i];
+              developer.log('Entry ${i + 1}:', name: 'NonAgriculturalEntry');
+              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"', name: 'NonAgriculturalEntry');
+              developer.log('  Survey Type: "${entry['selectedSurveyType'] ?? ''}"', name: 'NonAgriculturalEntry');
+              developer.log('  Area: "${entry['area'] ?? ''}"', name: 'NonAgriculturalEntry');
+              developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"', name: 'NonAgriculturalEntry');
+              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}', name: 'NonAgriculturalEntry');
+            }
+            break;
+
+          case 'Counting by number of knots':
+            developer.log('Knots Count: "${calculationData['knotsCount']}"', name: 'KnotsCounting');
+            developer.log('Knot Spacing: "${calculationData['knotSpacing']}"', name: 'KnotsCounting');
+            developer.log('Calculation Method: "${calculationData['calculationMethod']}"', name: 'KnotsCounting');
+            developer.log('Knots Counting Entries Count: ${calculationData['knotsCountingEntriesCount'] ?? 0}', name: 'KnotsCounting');
+
+            // Print detailed entries
+            for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+              final entry = calculationController.knotsCountingEntries[i];
+              developer.log('Entry ${i + 1}:', name: 'KnotsCountingEntry');
+              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"', name: 'KnotsCountingEntry');
+              developer.log('  Survey Type: "${entry['selectedSurveyType'] ?? ''}"', name: 'KnotsCountingEntry');
+              developer.log('  Area: "${entry['area'] ?? ''}"', name: 'KnotsCountingEntry');
+              developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"', name: 'KnotsCountingEntry');
+              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}', name: 'KnotsCountingEntry');
+            }
+            break;
+
+          case 'Integration calculation':
+            developer.log('Integration Type: "${calculationData['integrationType']}"', name: 'IntegrationCalculation');
+            developer.log('Base Line: "${calculationData['baseLine']}"', name: 'IntegrationCalculation');
+            developer.log('Ordinates: "${calculationData['ordinates']}"', name: 'IntegrationCalculation');
+            developer.log('Merger Order Number: "${calculationData['mergerOrderNumber']}"', name: 'IntegrationCalculation');
+            developer.log('Merger Order Date: "${calculationData['mergerOrderDate']}"', name: 'IntegrationCalculation');
+            developer.log('Old Merger Number: "${calculationData['oldMergerNumber']}"', name: 'IntegrationCalculation');
+            developer.log('Incorporation Order Files Count: ${calculationData['incorporationOrderFiles']?.length ?? 0}', name: 'IntegrationCalculation');
+            developer.log('Integration Calculation Entries Count: ${calculationData['integrationCalculationEntriesCount'] ?? 0}', name: 'IntegrationCalculation');
+
+            // Print detailed entries
+            for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+              final entry = calculationController.integrationCalculationEntries[i];
+              developer.log('Entry ${i + 1}:', name: 'IntegrationCalculationEntry');
+              developer.log('  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"', name: 'IntegrationCalculationEntry');
+              developer.log('  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"', name: 'IntegrationCalculationEntry');
+              developer.log('  Area: "${entry['area'] ?? ''}"', name: 'IntegrationCalculationEntry');
+              developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"', name: 'IntegrationCalculationEntry');
+              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}', name: 'IntegrationCalculationEntry');
+            }
+            break;
+
+          default:
+            developer.log('No calculation type selected or unknown type: "$calcType"', name: 'CalculationData', level: 900);
+        }
+      } else {
+        developer.log('Calculation data is empty - no calculation type selected or no data entered', name: 'CalculationData', level: 900);
       }
-      if (calculations['orderDate']?.toString().isNotEmpty ?? false) {
-        print('Order Date: "${calculations['orderDate']}"');
-      }
-      if (calculations['schemeOrderNumber']?.toString().isNotEmpty ?? false) {
-        print('Scheme Order Number: "${calculations['schemeOrderNumber']}"');
-      }
-      if (calculations['appointmentDate']?.toString().isNotEmpty ?? false) {
-        print('Appointment Date: "${calculations['appointmentDate']}"');
-      }
-
-      // Print type-specific fields based on calculation type
-      String calcType = calculations['calculationType']?.toString() ?? '';
-
-      switch (calcType) {
-        case 'Hddkayam':
-          print('Survey Number: "${calculations['surveyNumber']}"');
-          print('Area: "${calculations['area']}"');
-          print('Subdivision: "${calculations['subdivision']}"');
-          print('Hddkayam Entries Count: ${calculations['hddkayamEntriesCount']}');
-
-          // Print detailed entries
-          for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
-            final entry = calculationController.hddkayamEntries[i];
-            print('  Entry ${i + 1}:');
-            print('    CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"');
-            print('    Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"');
-            print('    Area: "${entry['area'] ?? ''}"');
-            print('    Area Sqm: "${entry['areaSqm'] ?? ''}"');
-            print('    Is Correct: ${entry['isCorrect'] ?? false}');
-          }
-          break;
-
-        case 'Stomach':
-          print('Stomach Entries Count: ${calculations['stomachEntriesCount']}');
-
-          // Print detailed entries
-          for (int i = 0; i < calculationController.stomachEntries.length; i++) {
-            final entry = calculationController.stomachEntries[i];
-            print('  Entry ${i + 1}:');
-            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
-            print('    Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"');
-            print('    Total Area: "${entry['totalArea'] ?? ''}"');
-            print('    Calculated Area: "${entry['calculatedArea'] ?? ''}"');
-            print('    Is Correct: ${entry['isCorrect'] ?? false}');
-          }
-          break;
-
-        case 'Non-agricultural':
-          print('Land Type: "${calculations['landType']}"');
-          print('Plot Number: "${calculations['plotNumber']}"');
-          print('Built Up Area: "${calculations['builtUpArea']}"');
-          print('Non-Agricultural Entries Count: ${calculations['nonAgriculturalEntriesCount']}');
-
-          // Print detailed entries
-          for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
-            final entry = calculationController.nonAgriculturalEntries[i];
-            print('  Entry ${i + 1}:');
-            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
-            print('    Survey Type: "${entry['selectedSurveyType'] ?? ''}"');
-            print('    Area: "${entry['area'] ?? ''}"');
-            print('    Area Hectares: "${entry['areaHectares'] ?? ''}"');
-            print('    Is Correct: ${entry['isCorrect'] ?? false}');
-          }
-          break;
-
-        case 'Counting by number of knots':
-          print('Knots Count: "${calculations['knotsCount']}"');
-          print('Knot Spacing: "${calculations['knotSpacing']}"');
-          print('Calculation Method: "${calculations['calculationMethod']}"');
-          print('Knots Counting Entries Count: ${calculations['knotsCountingEntriesCount']}');
-
-          // Print detailed entries
-          for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
-            final entry = calculationController.knotsCountingEntries[i];
-            print('  Entry ${i + 1}:');
-            print('    Survey Number: "${entry['surveyNumber'] ?? ''}"');
-            print('    Survey Type: "${entry['selectedSurveyType'] ?? ''}"');
-            print('    Area: "${entry['area'] ?? ''}"');
-            print('    Area Hectares: "${entry['areaHectares'] ?? ''}"');
-            print('    Is Correct: ${entry['isCorrect'] ?? false}');
-          }
-          break;
-
-        case 'Integration calculation':
-          print('Integration Type: "${calculations['integrationType']}"');
-          print('Base Line: "${calculations['baseLine']}"');
-          print('Ordinates: "${calculations['ordinates']}"');
-          print('Merger Order Number: "${calculations['mergerOrderNumber']}"');
-          print('Merger Order Date: "${calculations['mergerOrderDate']}"');
-          print('Old Merger Number: "${calculations['oldMergerNumber']}"');
-          print('Incorporation Order Files Count: ${calculations['incorporationOrderFiles']?.length ?? 0}');
-          print('Integration Calculation Entries Count: ${calculations['integrationCalculationEntriesCount']}');
-
-          // Print detailed entries
-          for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
-            final entry = calculationController.integrationCalculationEntries[i];
-            print('  Entry ${i + 1}:');
-            print('    CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"');
-            print('    Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"');
-            print('    Area: "${entry['area'] ?? ''}"');
-            print('    Area Sqm: "${entry['areaSqm'] ?? ''}"');
-            print('    Is Correct: ${entry['isCorrect'] ?? false}');
-          }
-          break;
-      }
-    } else {
-      print('Calculation data is null');
+    } catch (e) {
+      developer.log('Error in calculation debug: $e', name: 'CalculationData', level: 1000); // Error level
     }
 
-    print('=== END DEBUG INFO ===');
+    developer.log('=== STEP FOUR DATA DEBUG ===', name: 'DebugInfo');
+
+    try {
+      // Get step four data using the fixed method
+      final stepFourData = getStepFourData();
+
+      developer.log('stepFourController null check: ${stepFourController == null}', name: 'StepFourData');
+      developer.log('stepFourData null check: ${stepFourData == null}', name: 'StepFourData');
+      developer.log('stepFourData isEmpty: ${stepFourData.isEmpty}', name: 'StepFourData');
+
+      if (stepFourData.isNotEmpty) {
+        developer.log('Calculation Type: "${stepFourData['calculation_type'] ?? 'null'}"', name: 'StepFourData');
+        developer.log('Duration: "${stepFourData['duration'] ?? 'null'}"', name: 'StepFourData');
+        developer.log('Holder Type: "${stepFourData['holder_type'] ?? 'null'}"', name: 'StepFourData');
+        developer.log('Location Category: "${stepFourData['location_category'] ?? 'null'}"', name: 'StepFourData');
+        developer.log('Calculation Fee: "${stepFourData['calculation_fee'] ?? 'null'}"', name: 'StepFourData');
+        developer.log('Calculation Fee Numeric: ${stepFourData['calculation_fee_numeric'] ?? 'null'}', name: 'StepFourData');
+
+        // Additional debugging for controller state
+        developer.log('Controller selectedCalculationType: "${stepFourController.selectedCalculationType.value}"', name: 'StepFourController');
+        developer.log('Controller selectedDuration: "${stepFourController.selectedDuration.value}"', name: 'StepFourController');
+        developer.log('Controller selectedHolderType: "${stepFourController.selectedHolderType.value}"', name: 'StepFourController');
+        developer.log('Controller selectedLocationCategory: "${stepFourController.selectedLocationCategory.value}"', name: 'StepFourController');
+        developer.log('Controller calculationFeeController text: "${stepFourController.calculationFeeController.text}"', name: 'StepFourController');
+
+        // Show fee calculation details
+        if (stepFourData['calculation_type'] != null &&
+            stepFourData['duration'] != null &&
+            stepFourData['holder_type'] != null &&
+            stepFourData['location_category'] != null) {
+
+          final key = '${stepFourData['calculation_type']}_${stepFourData['duration']}_${stepFourData['holder_type']}_${stepFourData['location_category']}';
+          developer.log('Fee calculation key: "$key"', name: 'FeeCalculation');
+
+          final expectedFee = stepFourController.feeCalculationMap[key];
+          developer.log('Expected fee from map: ${expectedFee ?? 'not found'}', name: 'FeeCalculation');
+        }
+      } else {
+        developer.log('Step Four data is empty - no data entered', name: 'StepFourData', level: 900);
+      }
+    } catch (e) {
+      developer.log('Error in Step Four debug: $e', name: 'StepFourData', level: 1000); // Error level
+    }
+
+
+    developer.log('=== FIFTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
+
+    try {
+      // Get applicant data using the fixed method
+      final applicantData = getFifthController();
+
+      developer.log('surveyFifthController null check: ${surveyFifthController == null}', name: 'ApplicantData');
+      developer.log('applicantData null check: ${applicantData == null}', name: 'ApplicantData');
+      developer.log('applicantData isEmpty: ${applicantData.isEmpty}', name: 'ApplicantData');
+      developer.log('applicantEntries count: ${surveyFifthController.applicantEntries.length}', name: 'ApplicantData');
+
+      if (applicantData.isNotEmpty) {
+        final applicantCount = applicantData['applicantCount'] ?? 0;
+        developer.log('Total Applicants: $applicantCount', name: 'ApplicantData');
+
+        // Debug each applicant entry
+        for (int i = 0; i < applicantCount; i++) {
+          final applicantKey = 'applicant_$i';
+          final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
+
+          if (applicantInfo != null) {
+            developer.log('=== APPLICANT ${i + 1} ===', name: 'ApplicantEntry');
+            developer.log('Agreement: "${applicantInfo['agreement'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Account Holder Name: "${applicantInfo['accountHolderName'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Account Number: "${applicantInfo['accountNumber'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Mobile Number: "${applicantInfo['mobileNumber'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Server Number: "${applicantInfo['serverNumber'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Area: "${applicantInfo['area'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Potkaharaba Area: "${applicantInfo['potkaharabaArea'] ?? ''}"', name: 'ApplicantEntry');
+            developer.log('Total Area: "${applicantInfo['totalArea'] ?? ''}"', name: 'ApplicantEntry');
+
+            // Debug address data
+            final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
+            if (addressInfo != null && addressInfo.isNotEmpty) {
+              developer.log('=== ADDRESS ${i + 1} ===', name: 'ApplicantAddress');
+              developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Address: "${addressInfo['address'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Email: "${addressInfo['email'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('District: "${addressInfo['district'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Village: "${addressInfo['village'] ?? ''}"', name: 'ApplicantAddress');
+              developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"', name: 'ApplicantAddress');
+            } else {
+              developer.log('No address data for applicant ${i + 1}', name: 'ApplicantAddress', level: 900);
+            }
+
+            // Check if required fields are filled
+            final requiredFields = ['agreement', 'accountHolderName', 'accountNumber', 'mobileNumber'];
+            final missingFields = <String>[];
+
+            for (String field in requiredFields) {
+              if ((applicantInfo[field] ?? '').toString().isEmpty) {
+                missingFields.add(field);
+              }
+            }
+
+            if (missingFields.isNotEmpty) {
+              developer.log('Missing required fields for applicant ${i + 1}: ${missingFields.join(', ')}', name: 'ApplicantValidation', level: 900);
+            } else {
+              developer.log('All required fields filled for applicant ${i + 1}', name: 'ApplicantValidation');
+            }
+          } else {
+            developer.log('Applicant ${i + 1} data is null', name: 'ApplicantEntry', level: 900);
+          }
+        }
+
+        // Additional controller state debugging
+        developer.log('=== CONTROLLER STATE ===', name: 'ApplicantController');
+        developer.log('Validation errors count: ${surveyFifthController.validationErrors.length}', name: 'ApplicantController');
+        developer.log('Is loading: ${surveyFifthController.isLoading.value}', name: 'ApplicantController');
+
+        if (surveyFifthController.validationErrors.isNotEmpty) {
+          developer.log('Validation errors:', name: 'ApplicantValidation');
+          surveyFifthController.validationErrors.forEach((key, value) {
+            developer.log('  $key: $value', name: 'ApplicantValidation');
+          });
+        }
+
+        // Check formatted addresses
+        for (int i = 0; i < surveyFifthController.applicantEntries.length; i++) {
+          final formattedAddress = surveyFifthController.getFormattedAddress(i);
+          developer.log('Formatted address for applicant ${i + 1}: "$formattedAddress"', name: 'ApplicantFormatted');
+        }
+
+      } else {
+        developer.log('Applicant data is empty - no applicants added', name: 'ApplicantData', level: 900);
+      }
+    } catch (e) {
+      developer.log('Error in Applicant debug: $e', name: 'ApplicantData', level: 1000); // Error level
+    }
+
+    developer.log('=== END APPLICANT DEBUG ===', name: 'DebugInfo');
+
+
+    developer.log('=== SIXTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
+
+    try {
+      // Get co-owner data using the fixed method
+      final coOwnerData = getSixthController();
+
+      developer.log('surveySixthController null check: ${surveySixthController == null}', name: 'CoOwnerData');
+      developer.log('coOwnerData null check: ${coOwnerData == null}', name: 'CoOwnerData');
+      developer.log('coOwnerData isEmpty: ${coOwnerData.isEmpty}', name: 'CoOwnerData');
+      developer.log('coownerEntries count: ${surveySixthController.coownerEntries.length}', name: 'CoOwnerData');
+
+      if (coOwnerData.isNotEmpty) {
+        final coownerCount = coOwnerData['coownerCount'] ?? 0;
+        developer.log('Total Co-owners: $coownerCount', name: 'CoOwnerData');
+
+        final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+
+        if (coowners != null && coowners.isNotEmpty) {
+          for (int i = 0; i < coowners.length; i++) {
+            final coowner = coowners[i];
+
+            developer.log('=== CO-OWNER ${i + 1} ===', name: 'CoOwnerEntry');
+            developer.log('Name: "${coowner['name'] ?? ''}"', name: 'CoOwnerEntry');
+            developer.log('Mobile Number: "${coowner['mobileNumber'] ?? ''}"', name: 'CoOwnerEntry');
+            developer.log('Server Number: "${coowner['serverNumber'] ?? ''}"', name: 'CoOwnerEntry');
+            developer.log('Consent: "${coowner['consent'] ?? ''}"', name: 'CoOwnerEntry');
+
+            // Debug address data
+            final addressInfo = coowner['address'] as Map<String, String>?;
+            if (addressInfo != null && addressInfo.isNotEmpty) {
+              developer.log('=== CO-OWNER ${i + 1} ADDRESS ===', name: 'CoOwnerAddress');
+              developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Address: "${addressInfo['address'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Email: "${addressInfo['email'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('District: "${addressInfo['district'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Village: "${addressInfo['village'] ?? ''}"', name: 'CoOwnerAddress');
+              developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"', name: 'CoOwnerAddress');
+            } else {
+              developer.log('No address data for co-owner ${i + 1}', name: 'CoOwnerAddress', level: 900);
+            }
+
+            // Check if required fields are filled
+            final requiredFields = ['name', 'mobileNumber', 'consent'];
+            final missingFields = <String>[];
+
+            for (String field in requiredFields) {
+              if ((coowner[field] ?? '').toString().isEmpty) {
+                missingFields.add(field);
+              }
+            }
+
+            // Check required address fields
+            final requiredAddressFields = ['address', 'pincode', 'village', 'postOffice'];
+            for (String field in requiredAddressFields) {
+              if ((addressInfo?[field] ?? '').isEmpty) {
+                missingFields.add('address_$field');
+              }
+            }
+
+            if (missingFields.isNotEmpty) {
+              developer.log('Missing required fields for co-owner ${i + 1}: ${missingFields.join(', ')}', name: 'CoOwnerValidation', level: 900);
+            } else {
+              developer.log('All required fields filled for co-owner ${i + 1}', name: 'CoOwnerValidation');
+            }
+
+            // Show formatted address
+            final formattedAddress = surveySixthController.getFormattedAddress(i);
+            developer.log('Formatted address for co-owner ${i + 1}: "$formattedAddress"', name: 'CoOwnerFormatted');
+          }
+        } else {
+          developer.log('No co-owners in the list', name: 'CoOwnerData', level: 900);
+        }
+
+        // Additional controller state debugging
+        developer.log('=== CO-OWNER CONTROLLER STATE ===', name: 'CoOwnerController');
+        developer.log('Validation errors count: ${surveySixthController.validationErrors.length}', name: 'CoOwnerController');
+
+        if (surveySixthController.validationErrors.isNotEmpty) {
+          developer.log('Validation errors:', name: 'CoOwnerValidation');
+          surveySixthController.validationErrors.forEach((key, value) {
+            developer.log('  $key: $value', name: 'CoOwnerValidation');
+          });
+        }
+
+        // Debug controller text values directly
+        for (int i = 0; i < surveySixthController.coownerEntries.length; i++) {
+          final entry = surveySixthController.coownerEntries[i];
+          developer.log('=== CO-OWNER ${i + 1} CONTROLLER VALUES ===', name: 'CoOwnerControllerValues');
+          developer.log('Name Controller: "${(entry['nameController'] as TextEditingController).text}"', name: 'CoOwnerControllerValues');
+          developer.log('Mobile Controller: "${(entry['mobileNumberController'] as TextEditingController).text}"', name: 'CoOwnerControllerValues');
+          developer.log('Server Controller: "${(entry['serverNumberController'] as TextEditingController).text}"', name: 'CoOwnerControllerValues');
+          developer.log('Consent Controller: "${(entry['consentController'] as TextEditingController).text}"', name: 'CoOwnerControllerValues');
+
+          // Debug stored data vs controller data
+          developer.log('Stored Name: "${entry['name'] ?? ''}"', name: 'CoOwnerStoredData');
+          developer.log('Stored Mobile: "${entry['mobileNumber'] ?? ''}"', name: 'CoOwnerStoredData');
+          developer.log('Stored Server: "${entry['serverNumber'] ?? ''}"', name: 'CoOwnerStoredData');
+          developer.log('Stored Consent: "${entry['consent'] ?? ''}"', name: 'CoOwnerStoredData');
+        }
+
+      } else {
+        developer.log('Co-owner data is empty - no co-owners added', name: 'CoOwnerData', level: 900);
+      }
+    } catch (e) {
+      developer.log('Error in Co-owner debug: $e', name: 'CoOwnerData', level: 1000); // Error level
+    }
+
+    developer.log('=== NEXT OF KIN DATA DEBUG ===', name: 'DebugInfo');
+
+    try {
+      // Get next of kin data using the fixed method
+      final nextOfKinData = getSeventhController();
+
+      developer.log('surveySeventhController null check: ${surveySeventhController == null}', name: 'NextOfKinData');
+      developer.log('nextOfKinData null check: ${nextOfKinData == null}', name: 'NextOfKinData');
+      developer.log('nextOfKinData isEmpty: ${nextOfKinData.isEmpty}', name: 'NextOfKinData');
+      developer.log('nextOfKinEntries count: ${surveySeventhController.nextOfKinEntries.length}', name: 'NextOfKinData');
+
+      if (nextOfKinData.isNotEmpty) {
+        final totalEntries = nextOfKinData['totalNextOfKinEntries'] ?? 0;
+        developer.log('Total Next of Kin Entries: $totalEntries', name: 'NextOfKinData');
+
+        final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+
+        if (entries != null && entries.isNotEmpty) {
+          for (int i = 0; i < entries.length; i++) {
+            final entry = entries[i];
+
+            developer.log('=== NEXT OF KIN ${i + 1} ===', name: 'NextOfKinEntry');
+            developer.log('Address: "${entry['address'] ?? ''}"', name: 'NextOfKinEntry');
+            developer.log('Mobile: "${entry['mobile'] ?? ''}"', name: 'NextOfKinEntry');
+            developer.log('Survey No: "${entry['surveyNo'] ?? ''}"', name: 'NextOfKinEntry');
+            developer.log('Direction: "${entry['direction'] ?? ''}"', name: 'NextOfKinEntry');
+            developer.log('Natural Resources: "${entry['naturalResources'] ?? ''}"', name: 'NextOfKinEntry');
+
+            // Check if required fields are filled
+            final requiredFields = ['address', 'mobile', 'surveyNo', 'direction', 'naturalResources'];
+            final missingFields = <String>[];
+
+            for (String field in requiredFields) {
+              if ((entry[field] ?? '').toString().trim().isEmpty) {
+                missingFields.add(field);
+              }
+            }
+
+            if (missingFields.isNotEmpty) {
+              developer.log('Missing required fields for next of kin ${i + 1}: ${missingFields.join(', ')}', name: 'NextOfKinValidation', level: 900);
+            } else {
+              developer.log('All required fields filled for next of kin ${i + 1}', name: 'NextOfKinValidation');
+            }
+
+            // Validate mobile number
+            final mobile = entry['mobile']?.toString() ?? '';
+            if (mobile.isNotEmpty) {
+              if (mobile.length < 10 || !RegExp(r'^\d+$').hasMatch(mobile)) {
+                developer.log('Invalid mobile number for next of kin ${i + 1}: "$mobile"', name: 'NextOfKinValidation', level: 900);
+              } else {
+                developer.log('Valid mobile number for next of kin ${i + 1}', name: 'NextOfKinValidation');
+              }
+            }
+          }
+        } else {
+          developer.log('No next of kin entries in the list', name: 'NextOfKinData', level: 900);
+        }
+
+        // Additional controller state debugging
+        developer.log('=== NEXT OF KIN CONTROLLER STATE ===', name: 'NextOfKinController');
+        developer.log('Direction options count: ${surveySeventhController.directionOptions.length}', name: 'NextOfKinController');
+        developer.log('Natural resources options count: ${surveySeventhController.naturalResourcesOptions.length}', name: 'NextOfKinController');
+
+        developer.log('Available directions: ${surveySeventhController.directionOptions.join(', ')}', name: 'NextOfKinController');
+        developer.log('Available natural resources: ${surveySeventhController.naturalResourcesOptions.join(', ')}', name: 'NextOfKinController');
+
+        // Debug controller text values directly
+        for (int i = 0; i < surveySeventhController.nextOfKinEntries.length; i++) {
+          final entry = surveySeventhController.nextOfKinEntries[i];
+          developer.log('=== NEXT OF KIN ${i + 1} CONTROLLER VALUES ===', name: 'NextOfKinControllerValues');
+          developer.log('Address Controller: "${(entry['addressController'] as TextEditingController).text}"', name: 'NextOfKinControllerValues');
+          developer.log('Mobile Controller: "${(entry['mobileController'] as TextEditingController).text}"', name: 'NextOfKinControllerValues');
+          developer.log('Survey No Controller: "${(entry['surveyNoController'] as TextEditingController).text}"', name: 'NextOfKinControllerValues');
+
+          // Debug stored data vs controller data
+          developer.log('Stored Address: "${entry['address'] ?? ''}"', name: 'NextOfKinStoredData');
+          developer.log('Stored Mobile: "${entry['mobile'] ?? ''}"', name: 'NextOfKinStoredData');
+          developer.log('Stored Survey No: "${entry['surveyNo'] ?? ''}"', name: 'NextOfKinStoredData');
+          developer.log('Stored Direction: "${entry['direction'] ?? ''}"', name: 'NextOfKinStoredData');
+          developer.log('Stored Natural Resources: "${entry['naturalResources'] ?? ''}"', name: 'NextOfKinStoredData');
+
+          // Check if dropdowns have valid selections
+          if (entry['direction'] != null && entry['direction'].toString().isNotEmpty) {
+            final isValidDirection = surveySeventhController.directionOptions.contains(entry['direction']);
+            developer.log('Direction "${entry['direction']}" is valid: $isValidDirection', name: 'NextOfKinDropdownValidation');
+          }
+
+          if (entry['naturalResources'] != null && entry['naturalResources'].toString().isNotEmpty) {
+            final isValidResource = surveySeventhController.naturalResourcesOptions.contains(entry['naturalResources']);
+            developer.log('Natural resource "${entry['naturalResources']}" is valid: $isValidResource', name: 'NextOfKinDropdownValidation');
+          }
+        }
+
+      } else {
+        developer.log('Next of kin data is empty - no entries added', name: 'NextOfKinData', level: 900);
+      }
+    } catch (e) {
+      developer.log('Error in Next of Kin debug: $e', name: 'NextOfKinData', level: 1000); // Error level
+    }
+
+    developer.log('=== END NEXT OF KIN DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== DOCUMENTS DATA DEBUG ===', name: 'DebugInfo');
+
+    try {
+      // Get documents data using the fixed method
+      final documentsData = getDocumentsData();
+
+      developer.log('surveyEightController null check: ${surveyEightController == null}', name: 'DocumentsData');
+      developer.log('documentsData null check: ${documentsData == null}', name: 'DocumentsData');
+      developer.log('documentsData isEmpty: ${documentsData.isEmpty}', name: 'DocumentsData');
+
+      if (documentsData.isNotEmpty) {
+        // Identity Card Information
+        developer.log('=== IDENTITY CARD ===', name: 'DocumentsData');
+        developer.log('Identity Card Type: "${documentsData['identityCardType'] ?? ''}"', name: 'DocumentsData');
+        developer.log('Identity Card Files Count: ${(documentsData['identityCardFiles'] as List<String>?)?.length ?? 0}', name: 'DocumentsData');
+
+        final identityFiles = documentsData['identityCardFiles'] as List<String>?;
+        if (identityFiles != null && identityFiles.isNotEmpty) {
+          for (int i = 0; i < identityFiles.length; i++) {
+            final fileName = identityFiles[i].split('/').last;
+            developer.log('Identity Card File ${i + 1}: "$fileName"', name: 'DocumentsData');
+            developer.log('Identity Card Path ${i + 1}: "${identityFiles[i]}"', name: 'DocumentsData');
+          }
+        } else {
+          developer.log('No identity card files uploaded', name: 'DocumentsData', level: 900);
+        }
+
+        // Document Files Information
+        final documentTypes = [
+          {'key': 'sevenTwelveFiles', 'name': '7/12 Documents'},
+          {'key': 'noteFiles', 'name': 'Note Documents'},
+          {'key': 'partitionFiles', 'name': 'Partition Documents'},
+          {'key': 'schemeSheetFiles', 'name': 'Scheme Sheet Documents'},
+          {'key': 'oldCensusMapFiles', 'name': 'Old Census Map Documents'},
+          {'key': 'demarcationCertificateFiles', 'name': 'Demarcation Certificate Documents'},
+        ];
+
+        for (final docType in documentTypes) {
+          final files = documentsData[docType['key']] as List<String>?;
+          developer.log('=== ${docType['name']?.toUpperCase()} ===', name: 'DocumentsData');
+          developer.log('${docType['name']} Count: ${files?.length ?? 0}', name: 'DocumentsData');
+
+          if (files != null && files.isNotEmpty) {
+            for (int i = 0; i < files.length; i++) {
+              final fileName = files[i].split('/').last;
+              developer.log('${docType['name']} File ${i + 1}: "$fileName"', name: 'DocumentsData');
+              developer.log('${docType['name']} Path ${i + 1}: "${files[i]}"', name: 'DocumentsData');
+            }
+          } else {
+            developer.log('No ${docType['name']?.toLowerCase()} uploaded', name: 'DocumentsData', level: 900);
+          }
+        }
+
+        // Validation Status
+        developer.log('=== DOCUMENTS VALIDATION ===', name: 'DocumentsValidation');
+        developer.log('All documents uploaded: ${surveyEightController.areAllDocumentsUploaded}', name: 'DocumentsValidation');
+        developer.log('Upload progress: ${surveyEightController.uploadProgressText}', name: 'DocumentsValidation');
+        developer.log('Is uploading: ${surveyEightController.isUploading.value}', name: 'DocumentsValidation');
+        developer.log('Upload progress value: ${surveyEightController.uploadProgress.value}', name: 'DocumentsValidation');
+
+        // Check validation errors
+        if (surveyEightController.validationErrors.isNotEmpty) {
+          developer.log('=== VALIDATION ERRORS ===', name: 'DocumentsValidation');
+          surveyEightController.validationErrors.forEach((key, value) {
+            developer.log('$key: $value', name: 'DocumentsValidation', level: 900);
+          });
+        } else {
+          developer.log('No validation errors', name: 'DocumentsValidation');
+        }
+
+        // Individual document validation status
+        developer.log('=== INDIVIDUAL DOCUMENT STATUS ===', name: 'DocumentsStatus');
+        final requiredDocs = [
+          {'key': 'identityType', 'name': 'Identity Type', 'check': documentsData['identityCardType']?.toString().isNotEmpty ?? false},
+          {'key': 'identityFiles', 'name': 'Identity Card Files', 'check': (documentsData['identityCardFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'sevenTwelve', 'name': '7/12 Files', 'check': (documentsData['sevenTwelveFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'note', 'name': 'Note Files', 'check': (documentsData['noteFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'partition', 'name': 'Partition Files', 'check': (documentsData['partitionFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'schemeSheet', 'name': 'Scheme Sheet Files', 'check': (documentsData['schemeSheetFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'oldCensusMap', 'name': 'Old Census Map Files', 'check': (documentsData['oldCensusMapFiles'] as List<String>?)?.isNotEmpty ?? false},
+          {'key': 'demarcationCertificate', 'name': 'Demarcation Certificate Files', 'check': (documentsData['demarcationCertificateFiles'] as List<String>?)?.isNotEmpty ?? false},
+        ];
+
+        final missingDocs = <String>[];
+        final completedDocs = <String>[];
+
+        for (final doc in requiredDocs) {
+          if (doc['check'] as bool) {
+            completedDocs.add(doc['name'] as String);
+          } else {
+            missingDocs.add(doc['name'] as String);
+          }
+          developer.log('${doc['name']}: ${(doc['check'] as bool) ? 'COMPLETED' : 'MISSING'}', name: 'DocumentsStatus');
+        }
+
+        developer.log('Completed documents (${completedDocs.length}): ${completedDocs.join(', ')}', name: 'DocumentsStatus');
+        if (missingDocs.isNotEmpty) {
+          developer.log('Missing documents (${missingDocs.length}): ${missingDocs.join(', ')}', name: 'DocumentsStatus', level: 900);
+        }
+
+        // Available identity card options
+        developer.log('=== CONTROLLER OPTIONS ===', name: 'DocumentsController');
+        developer.log('Available identity card types: ${surveyEightController.identityCardOptions.join(', ')}', name: 'DocumentsController');
+        developer.log('Selected identity type is valid: ${surveyEightController.identityCardOptions.contains(surveyEightController.selectedIdentityType.value)}', name: 'DocumentsController');
+
+        // File name helpers debug
+        developer.log('=== FILE NAME HELPERS ===', name: 'DocumentsHelpers');
+        developer.log('Identity card file names: ${surveyEightController.identityCardFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('7/12 file names: ${surveyEightController.sevenTwelveFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('Note file names: ${surveyEightController.noteFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('Partition file names: ${surveyEightController.partitionFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('Scheme sheet file names: ${surveyEightController.schemeSheetFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('Old census map file names: ${surveyEightController.oldCensusMapFileNames.join(', ')}', name: 'DocumentsHelpers');
+        developer.log('Demarcation certificate file names: ${surveyEightController.demarcationCertificateFileNames.join(', ')}', name: 'DocumentsHelpers');
+
+      } else {
+        developer.log('Documents data is empty - no documents uploaded', name: 'DocumentsData', level: 900);
+      }
+    } catch (e) {
+      developer.log('Error in Documents debug: $e', name: 'DocumentsData', level: 1000); // Error level
+    }
+
+    developer.log('=== END DOCUMENTS DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== END DEBUG ===', name: 'DebugInfo');
+
   }
-
-
 
 
   // API Submit Method

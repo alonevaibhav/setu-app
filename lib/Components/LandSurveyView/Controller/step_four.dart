@@ -176,11 +176,11 @@ class StepFourController extends GetxController with StepValidationMixin, StepDa
       'holder_type': selectedHolderType.value,
       'location_category': selectedLocationCategory.value,
       'calculation_fee': calculationFeeController.text,
-      'calculation_fee_numeric': _extractNumericFee(),
+      'calculation_fee_numeric': extractNumericFee(),
     };
   }
 
-  int? _extractNumericFee() {
+  int? extractNumericFee() {
     final text = calculationFeeController.text.replaceAll('₹', '').trim();
     return int.tryParse(text);
   }
