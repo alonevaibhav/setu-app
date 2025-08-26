@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
@@ -186,7 +188,8 @@ class CourtCommissionCaseController extends GetxController {
     _saveCurrentSubStepData();
 
     // Print the current survey data to the console
-    print('Current Survey Data: ${surveyData.value}');
+    debugPrintPersonalInfo();
+    // print('Current Survey Data: ${surveyData.value}');
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -307,6 +310,182 @@ class CourtCommissionCaseController extends GetxController {
     currentData[key] = value;
     surveyData.value = currentData;
   }
+
+
+  ///////////////////////////////////
+// ALL DATA COLLECTION METHODS
+///////////////////////////////////
+
+  /// Collect data from PersonalInfoController
+  Map<String, dynamic> getCourtCommissionData() {
+    try {
+      if (personalInfoController is StepDataMixin) {
+        return personalInfoController.getStepData();
+      }
+      return {
+        'court_commission': {
+          'court_name': personalInfoController.courtNameController.text.trim(),
+          'court_address': personalInfoController.courtAddressController.text.trim(),
+          'commission_order_no': personalInfoController.commissionOrderNoController.text.trim(),
+          'commission_date': personalInfoController.commissionDateController.text.trim(),
+          'selected_commission_date': personalInfoController.selectedCommissionDate.value?.toIso8601String(),
+          'civil_claim': personalInfoController.civilClaimController.text.trim(),
+          'issuing_office': personalInfoController.issuingOfficeController.text.trim(),
+          'commission_order_files': personalInfoController.commissionOrderFiles.toList(),
+        }
+      };
+    } catch (e) {
+      print('Error getting PersonalInfo data: $e');
+      return {
+        'personal_info': {},
+        'court_commission': {}
+      };
+    }
+  }
+
+
+  /// Collect data from SurveyCTSController
+  Map<String, dynamic> getSurveyCTSData() {
+    try {
+      if (surveyCTSController is StepDataMixin) {
+        return surveyCTSController.getStepData();
+      }
+      return {
+        'survey_cts': {
+          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
+          'department': surveyCTSController.selectedDepartment.value,
+          'district': surveyCTSController.selectedDistrict.value,
+          'taluka': surveyCTSController.selectedTaluka.value,
+          'village': surveyCTSController.selectedVillage.value,
+          'office': surveyCTSController.selectedOffice.value,
+        }
+      };
+    } catch (e) {
+      print('Error getting SurveyCTS data: $e');
+      return {'survey_cts': {}};
+    }
+  }
+
+  /// Collect data from CalculationController
+  Map<String, dynamic> getCalculationData() {
+    try {
+      if (calculationController is StepDataMixin) {
+        return calculationController.getStepData();
+      }
+      return {
+        'calculation': {
+          'selected_village': calculationController.selectedVillage.value,
+          'survey_entries': calculationController.surveyEntries.map((entry) => {
+            'id': entry['id'],
+            'survey_no': entry['surveyNo'],
+            'share': entry['share'],
+            'area': entry['area'],
+          }).toList(),
+          'total_area': calculationController.totalArea,
+          'total_share': calculationController.totalShare,
+          'village_options': calculationController.villageOptions,
+          'is_loading': calculationController.isLoading.value,
+          'calculation_summary': calculationController.getCalculationSummary(),
+        }
+      };
+    } catch (e) {
+      print('Error getting Calculation data: $e');
+      return {
+        'calculation': {}
+      };
+    }
+  }
+
+
+///////////////////////////////////
+// DEBUG PRINT METHODS
+///////////////////////////////////
+
+  void debugPrintPersonalInfo() {
+    developer.log('=== COURT COMMISSION DATA DEBUG ===', name: 'DebugInfo');
+
+    // Court commission details
+    developer.log('Court name: "${personalInfoController.courtNameController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Court address: "${personalInfoController.courtAddressController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Commission order number: "${personalInfoController.commissionOrderNoController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Commission date (text): "${personalInfoController.commissionDateController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Selected commission date: "${personalInfoController.selectedCommissionDate.value}"', name: 'CourtCommission');
+    developer.log('Civil claim: "${personalInfoController.civilClaimController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Issuing office: "${personalInfoController.issuingOfficeController.text.trim()}"', name: 'CourtCommission');
+    developer.log('Commission order files: "${personalInfoController.commissionOrderFiles}"', name: 'CourtCommission');
+
+
+    developer.log('=== END COURT COMMISSION DATA DEBUG ===', name: 'DebugInfo');
+
+
+
+    developer.log('=== SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Survey number: "${surveyCTSController.surveyNumberController.text.trim()}"', name: 'SurveyCTS');
+    developer.log('Department: "${surveyCTSController.selectedDepartment.value}"', name: 'SurveyCTS');
+    developer.log('District: "${surveyCTSController.selectedDistrict.value}"', name: 'SurveyCTS');
+    developer.log('Taluka: "${surveyCTSController.selectedTaluka.value}"', name: 'SurveyCTS');
+    developer.log('Village: "${surveyCTSController.selectedVillage.value}"', name: 'SurveyCTS');
+    developer.log('Office: "${surveyCTSController.selectedOffice.value}"', name: 'SurveyCTS');
+
+    developer.log('=== END SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+
+    // Village selection
+    developer.log('Selected village: "${calculationController.selectedVillage.value}"', name: 'Calculation');
+    // developer.log('Available villages: "${calculationController.villageOptions}"', name: 'Calculation');
+    // developer.log('Is loading: ${calculationController.isLoading.value}', name: 'Calculation');
+
+    // Survey entries summary
+    // developer.log('Total survey entries: ${calculationController.surveyEntries.length}', name: 'Calculation');
+    // developer.log('Total area: ${calculationController.totalArea}', name: 'Calculation');
+    // developer.log('Total share: ${calculationController.totalShare}', name: 'Calculation');
+
+    // Individual survey entries
+    for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+      final entry = calculationController.surveyEntries[i];
+      developer.log('--- Survey Entry ${i + 1} ---', name: 'SurveyEntry');
+      // developer.log('Entry ID: "${entry['id']}"', name: 'SurveyEntry');
+      // developer.log('Survey No: "${entry['surveyNo']}"', name: 'SurveyEntry');
+      // developer.log('Share: "${entry['share']}"', name: 'SurveyEntry');
+      // developer.log('Area: "${entry['area']}"', name: 'SurveyEntry');
+      developer.log('Survey No Controller Text: "${entry['surveyNoController']?.text ?? 'null'}"', name: 'SurveyEntry');
+      developer.log('Share Controller Text: "${entry['shareController']?.text ?? 'null'}"', name: 'SurveyEntry');
+      developer.log('Area Controller Text: "${entry['areaController']?.text ?? 'null'}"', name: 'SurveyEntry');
+    }
+
+    developer.log('=== END CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // API Submit Method
   Future<void> submitSurvey() async {

@@ -1,5 +1,4 @@
 import 'dart:developer' as developer;
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
@@ -147,8 +146,7 @@ class MainLandAcquisitionController extends GetxController {
     final stepController = currentStepController;
     final fieldToValidate = currentSubStepField;
 
-    print(
-        'Validating Step: ${currentStep.value}, SubStep: ${currentSubStep.value}, Field: $fieldToValidate');
+    print('Validating Step: ${currentStep.value}, SubStep: ${currentSubStep.value}, Field: $fieldToValidate');
 
     if (stepController is StepValidationMixin) {
       final isValid = stepController.validateCurrentSubStep(fieldToValidate);
@@ -599,6 +597,7 @@ class MainLandAcquisitionController extends GetxController {
     developer.log('Land acquisition order file : "${personalInfoController.landAcquisitionOrderFiles}"', name: 'LandAcquisition');
     developer.log('Land acquisition map file : "${personalInfoController.landAcquisitionMapFiles}"', name: 'LandAcquisition');
     developer.log('KML file : "${personalInfoController.kmlFiles}"', name: 'LandAcquisition');
+
     developer.log('=== END LAND ACQUISITION DATA DEBUG ===', name: 'DebugInfo');
 
 
@@ -682,8 +681,6 @@ class MainLandAcquisitionController extends GetxController {
 
     developer.log('=== END LAND SIXTH DATA DEBUG ===', name: 'DebugInfo');
 
-
-
     developer.log('=== DOCUMENTS DATA DEBUG ===', name: 'DebugInfo');
 
     try {
@@ -740,30 +737,6 @@ class MainLandAcquisitionController extends GetxController {
 
     developer.log('=== END DEBUG ===', name: 'DebugInfo');
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
