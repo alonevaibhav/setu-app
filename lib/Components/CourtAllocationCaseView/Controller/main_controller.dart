@@ -7,6 +7,8 @@ import 'allocation_fifth_controller.dart';
 import 'allocation_seventh_controller.dart';
 import 'allocation_sixth_controller.dart';
 import 'court_fouth_controller.dart';
+import 'dart:developer' as developer;
+
 
 // Import all step controllers
 
@@ -46,7 +48,7 @@ class CourtAllocationCaseController extends GetxController {
     3: ['calculation'], // Calculation Information
     4: ['plaintiff_defendant'], // Applicant Information
     5: ['next_of_kin'], // Co-owner Information
-    6: ['adjacent', 'status'], // Information about Adjacent Holders
+    6: ['documents'], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment
@@ -187,7 +189,8 @@ class CourtAllocationCaseController extends GetxController {
     _saveCurrentSubStepData();
 
     // Print the current survey data to the console
-    print('Current Survey Data: ${surveyData.value}');
+    // print('Current Survey Data: ${surveyData.value}');
+    debugPrintInfo();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -308,6 +311,354 @@ class CourtAllocationCaseController extends GetxController {
     currentData[key] = value;
     surveyData.value = currentData;
   }
+
+
+///////////////////////////////////
+// ALL DATA COLLECTION METHODS
+///////////////////////////////////
+
+  /// Collect data from PersonalInfoController
+  Map<String, dynamic> getCourtOrderData() {
+    try {
+      if (personalInfoController is StepDataMixin) {
+        return personalInfoController.getStepData();
+      }
+      return {
+        'court_order': {
+          'court_name': personalInfoController.courtNameController.text.trim(),
+          'court_address': personalInfoController.courtAddressController.text.trim(),
+          'court_order_number': personalInfoController.courtOrderNumberController.text.trim(),
+          'court_allotment_date': personalInfoController.courtAllotmentDateController.text.trim(),
+          'selected_court_allotment_date': personalInfoController.courtAllotmentDate.value?.toIso8601String(),
+          'claim_number_year': personalInfoController.claimNumberYearController.text.trim(),
+          'special_order_comments': personalInfoController.specialOrderCommentsController.text.trim(),
+          'court_order_files': personalInfoController.courtOrderFiles.toList(),
+        }
+      };
+    } catch (e) {
+      print('Error getting PersonalInfo data: $e');
+      return {
+        'personal_info': {},
+        'court_order': {}
+      };
+    }
+  }
+
+  /// Collect data from SurveyCTSController
+  Map<String, dynamic> getSurveyCTSData() {
+    try {
+      if (surveyCTSController is StepDataMixin) {
+        return surveyCTSController.getStepData();
+      }
+      return {
+        'survey_cts': {
+          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
+          'department': surveyCTSController.selectedDepartment.value,
+          'district': surveyCTSController.selectedDistrict.value,
+          'taluka': surveyCTSController.selectedTaluka.value,
+          'village': surveyCTSController.selectedVillage.value,
+          'office': surveyCTSController.selectedOffice.value,
+        }
+      };
+    } catch (e) {
+      print('Error getting SurveyCTS data: $e');
+      return {'survey_cts': {}};
+    }
+  }
+
+  /// Collect data from CalculationController
+  Map<String, dynamic> getCalculationData() {
+    try {
+      if (calculationController is StepDataMixin) {
+        return calculationController.getStepData();
+      }
+      return {
+        'calculation': {
+          'survey_entries': calculationController.surveyEntries.map((entry) => {
+            'id': entry['id'],
+            'survey_no': entry['surveyNo'],
+            'share': entry['share'],
+            'area': entry['area'],
+            'selected_village': entry['selectedVillage'],
+          }).toList(),
+          'total_area': calculationController.totalArea,
+          'total_share': calculationController.totalShare,
+          'village_options': calculationController.villageOptions,
+          'is_loading': calculationController.isLoading.value,
+          'calculation_summary': calculationController.getCalculationSummary(),
+          'selected_villages': calculationController.getSelectedVillages(),
+          'completion_percentage': calculationController.getCompletionPercentage(),
+          'all_entries_complete': calculationController.areAllEntriesComplete(),
+        }
+      };
+    } catch (e) {
+      print('Error getting Calculation data: $e');
+      return {
+        'calculation': {}
+      };
+    }
+  }
+
+  /// Collect data from CourtAlloFouthController
+  Map<String, dynamic> getCourtAlloFourthData() {
+    try {
+      if (courtAlloFouthController is StepDataMixin) {
+        return courtAlloFouthController.getStepData();
+      }
+      return {
+        'court_allo_fourth': {
+          'calculation_type': courtAlloFouthController.selectedCalculationType.value,
+          'duration': courtAlloFouthController.selectedDuration.value,
+          'holder_type': courtAlloFouthController.selectedHolderType.value,
+          'location_category': courtAlloFouthController.selectedLocationCategory.value,
+          'calculation_fee': courtAlloFouthController.calculationFeeController.text.trim(),
+          'calculation_fee_numeric': courtAlloFouthController.extractNumericFee(),
+        }
+      };
+    } catch (e) {
+      print('Error getting CourtAlloFourth data: $e');
+      return {
+        'court_allo_fourth': {}
+      };
+    }
+  }
+
+  /// Collect data from AllocationFifthController
+  Map<String, dynamic> getAllocationFifthData() {
+    try {
+      if (allocationFifthController is StepDataMixin) {
+        return allocationFifthController.getStepData();
+      }
+
+      final List<Map<String, dynamic>> entriesData = [];
+
+      for (var entry in allocationFifthController.plaintiffDefendantEntries) {
+        final selectedType = entry['selectedType'] as RxString?;
+        final detailedAddress = entry['detailedAddress'] as RxMap<String, String>;
+
+        entriesData.add({
+          'name': entry['nameController']?.text ?? '',
+          'address': entry['addressController']?.text ?? '',
+          'mobile': entry['mobileController']?.text ?? '',
+          'survey_number': entry['surveyNumberController']?.text ?? '',
+          'type': selectedType?.value ?? '',
+          'detailed_address': Map<String, String>.from(detailedAddress),
+        });
+      }
+
+      return {
+        'allocation_fifth': {
+          'plaintiff_defendant_entries': entriesData,
+          'total_entries': allocationFifthController.plaintiffDefendantEntries.length,
+        }
+      };
+    } catch (e) {
+      print('Error getting AllocationFifth data: $e');
+      return {
+        'allocation_fifth': {}
+      };
+    }
+  }
+
+  /// Collect data from AllocationSixthController
+  Map<String, dynamic> getAllocationSixthData() {
+    try {
+      if (allocationSixthController is StepDataMixin) {
+        return allocationSixthController.getStepData();
+      }
+
+      final List<Map<String, dynamic>> entriesData = [];
+
+      for (final entry in allocationSixthController.nextOfKinEntries) {
+        entriesData.add({
+          'address': entry['addressController']?.text ?? '',
+          'mobile': entry['mobileController']?.text ?? '',
+          'survey_no': entry['surveyNoController']?.text ?? '',
+          'direction': entry['direction'] ?? '',
+          'natural_resources': entry['naturalResources'] ?? '',
+        });
+      }
+
+      return {
+        'allocation_sixth': {
+          'next_of_kin_entries': entriesData,
+          'total_next_of_kin_entries': allocationSixthController.nextOfKinEntries.length,
+        }
+      };
+    } catch (e) {
+      print('Error getting AllocationSixth data: $e');
+      return {
+        'allocation_sixth': {}
+      };
+    }
+  }
+
+
+  /// Collect data from CourtSeventhController
+  Map<String, dynamic> getCourtSeventhData() {
+    try {
+      if (allocationSeventhController is StepDataMixin) {
+        return allocationSeventhController.getStepData();
+      }
+      return {
+        'court_seventh': {
+          'selected_identity_type': allocationSeventhController.selectedIdentityType.value,
+          'identity_card_files': allocationSeventhController.identityCardFiles.toList(),
+          'seven_twelve_files': allocationSeventhController.sevenTwelveFiles.toList(),
+          'note_files': allocationSeventhController.noteFiles.toList(),
+          'partition_files': allocationSeventhController.partitionFiles.toList(),
+          'scheme_sheet_files': allocationSeventhController.schemeSheetFiles.toList(),
+          'old_census_map_files': allocationSeventhController.oldCensusMapFiles.toList(),
+          'demarcation_certificate_files': allocationSeventhController.demarcationCertificateFiles.toList(),
+          'identity_card_options': allocationSeventhController.identityCardOptions,
+          'all_documents_uploaded': allocationSeventhController.areAllDocumentsUploaded,
+          'upload_progress_text': allocationSeventhController.uploadProgressText,
+          // 'validation_errors': courtSeventhController.validationErrors.toMap(),
+        }
+      };
+    } catch (e) {
+      print('Error getting CourtSeventh data: $e');
+      return {
+        'court_seventh': {}
+      };
+    }
+  }
+
+
+
+
+///////////////////////////////////
+// DEBUG PRINT METHODS
+///////////////////////////////////
+
+  void debugPrintInfo() {
+    developer.log('=== COURT ORDER DATA DEBUG ===', name: 'DebugInfo');
+
+    // Court order details
+    developer.log('Court name: "${personalInfoController.courtNameController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Court address: "${personalInfoController.courtAddressController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Court order number: "${personalInfoController.courtOrderNumberController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Court allotment date (text): "${personalInfoController.courtAllotmentDateController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Selected court allotment date: "${personalInfoController.courtAllotmentDate.value}"', name: 'CourtOrder');
+    developer.log('Claim number year: "${personalInfoController.claimNumberYearController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Special order comments: "${personalInfoController.specialOrderCommentsController.text.trim()}"', name: 'CourtOrder');
+    developer.log('Court order files: "${personalInfoController.courtOrderFiles}"', name: 'CourtOrder');
+
+    developer.log('=== SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Survey number: "${surveyCTSController.surveyNumberController.text.trim()}"', name: 'SurveyCTS');
+    developer.log('Department: "${surveyCTSController.selectedDepartment.value}"', name: 'SurveyCTS');
+    developer.log('District: "${surveyCTSController.selectedDistrict.value}"', name: 'SurveyCTS');
+    developer.log('Taluka: "${surveyCTSController.selectedTaluka.value}"', name: 'SurveyCTS');
+    developer.log('Village: "${surveyCTSController.selectedVillage.value}"', name: 'SurveyCTS');
+    developer.log('Office: "${surveyCTSController.selectedOffice.value}"', name: 'SurveyCTS');
+
+    developer.log('=== END SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+
+    for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+      final entry = calculationController.surveyEntries[i];
+      developer.log('--- Survey Entry ${i + 1} ---', name: 'SurveyEntry');
+      developer.log('Selected Village: "${entry['selectedVillage']}"', name: 'SurveyEntry');
+      developer.log('Survey No: "${entry['surveyNo']}"', name: 'SurveyEntry');
+      developer.log('Share: "${entry['share']}"', name: 'SurveyEntry');
+      developer.log('Area: "${entry['area']}"', name: 'SurveyEntry');
+    }
+
+    developer.log('=== END CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== COURT ALLOCATION FOURTH DATA DEBUG ===', name: 'DebugInfo');
+
+    // Court allocation fourth details
+    developer.log('Calculation type: "${courtAlloFouthController.selectedCalculationType.value}"', name: 'CourtAlloFourth');
+    developer.log('Duration: "${courtAlloFouthController.selectedDuration.value}"', name: 'CourtAlloFourth');
+    developer.log('Holder type: "${courtAlloFouthController.selectedHolderType.value}"', name: 'CourtAlloFourth');
+    developer.log('Location category: "${courtAlloFouthController.selectedLocationCategory.value}"', name: 'CourtAlloFourth');
+    developer.log('Calculation fee: "${courtAlloFouthController.calculationFeeController.text.trim()}"', name: 'CourtAlloFourth');
+    developer.log('Calculation fee numeric: "${courtAlloFouthController.extractNumericFee()}"', name: 'CourtAlloFourth');
+
+    developer.log('=== PLAINTIFF DEFENDANT DATA DEBUG ===', name: 'DebugInfo');
+
+    // Plaintiff defendant entries
+    developer.log('Total entries count: "${allocationFifthController.plaintiffDefendantEntries.length}"', name: 'PlaintiffDefendant');
+
+    for (int i = 0; i < allocationFifthController.plaintiffDefendantEntries.length; i++) {
+      final entry = allocationFifthController.plaintiffDefendantEntries[i];
+      final selectedType = entry['selectedType'] as RxString?;
+      final detailedAddress = entry['detailedAddress'] as RxMap<String, String>;
+
+      developer.log('--- Entry ${i + 1} ---', name: 'PlaintiffDefendant');
+      developer.log('Name: "${entry['nameController']?.text ?? ''}"', name: 'PlaintiffDefendant');
+      developer.log('Address: "${entry['addressController']?.text ?? ''}"', name: 'PlaintiffDefendant');
+      developer.log('Mobile: "${entry['mobileController']?.text ?? ''}"', name: 'PlaintiffDefendant');
+      developer.log('Survey Number: "${entry['surveyNumberController']?.text ?? ''}"', name: 'PlaintiffDefendant');
+      developer.log('Type: "${selectedType?.value ?? ''}"', name: 'PlaintiffDefendant');
+      developer.log('Detailed Address: "${Map<String, String>.from(detailedAddress)}"', name: 'PlaintiffDefendant');
+    }
+
+    developer.log('=== NEXT OF KIN DATA DEBUG ===', name: 'DebugInfo');
+
+    // Next of kin entries
+    developer.log('Total entries count: "${allocationSixthController.nextOfKinEntries.length}"', name: 'NextOfKin');
+
+    for (int i = 0; i < allocationSixthController.nextOfKinEntries.length; i++) {
+      final entry = allocationSixthController.nextOfKinEntries[i];
+
+      developer.log('--- Entry ${i + 1} ---', name: 'NextOfKin');
+      developer.log('Address: "${entry['addressController']?.text ?? ''}"', name: 'NextOfKin');
+      developer.log('Mobile: "${entry['mobileController']?.text ?? ''}"', name: 'NextOfKin');
+      developer.log('Survey No: "${entry['surveyNoController']?.text ?? ''}"', name: 'NextOfKin');
+      developer.log('Direction: "${entry['direction'] ?? ''}"', name: 'NextOfKin');
+      developer.log('Natural Resources: "${entry['naturalResources'] ?? ''}"', name: 'NextOfKin');
+    }
+
+    developer.log('=== COURT SEVENTH DATA DEBUG ===', name: 'DebugInfo');
+
+    // Identity card info
+    developer.log('Selected Identity Type: "${allocationSeventhController.selectedIdentityType.value}"', name: 'CourtSeventh');
+    developer.log('Identity Card Files: "${allocationSeventhController.identityCardFiles}"', name: 'CourtSeventh');
+
+    // Document files
+    developer.log('Seven Twelve Files: "${allocationSeventhController.sevenTwelveFiles}"', name: 'CourtSeventh');
+    developer.log('Note Files: "${allocationSeventhController.noteFiles}"', name: 'CourtSeventh');
+    developer.log('Partition Files: "${allocationSeventhController.partitionFiles}"', name: 'CourtSeventh');
+    developer.log('Scheme Sheet Files: "${allocationSeventhController.schemeSheetFiles}"', name: 'CourtSeventh');
+    developer.log('Old Census Map Files: "${allocationSeventhController.oldCensusMapFiles}"', name: 'CourtSeventh');
+    developer.log('Demarcation Certificate Files: "${allocationSeventhController.demarcationCertificateFiles}"', name: 'CourtSeventh');
+
+    developer.log('=== END COURT SEVENTH DATA DEBUG ===', name: 'DebugInfo');
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // API Submit Method
   Future<void> submitSurvey() async {

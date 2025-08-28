@@ -2,8 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../Controller/main_controller.dart';
 
-class CalculationController extends GetxController
-    with StepValidationMixin, StepDataMixin {
+class CalculationController extends GetxController with StepValidationMixin, StepDataMixin {
 
   // Observable list to store survey entries
   final surveyEntries = <Map<String, dynamic>>[].obs;

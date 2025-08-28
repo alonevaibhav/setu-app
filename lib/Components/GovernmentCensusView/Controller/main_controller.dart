@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../GovernmentCensusView/Controller/personal_info_controller.dart';
@@ -52,7 +54,7 @@ class GovernmentCensusController extends GetxController {
     ], // Applicant Information
     5: ['coowner', ], // Co-owner Information
     6: ['next_of_kin', ], // Information about Adjacent Holders
-    7: ['documents', 'status'], // Document Upload
+    7: ['documents',], // Document Upload
     8: ['preview', 'status'], // Preview
     9: ['payment', 'status'], // Payment
   };
@@ -195,7 +197,8 @@ class GovernmentCensusController extends GetxController {
     _saveCurrentSubStepData();
 
     // Print the current survey data to the console
-    print('Current Survey Data: ${surveyData.value}');
+    // print('Current Survey Data: ${surveyData.value}');
+    debugPrintInfo();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -316,6 +319,429 @@ class GovernmentCensusController extends GetxController {
     currentData[key] = value;
     surveyData.value = currentData;
   }
+
+
+  ///////////////////////////////////
+// DATA COLLECTION METHODS
+///////////////////////////////////
+
+  /// Collect data from PersonalInfoController
+  Map<String, dynamic> getGovernmentCountingData() {
+    try {
+      if (personalInfoController is StepDataMixin) {
+        return personalInfoController.getStepData();
+      }
+      return {
+        'government_counting': {
+          'government_counting_officer': personalInfoController.governmentCountingOfficerController.text.trim(),
+          'government_counting_officer_address': personalInfoController.governmentCountingOfficerAddressController.text.trim(),
+          'government_counting_order_number': personalInfoController.governmentCountingOrderNumberController.text.trim(),
+          'government_counting_order_date': personalInfoController.governmentCountingOrderDateController.text.trim(),
+          'selected_government_counting_order_date': personalInfoController.governmentCountingOrderDate.value?.toIso8601String(),
+          'counting_applicant_name': personalInfoController.countingApplicantNameController.text.trim(),
+          'counting_applicant_address': personalInfoController.countingApplicantAddressController.text.trim(),
+          'government_counting_details': personalInfoController.governmentCountingDetailsController.text.trim(),
+          'government_counting_order_files': personalInfoController.governmentCountingOrderFiles.toList(),
+        }
+      };
+    } catch (e) {
+      print('Error getting PersonalInfo government counting data: $e');
+      return {
+        'government_counting': {}
+      };
+    }
+  }
+
+
+  /// Collect data from SurveyCTSController
+  Map<String, dynamic> getSurveyCTSData() {
+    try {
+      if (surveyCTSController is StepDataMixin) {
+        return surveyCTSController.getStepData();
+      }
+      return {
+        'survey_cts': {
+          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
+          'department': surveyCTSController.selectedDepartment.value,
+          'district': surveyCTSController.selectedDistrict.value,
+          'taluka': surveyCTSController.selectedTaluka.value,
+          'village': surveyCTSController.selectedVillage.value,
+          'office': surveyCTSController.selectedOffice.value,
+        }
+      };
+    } catch (e) {
+      print('Error getting SurveyCTS data: $e');
+      return {'survey_cts': {}};
+    }
+  }
+  /// Collect data from CalculationController
+  Map<String, dynamic> getGovernmentSurveyData() {
+    try {
+      if (calculationController is StepDataMixin) {
+        return calculationController.getStepData();
+      }
+      return {
+        'government_survey': {
+          'entries': calculationController.entriesSummary,
+          'total_area': calculationController.totalArea,
+          'entry_count': calculationController.surveyEntries.length,
+          'is_form_valid': calculationController.isFormValid.value,
+          // 'validation_errors': calculationController.validationErrors.toMap(),
+          'timestamp': DateTime.now().toIso8601String(),
+        }
+      };
+    } catch (e) {
+      print('Error getting CalculationController government survey data: $e');
+      return {
+        'government_survey': {}
+      };
+    }
+  }
+
+
+  /// Collect data from CensusFourthController
+  Map<String, dynamic> getCensusFourthData() {
+    try {
+      if (censusFourthController is StepDataMixin) {
+        return censusFourthController.getStepData();
+      }
+      return {
+        'census_fourth': {
+          'calculationType': censusFourthController.selectedCalculationType.value,
+          'duration': censusFourthController.selectedDuration.value,
+          'holderType': censusFourthController.selectedHolderType.value,
+          'calculationFeeRate': censusFourthController.selectedCalculationFeeRate.value,
+          'countingFee': censusFourthController.countingFee.value,
+        }
+      };
+    } catch (e) {
+      print('Error getting CensusFourthController data: $e');
+      return {
+        'census_fourth': {}
+      };
+    }
+  }
+
+
+  /// Collect data from CensusFifthController
+  Map<String, dynamic> getCensusFifthData() {
+    try {
+      if (censusFifthController is StepDataMixin) {
+        return censusFifthController.getStepData();
+      }
+
+      final data = <String, dynamic>{};
+      for (int i = 0; i < censusFifthController.applicantEntries.length; i++) {
+        final entry = censusFifthController.applicantEntries[i];
+        final addressData = entry['address'] as RxMap<String, dynamic>?;
+
+        data['applicant_$i'] = {
+          'agreement': (entry['agreementController'] as TextEditingController?)?.text ?? '',
+          'accountHolderName': (entry['accountHolderNameController'] as TextEditingController?)?.text ?? '',
+          'accountNumber': (entry['accountNumberController'] as TextEditingController?)?.text ?? '',
+          'mobileNumber': (entry['mobileNumberController'] as TextEditingController?)?.text ?? '',
+          'serverNumber': (entry['serverNumberController'] as TextEditingController?)?.text ?? '',
+          'area': (entry['areaController'] as TextEditingController?)?.text ?? '',
+          'potkaharabaArea': (entry['potkaharabaAreaController'] as TextEditingController?)?.text ?? '',
+          'totalArea': (entry['totalAreaController'] as TextEditingController?)?.text ?? '',
+          'address': addressData != null ? Map<String, dynamic>.from(addressData) : <String, dynamic>{},
+        };
+      }
+      data['applicantCount'] = censusFifthController.applicantEntries.length;
+
+      return {
+        'census_fifth': data
+      };
+    } catch (e) {
+      print('Error getting CensusFifthController data: $e');
+      return {
+        'census_fifth': {}
+      };
+    }
+  }
+
+
+  /// Collect data from CensusSixthController
+  Map<String, dynamic> getCensusSixthData() {
+    try {
+      if (censusSixthController is StepDataMixin) {
+        return censusSixthController.getStepData();
+      }
+
+      final List<Map<String, dynamic>> coownerData = [];
+      for (int i = 0; i < censusSixthController.coownerEntries.length; i++) {
+        final entry = censusSixthController.coownerEntries[i];
+        final addressEntry = entry['address'];
+
+        coownerData.add({
+          'name': entry['name'] ?? '',
+          'mobileNumber': entry['mobileNumber'] ?? '',
+          'serverNumber': entry['serverNumber'] ?? '',
+          'consent': entry['consent'] ?? '',
+          'address': addressEntry != null
+              ? Map<String, String>.from(addressEntry as Map)
+              : <String, String>{},
+        });
+      }
+
+      return {
+        'census_sixth': {
+          'coowners': coownerData,
+          'coownerCount': censusSixthController.coownerEntries.length,
+        }
+      };
+    } catch (e) {
+      print('Error getting CensusSixthController data: $e');
+      return {
+        'census_sixth': {}
+      };
+    }
+  }
+
+
+  /// Collect data from CensusSeventhController
+  Map<String, dynamic> getCensusSeventhData() {
+    try {
+      if (censusSeventhController is StepDataMixin) {
+        return censusSeventhController.getStepData();
+      }
+
+      final List<Map<String, dynamic>> entriesData = [];
+      for (final entry in censusSeventhController.nextOfKinEntries) {
+        entriesData.add({
+          'name': entry['name'] as String? ?? '',
+          'address': entry['address'] as String? ?? '',
+          'mobile': entry['mobile'] as String? ?? '',
+          'surveyNo': entry['surveyNo'] as String? ?? '',
+          'direction': entry['direction'] as String? ?? '',
+          'naturalResources': entry['naturalResources'] as String? ?? '',
+        });
+      }
+
+      return {
+        'census_seventh': {
+          'nextOfKinEntries': entriesData,
+          'totalNextOfKinEntries': entriesData.length,
+        }
+      };
+    } catch (e) {
+      print('Error getting CensusSeventhController data: $e');
+      return {
+        'census_seventh': {}
+      };
+    }
+  }
+
+  /// Collect data from censusEighthController
+  Map<String, dynamic> getCourtEightData() {
+    try {
+      if (censusEighthController is StepDataMixin) {
+        return censusEighthController.getStepData();
+      }
+      return {
+        'court_seventh': {
+          'selected_identity_type': censusEighthController.selectedIdentityType.value,
+          'identity_card_files': censusEighthController.identityCardFiles.toList(),
+          'seven_twelve_files': censusEighthController.sevenTwelveFiles.toList(),
+          'note_files': censusEighthController.noteFiles.toList(),
+          'partition_files': censusEighthController.partitionFiles.toList(),
+          'scheme_sheet_files': censusEighthController.schemeSheetFiles.toList(),
+          'old_census_map_files': censusEighthController.oldCensusMapFiles.toList(),
+          'demarcation_certificate_files': censusEighthController.demarcationCertificateFiles.toList(),
+          'identity_card_options': censusEighthController.identityCardOptions,
+          'all_documents_uploaded': censusEighthController.areAllDocumentsUploaded,
+          'upload_progress_text': censusEighthController.uploadProgressText,
+          // 'validation_errors': censusEighthController.validationErrors.toMap(),
+        }
+      };
+    } catch (e) {
+      print('Error getting CourtSeventh data: $e');
+      return {
+        'court_seventh': {}
+      };
+    }
+  }
+
+
+
+
+///////////////////////////////////
+// DEBUG PRINT METHODS
+///////////////////////////////////
+
+  void debugPrintInfo() {
+    developer.log('=== GOVERNMENT COUNTING DATA DEBUG ===', name: 'DebugInfo');
+
+    // Government counting details
+    developer.log('Government counting officer: "${personalInfoController.governmentCountingOfficerController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Government counting officer address: "${personalInfoController.governmentCountingOfficerAddressController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Government counting order number: "${personalInfoController.governmentCountingOrderNumberController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Government counting order date (text): "${personalInfoController.governmentCountingOrderDateController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Selected government counting order date: "${personalInfoController.governmentCountingOrderDate.value}"', name: 'GovernmentCounting');
+    developer.log('Counting applicant name: "${personalInfoController.countingApplicantNameController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Counting applicant address: "${personalInfoController.countingApplicantAddressController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Government counting details: "${personalInfoController.governmentCountingDetailsController.text.trim()}"', name: 'GovernmentCounting');
+    developer.log('Government counting order files: "${personalInfoController.governmentCountingOrderFiles}"', name: 'GovernmentCounting');
+    developer.log('=== END GOVERNMENT COUNTING DEBUG ===', name: 'DebugInfo');
+
+
+
+
+    developer.log('=== SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Survey number: "${surveyCTSController.surveyNumberController.text.trim()}"', name: 'SurveyCTS');
+    developer.log('Department: "${surveyCTSController.selectedDepartment.value}"', name: 'SurveyCTS');
+    developer.log('District: "${surveyCTSController.selectedDistrict.value}"', name: 'SurveyCTS');
+    developer.log('Taluka: "${surveyCTSController.selectedTaluka.value}"', name: 'SurveyCTS');
+    developer.log('Village: "${surveyCTSController.selectedVillage.value}"', name: 'SurveyCTS');
+    developer.log('Office: "${surveyCTSController.selectedOffice.value}"', name: 'SurveyCTS');
+
+    developer.log('=== END SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
+
+
+    developer.log('=== GOVERNMENT SURVEY DATA DEBUG ===', name: 'DebugInfo');
+
+    // Individual survey entries
+    for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+      final entry = calculationController.surveyEntries[i];
+      developer.log('=== SURVEY ENTRY ${i + 1} ===', name: 'GovernmentSurvey');
+      developer.log('Survey No./Group No.: "${entry['surveyNo'] ?? ''}"', name: 'GovernmentSurvey');
+      developer.log('Part No.: "${entry['partNo'] ?? ''}"', name: 'GovernmentSurvey');
+      developer.log('Area: "${entry['area'] ?? ''}"', name: 'GovernmentSurvey');
+
+    }
+
+    developer.log('=== END GOVERNMENT SURVEY DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== CENSUS FOURTH DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Calculation Type: "${censusFourthController.selectedCalculationType.value ?? ''}"', name: 'CensusFourth');
+    developer.log('Duration: "${censusFourthController.selectedDuration.value ?? ''}"', name: 'CensusFourth');
+    developer.log('Holder Type: "${censusFourthController.selectedHolderType.value ?? ''}"', name: 'CensusFourth');
+    developer.log('Calculation Fee Rate: "${censusFourthController.selectedCalculationFeeRate.value ?? ''}"', name: 'CensusFourth');
+    developer.log('Counting Fee: "${censusFourthController.countingFee.value}"', name: 'CensusFourth');
+
+    developer.log('=== END CENSUS FOURTH DEBUG ===', name: 'DebugInfo');
+
+
+    developer.log('=== CENSUS FIFTH DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Total applicant entries: "${censusFifthController.applicantEntries.length}"', name: 'CensusFifth');
+
+    // Individual applicant entries
+    for (int i = 0; i < censusFifthController.applicantEntries.length; i++) {
+      final entry = censusFifthController.applicantEntries[i];
+      final addressData = entry['address'] as RxMap<String, dynamic>?;
+
+      developer.log('=== APPLICANT ENTRY ${i + 1} ===', name: 'CensusFifth');
+      developer.log('Agreement: "${(entry['agreementController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Account Holder Name: "${(entry['accountHolderNameController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Account Number: "${(entry['accountNumberController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Mobile Number: "${(entry['mobileNumberController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Server Number: "${(entry['serverNumberController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Area: "${(entry['areaController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Potkaharaba Area: "${(entry['potkaharabaAreaController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+      developer.log('Total Area: "${(entry['totalAreaController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusFifth');
+
+      if (addressData != null) {
+        developer.log('Plot No: "${addressData['plotNo'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Address: "${addressData['address'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Address Mobile: "${addressData['mobileNumber'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Email: "${addressData['email'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Pincode: "${addressData['pincode'] ?? ''}"', name: 'CensusFifth');
+        developer.log('District: "${addressData['district'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Village: "${addressData['village'] ?? ''}"', name: 'CensusFifth');
+        developer.log('Post Office: "${addressData['postOffice'] ?? ''}"', name: 'CensusFifth');
+      }
+    }
+
+    developer.log('=== END CENSUS FIFTH DEBUG ===', name: 'DebugInfo');
+
+
+    developer.log('=== CENSUS SIXTH DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Total coowner entries: "${censusSixthController.coownerEntries.length}"', name: 'CensusSixth');
+
+    // Individual coowner entries
+    for (int i = 0; i < censusSixthController.coownerEntries.length; i++) {
+      final entry = censusSixthController.coownerEntries[i];
+      final addressEntry = entry['address'];
+      final address = addressEntry != null ? addressEntry as Map<String, String> : <String, String>{};
+
+      developer.log('=== COOWNER ENTRY ${i + 1} ===', name: 'CensusSixth');
+      developer.log('Name: "${(entry['nameController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSixth');
+      developer.log('Mobile Number: "${(entry['mobileNumberController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSixth');
+      developer.log('Server Number: "${(entry['serverNumberController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSixth');
+      developer.log('Consent: "${(entry['consentController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSixth');
+      developer.log('Plot No: "${address['plotNo'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Address: "${address['address'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Address Mobile: "${address['mobileNumber'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Email: "${address['email'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Pincode: "${address['pincode'] ?? ''}"', name: 'CensusSixth');
+      developer.log('District: "${address['district'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Village: "${address['village'] ?? ''}"', name: 'CensusSixth');
+      developer.log('Post Office: "${address['postOffice'] ?? ''}"', name: 'CensusSixth');
+    }
+
+    developer.log('=== END CENSUS SIXTH DEBUG ===', name: 'DebugInfo');
+
+
+    developer.log('=== CENSUS SEVENTH DATA DEBUG ===', name: 'DebugInfo');
+
+    developer.log('Total next of kin entries: "${censusSeventhController.nextOfKinEntries.length}"', name: 'CensusSeventh');
+
+    // Individual next of kin entries
+    for (int i = 0; i < censusSeventhController.nextOfKinEntries.length; i++) {
+      final entry = censusSeventhController.nextOfKinEntries[i];
+
+      developer.log('=== NEXT OF KIN ENTRY ${i + 1} ===', name: 'CensusSeventh');
+      developer.log('Name: "${(entry['nameController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSeventh');
+      developer.log('Address: "${(entry['addressController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSeventh');
+      developer.log('Mobile: "${(entry['mobileController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSeventh');
+      developer.log('Survey No: "${(entry['surveyNoController'] as TextEditingController?)?.text ?? ''}"', name: 'CensusSeventh');
+      developer.log('Direction: "${entry['direction'] ?? ''}"', name: 'CensusSeventh');
+      developer.log('Natural Resources: "${entry['naturalResources'] ?? ''}"', name: 'CensusSeventh');
+    }
+
+    developer.log('=== END CENSUS SEVENTH DEBUG ===', name: 'DebugInfo');
+
+    developer.log('=== COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
+
+    // Identity card info
+    developer.log('Selected Identity Type: "${censusEighthController.selectedIdentityType.value}"', name: 'CourtSeventh');
+    developer.log('Identity Card Files: "${censusEighthController.identityCardFiles}"', name: 'CourtSeventh');
+
+    // Document files
+    developer.log('Seven Twelve Files: "${censusEighthController.sevenTwelveFiles}"', name: 'CourtSeventh');
+    developer.log('Note Files: "${censusEighthController.noteFiles}"', name: 'CourtSeventh');
+    developer.log('Partition Files: "${censusEighthController.partitionFiles}"', name: 'CourtSeventh');
+    developer.log('Scheme Sheet Files: "${censusEighthController.schemeSheetFiles}"', name: 'CourtSeventh');
+    developer.log('Old Census Map Files: "${censusEighthController.oldCensusMapFiles}"', name: 'CourtSeventh');
+    developer.log('Demarcation Certificate Files: "${censusEighthController.demarcationCertificateFiles}"', name: 'CourtSeventh');
+
+    developer.log('=== END COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // API Submit Method
   Future<void> submitSurvey() async {
