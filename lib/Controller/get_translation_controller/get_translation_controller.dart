@@ -58,6 +58,10 @@ class TranslationController extends GetxController {
   Future<void> _initializeController() async {
     try {
       _isLoading.value = true;
+
+
+
+
       // Initialize translation service with configuration
       await TranslationService.instance.initialize(
         config: const TranslationConfig(
@@ -80,6 +84,8 @@ class TranslationController extends GetxController {
     } catch (e) {
       _networkStatus.value = false;
       _showError('Translation service initialization failed: $e');
+      print('Translation service initialization failed: $e');
+
     } finally {
       _isLoading.value = false;
     }

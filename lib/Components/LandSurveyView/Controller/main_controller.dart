@@ -5,6 +5,8 @@ import 'package:setuapp/Components/LandSurveyView/Controller/survey_eight_contro
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_fifth_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_seventh_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_sixth_controller.dart';
+import '../../../API Service/api_service.dart';
+import '../../../Constants/api_constant.dart';
 import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
@@ -743,8 +745,8 @@ class MainSurveyController extends GetxController {
 
             // Print detailed entries
             for (int i = 0;
-                i < calculationController.hddkayamEntries.length;
-                i++) {
+            i < calculationController.hddkayamEntries.length;
+            i++) {
               final entry = calculationController.hddkayamEntries[i];
               developer.log('Entry ${i + 1}:', name: 'HddkayamEntry');
               developer.log(
@@ -769,8 +771,8 @@ class MainSurveyController extends GetxController {
 
             // Print detailed entries
             for (int i = 0;
-                i < calculationController.stomachEntries.length;
-                i++) {
+            i < calculationController.stomachEntries.length;
+            i++) {
               final entry = calculationController.stomachEntries[i];
               developer.log('Entry ${i + 1}:', name: 'StomachEntry');
               developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
@@ -788,8 +790,8 @@ class MainSurveyController extends GetxController {
 
           case 'Non-agricultural':
             for (int i = 0;
-                i < calculationController.nonAgriculturalEntries.length;
-                i++) {
+            i < calculationController.nonAgriculturalEntries.length;
+            i++) {
               final entry = calculationController.nonAgriculturalEntries[i];
               developer.log('Entry ${i + 1}:', name: 'NonAgriculturalEntry');
               developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
@@ -806,8 +808,8 @@ class MainSurveyController extends GetxController {
 
           case 'Counting by number of knots':
             for (int i = 0;
-                i < calculationController.knotsCountingEntries.length;
-                i++) {
+            i < calculationController.knotsCountingEntries.length;
+            i++) {
               final entry = calculationController.knotsCountingEntries[i];
               developer.log('Entry ${i + 1}:', name: 'KnotsCountingEntry');
               developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
@@ -838,10 +840,10 @@ class MainSurveyController extends GetxController {
 
             // Print detailed entries
             for (int i = 0;
-                i < calculationController.integrationCalculationEntries.length;
-                i++) {
+            i < calculationController.integrationCalculationEntries.length;
+            i++) {
               final entry =
-                  calculationController.integrationCalculationEntries[i];
+              calculationController.integrationCalculationEntries[i];
               developer.log('Entry ${i + 1}:',
                   name: 'IntegrationCalculationEntry');
               developer.log(
@@ -921,7 +923,7 @@ class MainSurveyController extends GetxController {
         for (int i = 0; i < applicantCount; i++) {
           final applicantKey = 'applicant_$i';
           final applicantInfo =
-              applicantData[applicantKey] as Map<String, dynamic>?;
+          applicantData[applicantKey] as Map<String, dynamic>?;
 
           if (applicantInfo != null) {
             developer.log('=== APPLICANT ${i + 1} ===', name: 'ApplicantEntry');
@@ -949,7 +951,7 @@ class MainSurveyController extends GetxController {
 
             // Debug address data
             final addressInfo =
-                applicantInfo['address'] as Map<String, dynamic>?;
+            applicantInfo['address'] as Map<String, dynamic>?;
             if (addressInfo != null && addressInfo.isNotEmpty) {
               developer.log('=== ADDRESS ${i + 1} ===',
                   name: 'ApplicantAddress');
@@ -1039,7 +1041,7 @@ class MainSurveyController extends GetxController {
 
             // Show formatted address
             final formattedAddress =
-                surveySixthController.getFormattedAddress(i);
+            surveySixthController.getFormattedAddress(i);
             developer.log(
                 'Formatted address for co-owner ${i + 1}: "$formattedAddress"',
                 name: 'CoOwnerFormatted');
@@ -1065,7 +1067,7 @@ class MainSurveyController extends GetxController {
 
       if (nextOfKinData.isNotEmpty) {
         final entries =
-            nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+        nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
 
         if (entries != null && entries.isNotEmpty) {
           for (int i = 0; i < entries.length; i++) {
@@ -1130,7 +1132,7 @@ class MainSurveyController extends GetxController {
             name: 'DocumentsData');
 
         final identityFiles =
-            documentsData['identityCardFiles'] as List<String>?;
+        documentsData['identityCardFiles'] as List<String>?;
         if (identityFiles != null && identityFiles.isNotEmpty) {
           developer.log('Identity Card Path : "$identityFiles"',
               name: 'DocumentsData');
@@ -1180,54 +1182,265 @@ class MainSurveyController extends GetxController {
     developer.log('=== END DEBUG ===', name: 'DebugInfo');
   }
 
-  // API Submit Method
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  Map<String, dynamic> PostRequestBody() {
+    // Get all data first
+    final surveyData = getSurveyInfoData();
+    final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
+    final calculationData = getCalculationData();
+    final stepFourData = getStepFourData();
+    final applicantData = getFifthController();
+    final coOwnerData = getSixthController();
+    final nextOfKinData = getSeventhController();
+    final documentsData = getDocumentsData();
+
+    return {
+      // === PERSONAL INFO ===
+      "is_holder_themselves": personalInfoController.isHolderThemselves.value.toString(),
+      "has_authority_on_behalf": personalInfoController.hasAuthorityOnBehalf.value.toString(),
+      "has_been_counted_before": personalInfoController.hasBeenCountedBefore.value.toString(),
+      "poa_registration_number": personalInfoController.poaRegistrationNumberController.text.trim(),
+      "poa_registration_date": personalInfoController.poaRegistrationDateController.text.trim(),
+      "poa_issuer_name": personalInfoController.poaIssuerNameController.text.trim(),
+      "poa_holder_name": personalInfoController.poaHolderNameController.text.trim(),
+      "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
+
+      // === SURVEY INFO ===
+      "survey_info": {
+        "survey_number": surveyInfo?['survey_number']?.toString() ?? "",
+        "department": surveyInfo?['department']?.toString() ?? "",
+        "district": surveyInfo?['district']?.toString() ?? "",
+        "taluka": surveyInfo?['taluka']?.toString() ?? "",
+        "village": surveyInfo?['village']?.toString() ?? "",
+        "office": surveyInfo?['office']?.toString() ?? "",
+      },
+
+      // === CALCULATION DATA ===
+      "calculation_info": {
+        "calculation_type": calculationData['calculationType']?.toString() ?? "",
+        "order_number": calculationData['orderNumber']?.toString() ?? "",
+        "order_date": calculationData['orderDate']?.toString() ?? "",
+        "scheme_order_number": calculationData['schemeOrderNumber']?.toString() ?? "",
+        "appointment_date": calculationData['appointmentDate']?.toString() ?? "",
+        "merger_order_number": calculationData['mergerOrderNumber']?.toString() ?? "",
+        "merger_order_date": calculationData['mergerOrderDate']?.toString() ?? "",
+        "old_merger_number": calculationData['oldMergerNumber']?.toString() ?? "",
+      },
+
+      // === STEP FOUR DATA ===
+      "step_four_info": {
+        "selected_calculation_type": stepFourController.selectedCalculationType.value,
+        "selected_duration": stepFourController.selectedDuration.value,
+        "selected_holder_type": stepFourController.selectedHolderType.value,
+        "selected_location_category": stepFourController.selectedLocationCategory.value,
+        "calculation_fee": stepFourController.calculationFeeController.text,
+        "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
+      },
+
+      // === DOCUMENT INFO ===
+      "documents": {
+        "identity_card_type": documentsData['identityCardType']?.toString() ?? "",
+        "identity_card_file": ((documentsData['identityCardFiles'] as List?)?.isNotEmpty == true) ? (documentsData['identityCardFiles'] as List)[0].toString() : "",
+        "seven_twelve_file": ((documentsData['sevenTwelveFiles'] as List?)?.isNotEmpty == true) ? (documentsData['sevenTwelveFiles'] as List)[0].toString() : "",
+        "note_file": ((documentsData['noteFiles'] as List?)?.isNotEmpty == true) ? (documentsData['noteFiles'] as List)[0].toString() : "",
+        "partition_file": ((documentsData['partitionFiles'] as List?)?.isNotEmpty == true) ? (documentsData['partitionFiles'] as List)[0].toString() : "",
+        "scheme_sheet_file": ((documentsData['schemeSheetFiles'] as List?)?.isNotEmpty == true) ? (documentsData['schemeSheetFiles'] as List)[0].toString() : "",
+        "old_census_map_file": ((documentsData['oldCensusMapFiles'] as List?)?.isNotEmpty == true) ? (documentsData['oldCensusMapFiles'] as List)[0].toString() : "",
+        "demarcation_certificate_file": ((documentsData['demarcationCertificateFiles'] as List?)?.isNotEmpty == true) ? (documentsData['demarcationCertificateFiles'] as List)[0].toString() : "",
+      },
+
+      // === CALCULATION ENTRIES (Based on Type) ===
+      "calculation_entries": () {
+        String calcType = calculationData['calculationType']?.toString() ?? '';
+        List<Map<String, dynamic>> entries = [];
+
+        switch (calcType) {
+          case 'Hddkayam':
+            for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+              final entry = calculationController.hddkayamEntries[i];
+              entries.add({
+                "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+                "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
+                "area": entry['area']?.toString() ?? "",
+                "area_sqm": entry['areaSqm']?.toString() ?? "",
+                "is_correct": (entry['isCorrect'] ?? false).toString(),
+              });
+            }
+            break;
+
+          case 'Stomach':
+            for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+              final entry = calculationController.stomachEntries[i];
+              entries.add({
+                "survey_number": entry['surveyNumber']?.toString() ?? "",
+                "measurement_type": entry['selectedMeasurementType']?.toString() ?? "",
+                "total_area": entry['totalArea']?.toString() ?? "",
+                "calculated_area": entry['calculatedArea']?.toString() ?? "",
+              });
+            }
+            break;
+
+          case 'Non-agricultural':
+            for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+              final entry = calculationController.nonAgriculturalEntries[i];
+              entries.add({
+                "survey_number": entry['surveyNumber']?.toString() ?? "",
+                "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                "area": entry['area']?.toString() ?? "",
+                "area_hectares": entry['areaHectares']?.toString() ?? "",
+              });
+            }
+            break;
+
+          case 'Integration calculation':
+            for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+              final entry = calculationController.integrationCalculationEntries[i];
+              entries.add({
+                "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+                "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
+                "area": entry['area']?.toString() ?? "",
+                "area_sqm": entry['areaSqm']?.toString() ?? "",
+              });
+            }
+            break;
+        }
+
+        return entries;
+      }(),
+
+      // === APPLICANTS ===
+      "applicants": () {
+        List<Map<String, dynamic>> applicantsList = [];
+        final applicantCount = applicantData['applicantCount'] ?? 0;
+
+        for (int i = 0; i < applicantCount; i++) {
+          final applicantKey = 'applicant_$i';
+          final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
+
+          if (applicantInfo != null) {
+            final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
+
+            applicantsList.add({
+              "agreement": applicantInfo['agreement']?.toString() ?? "",
+              "account_holder_name": applicantInfo['accountHolderName']?.toString() ?? "",
+              "account_number": applicantInfo['accountNumber']?.toString() ?? "",
+              "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
+              "server_number": applicantInfo['serverNumber']?.toString() ?? "",
+              "area": applicantInfo['area']?.toString() ?? "",
+              "potkaharaba_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
+              "total_area": applicantInfo['totalArea']?.toString() ?? "",
+              "address": {
+                "plot_no": addressInfo?['plotNo']?.toString() ?? "",
+                "address": addressInfo?['address']?.toString() ?? "",
+                "mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
+                "email": addressInfo?['email']?.toString() ?? "",
+                "pincode": addressInfo?['pincode']?.toString() ?? "",
+                "district": addressInfo?['district']?.toString() ?? "",
+                "village": addressInfo?['village']?.toString() ?? "",
+                "post_office": addressInfo?['postOffice']?.toString() ?? "",
+              }
+            });
+          }
+        }
+
+        return applicantsList;
+      }(),
+
+      // === CO-OWNERS ===
+      "co_owners": () {
+        List<Map<String, dynamic>> coOwnersList = [];
+        final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+
+        if (coowners != null) {
+          for (int i = 0; i < coowners.length; i++) {
+            final coowner = coowners[i];
+            final addressInfo = coowner['address'] as Map<String, String>?;
+
+            coOwnersList.add({
+              "name": coowner['name']?.toString() ?? "",
+              "mobile_number": coowner['mobileNumber']?.toString() ?? "",
+              "server_number": coowner['serverNumber']?.toString() ?? "",
+              "consent": coowner['consent']?.toString() ?? "",
+              "address": {
+                "plot_no": addressInfo?['plotNo'] ?? "",
+                "address": addressInfo?['address'] ?? "",
+                "mobile_number": addressInfo?['mobileNumber'] ?? "",
+                "email": addressInfo?['email'] ?? "",
+                "pincode": addressInfo?['pincode'] ?? "",
+                "district": addressInfo?['district'] ?? "",
+                "village": addressInfo?['village'] ?? "",
+                "post_office": addressInfo?['postOffice'] ?? "",
+              }
+            });
+          }
+        }
+
+        return coOwnersList;
+      }(),
+
+      // === NEXT OF KIN ===
+      "next_of_kin": () {
+        List<Map<String, dynamic>> nextOfKinList = [];
+        final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+
+        if (entries != null) {
+          for (int i = 0; i < entries.length; i++) {
+            final entry = entries[i];
+            nextOfKinList.add({
+              "address": entry['address']?.toString() ?? "",
+              "mobile": entry['mobile']?.toString() ?? "",
+              "survey_no": entry['surveyNo']?.toString() ?? "",
+              "direction": entry['direction']?.toString() ?? "",
+              "natural_resources": entry['naturalResources']?.toString() ?? "",
+            });
+          }
+        }
+
+        return nextOfKinList;
+      }(),
+    };
+  }
+
+
+
+
+
+
+
   Future<void> submitSurvey() async {
     try {
-      isLoading.value = true;
-      // Final validation - check all required steps
-      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      for (int step in requiredSteps) {
-        if (!isMainStepCompleted(step)) {
-          Get.snackbar(
-            'Incomplete Form',
-            'Please complete all required fields in step ${step + 1}',
-            backgroundColor: Color(0xFFDC3545),
-            colorText: Colors.white,
-          );
-          return;
-        }
+      final requestBody = PostRequestBody();
+
+      final response = await ApiService.post<Map<String, dynamic>>(
+        endpoint: bhusampadanPost,
+        body: requestBody,
+        fromJson: (json) => json as Map<String, dynamic>,
+        includeToken: true,
+      );
+
+      if (response.success && response.data != null) {
+        print('✅ Success: ${response.data}');
+      } else {
+        print('❌ Error: ${response.errorMessage ?? 'Unknown error'}');
       }
-      // Save final data from all controllers
-      _saveAllStepsData();
-      // Mock API call
-      await Future.delayed(Duration(seconds: 2));
-      final response = {
-        'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-        'status': 'submitted',
-        'timestamp': DateTime.now().toIso8601String(),
-        'surveyData': surveyData.value,
-      };
-      surveyData.value = response;
-      Get.snackbar(
-        'Success',
-        'Your survey has been submitted successfully',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
-      );
-      // Navigate to confirmation page
-      Get.toNamed('/confirmation');
     } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Please try again',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
+      print('💥 Exception: $e');
     }
   }
+
 
   void _saveAllStepsData() {
     // Collect data from all step controllers

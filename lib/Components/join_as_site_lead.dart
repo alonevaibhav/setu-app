@@ -5,7 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gap/gap.dart';
 import '../../Constants/color_constant.dart';
-import '../Controller/login_view_controller.dart';
+import '../Auth/login_view_controller.dart';
 
 class SiteLeadApplication extends StatelessWidget {
   const SiteLeadApplication({Key? key}) : super(key: key);

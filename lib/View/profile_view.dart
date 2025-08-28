@@ -6,6 +6,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
+import '../Auth/login_view_controller.dart';
 import '../Constants/color_constant.dart';
 import '../../Controller/get_translation_controller/get_translation_controller.dart';
 import '../../Utils/TranslationManager/translation_service.dart';
@@ -17,7 +18,8 @@ class ProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final translationController = Get.put(TranslationController());
+    // final translationController = Get.put(TranslationController());
+    final translationController = Get.find<TranslationController>();
 
     return Scaffold(
       backgroundColor: SetuColors.background,
@@ -844,12 +846,10 @@ class ProfileView extends StatelessWidget {
   }
 
   void _performLogout(BuildContext context) {
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      '/login',
-          (route) => false,
-    );
+    final loginController = Get.find<LoginViewController>();
+    loginController.logout();
   }
+
 
   void _showError(String message) {
     if (Get.context != null) {

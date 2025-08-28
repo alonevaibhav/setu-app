@@ -7,8 +7,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gap/gap.dart';
 import '../Constants/color_constant.dart';
-import '../Controller/login_controller.dart';
-import '../Controller/login_view_controller.dart';
+import 'login_view_controller.dart';
 import '../Route Manager/app_routes.dart';
 
 class NewLoginView extends StatelessWidget {
@@ -360,8 +359,7 @@ class NewLoginView extends StatelessWidget {
                             height: 20.w * 0.8,
                             child: CircularProgressIndicator(
                               strokeWidth: 2 * 0.8,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                             ),
                           ),
                           Gap(12.w * 0.8),

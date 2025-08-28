@@ -11,8 +11,7 @@ import '../Utils/double_tap_to_exit.dart';
 import 'dashboard_view.dart';
 
 class MainNavigationView extends StatelessWidget {
-  final MainNavigationController controller =
-      Get.put(MainNavigationController());
+  final MainNavigationController controller = Get.put(MainNavigationController());
 
   @override
   Widget build(BuildContext context) {
