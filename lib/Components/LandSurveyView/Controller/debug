@@ -741,3 +741,217 @@
 
     };
   }
+
+
+  ---------------------------------------
+
+
+    Map<String, dynamic> PostRequestBody() {
+      // Get all data
+      final surveyData = getSurveyInfoData();
+      final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
+      final calculationData = getCalculationData();
+      final stepFourData = getStepFourData();
+      final applicantData = getFifthController();
+      final coOwnerData = getSixthController();
+      final nextOfKinData = getSeventhController();
+
+      return {
+        // === PERSONAL INFO ===
+        "is_landholder": personalInfoController.isHolderThemselves.value.toString(),
+        "has_authority_on_behalf": personalInfoController.hasAuthorityOnBehalf.value.toString(),
+        "has_been_counted_before": personalInfoController.hasBeenCountedBefore.value.toString(),
+        "poa_registration_number": personalInfoController.poaRegistrationNumberController.text.trim(),
+        "poa_registration_date": personalInfoController.poaRegistrationDateController.text.trim(),
+        "poa_issuer_name": personalInfoController.poaIssuerNameController.text.trim(),
+        "poa_holder_name": personalInfoController.poaHolderNameController.text.trim(),
+        "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
+        "seven_twelve_files": personalInfoController.sevenTwelveFiles.toList(),
+
+        // === SURVEY INFO ===
+        "survey_number": surveyInfo?['survey_number']?.toString() ?? "",
+        "department": surveyInfo?['department']?.toString() ?? "",
+        "district": surveyInfo?['district']?.toString() ?? "",
+        "taluka": surveyInfo?['taluka']?.toString() ?? "",
+        "village": surveyInfo?['village']?.toString() ?? "",
+        "office": surveyInfo?['office']?.toString() ?? "",
+
+        // === CALCULATION INFO ===
+        "calculation_type": calculationData['calculationType']?.toString() ?? "",
+
+        // === STEP FOUR INFO ===
+        "selected_calculation_type": stepFourController.selectedCalculationType.value,
+        "selected_duration": stepFourController.selectedDuration.value,
+        "selected_holder_type": stepFourController.selectedHolderType.value,
+        "selected_location_category": stepFourController.selectedLocationCategory.value,
+        "calculation_fee": stepFourController.calculationFeeController.text.trim(),
+        "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
+
+        // === CALCULATION ENTRIES ===
+        "calculation_entries": () {
+          String calcType = calculationData['calculationType']?.toString() ?? '';
+          List<Map<String, dynamic>> entries = [];
+
+          switch (calcType) {
+            case 'Hddkayam':
+              for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+                final entry = calculationController.hddkayamEntries[i];
+                entries.add({
+                  "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+                  "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
+                  "area": entry['area']?.toString() ?? "",
+                  "area_sqm": entry['areaSqm']?.toString() ?? "",
+                });
+              }
+              break;
+
+            case 'Stomach':
+              for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+                final entry = calculationController.stomachEntries[i];
+                entries.add({
+                  "survey_number": entry['surveyNumber']?.toString() ?? "",
+                  "measurement_type": entry['selectedMeasurementType']?.toString() ?? "",
+                  "total_area": entry['totalArea']?.toString() ?? "",
+                  "calculated_area": entry['calculatedArea']?.toString() ?? "",
+                });
+              }
+              break;
+
+            case 'Non-agricultural':
+              for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+                final entry = calculationController.nonAgriculturalEntries[i];
+                entries.add({
+                  "survey_number": entry['surveyNumber']?.toString() ?? "",
+                  "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                  "area": entry['area']?.toString() ?? "",
+                  "area_hectares": entry['areaHectares']?.toString() ?? "",
+                });
+              }
+              break;
+
+            case 'Counting by number of knots':
+              for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+                final entry = calculationController.knotsCountingEntries[i];
+                entries.add({
+                  "survey_number": entry['surveyNumber']?.toString() ?? "",
+                  "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                  "area": entry['area']?.toString() ?? "",
+                  "area_hectares": entry['areaHectares']?.toString() ?? "",
+                });
+              }
+              break;
+
+            case 'Integration calculation':
+              for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+                final entry = calculationController.integrationCalculationEntries[i];
+                entries.add({
+                  "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+                  "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
+                  "area": entry['area']?.toString() ?? "",
+                  "area_sqm": entry['areaSqm']?.toString() ?? "",
+                });
+              }
+              break;
+          }
+
+          return entries;
+        }(),
+
+        // === APPLICANTS ===
+        "applicants": () {
+          List<Map<String, dynamic>> applicantsList = [];
+          final applicantCount = applicantData['applicantCount'] ?? 0;
+
+          for (int i = 0; i < applicantCount; i++) {
+            final applicantKey = 'applicant_$i';
+            final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
+
+            if (applicantInfo != null) {
+              final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
+
+              applicantsList.add({
+                "agreement": applicantInfo['agreement']?.toString() ?? "",
+                "account_holder_name": applicantInfo['accountHolderName']?.toString() ?? "",
+                "account_number": applicantInfo['accountNumber']?.toString() ?? "",
+                "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
+                "server_number": applicantInfo['serverNumber']?.toString() ?? "",
+                "area": applicantInfo['area']?.toString() ?? "",
+                "potkaharaba_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
+                "total_area": applicantInfo['totalArea']?.toString() ?? "",
+                "plot_no": addressInfo?['plotNo']?.toString() ?? "",
+                "address": addressInfo?['address']?.toString() ?? "",
+                "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
+                "email": addressInfo?['email']?.toString() ?? "",
+                "pincode": addressInfo?['pincode']?.toString() ?? "",
+                "address_district": addressInfo?['district']?.toString() ?? "",
+                "address_village": addressInfo?['village']?.toString() ?? "",
+                "post_office": addressInfo?['postOffice']?.toString() ?? "",
+              });
+            }
+          }
+
+          return applicantsList;
+        }(),
+
+        // === CO-OWNERS ===
+        "co_owners": () {
+          List<Map<String, dynamic>> coOwnersList = [];
+          final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+
+          if (coowners != null) {
+            for (int i = 0; i < coowners.length; i++) {
+              final coowner = coowners[i];
+              final addressInfo = coowner['address'] as Map<String, String>?;
+
+              coOwnersList.add({
+                "name": coowner['name']?.toString() ?? "",
+                "mobile_number": coowner['mobileNumber']?.toString() ?? "",
+                "server_number": coowner['serverNumber']?.toString() ?? "",
+                "consent": coowner['consent']?.toString() ?? "",
+                "plot_no": addressInfo?['plotNo'] ?? "",
+                "address": addressInfo?['address'] ?? "",
+                "address_mobile_number": addressInfo?['mobileNumber'] ?? "",
+                "email": addressInfo?['email'] ?? "",
+                "pincode": addressInfo?['pincode'] ?? "",
+                "address_district": addressInfo?['district'] ?? "",
+                "address_village": addressInfo?['village'] ?? "",
+                "post_office": addressInfo?['postOffice'] ?? "",
+              });
+            }
+          }
+
+          return coOwnersList;
+        }(),
+
+        // === NEXT OF KIN ===
+        "next_of_kin": () {
+          List<Map<String, dynamic>> nextOfKinList = [];
+          final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+
+          if (entries != null) {
+            for (int i = 0; i < entries.length; i++) {
+              final entry = entries[i];
+              nextOfKinList.add({
+                "address": entry['address']?.toString() ?? "",
+                "mobile": entry['mobile']?.toString() ?? "",
+                "survey_no": entry['surveyNo']?.toString() ?? "",
+                "direction": entry['direction']?.toString() ?? "",
+                "natural_resources": entry['naturalResources']?.toString() ?? "",
+              });
+            }
+          }
+
+          return nextOfKinList;
+        }(),
+
+        // === DOCUMENTS ===
+        "identity_card_type": surveyEightController.selectedIdentityType.value,
+        "identity_card_files": surveyEightController.identityCardFiles?.map((file) => file.toString()).toList() ?? [],
+        "seven_twelve_files": surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? [],
+        "note_files": surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? [],
+        "partition_files": surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? [],
+        "scheme_sheet_files": surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? [],
+        "old_census_map_files": surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? [],
+        "demarcation_certificate_files": surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? [],
+      };
+    }

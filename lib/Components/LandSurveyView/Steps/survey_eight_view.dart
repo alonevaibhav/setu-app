@@ -498,8 +498,7 @@ class SurveyEightView extends StatelessWidget {
                   hint: 'Upload 7/12 document',
                   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.sevenTwelveFiles,
-                  onFilesSelected: (files) =>
-                      docController.sevenTwelveFiles.assignAll(files),
+                  onFilesSelected: (files) => docController.sevenTwelveFiles.assignAll(files),
                 ),
                 Gap(16.h),
 

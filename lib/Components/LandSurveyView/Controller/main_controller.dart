@@ -214,7 +214,7 @@ class MainSurveyController extends GetxController {
     final currentStepSubSteps = stepConfigurations[currentStep.value];
     final totalSubSteps = currentStepSubSteps?.length ?? 1;
     if (currentSubStep.value < totalSubSteps - 1) {
-      // Move to next substep within current main step
+      // Move to next sub-step within current main step
       currentSubStep.value++;
     } else {
       // Move to next main step
@@ -1193,6 +1193,14 @@ class MainSurveyController extends GetxController {
 
       case 'Non-agricultural':
         developer.log('Calculation Type: Non-agricultural - ${calculationController.nonAgriculturalEntries.length} entries', name: 'CalculationEntries');
+
+        // Log common fields (shared with Counting by number of knots)
+        developer.log('  order_number: "${calculationController.orderNumberController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  order_date: "${calculationController.orderDateController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  scheme_order_number: "${calculationController.schemeOrderNumberController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  appointment_date: "${calculationController.appointmentDateController.text.trim()}"', name: 'CalculationEntries');
+
+        // Log table entries
         for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
           final entry = calculationController.nonAgriculturalEntries[i];
           developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
@@ -1205,6 +1213,14 @@ class MainSurveyController extends GetxController {
 
       case 'Counting by number of knots':
         developer.log('Calculation Type: Counting by number of knots - ${calculationController.knotsCountingEntries.length} entries', name: 'CalculationEntries');
+
+        // Log common fields (shared with Non-agricultural)
+        developer.log('  order_number: "${calculationController.orderNumberController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  order_date: "${calculationController.orderDateController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  scheme_order_number: "${calculationController.schemeOrderNumberController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  appointment_date: "${calculationController.appointmentDateController.text.trim()}"', name: 'CalculationEntries');
+
+        // Log table entries
         for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
           final entry = calculationController.knotsCountingEntries[i];
           developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
@@ -1217,6 +1233,16 @@ class MainSurveyController extends GetxController {
 
       case 'Integration calculation':
         developer.log('Calculation Type: Integration calculation - ${calculationController.integrationCalculationEntries.length} entries', name: 'CalculationEntries');
+
+        // === MERGER/ORDER RELATED FIELDS ===
+        developer.log('  merger_order_number: "${calculationController.mergerOrderNumberController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  merger_order_date: "${calculationController.mergerOrderDateController.text.trim()}"', name: 'CalculationEntries');
+        developer.log('  old_merger_number: "${calculationController.oldMergerNumberController.text.trim()}"', name: 'CalculationEntries');
+
+        // === FILE UPLOADS (incorporation order files) ===
+        developer.log('  incorporation_order_files: ${calculationController.incorporationOrderFiles.map((file) => file.toString()).toList()}', name: 'CalculationEntries');
+
+        // === TABLE ENTRIES ===
         for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
           final entry = calculationController.integrationCalculationEntries[i];
           developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
@@ -1224,6 +1250,7 @@ class MainSurveyController extends GetxController {
           developer.log('  selected_ct_survey: "${entry['selectedCTSurvey']?.toString() ?? ""}"', name: 'CalculationEntries');
           developer.log('  area: "${entry['area']?.toString() ?? ""}"', name: 'CalculationEntries');
           developer.log('  area_sqm: "${entry['areaSqm']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  is_correct: "${entry['isCorrect']?.toString() ?? "false"}"', name: 'CalculationEntries');
         }
         break;
 
@@ -1345,33 +1372,27 @@ class MainSurveyController extends GetxController {
 
     return {
       // === PERSONAL INFO ===
-      "is_holder_themselves": personalInfoController.isHolderThemselves.value.toString(),
-      "has_authority_on_behalf": personalInfoController.hasAuthorityOnBehalf.value.toString(),
+      "is_landholder": personalInfoController.isHolderThemselves.value.toString(),
+      "is_power_of_attorney": personalInfoController.hasAuthorityOnBehalf.value.toString(),
       "has_been_counted_before": personalInfoController.hasBeenCountedBefore.value.toString(),
       "poa_registration_number": personalInfoController.poaRegistrationNumberController.text.trim(),
       "poa_registration_date": personalInfoController.poaRegistrationDateController.text.trim(),
-      "poa_issuer_name": personalInfoController.poaIssuerNameController.text.trim(),
+      "poa_giver_name": personalInfoController.poaIssuerNameController.text.trim(),
       "poa_holder_name": personalInfoController.poaHolderNameController.text.trim(),
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
+      "poa_document_path": personalInfoController.sevenTwelveFiles.toList(), // add validation later
 
       // === SURVEY INFO ===
-      "survey_number": surveyInfo?['survey_number']?.toString() ?? "",
+      "survey_type": surveyInfo?['survey_number']?.toString() ?? "", // changes to dropdown
       "department": surveyInfo?['department']?.toString() ?? "",
-      "district": surveyInfo?['district']?.toString() ?? "",
-      "taluka": surveyInfo?['taluka']?.toString() ?? "",
-      "village": surveyInfo?['village']?.toString() ?? "",
-      "office": surveyInfo?['office']?.toString() ?? "",
+      "division_id": surveyInfo?['division_id']?.toString() ?? "", // added later
+      "district_id": surveyInfo?['district']?.toString() ?? "",
+      "taluka_id": surveyInfo?['taluka']?.toString() ?? "",
+      "village_id": surveyInfo?['village']?.toString() ?? "",
+      "office_name": surveyInfo?['office']?.toString() ?? "",
 
       // === CALCULATION INFO ===
-      "calculation_type": calculationData['calculationType']?.toString() ?? "",
-
-      // === STEP FOUR INFO ===
-      "selected_calculation_type": stepFourController.selectedCalculationType.value,
-      "selected_duration": stepFourController.selectedDuration.value,
-      "selected_holder_type": stepFourController.selectedHolderType.value,
-      "selected_location_category": stepFourController.selectedLocationCategory.value,
-      "calculation_fee": stepFourController.calculationFeeController.text.trim(),
-      "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
+      "operation_type": calculationData['calculationType']?.toString() ?? "",  //changes to ENUM given values
 
       // === CALCULATION ENTRIES ===
       "calculation_entries": () {
@@ -1383,10 +1404,10 @@ class MainSurveyController extends GetxController {
             for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
               final entry = calculationController.hddkayamEntries[i];
               entries.add({
-                "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
-                "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
-                "area": entry['area']?.toString() ?? "",
-                "area_sqm": entry['areaSqm']?.toString() ?? "",
+                "survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+                // "survey_number": entry['selectedCTSurvey']?.toString() ?? "",  /// same field are same data manage in UI
+                "original_area": entry['area']?.toString() ?? "",
+                // "original_area": entry['areaSqm']?.toString() ?? "",
               });
             }
             break;
@@ -1396,45 +1417,69 @@ class MainSurveyController extends GetxController {
               final entry = calculationController.stomachEntries[i];
               entries.add({
                 "survey_number": entry['surveyNumber']?.toString() ?? "",
-                "measurement_type": entry['selectedMeasurementType']?.toString() ?? "",
-                "total_area": entry['totalArea']?.toString() ?? "",
-                "calculated_area": entry['calculatedArea']?.toString() ?? "",
+                // "measurement_type": entry['selectedMeasurementType']?.toString() ?? "",
+                "original_area": entry['totalArea']?.toString() ?? "",
+                // "calculated_area": entry['calculatedArea']?.toString() ?? "",
               });
             }
             break;
 
           case 'Non-agricultural':
+          // Add common fields for Non-agricultural
+            entries.add({
+              "order_approval_number": calculationController.orderNumberController.text.trim(),
+              "order_approval_date": calculationController.orderDateController.text.trim(),
+              "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
+              "layout_approval_date": calculationController.appointmentDateController.text.trim(),
+            });
+
             for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
               final entry = calculationController.nonAgriculturalEntries[i];
               entries.add({
                 "survey_number": entry['surveyNumber']?.toString() ?? "",
-                "survey_type": entry['selectedSurveyType']?.toString() ?? "",
-                "area": entry['area']?.toString() ?? "",
-                "area_hectares": entry['areaHectares']?.toString() ?? "",
+                // "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                "original_area": entry['area']?.toString() ?? "",
+                // "area_hectares": entry['areaHectares']?.toString() ?? "",
               });
             }
             break;
 
           case 'Counting by number of knots':
+          // Add common fields for Counting by number of knots
+            entries.add({
+              "order_approval_number": calculationController.orderNumberController.text.trim(),
+              "order_approval_date": calculationController.orderDateController.text.trim(),
+              "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
+              "layout_approval_date": calculationController.appointmentDateController.text.trim(),
+            });
+
             for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
               final entry = calculationController.knotsCountingEntries[i];
               entries.add({
                 "survey_number": entry['surveyNumber']?.toString() ?? "",
-                "survey_type": entry['selectedSurveyType']?.toString() ?? "",
-                "area": entry['area']?.toString() ?? "",
-                "area_hectares": entry['areaHectares']?.toString() ?? "",
+                // "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                "original_area": entry['area']?.toString() ?? "",
+                // "area_hectares": entry['areaHectares']?.toString() ?? "",
               });
             }
             break;
 
           case 'Integration calculation':
+          // Add specific fields for Integration calculation
+            entries.add({
+              "consolidation_order_number": calculationController.mergerOrderNumberController.text.trim(),
+              "consolidation_order_date": calculationController.mergerOrderDateController.text.trim(),
+              "old_consolidation_mrn": calculationController.oldMergerNumberController.text.trim(),
+              "consolidationOrderMapPath": calculationController.incorporationOrderFiles?.map((file) => file.toString()).toList() ?? [],
+            });
+
             for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
               final entry = calculationController.integrationCalculationEntries[i];
               entries.add({
                 "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
-                "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
-                "area": entry['area']?.toString() ?? "",
-                "area_sqm": entry['areaSqm']?.toString() ?? "",
+                // "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
+                "original_area": entry['area']?.toString() ?? "",
+                // "area_sqm": entry['areaSqm']?.toString() ?? "",
               });
             }
             break;
@@ -1443,8 +1488,18 @@ class MainSurveyController extends GetxController {
         return entries;
       }(),
 
+      // === STEP FOUR INFO ===
+      "selected_calculation_type": stepFourController.selectedCalculationType.value,
+      "selected_duration": stepFourController.selectedDuration.value,
+      "selected_holder_type": stepFourController.selectedHolderType.value,
+      "selected_location_category": stepFourController.selectedLocationCategory.value,  //is_within_municipal_corporation: 0 or 1
+      "calculation_fee": stepFourController.calculationFeeController.text.trim(),
+      "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
+
+
+
       // === APPLICANTS ===
-      "applicants": () {
+      "adjacent_owners": () {
         List<Map<String, dynamic>> applicantsList = [];
         final applicantCount = applicantData['applicantCount'] ?? 0;
 
@@ -1456,14 +1511,15 @@ class MainSurveyController extends GetxController {
             final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
 
             applicantsList.add({
-              "agreement": applicantInfo['agreement']?.toString() ?? "",
-              "account_holder_name": applicantInfo['accountHolderName']?.toString() ?? "",
+              // "agreement": applicantInfo['agreement']?.toString() ?? "",
+              "name": applicantInfo['accountHolderName']?.toString() ?? "",
               "account_number": applicantInfo['accountNumber']?.toString() ?? "",
               "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
               "server_number": applicantInfo['serverNumber']?.toString() ?? "",
               "area": applicantInfo['area']?.toString() ?? "",
-              "potkaharaba_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
+              "potkharab_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
               "total_area": applicantInfo['totalArea']?.toString() ?? "",
+
               "plot_no": addressInfo?['plotNo']?.toString() ?? "",
               "address": addressInfo?['address']?.toString() ?? "",
               "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
@@ -1493,10 +1549,11 @@ class MainSurveyController extends GetxController {
               "name": coowner['name']?.toString() ?? "",
               "mobile_number": coowner['mobileNumber']?.toString() ?? "",
               "server_number": coowner['serverNumber']?.toString() ?? "",
-              "consent": coowner['consent']?.toString() ?? "",
+              "consent": coowner['consent']?.toString() ?? "", // this is checkbox not added yet
+              //address fields
               "plot_no": addressInfo?['plotNo'] ?? "",
               "address": addressInfo?['address'] ?? "",
-              "address_mobile_number": addressInfo?['mobileNumber'] ?? "",
+              "address_mobile_number": addressInfo?['mobileNumber'] ?? "", // not added yet
               "email": addressInfo?['email'] ?? "",
               "pincode": addressInfo?['pincode'] ?? "",
               "address_district": addressInfo?['district'] ?? "",
@@ -1531,14 +1588,14 @@ class MainSurveyController extends GetxController {
       }(),
 
       // === DOCUMENTS ===
-      "identity_card_type": surveyEightController.selectedIdentityType.value,
+      "identity_proof_path": surveyEightController.selectedIdentityType.value,
       "identity_card_files": surveyEightController.identityCardFiles?.map((file) => file.toString()).toList() ?? [],
-      "seven_twelve_files": surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? [],
-      "note_files": surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? [],
-      "partition_files": surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? [],
-      "scheme_sheet_files": surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? [],
-      "old_census_map_files": surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? [],
-      "demarcation_certificate_files": surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? [],
+      "seven_eleven_path": surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? [],
+      "tipan_path": surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? [],
+      "fadni_path": surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? [],
+      "yojana_patrak_path": surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? [],
+      "old_measurement_path": surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? [],
+      "simankan_pramanpatra_path": surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? [],
     };
   }
 

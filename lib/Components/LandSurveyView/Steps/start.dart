@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../Utils/custimize_image_picker.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 
@@ -205,7 +206,7 @@ class PersonalInfoStep extends StatelessWidget {
           // Address holding Power of Attorney
           SurveyUIUtils.buildTextFormField(
             controller: controller.poaHolderAddressController,
-            label: 'Address holding Power of Attorney',
+            label: 'Upload the authority letter / power of attorney holder letter',
             hint: 'Enter full address',
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.streetAddress,
@@ -216,6 +217,15 @@ class PersonalInfoStep extends StatelessWidget {
               }
               return null;
             },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+          ImagePickerUtil.buildFileUploadField(
+            label: '7/12 of the 3rd month *',
+            hint: 'Upload 7/12 document',
+            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+            uploadedFiles: controller.sevenTwelveFiles,
+            onFilesSelected: (files) => controller.sevenTwelveFiles.assignAll(files),
           ),
         ],
       ),

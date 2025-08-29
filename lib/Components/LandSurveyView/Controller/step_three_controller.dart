@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'main_controller.dart';
 
-class CalculationController extends GetxController
-    with StepValidationMixin, StepDataMixin {
+class CalculationController extends GetxController with StepValidationMixin, StepDataMixin {
   // Main calculation type
   final selectedCalculationType = ''.obs;
+  // final List<String> calculationTypes = [
+  //   'Hddkayam',
+  //   'Stomach',
+  //   'Non-agricultural',
+  //   'Counting by number of knots',
+  //   'Integration calculation'
+  // ];
   final List<String> calculationTypes = [
     'Hddkayam',
     'Stomach',

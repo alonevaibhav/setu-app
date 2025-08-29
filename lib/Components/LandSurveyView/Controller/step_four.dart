@@ -17,12 +17,12 @@ class StepFourController extends GetxController with StepValidationMixin, StepDa
 
   final durationOptions = [
     'Regular',
-    'Fast pace'
+    'Fast Track'
   ].obs;
 
   final holderTypeOptions = [
-    'Holder (farmer)',
-    'Companies/Other Institutions/Various Authorities/Corporations and Land Acquisition Joint Enumeration Holders (Other than Farmers)'
+    'धारक(शेतकरी)',
+    'कंपन्या/इतर संस्था/ विविध प्राधिकरणे/ महामंडळ व भूसंपादन संयुक्त मोजणी'
   ].obs;
 
   final locationCategoryOptions = [
