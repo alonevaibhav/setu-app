@@ -655,529 +655,667 @@ class MainSurveyController extends GetxController {
   // DEBUG PRINT METHOD
   ///////////////////////////////////
 
+  // void debugPrintInfo() {
+  //   developer.log('=== PERSONAL INFO DEBUG ===', name: 'DebugInfo');
+  //
+  //   developer.log(
+  //       'Is holder themselves: ${personalInfoController.isHolderThemselves.value}',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"',
+  //       name: 'PersonalInfo');
+  //   developer.log(
+  //       'POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"',
+  //       name: 'PersonalInfo');
+  //
+  //   developer.log('=== SURVEY INFO DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   final surveyData = getSurveyInfoData();
+  //   final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
+  //
+  //   if (surveyInfo != null) {
+  //     developer.log('Survey Number: "${surveyInfo['survey_number']}"',
+  //         name: 'SurveyInfo');
+  //     developer.log('Department: "${surveyInfo['department']}"',
+  //         name: 'SurveyInfo');
+  //     developer.log('District: "${surveyInfo['district']}"',
+  //         name: 'SurveyInfo');
+  //     developer.log('Taluka: "${surveyInfo['taluka']}"', name: 'SurveyInfo');
+  //     developer.log('Village: "${surveyInfo['village']}"', name: 'SurveyInfo');
+  //     developer.log('Office: "${surveyInfo['office']}"', name: 'SurveyInfo');
+  //   } else {
+  //     developer.log('Survey info data is null',
+  //         name: 'SurveyInfo', level: 900); // Warning level
+  //   }
+  //
+  //   developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   try {
+  //     // Get calculation data using the fixed method
+  //     final calculationData = getCalculationData();
+  //
+  //     if (calculationData.isNotEmpty) {
+  //       developer.log(
+  //           'Calculation Type: "${calculationData['calculationType']}"',
+  //           name: 'CalculationData');
+  //
+  //
+  //       // Print type-specific fields based on calculation type
+  //       String calcType = calculationData['calculationType']?.toString() ?? '';
+  //
+  //       switch (calcType) {
+  //         case 'Hddkayam':
+  //           developer.log(
+  //               'Hddkayam Entries Count: ${calculationData['hddkayamEntriesCount'] ?? 0}',
+  //               name: 'Hddkayam');
+  //
+  //           // Print detailed entries
+  //           for (int i = 0;
+  //           i < calculationController.hddkayamEntries.length;
+  //           i++) {
+  //             final entry = calculationController.hddkayamEntries[i];
+  //             developer.log('Entry ${i + 1}:', name: 'HddkayamEntry');
+  //             developer.log(
+  //                 '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
+  //                 name: 'HddkayamEntry');
+  //             developer.log(
+  //                 '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
+  //                 name: 'HddkayamEntry');
+  //             developer.log('  Area: "${entry['area'] ?? ''}"',
+  //                 name: 'HddkayamEntry');
+  //             developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
+  //                 name: 'HddkayamEntry');
+  //             developer.log('  Is Correct: ${entry['isCorrect'] ?? false}',
+  //                 name: 'HddkayamEntry');
+  //           }
+  //           break;
+  //
+  //         case 'Stomach':
+  //           developer.log(
+  //               'Stomach Entries Count: ${calculationData['stomachEntriesCount'] ?? 0}',
+  //               name: 'Stomach');
+  //
+  //           // Print detailed entries
+  //           for (int i = 0;
+  //           i < calculationController.stomachEntries.length;
+  //           i++) {
+  //             final entry = calculationController.stomachEntries[i];
+  //             developer.log('Entry ${i + 1}:', name: 'StomachEntry');
+  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
+  //                 name: 'StomachEntry');
+  //             developer.log(
+  //                 '  Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"',
+  //                 name: 'StomachEntry');
+  //             developer.log('  Total Area: "${entry['totalArea'] ?? ''}"',
+  //                 name: 'StomachEntry');
+  //             developer.log(
+  //                 '  Calculated Area: "${entry['calculatedArea'] ?? ''}"',
+  //                 name: 'StomachEntry');
+  //           }
+  //           break;
+  //
+  //         case 'Non-agricultural':
+  //           for (int i = 0;
+  //           i < calculationController.nonAgriculturalEntries.length;
+  //           i++) {
+  //             final entry = calculationController.nonAgriculturalEntries[i];
+  //             developer.log('Entry ${i + 1}:', name: 'NonAgriculturalEntry');
+  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
+  //                 name: 'NonAgriculturalEntry');
+  //             developer.log(
+  //                 '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
+  //                 name: 'NonAgriculturalEntry');
+  //             developer.log('  Area: "${entry['area'] ?? ''}"',
+  //                 name: 'NonAgriculturalEntry');
+  //             developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
+  //                 name: 'NonAgriculturalEntry');
+  //           }
+  //           break;
+  //
+  //         case 'Counting by number of knots':
+  //           for (int i = 0;
+  //           i < calculationController.knotsCountingEntries.length;
+  //           i++) {
+  //             final entry = calculationController.knotsCountingEntries[i];
+  //             developer.log('Entry ${i + 1}:', name: 'KnotsCountingEntry');
+  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
+  //                 name: 'KnotsCountingEntry');
+  //             developer.log(
+  //                 '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
+  //                 name: 'KnotsCountingEntry');
+  //             developer.log('  Area: "${entry['area'] ?? ''}"',
+  //                 name: 'KnotsCountingEntry');
+  //             developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
+  //                 name: 'KnotsCountingEntry');
+  //           }
+  //           break;
+  //
+  //         case 'Integration calculation':
+  //           developer.log(
+  //               'Merger Order Number: "${calculationData['mergerOrderNumber']}"',
+  //               name: 'IntegrationCalculation');
+  //           developer.log(
+  //               'Merger Order Date: "${calculationData['mergerOrderDate']}"',
+  //               name: 'IntegrationCalculation');
+  //           developer.log(
+  //               'Old Merger Number: "${calculationData['oldMergerNumber']}"',
+  //               name: 'IntegrationCalculation');
+  //           developer.log(
+  //               'incorporationOrderFiles raw: ${calculationController.incorporationOrderFiles}',
+  //               name: 'IntegrationCalculation');
+  //
+  //           // Print detailed entries
+  //           for (int i = 0;
+  //           i < calculationController.integrationCalculationEntries.length;
+  //           i++) {
+  //             final entry =
+  //             calculationController.integrationCalculationEntries[i];
+  //             developer.log('Entry ${i + 1}:',
+  //                 name: 'IntegrationCalculationEntry');
+  //             developer.log(
+  //                 '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
+  //                 name: 'IntegrationCalculationEntry');
+  //             developer.log(
+  //                 '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
+  //                 name: 'IntegrationCalculationEntry');
+  //             developer.log('  Area: "${entry['area'] ?? ''}"',
+  //                 name: 'IntegrationCalculationEntry');
+  //             developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
+  //                 name: 'IntegrationCalculationEntry');
+  //           }
+  //           break;
+  //
+  //         default:
+  //           developer.log(
+  //               'No calculation type selected or unknown type: "$calcType"',
+  //               name: 'CalculationData',
+  //               level: 900);
+  //       }
+  //     } else {
+  //       developer.log(
+  //           'Calculation data is empty - no calculation type selected or no data entered',
+  //           name: 'CalculationData',
+  //           level: 900);
+  //     }
+  //   } catch (e) {
+  //     developer.log('Error in calculation debug: $e',
+  //         name: 'CalculationData', level: 1000); // Error level
+  //   }
+  //
+  //   developer.log('=== STEP FOUR DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   try {
+  //     // Get step four data using the fixed method
+  //     final stepFourData = getStepFourData();
+  //
+  //     if (stepFourData.isNotEmpty) {
+  //       // Additional debugging for controller state
+  //       developer.log(
+  //           'Controller selectedCalculationType: "${stepFourController.selectedCalculationType.value}"',
+  //           name: 'StepFourController');
+  //       developer.log(
+  //           'Controller selectedDuration: "${stepFourController.selectedDuration.value}"',
+  //           name: 'StepFourController');
+  //       developer.log(
+  //           'Controller selectedHolderType: "${stepFourController.selectedHolderType.value}"',
+  //           name: 'StepFourController');
+  //       developer.log(
+  //           'Controller selectedLocationCategory: "${stepFourController.selectedLocationCategory.value}"',
+  //           name: 'StepFourController');
+  //       developer.log(
+  //           'Controller calculationFeeController text: "${stepFourController.calculationFeeController.text}"',
+  //           name: 'StepFourController');
+  //       developer.log(
+  //           'Calculation Fee Numeric: ${stepFourData['calculation_fee_numeric'] ?? 'null'}',
+  //           name: 'StepFourData');
+  //     }
+  //   } catch (e) {
+  //     developer.log('Error in Step Four debug: $e',
+  //         name: 'StepFourData', level: 1000); // Error level
+  //   }
+  //
+  //   developer.log('=== FIFTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   try {
+  //     // Get applicant data using the fixed method
+  //     final applicantData = getFifthController();
+  //
+  //     if (applicantData.isNotEmpty) {
+  //       final applicantCount = applicantData['applicantCount'] ?? 0;
+  //       developer.log('Total Applicants: $applicantCount',
+  //           name: 'ApplicantData');
+  //
+  //       // Debug each applicant entry
+  //       for (int i = 0; i < applicantCount; i++) {
+  //         final applicantKey = 'applicant_$i';
+  //         final applicantInfo =
+  //         applicantData[applicantKey] as Map<String, dynamic>?;
+  //
+  //         if (applicantInfo != null) {
+  //           developer.log('=== APPLICANT ${i + 1} ===', name: 'ApplicantEntry');
+  //           developer.log('Agreement: "${applicantInfo['agreement'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log(
+  //               'Account Holder Name: "${applicantInfo['accountHolderName'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log(
+  //               'Account Number: "${applicantInfo['accountNumber'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log(
+  //               'Mobile Number: "${applicantInfo['mobileNumber'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log(
+  //               'Server Number: "${applicantInfo['serverNumber'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log('Area: "${applicantInfo['area'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log(
+  //               'Potkaharaba Area: "${applicantInfo['potkaharabaArea'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //           developer.log('Total Area: "${applicantInfo['totalArea'] ?? ''}"',
+  //               name: 'ApplicantEntry');
+  //
+  //           // Debug address data
+  //           final addressInfo =
+  //           applicantInfo['address'] as Map<String, dynamic>?;
+  //           if (addressInfo != null && addressInfo.isNotEmpty) {
+  //             developer.log('=== ADDRESS ${i + 1} ===',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Address: "${addressInfo['address'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Email: "${addressInfo['email'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('District: "${addressInfo['district'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Village: "${addressInfo['village'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //             developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
+  //                 name: 'ApplicantAddress');
+  //           } else {
+  //             developer.log('No address data for applicant ${i + 1}',
+  //                 name: 'ApplicantAddress', level: 900);
+  //           }
+  //         } else {
+  //           developer.log('Applicant ${i + 1} data is null',
+  //               name: 'ApplicantEntry', level: 900);
+  //         }
+  //       }
+  //     } else {
+  //       developer.log('Applicant data is empty - no applicants added',
+  //           name: 'ApplicantData', level: 900);
+  //     }
+  //   } catch (e) {
+  //     developer.log('Error in Applicant debug: $e',
+  //         name: 'ApplicantData', level: 1000); // Error level
+  //   }
+  //
+  //   developer.log('=== END APPLICANT DEBUG ===', name: 'DebugInfo');
+  //
+  //   developer.log('=== SIXTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   try {
+  //     // Get co-owner data using the fixed method
+  //     final coOwnerData = getSixthController();
+  //     if (coOwnerData.isNotEmpty) {
+  //       final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+  //
+  //       if (coowners != null && coowners.isNotEmpty) {
+  //         for (int i = 0; i < coowners.length; i++) {
+  //           final coowner = coowners[i];
+  //
+  //           developer.log('=== CO-OWNER ${i + 1} ===', name: 'CoOwnerEntry');
+  //           developer.log('Name: "${coowner['name'] ?? ''}"',
+  //               name: 'CoOwnerEntry');
+  //           developer.log('Mobile Number: "${coowner['mobileNumber'] ?? ''}"',
+  //               name: 'CoOwnerEntry');
+  //           developer.log('Server Number: "${coowner['serverNumber'] ?? ''}"',
+  //               name: 'CoOwnerEntry');
+  //           developer.log('Consent: "${coowner['consent'] ?? ''}"',
+  //               name: 'CoOwnerEntry');
+  //
+  //           // Debug address data
+  //           final addressInfo = coowner['address'] as Map<String, String>?;
+  //           if (addressInfo != null && addressInfo.isNotEmpty) {
+  //             developer.log('=== CO-OWNER ${i + 1} ADDRESS ===',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Address: "${addressInfo['address'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Email: "${addressInfo['email'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('District: "${addressInfo['district'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Village: "${addressInfo['village'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //             developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
+  //                 name: 'CoOwnerAddress');
+  //           } else {
+  //             developer.log('No address data for co-owner ${i + 1}',
+  //                 name: 'CoOwnerAddress', level: 900);
+  //           }
+  //
+  //           // Show formatted address
+  //           final formattedAddress =
+  //           surveySixthController.getFormattedAddress(i);
+  //           developer.log(
+  //               'Formatted address for co-owner ${i + 1}: "$formattedAddress"',
+  //               name: 'CoOwnerFormatted');
+  //         }
+  //       } else {
+  //         developer.log('No co-owners in the list',
+  //             name: 'CoOwnerData', level: 900);
+  //       }
+  //     } else {
+  //       developer.log('Co-owner data is empty - no co-owners added',
+  //           name: 'CoOwnerData', level: 900);
+  //     }
+  //   } catch (e) {
+  //     developer.log('Error in Co-owner debug: $e',
+  //         name: 'CoOwnerData', level: 1000); // Error level
+  //   }
+  //
+  //   developer.log('=== NEXT OF KIN DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   try {
+  //     // Get next of kin data using the fixed method
+  //     final nextOfKinData = getSeventhController();
+  //
+  //     if (nextOfKinData.isNotEmpty) {
+  //       final entries =
+  //       nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+  //
+  //       if (entries != null && entries.isNotEmpty) {
+  //         for (int i = 0; i < entries.length; i++) {
+  //           final entry = entries[i];
+  //
+  //           developer.log('=== NEXT OF KIN ${i + 1} ===',
+  //               name: 'NextOfKinEntry');
+  //           developer.log('Address: "${entry['address'] ?? ''}"',
+  //               name: 'NextOfKinEntry');
+  //           developer.log('Mobile: "${entry['mobile'] ?? ''}"',
+  //               name: 'NextOfKinEntry');
+  //           developer.log('Survey No: "${entry['surveyNo'] ?? ''}"',
+  //               name: 'NextOfKinEntry');
+  //           developer.log('Direction: "${entry['direction'] ?? ''}"',
+  //               name: 'NextOfKinEntry');
+  //           developer.log(
+  //               'Natural Resources: "${entry['naturalResources'] ?? ''}"',
+  //               name: 'NextOfKinEntry');
+  //
+  //           // Check if required fields are filled
+  //           final requiredFields = [
+  //             'address',
+  //             'mobile',
+  //             'surveyNo',
+  //             'direction',
+  //             'naturalResources'
+  //           ];
+  //           final missingFields = <String>[];
+  //
+  //           for (String field in requiredFields) {
+  //             if ((entry[field] ?? '').toString().trim().isEmpty) {
+  //               missingFields.add(field);
+  //             }
+  //           }
+  //         }
+  //       } else {
+  //         developer.log('No next of kin entries in the list',
+  //             name: 'NextOfKinData', level: 900);
+  //       }
+  //     } else {
+  //       developer.log('Next of kin data is empty - no entries added',
+  //           name: 'NextOfKinData', level: 900);
+  //     }
+  //   } catch (e) {
+  //     developer.log('Error in Next of Kin debug: $e',
+  //         name: 'NextOfKinData', level: 1000); // Error level
+  //   }
+  //
+  //   developer.log('=== COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   // Identity card info
+  //   developer.log('Selected Identity Type: "${surveyEightController.selectedIdentityType.value}"', name: 'CourtSeventh');
+  //   developer.log('Identity Card Files: "${surveyEightController.identityCardFiles}"', name: 'CourtSeventh');
+  //
+  //   // Document files
+  //   developer.log('Seven Twelve Files: "${surveyEightController.sevenTwelveFiles}"', name: 'CourtSeventh');
+  //   developer.log('Note Files: "${surveyEightController.noteFiles}"', name: 'CourtSeventh');
+  //   developer.log('Partition Files: "${surveyEightController.partitionFiles}"', name: 'CourtSeventh');
+  //   developer.log('Scheme Sheet Files: "${surveyEightController.schemeSheetFiles}"', name: 'CourtSeventh');
+  //   developer.log('Old Census Map Files: "${surveyEightController.oldCensusMapFiles}"', name: 'CourtSeventh');
+  //   developer.log('Demarcation Certificate Files: "${surveyEightController.demarcationCertificateFiles}"', name: 'CourtSeventh');
+  //
+  //   developer.log('=== END COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
+  //
+  //   developer.log('=== END DEBUG ===', name: 'DebugInfo');
+  // }
+
+
   void debugPrintInfo() {
-    developer.log('=== PERSONAL INFO DEBUG ===', name: 'DebugInfo');
+    developer.log('=== POST REQUEST BODY DEBUG ===', name: 'DebugInfo');
 
-    developer.log(
-        'Is holder themselves: ${personalInfoController.isHolderThemselves.value}',
-        name: 'PersonalInfo');
-    developer.log(
-        'Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}',
-        name: 'PersonalInfo');
-    developer.log(
-        'Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}',
-        name: 'PersonalInfo');
-    developer.log(
-        'POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"',
-        name: 'PersonalInfo');
-    developer.log(
-        'POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"',
-        name: 'PersonalInfo');
-    developer.log(
-        'POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"',
-        name: 'PersonalInfo');
-    developer.log(
-        'POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"',
-        name: 'PersonalInfo');
-    developer.log(
-        'POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"',
-        name: 'PersonalInfo');
-
-    developer.log('=== SURVEY INFO DATA DEBUG ===', name: 'DebugInfo');
-
+    // Get all data
     final surveyData = getSurveyInfoData();
     final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
+    final calculationData = getCalculationData();
+    final stepFourData = getStepFourData();
+    final applicantData = getFifthController();
+    final coOwnerData = getSixthController();
+    final nextOfKinData = getSeventhController();
 
-    if (surveyInfo != null) {
-      developer.log('Survey Number: "${surveyInfo['survey_number']}"',
-          name: 'SurveyInfo');
-      developer.log('Department: "${surveyInfo['department']}"',
-          name: 'SurveyInfo');
-      developer.log('District: "${surveyInfo['district']}"',
-          name: 'SurveyInfo');
-      developer.log('Taluka: "${surveyInfo['taluka']}"', name: 'SurveyInfo');
-      developer.log('Village: "${surveyInfo['village']}"', name: 'SurveyInfo');
-      developer.log('Office: "${surveyInfo['office']}"', name: 'SurveyInfo');
-    } else {
-      developer.log('Survey info data is null',
-          name: 'SurveyInfo', level: 900); // Warning level
+    // === PERSONAL INFO ===
+    developer.log('=== PERSONAL INFO ===', name: 'DebugInfo');
+    developer.log('is_holder_themselves: ${personalInfoController.isHolderThemselves.value.toString()}', name: 'PersonalInfo');
+    developer.log('has_authority_on_behalf: ${personalInfoController.hasAuthorityOnBehalf.value.toString()}', name: 'PersonalInfo');
+    developer.log('has_been_counted_before: ${personalInfoController.hasBeenCountedBefore.value.toString()}', name: 'PersonalInfo');
+    developer.log('poa_registration_number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('poa_registration_date: "${personalInfoController.poaRegistrationDateController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('poa_issuer_name: "${personalInfoController.poaIssuerNameController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('poa_holder_name: "${personalInfoController.poaHolderNameController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('poa_holder_address: "${personalInfoController.poaHolderAddressController.text.trim()}"', name: 'PersonalInfo');
+
+    // === SURVEY INFO ===
+    developer.log('=== SURVEY INFO ===', name: 'DebugInfo');
+    developer.log('survey_number: "${surveyInfo?['survey_number']?.toString() ?? ""}"', name: 'SurveyInfo');
+    developer.log('department: "${surveyInfo?['department']?.toString() ?? ""}"', name: 'SurveyInfo');
+    developer.log('district: "${surveyInfo?['district']?.toString() ?? ""}"', name: 'SurveyInfo');
+    developer.log('taluka: "${surveyInfo?['taluka']?.toString() ?? ""}"', name: 'SurveyInfo');
+    developer.log('village: "${surveyInfo?['village']?.toString() ?? ""}"', name: 'SurveyInfo');
+    developer.log('office: "${surveyInfo?['office']?.toString() ?? ""}"', name: 'SurveyInfo');
+
+    // === CALCULATION INFO ===
+    developer.log('=== CALCULATION INFO ===', name: 'DebugInfo');
+    developer.log('calculation_type: "${calculationData['calculationType']?.toString() ?? ""}"', name: 'CalculationInfo');
+
+    // === STEP FOUR INFO ===
+    developer.log('=== STEP FOUR INFO ===', name: 'DebugInfo');
+    developer.log('selected_calculation_type: "${stepFourController.selectedCalculationType.value}"', name: 'StepFourInfo');
+    developer.log('selected_duration: "${stepFourController.selectedDuration.value}"', name: 'StepFourInfo');
+    developer.log('selected_holder_type: "${stepFourController.selectedHolderType.value}"', name: 'StepFourInfo');
+    developer.log('selected_location_category: "${stepFourController.selectedLocationCategory.value}"', name: 'StepFourInfo');
+    developer.log('calculation_fee: "${stepFourController.calculationFeeController.text.trim()}"', name: 'StepFourInfo');
+    developer.log('calculation_fee_numeric: "${stepFourData['calculation_fee_numeric']?.toString() ?? ""}"', name: 'StepFourInfo');
+
+    // === CALCULATION ENTRIES ===
+    developer.log('=== CALCULATION ENTRIES ===', name: 'DebugInfo');
+    String calcType = calculationData['calculationType']?.toString() ?? '';
+
+    switch (calcType) {
+      case 'Hddkayam':
+        developer.log('Calculation Type: Hddkayam - ${calculationController.hddkayamEntries.length} entries', name: 'CalculationEntries');
+        for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+          final entry = calculationController.hddkayamEntries[i];
+          developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
+          developer.log('  ct_survey_number: "${entry['ctSurveyNumber']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  selected_ct_survey: "${entry['selectedCTSurvey']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area: "${entry['area']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area_sqm: "${entry['areaSqm']?.toString() ?? ""}"', name: 'CalculationEntries');
+        }
+        break;
+
+      case 'Stomach':
+        developer.log('Calculation Type: Stomach - ${calculationController.stomachEntries.length} entries', name: 'CalculationEntries');
+        for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+          final entry = calculationController.stomachEntries[i];
+          developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
+          developer.log('  survey_number: "${entry['surveyNumber']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  measurement_type: "${entry['selectedMeasurementType']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  total_area: "${entry['totalArea']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  calculated_area: "${entry['calculatedArea']?.toString() ?? ""}"', name: 'CalculationEntries');
+        }
+        break;
+
+      case 'Non-agricultural':
+        developer.log('Calculation Type: Non-agricultural - ${calculationController.nonAgriculturalEntries.length} entries', name: 'CalculationEntries');
+        for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+          final entry = calculationController.nonAgriculturalEntries[i];
+          developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
+          developer.log('  survey_number: "${entry['surveyNumber']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  survey_type: "${entry['selectedSurveyType']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area: "${entry['area']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area_hectares: "${entry['areaHectares']?.toString() ?? ""}"', name: 'CalculationEntries');
+        }
+        break;
+
+      case 'Counting by number of knots':
+        developer.log('Calculation Type: Counting by number of knots - ${calculationController.knotsCountingEntries.length} entries', name: 'CalculationEntries');
+        for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+          final entry = calculationController.knotsCountingEntries[i];
+          developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
+          developer.log('  survey_number: "${entry['surveyNumber']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  survey_type: "${entry['selectedSurveyType']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area: "${entry['area']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area_hectares: "${entry['areaHectares']?.toString() ?? ""}"', name: 'CalculationEntries');
+        }
+        break;
+
+      case 'Integration calculation':
+        developer.log('Calculation Type: Integration calculation - ${calculationController.integrationCalculationEntries.length} entries', name: 'CalculationEntries');
+        for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+          final entry = calculationController.integrationCalculationEntries[i];
+          developer.log('Entry ${i + 1}:', name: 'CalculationEntries');
+          developer.log('  ct_survey_number: "${entry['ctSurveyNumber']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  selected_ct_survey: "${entry['selectedCTSurvey']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area: "${entry['area']?.toString() ?? ""}"', name: 'CalculationEntries');
+          developer.log('  area_sqm: "${entry['areaSqm']?.toString() ?? ""}"', name: 'CalculationEntries');
+        }
+        break;
+
+      default:
+        developer.log('No calculation type selected or unknown type', name: 'CalculationEntries');
     }
 
-    developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
+    // === APPLICANTS ===
+    developer.log('=== APPLICANTS ===', name: 'DebugInfo');
+    final applicantCount = applicantData['applicantCount'] ?? 0;
+    developer.log('Total applicants: $applicantCount', name: 'Applicants');
 
-    try {
-      // Get calculation data using the fixed method
-      final calculationData = getCalculationData();
+    for (int i = 0; i < applicantCount; i++) {
+      final applicantKey = 'applicant_$i';
+      final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
 
-      if (calculationData.isNotEmpty) {
-        developer.log(
-            'Calculation Type: "${calculationData['calculationType']}"',
-            name: 'CalculationData');
-        if (calculationData['orderNumber']?.toString().isNotEmpty ?? false) {
-          developer.log('Order Number: "${calculationData['orderNumber']}"',
-              name: 'CalculationData');
-        }
-        if (calculationData['orderDate']?.toString().isNotEmpty ?? false) {
-          developer.log('Order Date: "${calculationData['orderDate']}"',
-              name: 'CalculationData');
-        }
-        if (calculationData['schemeOrderNumber']?.toString().isNotEmpty ??
-            false) {
-          developer.log(
-              'Scheme Order Number: "${calculationData['schemeOrderNumber']}"',
-              name: 'CalculationData');
-        }
-        if (calculationData['appointmentDate']?.toString().isNotEmpty ??
-            false) {
-          developer.log(
-              'Appointment Date: "${calculationData['appointmentDate']}"',
-              name: 'CalculationData');
-        }
+      if (applicantInfo != null) {
+        final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
 
-        // Print type-specific fields based on calculation type
-        String calcType = calculationData['calculationType']?.toString() ?? '';
-
-        switch (calcType) {
-          case 'Hddkayam':
-            developer.log(
-                'Hddkayam Entries Count: ${calculationData['hddkayamEntriesCount'] ?? 0}',
-                name: 'Hddkayam');
-
-            // Print detailed entries
-            for (int i = 0;
-            i < calculationController.hddkayamEntries.length;
-            i++) {
-              final entry = calculationController.hddkayamEntries[i];
-              developer.log('Entry ${i + 1}:', name: 'HddkayamEntry');
-              developer.log(
-                  '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
-                  name: 'HddkayamEntry');
-              developer.log(
-                  '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
-                  name: 'HddkayamEntry');
-              developer.log('  Area: "${entry['area'] ?? ''}"',
-                  name: 'HddkayamEntry');
-              developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
-                  name: 'HddkayamEntry');
-              developer.log('  Is Correct: ${entry['isCorrect'] ?? false}',
-                  name: 'HddkayamEntry');
-            }
-            break;
-
-          case 'Stomach':
-            developer.log(
-                'Stomach Entries Count: ${calculationData['stomachEntriesCount'] ?? 0}',
-                name: 'Stomach');
-
-            // Print detailed entries
-            for (int i = 0;
-            i < calculationController.stomachEntries.length;
-            i++) {
-              final entry = calculationController.stomachEntries[i];
-              developer.log('Entry ${i + 1}:', name: 'StomachEntry');
-              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-                  name: 'StomachEntry');
-              developer.log(
-                  '  Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"',
-                  name: 'StomachEntry');
-              developer.log('  Total Area: "${entry['totalArea'] ?? ''}"',
-                  name: 'StomachEntry');
-              developer.log(
-                  '  Calculated Area: "${entry['calculatedArea'] ?? ''}"',
-                  name: 'StomachEntry');
-            }
-            break;
-
-          case 'Non-agricultural':
-            for (int i = 0;
-            i < calculationController.nonAgriculturalEntries.length;
-            i++) {
-              final entry = calculationController.nonAgriculturalEntries[i];
-              developer.log('Entry ${i + 1}:', name: 'NonAgriculturalEntry');
-              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-                  name: 'NonAgriculturalEntry');
-              developer.log(
-                  '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
-                  name: 'NonAgriculturalEntry');
-              developer.log('  Area: "${entry['area'] ?? ''}"',
-                  name: 'NonAgriculturalEntry');
-              developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
-                  name: 'NonAgriculturalEntry');
-            }
-            break;
-
-          case 'Counting by number of knots':
-            for (int i = 0;
-            i < calculationController.knotsCountingEntries.length;
-            i++) {
-              final entry = calculationController.knotsCountingEntries[i];
-              developer.log('Entry ${i + 1}:', name: 'KnotsCountingEntry');
-              developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-                  name: 'KnotsCountingEntry');
-              developer.log(
-                  '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
-                  name: 'KnotsCountingEntry');
-              developer.log('  Area: "${entry['area'] ?? ''}"',
-                  name: 'KnotsCountingEntry');
-              developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
-                  name: 'KnotsCountingEntry');
-            }
-            break;
-
-          case 'Integration calculation':
-            developer.log(
-                'Merger Order Number: "${calculationData['mergerOrderNumber']}"',
-                name: 'IntegrationCalculation');
-            developer.log(
-                'Merger Order Date: "${calculationData['mergerOrderDate']}"',
-                name: 'IntegrationCalculation');
-            developer.log(
-                'Old Merger Number: "${calculationData['oldMergerNumber']}"',
-                name: 'IntegrationCalculation');
-            developer.log(
-                'incorporationOrderFiles raw: ${calculationController.incorporationOrderFiles}',
-                name: 'IntegrationCalculation');
-
-            // Print detailed entries
-            for (int i = 0;
-            i < calculationController.integrationCalculationEntries.length;
-            i++) {
-              final entry =
-              calculationController.integrationCalculationEntries[i];
-              developer.log('Entry ${i + 1}:',
-                  name: 'IntegrationCalculationEntry');
-              developer.log(
-                  '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
-                  name: 'IntegrationCalculationEntry');
-              developer.log(
-                  '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
-                  name: 'IntegrationCalculationEntry');
-              developer.log('  Area: "${entry['area'] ?? ''}"',
-                  name: 'IntegrationCalculationEntry');
-              developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
-                  name: 'IntegrationCalculationEntry');
-            }
-            break;
-
-          default:
-            developer.log(
-                'No calculation type selected or unknown type: "$calcType"',
-                name: 'CalculationData',
-                level: 900);
-        }
-      } else {
-        developer.log(
-            'Calculation data is empty - no calculation type selected or no data entered',
-            name: 'CalculationData',
-            level: 900);
+        developer.log('Applicant ${i + 1}:', name: 'Applicants');
+        developer.log('  agreement: "${applicantInfo['agreement']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  account_holder_name: "${applicantInfo['accountHolderName']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  account_number: "${applicantInfo['accountNumber']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  mobile_number: "${applicantInfo['mobileNumber']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  server_number: "${applicantInfo['serverNumber']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  area: "${applicantInfo['area']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  potkaharaba_area: "${applicantInfo['potkaharabaArea']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  total_area: "${applicantInfo['totalArea']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  plot_no: "${addressInfo?['plotNo']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  address: "${addressInfo?['address']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  address_mobile_number: "${addressInfo?['mobileNumber']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  email: "${addressInfo?['email']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  pincode: "${addressInfo?['pincode']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  address_district: "${addressInfo?['district']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  address_village: "${addressInfo?['village']?.toString() ?? ""}"', name: 'Applicants');
+        developer.log('  post_office: "${addressInfo?['postOffice']?.toString() ?? ""}"', name: 'Applicants');
       }
-    } catch (e) {
-      developer.log('Error in calculation debug: $e',
-          name: 'CalculationData', level: 1000); // Error level
     }
 
-    developer.log('=== STEP FOUR DATA DEBUG ===', name: 'DebugInfo');
+    // === CO-OWNERS ===
+    developer.log('=== CO-OWNERS ===', name: 'DebugInfo');
+    final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+    developer.log('Total co-owners: ${coowners?.length ?? 0}', name: 'CoOwners');
 
-    try {
-      // Get step four data using the fixed method
-      final stepFourData = getStepFourData();
+    if (coowners != null) {
+      for (int i = 0; i < coowners.length; i++) {
+        final coowner = coowners[i];
+        final addressInfo = coowner['address'] as Map<String, String>?;
 
-      if (stepFourData.isNotEmpty) {
-        // Additional debugging for controller state
-        developer.log(
-            'Controller selectedCalculationType: "${stepFourController.selectedCalculationType.value}"',
-            name: 'StepFourController');
-        developer.log(
-            'Controller selectedDuration: "${stepFourController.selectedDuration.value}"',
-            name: 'StepFourController');
-        developer.log(
-            'Controller selectedHolderType: "${stepFourController.selectedHolderType.value}"',
-            name: 'StepFourController');
-        developer.log(
-            'Controller selectedLocationCategory: "${stepFourController.selectedLocationCategory.value}"',
-            name: 'StepFourController');
-        developer.log(
-            'Controller calculationFeeController text: "${stepFourController.calculationFeeController.text}"',
-            name: 'StepFourController');
-        developer.log(
-            'Calculation Fee Numeric: ${stepFourData['calculation_fee_numeric'] ?? 'null'}',
-            name: 'StepFourData');
+        developer.log('Co-Owner ${i + 1}:', name: 'CoOwners');
+        developer.log('  name: "${coowner['name']?.toString() ?? ""}"', name: 'CoOwners');
+        developer.log('  mobile_number: "${coowner['mobileNumber']?.toString() ?? ""}"', name: 'CoOwners');
+        developer.log('  server_number: "${coowner['serverNumber']?.toString() ?? ""}"', name: 'CoOwners');
+        developer.log('  consent: "${coowner['consent']?.toString() ?? ""}"', name: 'CoOwners');
+        developer.log('  plot_no: "${addressInfo?['plotNo'] ?? ""}"', name: 'CoOwners');
+        developer.log('  address: "${addressInfo?['address'] ?? ""}"', name: 'CoOwners');
+        developer.log('  address_mobile_number: "${addressInfo?['mobileNumber'] ?? ""}"', name: 'CoOwners');
+        developer.log('  email: "${addressInfo?['email'] ?? ""}"', name: 'CoOwners');
+        developer.log('  pincode: "${addressInfo?['pincode'] ?? ""}"', name: 'CoOwners');
+        developer.log('  address_district: "${addressInfo?['district'] ?? ""}"', name: 'CoOwners');
+        developer.log('  address_village: "${addressInfo?['village'] ?? ""}"', name: 'CoOwners');
+        developer.log('  post_office: "${addressInfo?['postOffice'] ?? ""}"', name: 'CoOwners');
       }
-    } catch (e) {
-      developer.log('Error in Step Four debug: $e',
-          name: 'StepFourData', level: 1000); // Error level
     }
 
-    developer.log('=== FIFTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
+    // === NEXT OF KIN ===
+    developer.log('=== NEXT OF KIN ===', name: 'DebugInfo');
+    final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+    developer.log('Total next of kin: ${entries?.length ?? 0}', name: 'NextOfKin');
 
-    try {
-      // Get applicant data using the fixed method
-      final applicantData = getFifthController();
-
-      if (applicantData.isNotEmpty) {
-        final applicantCount = applicantData['applicantCount'] ?? 0;
-        developer.log('Total Applicants: $applicantCount',
-            name: 'ApplicantData');
-
-        // Debug each applicant entry
-        for (int i = 0; i < applicantCount; i++) {
-          final applicantKey = 'applicant_$i';
-          final applicantInfo =
-          applicantData[applicantKey] as Map<String, dynamic>?;
-
-          if (applicantInfo != null) {
-            developer.log('=== APPLICANT ${i + 1} ===', name: 'ApplicantEntry');
-            developer.log('Agreement: "${applicantInfo['agreement'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log(
-                'Account Holder Name: "${applicantInfo['accountHolderName'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log(
-                'Account Number: "${applicantInfo['accountNumber'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log(
-                'Mobile Number: "${applicantInfo['mobileNumber'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log(
-                'Server Number: "${applicantInfo['serverNumber'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log('Area: "${applicantInfo['area'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log(
-                'Potkaharaba Area: "${applicantInfo['potkaharabaArea'] ?? ''}"',
-                name: 'ApplicantEntry');
-            developer.log('Total Area: "${applicantInfo['totalArea'] ?? ''}"',
-                name: 'ApplicantEntry');
-
-            // Debug address data
-            final addressInfo =
-            applicantInfo['address'] as Map<String, dynamic>?;
-            if (addressInfo != null && addressInfo.isNotEmpty) {
-              developer.log('=== ADDRESS ${i + 1} ===',
-                  name: 'ApplicantAddress');
-              developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Address: "${addressInfo['address'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Email: "${addressInfo['email'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('District: "${addressInfo['district'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Village: "${addressInfo['village'] ?? ''}"',
-                  name: 'ApplicantAddress');
-              developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
-                  name: 'ApplicantAddress');
-            } else {
-              developer.log('No address data for applicant ${i + 1}',
-                  name: 'ApplicantAddress', level: 900);
-            }
-          } else {
-            developer.log('Applicant ${i + 1} data is null',
-                name: 'ApplicantEntry', level: 900);
-          }
-        }
-      } else {
-        developer.log('Applicant data is empty - no applicants added',
-            name: 'ApplicantData', level: 900);
+    if (entries != null) {
+      for (int i = 0; i < entries.length; i++) {
+        final entry = entries[i];
+        developer.log('Next of Kin ${i + 1}:', name: 'NextOfKin');
+        developer.log('  address: "${entry['address']?.toString() ?? ""}"', name: 'NextOfKin');
+        developer.log('  mobile: "${entry['mobile']?.toString() ?? ""}"', name: 'NextOfKin');
+        developer.log('  survey_no: "${entry['surveyNo']?.toString() ?? ""}"', name: 'NextOfKin');
+        developer.log('  direction: "${entry['direction']?.toString() ?? ""}"', name: 'NextOfKin');
+        developer.log('  natural_resources: "${entry['naturalResources']?.toString() ?? ""}"', name: 'NextOfKin');
       }
-    } catch (e) {
-      developer.log('Error in Applicant debug: $e',
-          name: 'ApplicantData', level: 1000); // Error level
     }
 
-    developer.log('=== END APPLICANT DEBUG ===', name: 'DebugInfo');
-
-    developer.log('=== SIXTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
-
-    try {
-      // Get co-owner data using the fixed method
-      final coOwnerData = getSixthController();
-      if (coOwnerData.isNotEmpty) {
-        final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
-
-        if (coowners != null && coowners.isNotEmpty) {
-          for (int i = 0; i < coowners.length; i++) {
-            final coowner = coowners[i];
-
-            developer.log('=== CO-OWNER ${i + 1} ===', name: 'CoOwnerEntry');
-            developer.log('Name: "${coowner['name'] ?? ''}"',
-                name: 'CoOwnerEntry');
-            developer.log('Mobile Number: "${coowner['mobileNumber'] ?? ''}"',
-                name: 'CoOwnerEntry');
-            developer.log('Server Number: "${coowner['serverNumber'] ?? ''}"',
-                name: 'CoOwnerEntry');
-            developer.log('Consent: "${coowner['consent'] ?? ''}"',
-                name: 'CoOwnerEntry');
-
-            // Debug address data
-            final addressInfo = coowner['address'] as Map<String, String>?;
-            if (addressInfo != null && addressInfo.isNotEmpty) {
-              developer.log('=== CO-OWNER ${i + 1} ADDRESS ===',
-                  name: 'CoOwnerAddress');
-              developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Address: "${addressInfo['address'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Email: "${addressInfo['email'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('District: "${addressInfo['district'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Village: "${addressInfo['village'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-              developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
-                  name: 'CoOwnerAddress');
-            } else {
-              developer.log('No address data for co-owner ${i + 1}',
-                  name: 'CoOwnerAddress', level: 900);
-            }
-
-            // Show formatted address
-            final formattedAddress =
-            surveySixthController.getFormattedAddress(i);
-            developer.log(
-                'Formatted address for co-owner ${i + 1}: "$formattedAddress"',
-                name: 'CoOwnerFormatted');
-          }
-        } else {
-          developer.log('No co-owners in the list',
-              name: 'CoOwnerData', level: 900);
-        }
-      } else {
-        developer.log('Co-owner data is empty - no co-owners added',
-            name: 'CoOwnerData', level: 900);
-      }
-    } catch (e) {
-      developer.log('Error in Co-owner debug: $e',
-          name: 'CoOwnerData', level: 1000); // Error level
-    }
-
-    developer.log('=== NEXT OF KIN DATA DEBUG ===', name: 'DebugInfo');
-
-    try {
-      // Get next of kin data using the fixed method
-      final nextOfKinData = getSeventhController();
-
-      if (nextOfKinData.isNotEmpty) {
-        final entries =
-        nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
-
-        if (entries != null && entries.isNotEmpty) {
-          for (int i = 0; i < entries.length; i++) {
-            final entry = entries[i];
-
-            developer.log('=== NEXT OF KIN ${i + 1} ===',
-                name: 'NextOfKinEntry');
-            developer.log('Address: "${entry['address'] ?? ''}"',
-                name: 'NextOfKinEntry');
-            developer.log('Mobile: "${entry['mobile'] ?? ''}"',
-                name: 'NextOfKinEntry');
-            developer.log('Survey No: "${entry['surveyNo'] ?? ''}"',
-                name: 'NextOfKinEntry');
-            developer.log('Direction: "${entry['direction'] ?? ''}"',
-                name: 'NextOfKinEntry');
-            developer.log(
-                'Natural Resources: "${entry['naturalResources'] ?? ''}"',
-                name: 'NextOfKinEntry');
-
-            // Check if required fields are filled
-            final requiredFields = [
-              'address',
-              'mobile',
-              'surveyNo',
-              'direction',
-              'naturalResources'
-            ];
-            final missingFields = <String>[];
-
-            for (String field in requiredFields) {
-              if ((entry[field] ?? '').toString().trim().isEmpty) {
-                missingFields.add(field);
-              }
-            }
-          }
-        } else {
-          developer.log('No next of kin entries in the list',
-              name: 'NextOfKinData', level: 900);
-        }
-      } else {
-        developer.log('Next of kin data is empty - no entries added',
-            name: 'NextOfKinData', level: 900);
-      }
-    } catch (e) {
-      developer.log('Error in Next of Kin debug: $e',
-          name: 'NextOfKinData', level: 1000); // Error level
-    }
-
-    // developer.log('=== END NEXT OF KIN DEBUG ===', name: 'DebugInfo');
-
-    developer.log('=== DOCUMENTS DATA DEBUG ===', name: 'DebugInfo');
-
-    try {
-      // Get documents data using the fixed method
-      final documentsData = getDocumentsData();
-
-      if (documentsData.isNotEmpty) {
-        // Identity Card Information
-        developer.log('=== IDENTITY CARD ===', name: 'DocumentsData');
-        developer.log(
-            'Identity Card Type: "${documentsData['identityCardType'] ?? ''}"',
-            name: 'DocumentsData');
-
-        final identityFiles =
-        documentsData['identityCardFiles'] as List<String>?;
-        if (identityFiles != null && identityFiles.isNotEmpty) {
-          developer.log('Identity Card Path : "$identityFiles"',
-              name: 'DocumentsData');
-          // }
-        } else {
-          developer.log('No identity card files uploaded',
-              name: 'DocumentsData', level: 900);
-        }
-
-        // Document Files Information
-        final documentTypes = [
-          {'key': 'sevenTwelveFiles', 'name': '7/12 Documents'},
-          {'key': 'noteFiles', 'name': 'Note Documents'},
-          {'key': 'partitionFiles', 'name': 'Partition Documents'},
-          {'key': 'schemeSheetFiles', 'name': 'Scheme Sheet Documents'},
-          {'key': 'oldCensusMapFiles', 'name': 'Old Census Map Documents'},
-          {
-            'key': 'demarcationCertificateFiles',
-            'name': 'Demarcation Certificate Documents'
-          },
-        ];
-
-        for (final docType in documentTypes) {
-          final files = documentsData[docType['key']] as List<String>?;
-          developer.log('=== ${docType['name']?.toUpperCase()} ===',
-              name: 'DocumentsData');
-
-          if (files != null && files.isNotEmpty) {
-            for (int i = 0; i < files.length; i++) {
-              final fileName = files[i].split('/').last;
-              developer.log('${docType['name']} Path ${i + 1}: "${files[i]}"',
-                  name: 'DocumentsData');
-            }
-          } else {
-            developer.log('No ${docType['name']?.toLowerCase()} uploaded',
-                name: 'DocumentsData', level: 900);
-          }
-        }
-      }
-    } catch (e) {
-      developer.log('Error in Documents debug: $e',
-          name: 'DocumentsData', level: 1000); // Error level
-    }
-
-    developer.log('=== END DOCUMENTS DEBUG ===', name: 'DebugInfo');
+    // === DOCUMENTS ===
+    developer.log('=== DOCUMENTS ===', name: 'DebugInfo');
+    developer.log('identity_card_type: "${surveyEightController.selectedIdentityType.value}"', name: 'Documents');
+    developer.log('identity_card_files: ${surveyEightController.identityCardFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('seven_twelve_files: ${surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('note_files: ${surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('partition_files: ${surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('scheme_sheet_files: ${surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('old_census_map_files: ${surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
+    developer.log('demarcation_certificate_files: ${surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? []}', name: 'Documents');
 
     developer.log('=== END DEBUG ===', name: 'DebugInfo');
   }
@@ -1195,9 +1333,8 @@ class MainSurveyController extends GetxController {
 
 
 
-
   Map<String, dynamic> PostRequestBody() {
-    // Get all data first
+    // Get all data
     final surveyData = getSurveyInfoData();
     final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
     final calculationData = getCalculationData();
@@ -1205,7 +1342,6 @@ class MainSurveyController extends GetxController {
     final applicantData = getFifthController();
     final coOwnerData = getSixthController();
     final nextOfKinData = getSeventhController();
-    final documentsData = getDocumentsData();
 
     return {
       // === PERSONAL INFO ===
@@ -1219,50 +1355,25 @@ class MainSurveyController extends GetxController {
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
 
       // === SURVEY INFO ===
-      "survey_info": {
-        "survey_number": surveyInfo?['survey_number']?.toString() ?? "",
-        "department": surveyInfo?['department']?.toString() ?? "",
-        "district": surveyInfo?['district']?.toString() ?? "",
-        "taluka": surveyInfo?['taluka']?.toString() ?? "",
-        "village": surveyInfo?['village']?.toString() ?? "",
-        "office": surveyInfo?['office']?.toString() ?? "",
-      },
+      "survey_number": surveyInfo?['survey_number']?.toString() ?? "",
+      "department": surveyInfo?['department']?.toString() ?? "",
+      "district": surveyInfo?['district']?.toString() ?? "",
+      "taluka": surveyInfo?['taluka']?.toString() ?? "",
+      "village": surveyInfo?['village']?.toString() ?? "",
+      "office": surveyInfo?['office']?.toString() ?? "",
 
-      // === CALCULATION DATA ===
-      "calculation_info": {
-        "calculation_type": calculationData['calculationType']?.toString() ?? "",
-        "order_number": calculationData['orderNumber']?.toString() ?? "",
-        "order_date": calculationData['orderDate']?.toString() ?? "",
-        "scheme_order_number": calculationData['schemeOrderNumber']?.toString() ?? "",
-        "appointment_date": calculationData['appointmentDate']?.toString() ?? "",
-        "merger_order_number": calculationData['mergerOrderNumber']?.toString() ?? "",
-        "merger_order_date": calculationData['mergerOrderDate']?.toString() ?? "",
-        "old_merger_number": calculationData['oldMergerNumber']?.toString() ?? "",
-      },
+      // === CALCULATION INFO ===
+      "calculation_type": calculationData['calculationType']?.toString() ?? "",
 
-      // === STEP FOUR DATA ===
-      "step_four_info": {
-        "selected_calculation_type": stepFourController.selectedCalculationType.value,
-        "selected_duration": stepFourController.selectedDuration.value,
-        "selected_holder_type": stepFourController.selectedHolderType.value,
-        "selected_location_category": stepFourController.selectedLocationCategory.value,
-        "calculation_fee": stepFourController.calculationFeeController.text,
-        "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
-      },
+      // === STEP FOUR INFO ===
+      "selected_calculation_type": stepFourController.selectedCalculationType.value,
+      "selected_duration": stepFourController.selectedDuration.value,
+      "selected_holder_type": stepFourController.selectedHolderType.value,
+      "selected_location_category": stepFourController.selectedLocationCategory.value,
+      "calculation_fee": stepFourController.calculationFeeController.text.trim(),
+      "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
 
-      // === DOCUMENT INFO ===
-      "documents": {
-        "identity_card_type": documentsData['identityCardType']?.toString() ?? "",
-        "identity_card_file": ((documentsData['identityCardFiles'] as List?)?.isNotEmpty == true) ? (documentsData['identityCardFiles'] as List)[0].toString() : "",
-        "seven_twelve_file": ((documentsData['sevenTwelveFiles'] as List?)?.isNotEmpty == true) ? (documentsData['sevenTwelveFiles'] as List)[0].toString() : "",
-        "note_file": ((documentsData['noteFiles'] as List?)?.isNotEmpty == true) ? (documentsData['noteFiles'] as List)[0].toString() : "",
-        "partition_file": ((documentsData['partitionFiles'] as List?)?.isNotEmpty == true) ? (documentsData['partitionFiles'] as List)[0].toString() : "",
-        "scheme_sheet_file": ((documentsData['schemeSheetFiles'] as List?)?.isNotEmpty == true) ? (documentsData['schemeSheetFiles'] as List)[0].toString() : "",
-        "old_census_map_file": ((documentsData['oldCensusMapFiles'] as List?)?.isNotEmpty == true) ? (documentsData['oldCensusMapFiles'] as List)[0].toString() : "",
-        "demarcation_certificate_file": ((documentsData['demarcationCertificateFiles'] as List?)?.isNotEmpty == true) ? (documentsData['demarcationCertificateFiles'] as List)[0].toString() : "",
-      },
-
-      // === CALCULATION ENTRIES (Based on Type) ===
+      // === CALCULATION ENTRIES ===
       "calculation_entries": () {
         String calcType = calculationData['calculationType']?.toString() ?? '';
         List<Map<String, dynamic>> entries = [];
@@ -1276,7 +1387,6 @@ class MainSurveyController extends GetxController {
                 "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
                 "area": entry['area']?.toString() ?? "",
                 "area_sqm": entry['areaSqm']?.toString() ?? "",
-                "is_correct": (entry['isCorrect'] ?? false).toString(),
               });
             }
             break;
@@ -1296,6 +1406,18 @@ class MainSurveyController extends GetxController {
           case 'Non-agricultural':
             for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
               final entry = calculationController.nonAgriculturalEntries[i];
+              entries.add({
+                "survey_number": entry['surveyNumber']?.toString() ?? "",
+                "survey_type": entry['selectedSurveyType']?.toString() ?? "",
+                "area": entry['area']?.toString() ?? "",
+                "area_hectares": entry['areaHectares']?.toString() ?? "",
+              });
+            }
+            break;
+
+          case 'Counting by number of knots':
+            for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+              final entry = calculationController.knotsCountingEntries[i];
               entries.add({
                 "survey_number": entry['surveyNumber']?.toString() ?? "",
                 "survey_type": entry['selectedSurveyType']?.toString() ?? "",
@@ -1342,16 +1464,14 @@ class MainSurveyController extends GetxController {
               "area": applicantInfo['area']?.toString() ?? "",
               "potkaharaba_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
               "total_area": applicantInfo['totalArea']?.toString() ?? "",
-              "address": {
-                "plot_no": addressInfo?['plotNo']?.toString() ?? "",
-                "address": addressInfo?['address']?.toString() ?? "",
-                "mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
-                "email": addressInfo?['email']?.toString() ?? "",
-                "pincode": addressInfo?['pincode']?.toString() ?? "",
-                "district": addressInfo?['district']?.toString() ?? "",
-                "village": addressInfo?['village']?.toString() ?? "",
-                "post_office": addressInfo?['postOffice']?.toString() ?? "",
-              }
+              "plot_no": addressInfo?['plotNo']?.toString() ?? "",
+              "address": addressInfo?['address']?.toString() ?? "",
+              "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
+              "email": addressInfo?['email']?.toString() ?? "",
+              "pincode": addressInfo?['pincode']?.toString() ?? "",
+              "address_district": addressInfo?['district']?.toString() ?? "",
+              "address_village": addressInfo?['village']?.toString() ?? "",
+              "post_office": addressInfo?['postOffice']?.toString() ?? "",
             });
           }
         }
@@ -1374,16 +1494,14 @@ class MainSurveyController extends GetxController {
               "mobile_number": coowner['mobileNumber']?.toString() ?? "",
               "server_number": coowner['serverNumber']?.toString() ?? "",
               "consent": coowner['consent']?.toString() ?? "",
-              "address": {
-                "plot_no": addressInfo?['plotNo'] ?? "",
-                "address": addressInfo?['address'] ?? "",
-                "mobile_number": addressInfo?['mobileNumber'] ?? "",
-                "email": addressInfo?['email'] ?? "",
-                "pincode": addressInfo?['pincode'] ?? "",
-                "district": addressInfo?['district'] ?? "",
-                "village": addressInfo?['village'] ?? "",
-                "post_office": addressInfo?['postOffice'] ?? "",
-              }
+              "plot_no": addressInfo?['plotNo'] ?? "",
+              "address": addressInfo?['address'] ?? "",
+              "address_mobile_number": addressInfo?['mobileNumber'] ?? "",
+              "email": addressInfo?['email'] ?? "",
+              "pincode": addressInfo?['pincode'] ?? "",
+              "address_district": addressInfo?['district'] ?? "",
+              "address_village": addressInfo?['village'] ?? "",
+              "post_office": addressInfo?['postOffice'] ?? "",
             });
           }
         }
@@ -1411,9 +1529,18 @@ class MainSurveyController extends GetxController {
 
         return nextOfKinList;
       }(),
+
+      // === DOCUMENTS ===
+      "identity_card_type": surveyEightController.selectedIdentityType.value,
+      "identity_card_files": surveyEightController.identityCardFiles?.map((file) => file.toString()).toList() ?? [],
+      "seven_twelve_files": surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? [],
+      "note_files": surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? [],
+      "partition_files": surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? [],
+      "scheme_sheet_files": surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? [],
+      "old_census_map_files": surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? [],
+      "demarcation_certificate_files": surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? [],
     };
   }
-
 
 
 
