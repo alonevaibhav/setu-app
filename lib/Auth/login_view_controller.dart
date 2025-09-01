@@ -389,6 +389,7 @@ import 'package:get/get.dart';
 import 'package:setuapp/Auth/token_manager.dart';
 import 'package:setuapp/Route%20Manager/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../API Service/api_service.dart';
 import '../Constants/color_constant.dart';
@@ -582,9 +583,6 @@ class LoginViewController extends GetxController {
 
             isLoggedIn.value = true;
 
-            // Save username for future convenience
-            // await saveUsername();
-
             // Success message
             Get.snackbar(
               'Welcome ${loginData.userName}!',
@@ -627,6 +625,35 @@ class LoginViewController extends GetxController {
   }
 
   // Save user session data
+  // Future<void> _saveUserSession(LoginData loginData) async {
+  //   try {
+  //     // Save token with TokenManager
+  //     await TokenManager.saveToken(
+  //       loginData.token,
+  //       expirationTime: loginData.expirationTime,
+  //     );
+  //
+  //     // Save user session data
+  //     await UserSession.saveSession(
+  //       token: loginData.token,
+  //       role: loginData.role,
+  //       email: loginData.profile.username,
+  //       profile: loginData.profile,
+  //     );
+  //
+  //     // Update API service
+  //     await ApiService.setToken(loginData.token);
+  //     print('Saving UID: ${loginData.token}');
+  //     await ApiService.setUid(loginData.userId.toString());
+  //
+  //   } catch (e) {
+  //     print('Error saving user session: $e');
+  //     throw Exception('Failed to save session data');
+  //   }
+  // }
+
+  // Enhanced logout function
+
   Future<void> _saveUserSession(LoginData loginData) async {
     try {
       // Save token with TokenManager
@@ -643,9 +670,13 @@ class LoginViewController extends GetxController {
         profile: loginData.profile,
       );
 
-      // Update API service
+      // Update API service with token
       await ApiService.setToken(loginData.token);
-      await ApiService.setUid(loginData.userId.toString());
+
+      // Extract and save user ID from JWT token
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(loginData.token);
+      String userId = decodedToken['id'].toString(); // Change 'id' to your field name
+      await ApiService.setUid(userId);
 
     } catch (e) {
       print('Error saving user session: $e');
@@ -653,7 +684,6 @@ class LoginViewController extends GetxController {
     }
   }
 
-  // Enhanced logout function
   Future<void> logout({bool sessionExpired = false}) async {
     try {
       isLoading.value = true;

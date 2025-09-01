@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/step_four.dart';
@@ -11,6 +13,10 @@ import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
 import 'dart:developer' as developer;
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class MainSurveyController extends GetxController {
   // Navigation State
@@ -208,7 +214,8 @@ class MainSurveyController extends GetxController {
 
     // Print the current survey data to the console
     // print('Current Survey Data: ${surveyData.value}');
-    debugPrintInfo();
+    // debugPrintInfo();
+    submitSurvey();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -651,470 +658,6 @@ class MainSurveyController extends GetxController {
     }
   }
 
-  ///////////////////////////////////
-  // DEBUG PRINT METHOD
-  ///////////////////////////////////
-
-  // void debugPrintInfo() {
-  //   developer.log('=== PERSONAL INFO DEBUG ===', name: 'DebugInfo');
-  //
-  //   developer.log(
-  //       'Is holder themselves: ${personalInfoController.isHolderThemselves.value}',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'Has authority on behalf: ${personalInfoController.hasAuthorityOnBehalf.value}',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'Has been counted before: ${personalInfoController.hasBeenCountedBefore.value}',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'POA registration number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'POA registration date: "${personalInfoController.poaRegistrationDateController.text.trim()}"',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'POA issuer name: "${personalInfoController.poaIssuerNameController.text.trim()}"',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'POA holder name: "${personalInfoController.poaHolderNameController.text.trim()}"',
-  //       name: 'PersonalInfo');
-  //   developer.log(
-  //       'POA holder address: "${personalInfoController.poaHolderAddressController.text.trim()}"',
-  //       name: 'PersonalInfo');
-  //
-  //   developer.log('=== SURVEY INFO DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   final surveyData = getSurveyInfoData();
-  //   final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
-  //
-  //   if (surveyInfo != null) {
-  //     developer.log('Survey Number: "${surveyInfo['survey_number']}"',
-  //         name: 'SurveyInfo');
-  //     developer.log('Department: "${surveyInfo['department']}"',
-  //         name: 'SurveyInfo');
-  //     developer.log('District: "${surveyInfo['district']}"',
-  //         name: 'SurveyInfo');
-  //     developer.log('Taluka: "${surveyInfo['taluka']}"', name: 'SurveyInfo');
-  //     developer.log('Village: "${surveyInfo['village']}"', name: 'SurveyInfo');
-  //     developer.log('Office: "${surveyInfo['office']}"', name: 'SurveyInfo');
-  //   } else {
-  //     developer.log('Survey info data is null',
-  //         name: 'SurveyInfo', level: 900); // Warning level
-  //   }
-  //
-  //   developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   try {
-  //     // Get calculation data using the fixed method
-  //     final calculationData = getCalculationData();
-  //
-  //     if (calculationData.isNotEmpty) {
-  //       developer.log(
-  //           'Calculation Type: "${calculationData['calculationType']}"',
-  //           name: 'CalculationData');
-  //
-  //
-  //       // Print type-specific fields based on calculation type
-  //       String calcType = calculationData['calculationType']?.toString() ?? '';
-  //
-  //       switch (calcType) {
-  //         case 'Hddkayam':
-  //           developer.log(
-  //               'Hddkayam Entries Count: ${calculationData['hddkayamEntriesCount'] ?? 0}',
-  //               name: 'Hddkayam');
-  //
-  //           // Print detailed entries
-  //           for (int i = 0;
-  //           i < calculationController.hddkayamEntries.length;
-  //           i++) {
-  //             final entry = calculationController.hddkayamEntries[i];
-  //             developer.log('Entry ${i + 1}:', name: 'HddkayamEntry');
-  //             developer.log(
-  //                 '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
-  //                 name: 'HddkayamEntry');
-  //             developer.log(
-  //                 '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
-  //                 name: 'HddkayamEntry');
-  //             developer.log('  Area: "${entry['area'] ?? ''}"',
-  //                 name: 'HddkayamEntry');
-  //             developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
-  //                 name: 'HddkayamEntry');
-  //             developer.log('  Is Correct: ${entry['isCorrect'] ?? false}',
-  //                 name: 'HddkayamEntry');
-  //           }
-  //           break;
-  //
-  //         case 'Stomach':
-  //           developer.log(
-  //               'Stomach Entries Count: ${calculationData['stomachEntriesCount'] ?? 0}',
-  //               name: 'Stomach');
-  //
-  //           // Print detailed entries
-  //           for (int i = 0;
-  //           i < calculationController.stomachEntries.length;
-  //           i++) {
-  //             final entry = calculationController.stomachEntries[i];
-  //             developer.log('Entry ${i + 1}:', name: 'StomachEntry');
-  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-  //                 name: 'StomachEntry');
-  //             developer.log(
-  //                 '  Measurement Type: "${entry['selectedMeasurementType'] ?? ''}"',
-  //                 name: 'StomachEntry');
-  //             developer.log('  Total Area: "${entry['totalArea'] ?? ''}"',
-  //                 name: 'StomachEntry');
-  //             developer.log(
-  //                 '  Calculated Area: "${entry['calculatedArea'] ?? ''}"',
-  //                 name: 'StomachEntry');
-  //           }
-  //           break;
-  //
-  //         case 'Non-agricultural':
-  //           for (int i = 0;
-  //           i < calculationController.nonAgriculturalEntries.length;
-  //           i++) {
-  //             final entry = calculationController.nonAgriculturalEntries[i];
-  //             developer.log('Entry ${i + 1}:', name: 'NonAgriculturalEntry');
-  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-  //                 name: 'NonAgriculturalEntry');
-  //             developer.log(
-  //                 '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
-  //                 name: 'NonAgriculturalEntry');
-  //             developer.log('  Area: "${entry['area'] ?? ''}"',
-  //                 name: 'NonAgriculturalEntry');
-  //             developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
-  //                 name: 'NonAgriculturalEntry');
-  //           }
-  //           break;
-  //
-  //         case 'Counting by number of knots':
-  //           for (int i = 0;
-  //           i < calculationController.knotsCountingEntries.length;
-  //           i++) {
-  //             final entry = calculationController.knotsCountingEntries[i];
-  //             developer.log('Entry ${i + 1}:', name: 'KnotsCountingEntry');
-  //             developer.log('  Survey Number: "${entry['surveyNumber'] ?? ''}"',
-  //                 name: 'KnotsCountingEntry');
-  //             developer.log(
-  //                 '  Survey Type: "${entry['selectedSurveyType'] ?? ''}"',
-  //                 name: 'KnotsCountingEntry');
-  //             developer.log('  Area: "${entry['area'] ?? ''}"',
-  //                 name: 'KnotsCountingEntry');
-  //             developer.log('  Area Hectares: "${entry['areaHectares'] ?? ''}"',
-  //                 name: 'KnotsCountingEntry');
-  //           }
-  //           break;
-  //
-  //         case 'Integration calculation':
-  //           developer.log(
-  //               'Merger Order Number: "${calculationData['mergerOrderNumber']}"',
-  //               name: 'IntegrationCalculation');
-  //           developer.log(
-  //               'Merger Order Date: "${calculationData['mergerOrderDate']}"',
-  //               name: 'IntegrationCalculation');
-  //           developer.log(
-  //               'Old Merger Number: "${calculationData['oldMergerNumber']}"',
-  //               name: 'IntegrationCalculation');
-  //           developer.log(
-  //               'incorporationOrderFiles raw: ${calculationController.incorporationOrderFiles}',
-  //               name: 'IntegrationCalculation');
-  //
-  //           // Print detailed entries
-  //           for (int i = 0;
-  //           i < calculationController.integrationCalculationEntries.length;
-  //           i++) {
-  //             final entry =
-  //             calculationController.integrationCalculationEntries[i];
-  //             developer.log('Entry ${i + 1}:',
-  //                 name: 'IntegrationCalculationEntry');
-  //             developer.log(
-  //                 '  CT Survey Number: "${entry['ctSurveyNumber'] ?? ''}"',
-  //                 name: 'IntegrationCalculationEntry');
-  //             developer.log(
-  //                 '  Selected CT Survey: "${entry['selectedCTSurvey'] ?? ''}"',
-  //                 name: 'IntegrationCalculationEntry');
-  //             developer.log('  Area: "${entry['area'] ?? ''}"',
-  //                 name: 'IntegrationCalculationEntry');
-  //             developer.log('  Area Sqm: "${entry['areaSqm'] ?? ''}"',
-  //                 name: 'IntegrationCalculationEntry');
-  //           }
-  //           break;
-  //
-  //         default:
-  //           developer.log(
-  //               'No calculation type selected or unknown type: "$calcType"',
-  //               name: 'CalculationData',
-  //               level: 900);
-  //       }
-  //     } else {
-  //       developer.log(
-  //           'Calculation data is empty - no calculation type selected or no data entered',
-  //           name: 'CalculationData',
-  //           level: 900);
-  //     }
-  //   } catch (e) {
-  //     developer.log('Error in calculation debug: $e',
-  //         name: 'CalculationData', level: 1000); // Error level
-  //   }
-  //
-  //   developer.log('=== STEP FOUR DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   try {
-  //     // Get step four data using the fixed method
-  //     final stepFourData = getStepFourData();
-  //
-  //     if (stepFourData.isNotEmpty) {
-  //       // Additional debugging for controller state
-  //       developer.log(
-  //           'Controller selectedCalculationType: "${stepFourController.selectedCalculationType.value}"',
-  //           name: 'StepFourController');
-  //       developer.log(
-  //           'Controller selectedDuration: "${stepFourController.selectedDuration.value}"',
-  //           name: 'StepFourController');
-  //       developer.log(
-  //           'Controller selectedHolderType: "${stepFourController.selectedHolderType.value}"',
-  //           name: 'StepFourController');
-  //       developer.log(
-  //           'Controller selectedLocationCategory: "${stepFourController.selectedLocationCategory.value}"',
-  //           name: 'StepFourController');
-  //       developer.log(
-  //           'Controller calculationFeeController text: "${stepFourController.calculationFeeController.text}"',
-  //           name: 'StepFourController');
-  //       developer.log(
-  //           'Calculation Fee Numeric: ${stepFourData['calculation_fee_numeric'] ?? 'null'}',
-  //           name: 'StepFourData');
-  //     }
-  //   } catch (e) {
-  //     developer.log('Error in Step Four debug: $e',
-  //         name: 'StepFourData', level: 1000); // Error level
-  //   }
-  //
-  //   developer.log('=== FIFTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   try {
-  //     // Get applicant data using the fixed method
-  //     final applicantData = getFifthController();
-  //
-  //     if (applicantData.isNotEmpty) {
-  //       final applicantCount = applicantData['applicantCount'] ?? 0;
-  //       developer.log('Total Applicants: $applicantCount',
-  //           name: 'ApplicantData');
-  //
-  //       // Debug each applicant entry
-  //       for (int i = 0; i < applicantCount; i++) {
-  //         final applicantKey = 'applicant_$i';
-  //         final applicantInfo =
-  //         applicantData[applicantKey] as Map<String, dynamic>?;
-  //
-  //         if (applicantInfo != null) {
-  //           developer.log('=== APPLICANT ${i + 1} ===', name: 'ApplicantEntry');
-  //           developer.log('Agreement: "${applicantInfo['agreement'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log(
-  //               'Account Holder Name: "${applicantInfo['accountHolderName'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log(
-  //               'Account Number: "${applicantInfo['accountNumber'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log(
-  //               'Mobile Number: "${applicantInfo['mobileNumber'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log(
-  //               'Server Number: "${applicantInfo['serverNumber'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log('Area: "${applicantInfo['area'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log(
-  //               'Potkaharaba Area: "${applicantInfo['potkaharabaArea'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //           developer.log('Total Area: "${applicantInfo['totalArea'] ?? ''}"',
-  //               name: 'ApplicantEntry');
-  //
-  //           // Debug address data
-  //           final addressInfo =
-  //           applicantInfo['address'] as Map<String, dynamic>?;
-  //           if (addressInfo != null && addressInfo.isNotEmpty) {
-  //             developer.log('=== ADDRESS ${i + 1} ===',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Address: "${addressInfo['address'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Email: "${addressInfo['email'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('District: "${addressInfo['district'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Village: "${addressInfo['village'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //             developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
-  //                 name: 'ApplicantAddress');
-  //           } else {
-  //             developer.log('No address data for applicant ${i + 1}',
-  //                 name: 'ApplicantAddress', level: 900);
-  //           }
-  //         } else {
-  //           developer.log('Applicant ${i + 1} data is null',
-  //               name: 'ApplicantEntry', level: 900);
-  //         }
-  //       }
-  //     } else {
-  //       developer.log('Applicant data is empty - no applicants added',
-  //           name: 'ApplicantData', level: 900);
-  //     }
-  //   } catch (e) {
-  //     developer.log('Error in Applicant debug: $e',
-  //         name: 'ApplicantData', level: 1000); // Error level
-  //   }
-  //
-  //   developer.log('=== END APPLICANT DEBUG ===', name: 'DebugInfo');
-  //
-  //   developer.log('=== SIXTH CONTROLLER DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   try {
-  //     // Get co-owner data using the fixed method
-  //     final coOwnerData = getSixthController();
-  //     if (coOwnerData.isNotEmpty) {
-  //       final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
-  //
-  //       if (coowners != null && coowners.isNotEmpty) {
-  //         for (int i = 0; i < coowners.length; i++) {
-  //           final coowner = coowners[i];
-  //
-  //           developer.log('=== CO-OWNER ${i + 1} ===', name: 'CoOwnerEntry');
-  //           developer.log('Name: "${coowner['name'] ?? ''}"',
-  //               name: 'CoOwnerEntry');
-  //           developer.log('Mobile Number: "${coowner['mobileNumber'] ?? ''}"',
-  //               name: 'CoOwnerEntry');
-  //           developer.log('Server Number: "${coowner['serverNumber'] ?? ''}"',
-  //               name: 'CoOwnerEntry');
-  //           developer.log('Consent: "${coowner['consent'] ?? ''}"',
-  //               name: 'CoOwnerEntry');
-  //
-  //           // Debug address data
-  //           final addressInfo = coowner['address'] as Map<String, String>?;
-  //           if (addressInfo != null && addressInfo.isNotEmpty) {
-  //             developer.log('=== CO-OWNER ${i + 1} ADDRESS ===',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Plot No: "${addressInfo['plotNo'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Address: "${addressInfo['address'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Mobile: "${addressInfo['mobileNumber'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Email: "${addressInfo['email'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Pincode: "${addressInfo['pincode'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('District: "${addressInfo['district'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Village: "${addressInfo['village'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //             developer.log('Post Office: "${addressInfo['postOffice'] ?? ''}"',
-  //                 name: 'CoOwnerAddress');
-  //           } else {
-  //             developer.log('No address data for co-owner ${i + 1}',
-  //                 name: 'CoOwnerAddress', level: 900);
-  //           }
-  //
-  //           // Show formatted address
-  //           final formattedAddress =
-  //           surveySixthController.getFormattedAddress(i);
-  //           developer.log(
-  //               'Formatted address for co-owner ${i + 1}: "$formattedAddress"',
-  //               name: 'CoOwnerFormatted');
-  //         }
-  //       } else {
-  //         developer.log('No co-owners in the list',
-  //             name: 'CoOwnerData', level: 900);
-  //       }
-  //     } else {
-  //       developer.log('Co-owner data is empty - no co-owners added',
-  //           name: 'CoOwnerData', level: 900);
-  //     }
-  //   } catch (e) {
-  //     developer.log('Error in Co-owner debug: $e',
-  //         name: 'CoOwnerData', level: 1000); // Error level
-  //   }
-  //
-  //   developer.log('=== NEXT OF KIN DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   try {
-  //     // Get next of kin data using the fixed method
-  //     final nextOfKinData = getSeventhController();
-  //
-  //     if (nextOfKinData.isNotEmpty) {
-  //       final entries =
-  //       nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
-  //
-  //       if (entries != null && entries.isNotEmpty) {
-  //         for (int i = 0; i < entries.length; i++) {
-  //           final entry = entries[i];
-  //
-  //           developer.log('=== NEXT OF KIN ${i + 1} ===',
-  //               name: 'NextOfKinEntry');
-  //           developer.log('Address: "${entry['address'] ?? ''}"',
-  //               name: 'NextOfKinEntry');
-  //           developer.log('Mobile: "${entry['mobile'] ?? ''}"',
-  //               name: 'NextOfKinEntry');
-  //           developer.log('Survey No: "${entry['surveyNo'] ?? ''}"',
-  //               name: 'NextOfKinEntry');
-  //           developer.log('Direction: "${entry['direction'] ?? ''}"',
-  //               name: 'NextOfKinEntry');
-  //           developer.log(
-  //               'Natural Resources: "${entry['naturalResources'] ?? ''}"',
-  //               name: 'NextOfKinEntry');
-  //
-  //           // Check if required fields are filled
-  //           final requiredFields = [
-  //             'address',
-  //             'mobile',
-  //             'surveyNo',
-  //             'direction',
-  //             'naturalResources'
-  //           ];
-  //           final missingFields = <String>[];
-  //
-  //           for (String field in requiredFields) {
-  //             if ((entry[field] ?? '').toString().trim().isEmpty) {
-  //               missingFields.add(field);
-  //             }
-  //           }
-  //         }
-  //       } else {
-  //         developer.log('No next of kin entries in the list',
-  //             name: 'NextOfKinData', level: 900);
-  //       }
-  //     } else {
-  //       developer.log('Next of kin data is empty - no entries added',
-  //           name: 'NextOfKinData', level: 900);
-  //     }
-  //   } catch (e) {
-  //     developer.log('Error in Next of Kin debug: $e',
-  //         name: 'NextOfKinData', level: 1000); // Error level
-  //   }
-  //
-  //   developer.log('=== COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   // Identity card info
-  //   developer.log('Selected Identity Type: "${surveyEightController.selectedIdentityType.value}"', name: 'CourtSeventh');
-  //   developer.log('Identity Card Files: "${surveyEightController.identityCardFiles}"', name: 'CourtSeventh');
-  //
-  //   // Document files
-  //   developer.log('Seven Twelve Files: "${surveyEightController.sevenTwelveFiles}"', name: 'CourtSeventh');
-  //   developer.log('Note Files: "${surveyEightController.noteFiles}"', name: 'CourtSeventh');
-  //   developer.log('Partition Files: "${surveyEightController.partitionFiles}"', name: 'CourtSeventh');
-  //   developer.log('Scheme Sheet Files: "${surveyEightController.schemeSheetFiles}"', name: 'CourtSeventh');
-  //   developer.log('Old Census Map Files: "${surveyEightController.oldCensusMapFiles}"', name: 'CourtSeventh');
-  //   developer.log('Demarcation Certificate Files: "${surveyEightController.demarcationCertificateFiles}"', name: 'CourtSeventh');
-  //
-  //   developer.log('=== END COURT EIGHT DATA DEBUG ===', name: 'DebugInfo');
-  //
-  //   developer.log('=== END DEBUG ===', name: 'DebugInfo');
-  // }
 
 
   void debugPrintInfo() {
@@ -1351,16 +894,7 @@ class MainSurveyController extends GetxController {
 
 
 
-
-
-
-
-
-
-
-
-
-  Map<String, dynamic> PostRequestBody() {
+  Map<String, dynamic> prepareMultipartData(userId) {
     // Get all data
     final surveyData = getSurveyInfoData();
     final surveyInfo = surveyData['survey_cts'] as Map<String, dynamic>?;
@@ -1370,263 +904,401 @@ class MainSurveyController extends GetxController {
     final coOwnerData = getSixthController();
     final nextOfKinData = getSeventhController();
 
-    return {
+    // Debug: Print data to check what's being collected
+    print('🔍 Survey Info: $surveyInfo');
+    print('🔍 Calculation Data: $calculationData');
+    print('🔍 Step Four Data: $stepFourData');
+    print('🔍 Applicant Data keys: ${applicantData.keys}');
+    print('🔍 Co-owner Data keys: ${coOwnerData.keys}');
+    print('🔍 Next of Kin Data keys: ${nextOfKinData.keys}');
+
+    // Prepare fields (non-file data)
+    Map<String, String> fields = {
+      // ID here
+      "user_id": userId?.toString() ?? "0",
+
       // === PERSONAL INFO ===
+      "applicant_name": personalInfoController.applicantNameController.text.trim(),
+      "applicant_address": personalInfoController.applicantAddressController.text.trim(),
       "is_landholder": personalInfoController.isHolderThemselves.value.toString(),
-      "is_power_of_attorney": personalInfoController.hasAuthorityOnBehalf.value.toString(),
+      "is_power_of_attorney": personalInfoController.hasAuthorityOnBehalf.value?.toString() ?? "false",
       "has_been_counted_before": personalInfoController.hasBeenCountedBefore.value.toString(),
       "poa_registration_number": personalInfoController.poaRegistrationNumberController.text.trim(),
       "poa_registration_date": personalInfoController.poaRegistrationDateController.text.trim(),
       "poa_giver_name": personalInfoController.poaIssuerNameController.text.trim(),
       "poa_holder_name": personalInfoController.poaHolderNameController.text.trim(),
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
-      "poa_document_path": personalInfoController.sevenTwelveFiles.toList(), // add validation later
 
       // === SURVEY INFO ===
-      "survey_type": surveyInfo?['survey_number']?.toString() ?? "", // changes to dropdown
+      "survey_type": "Survey No.",
       "department": surveyInfo?['department']?.toString() ?? "",
-      "division_id": surveyInfo?['division_id']?.toString() ?? "", // added later
-      "district_id": surveyInfo?['district']?.toString() ?? "",
-      "taluka_id": surveyInfo?['taluka']?.toString() ?? "",
-      "village_id": surveyInfo?['village']?.toString() ?? "",
+      "division_id": "1",
+      "district_id": "26",
+      "taluka_id": "5",
+      "village_id": "3",
       "office_name": surveyInfo?['office']?.toString() ?? "",
 
       // === CALCULATION INFO ===
-      "operation_type": calculationData['calculationType']?.toString() ?? "",  //changes to ENUM given values
-
-      // === CALCULATION ENTRIES ===
-      "calculation_entries": () {
-        String calcType = calculationData['calculationType']?.toString() ?? '';
-        List<Map<String, dynamic>> entries = [];
-
-        switch (calcType) {
-          case 'Hddkayam':
-            for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
-              final entry = calculationController.hddkayamEntries[i];
-              entries.add({
-                "survey_number": entry['ctSurveyNumber']?.toString() ?? "",
-                // "survey_number": entry['selectedCTSurvey']?.toString() ?? "",  /// same field are same data manage in UI
-                "original_area": entry['area']?.toString() ?? "",
-                // "original_area": entry['areaSqm']?.toString() ?? "",
-              });
-            }
-            break;
-
-          case 'Stomach':
-            for (int i = 0; i < calculationController.stomachEntries.length; i++) {
-              final entry = calculationController.stomachEntries[i];
-              entries.add({
-                "survey_number": entry['surveyNumber']?.toString() ?? "",
-                // "measurement_type": entry['selectedMeasurementType']?.toString() ?? "",
-                "original_area": entry['totalArea']?.toString() ?? "",
-                // "calculated_area": entry['calculatedArea']?.toString() ?? "",
-              });
-            }
-            break;
-
-          case 'Non-agricultural':
-          // Add common fields for Non-agricultural
-            entries.add({
-              "order_approval_number": calculationController.orderNumberController.text.trim(),
-              "order_approval_date": calculationController.orderDateController.text.trim(),
-              "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
-              "layout_approval_date": calculationController.appointmentDateController.text.trim(),
-            });
-
-            for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
-              final entry = calculationController.nonAgriculturalEntries[i];
-              entries.add({
-                "survey_number": entry['surveyNumber']?.toString() ?? "",
-                // "survey_type": entry['selectedSurveyType']?.toString() ?? "",
-                "original_area": entry['area']?.toString() ?? "",
-                // "area_hectares": entry['areaHectares']?.toString() ?? "",
-              });
-            }
-            break;
-
-          case 'Counting by number of knots':
-          // Add common fields for Counting by number of knots
-            entries.add({
-              "order_approval_number": calculationController.orderNumberController.text.trim(),
-              "order_approval_date": calculationController.orderDateController.text.trim(),
-              "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
-              "layout_approval_date": calculationController.appointmentDateController.text.trim(),
-            });
-
-            for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
-              final entry = calculationController.knotsCountingEntries[i];
-              entries.add({
-                "survey_number": entry['surveyNumber']?.toString() ?? "",
-                // "survey_type": entry['selectedSurveyType']?.toString() ?? "",
-                "original_area": entry['area']?.toString() ?? "",
-                // "area_hectares": entry['areaHectares']?.toString() ?? "",
-              });
-            }
-            break;
-
-          case 'Integration calculation':
-          // Add specific fields for Integration calculation
-            entries.add({
-              "consolidation_order_number": calculationController.mergerOrderNumberController.text.trim(),
-              "consolidation_order_date": calculationController.mergerOrderDateController.text.trim(),
-              "old_consolidation_mrn": calculationController.oldMergerNumberController.text.trim(),
-              "consolidationOrderMapPath": calculationController.incorporationOrderFiles?.map((file) => file.toString()).toList() ?? [],
-            });
-
-            for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
-              final entry = calculationController.integrationCalculationEntries[i];
-              entries.add({
-                "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
-                // "selected_ct_survey": entry['selectedCTSurvey']?.toString() ?? "",
-                "original_area": entry['area']?.toString() ?? "",
-                // "area_sqm": entry['areaSqm']?.toString() ?? "",
-              });
-            }
-            break;
-        }
-
-        return entries;
-      }(),
+      "operation_type": "Hadd-kayam",
 
       // === STEP FOUR INFO ===
-      "selected_calculation_type": stepFourController.selectedCalculationType.value,
-      "selected_duration": stepFourController.selectedDuration.value,
-      "selected_holder_type": stepFourController.selectedHolderType.value,
-      "selected_location_category": stepFourController.selectedLocationCategory.value,  //is_within_municipal_corporation: 0 or 1
+      "selected_calculation_type": stepFourController.selectedCalculationType.value ?? "",
+      "selected_duration": stepFourController.selectedDuration.value ?? "",
+      "selected_holder_type": stepFourController.selectedHolderType.value ?? "",
+      "selected_location_category": stepFourController.selectedLocationCategory.value ?? "",
       "calculation_fee": stepFourController.calculationFeeController.text.trim(),
-      "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "",
+      "calculation_fee_numeric": stepFourData['calculation_fee_numeric']?.toString() ?? "0",
+
+    };
+
+    // Convert complex data to JSON strings for multipart
+    final calculationEntries = _getCalculationEntries(calculationData);
+    final adjacentOwners = _getAdjacentOwners(applicantData);
+    final coOwners = _getCoOwners(coOwnerData);
+    final nextOfKin = _getNextOfKin(nextOfKinData);
+
+    // Debug: Print the arrays before encoding
+    print('🔍 Calculation Entries: $calculationEntries');
+    print('🔍 Adjacent Owners: $adjacentOwners');
+    print('🔍 Co-owners: $coOwners');
+    print('🔍 Next of Kin: $nextOfKin');
+
+    fields["survey_areas"] = jsonEncode(calculationEntries);
+    fields["adjacent_owners"] = jsonEncode(adjacentOwners);
+    fields["co_owners"] = jsonEncode(coOwners);
+    fields["next_of_kin"] = jsonEncode(nextOfKin);
 
 
 
-      // === APPLICANTS ===
-      "adjacent_owners": () {
-        List<Map<String, dynamic>> applicantsList = [];
-        final applicantCount = applicantData['applicantCount'] ?? 0;
+    // Prepare files
+    List<MultipartFiles> files = [];
 
-        for (int i = 0; i < applicantCount; i++) {
-          final applicantKey = 'applicant_$i';
-          final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
+    // Add POA documents
+    if (personalInfoController.sevenTwelveFiles.isNotEmpty) {
+      for (int i = 0; i < personalInfoController.sevenTwelveFiles.length; i++) {
+        final filePath = personalInfoController.sevenTwelveFiles[i].toString();
+        if (filePath.isNotEmpty) {
+          files.add(MultipartFiles(
+            field: "poa_document_$i",
+            filePath: filePath,
+          ));
+        }
+      }
+    }
 
-          if (applicantInfo != null) {
-            final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
+    // Add document files (single entries, not arrays)
+    if (surveyEightController.identityCardFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "identity_proof_path",
+        filePath: surveyEightController.identityCardFiles!.first.toString(),
+      ));
+    }
 
-            applicantsList.add({
-              // "agreement": applicantInfo['agreement']?.toString() ?? "",
-              "name": applicantInfo['accountHolderName']?.toString() ?? "",
-              "account_number": applicantInfo['accountNumber']?.toString() ?? "",
-              "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
-              "server_number": applicantInfo['serverNumber']?.toString() ?? "",
-              "area": applicantInfo['area']?.toString() ?? "",
-              "potkharab_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
-              "total_area": applicantInfo['totalArea']?.toString() ?? "",
+    if (surveyEightController.sevenTwelveFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "seven_eleven_path",
+        filePath: surveyEightController.sevenTwelveFiles!.first.toString(),
+      ));
+    }
 
-              "plot_no": addressInfo?['plotNo']?.toString() ?? "",
-              "address": addressInfo?['address']?.toString() ?? "",
-              "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
-              "email": addressInfo?['email']?.toString() ?? "",
-              "pincode": addressInfo?['pincode']?.toString() ?? "",
-              "address_district": addressInfo?['district']?.toString() ?? "",
-              "address_village": addressInfo?['village']?.toString() ?? "",
-              "post_office": addressInfo?['postOffice']?.toString() ?? "",
-            });
+    if (surveyEightController.noteFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "tipan_path",
+        filePath: surveyEightController.noteFiles!.first.toString(),
+      ));
+    }
+
+    if (surveyEightController.partitionFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "fadni_path",
+        filePath: surveyEightController.partitionFiles!.first.toString(),
+      ));
+    }
+
+    if (surveyEightController.schemeSheetFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "yojana_patrak_path",
+        filePath: surveyEightController.schemeSheetFiles!.first.toString(),
+      ));
+    }
+
+    if (surveyEightController.oldCensusMapFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "old_measurement_path",
+        filePath: surveyEightController.oldCensusMapFiles!.first.toString(),
+      ));
+    }
+
+    if (surveyEightController.demarcationCertificateFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "simankan_pramanpatra_path",
+        filePath: surveyEightController.demarcationCertificateFiles!.first.toString(),
+      ));
+    }
+
+    // Add calculation-specific files
+    if (calculationData['calculationType'] == 'Integration calculation') {
+      if (calculationController.incorporationOrderFiles?.isNotEmpty == true) {
+        for (int i = 0; i < calculationController.incorporationOrderFiles!.length; i++) {
+          final filePath = calculationController.incorporationOrderFiles![i].toString();
+          if (filePath.isNotEmpty) {
+            files.add(MultipartFiles(
+              field: "consolidation_order_map$i",
+              filePath: filePath,
+            ));
           }
         }
+      }
+    }
 
-        return applicantsList;
-      }(),
+    print('🔍 Total Files: ${files.length}');
+    for (var file in files) {
+      print('🔍 File: ${file.field} -> ${file.filePath}');
+    }
 
-      // === CO-OWNERS ===
-      "co_owners": () {
-        List<Map<String, dynamic>> coOwnersList = [];
-        final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
-
-        if (coowners != null) {
-          for (int i = 0; i < coowners.length; i++) {
-            final coowner = coowners[i];
-            final addressInfo = coowner['address'] as Map<String, String>?;
-
-            coOwnersList.add({
-              "name": coowner['name']?.toString() ?? "",
-              "mobile_number": coowner['mobileNumber']?.toString() ?? "",
-              "server_number": coowner['serverNumber']?.toString() ?? "",
-              "consent": coowner['consent']?.toString() ?? "", // this is checkbox not added yet
-              //address fields
-              "plot_no": addressInfo?['plotNo'] ?? "",
-              "address": addressInfo?['address'] ?? "",
-              "address_mobile_number": addressInfo?['mobileNumber'] ?? "", // not added yet
-              "email": addressInfo?['email'] ?? "",
-              "pincode": addressInfo?['pincode'] ?? "",
-              "address_district": addressInfo?['district'] ?? "",
-              "address_village": addressInfo?['village'] ?? "",
-              "post_office": addressInfo?['postOffice'] ?? "",
-            });
-          }
-        }
-
-        return coOwnersList;
-      }(),
-
-      // === NEXT OF KIN ===
-      "next_of_kin": () {
-        List<Map<String, dynamic>> nextOfKinList = [];
-        final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
-
-        if (entries != null) {
-          for (int i = 0; i < entries.length; i++) {
-            final entry = entries[i];
-            nextOfKinList.add({
-              "address": entry['address']?.toString() ?? "",
-              "mobile": entry['mobile']?.toString() ?? "",
-              "survey_no": entry['surveyNo']?.toString() ?? "",
-              "direction": entry['direction']?.toString() ?? "",
-              "natural_resources": entry['naturalResources']?.toString() ?? "",
-            });
-          }
-        }
-
-        return nextOfKinList;
-      }(),
-
-      // === DOCUMENTS ===
-      "identity_proof_path": surveyEightController.selectedIdentityType.value,
-      "identity_card_files": surveyEightController.identityCardFiles?.map((file) => file.toString()).toList() ?? [],
-      "seven_eleven_path": surveyEightController.sevenTwelveFiles?.map((file) => file.toString()).toList() ?? [],
-      "tipan_path": surveyEightController.noteFiles?.map((file) => file.toString()).toList() ?? [],
-      "fadni_path": surveyEightController.partitionFiles?.map((file) => file.toString()).toList() ?? [],
-      "yojana_patrak_path": surveyEightController.schemeSheetFiles?.map((file) => file.toString()).toList() ?? [],
-      "old_measurement_path": surveyEightController.oldCensusMapFiles?.map((file) => file.toString()).toList() ?? [],
-      "simankan_pramanpatra_path": surveyEightController.demarcationCertificateFiles?.map((file) => file.toString()).toList() ?? [],
+    return {
+      'fields': fields,
+      'files': files,
     };
   }
 
+// Helper method to get calculation entries
+  List<Map<String, dynamic>> _getCalculationEntries(Map<String, dynamic> calculationData) {
+    String calcType = calculationData['calculationType']?.toString() ?? '';
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing calculation type: $calcType');
+
+    switch (calcType) {
+      case 'Hddkayam':
+        if (calculationController.hddkayamEntries.isNotEmpty) {
+          for (int i = 0; i < calculationController.hddkayamEntries.length; i++) {
+            final entry = calculationController.hddkayamEntries[i];
+            entries.add({
+              "survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+              "original_area": entry['area']?.toString() ?? "",
+            });
+          }
+        }
+        break;
+
+      case 'Stomach':
+        if (calculationController.stomachEntries.isNotEmpty) {
+          for (int i = 0; i < calculationController.stomachEntries.length; i++) {
+            final entry = calculationController.stomachEntries[i];
+            entries.add({
+              "survey_number": entry['surveyNumber']?.toString() ?? "",
+              "original_area": entry['totalArea']?.toString() ?? "",
+            });
+          }
+        }
+        break;
+
+      case 'Non-agricultural':
+      // Add order details first
+        entries.add({
+          "order_approval_number": calculationController.orderNumberController.text.trim(),
+          "order_approval_date": calculationController.orderDateController.text.trim(),
+          "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
+          "layout_approval_date": calculationController.appointmentDateController.text.trim(),
+        });
+
+        // Then add survey entries
+        if (calculationController.nonAgriculturalEntries.isNotEmpty) {
+          for (int i = 0; i < calculationController.nonAgriculturalEntries.length; i++) {
+            final entry = calculationController.nonAgriculturalEntries[i];
+            entries.add({
+              "survey_number": entry['surveyNumber']?.toString() ?? "",
+              "original_area": entry['area']?.toString() ?? "",
+            });
+          }
+        }
+        break;
+
+      case 'Counting by number of knots':
+      // Add order details first
+        entries.add({
+          "order_approval_number": calculationController.orderNumberController.text.trim(),
+          "order_approval_date": calculationController.orderDateController.text.trim(),
+          "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
+          "layout_approval_date": calculationController.appointmentDateController.text.trim(),
+        });
+
+        // Then add survey entries
+        if (calculationController.knotsCountingEntries.isNotEmpty) {
+          for (int i = 0; i < calculationController.knotsCountingEntries.length; i++) {
+            final entry = calculationController.knotsCountingEntries[i];
+            entries.add({
+              "survey_number": entry['surveyNumber']?.toString() ?? "",
+              "original_area": entry['area']?.toString() ?? "",
+            });
+          }
+        }
+        break;
+
+      case 'Integration calculation':
+      // Add consolidation details first
+        entries.add({
+          "consolidation_order_number": calculationController.mergerOrderNumberController.text.trim(),
+          "consolidation_order_date": calculationController.mergerOrderDateController.text.trim(),
+          "old_consolidation_mrn": calculationController.oldMergerNumberController.text.trim(),
+        });
+
+        // Then add survey entries
+        if (calculationController.integrationCalculationEntries.isNotEmpty) {
+          for (int i = 0; i < calculationController.integrationCalculationEntries.length; i++) {
+            final entry = calculationController.integrationCalculationEntries[i];
+            entries.add({
+              "ct_survey_number": entry['ctSurveyNumber']?.toString() ?? "",
+              "original_area": entry['area']?.toString() ?? "",
+            });
+          }
+        }
+        break;
+
+      default:
+        print('⚠️ Unknown calculation type: $calcType');
+        break;
+    }
+
+    print('🔍 Generated ${entries.length} calculation entries');
+    return entries;
+  }
+
+// Helper method to get adjacent owners
+  List<Map<String, dynamic>> _getAdjacentOwners(Map<String, dynamic> applicantData) {
+    List<Map<String, dynamic>> applicantsList = [];
+    final applicantCount = applicantData['applicantCount'] ?? 0;
+
+    print('🔍 Processing $applicantCount adjacent owners');
+
+    for (int i = 0; i < applicantCount; i++) {
+      final applicantKey = 'applicant_$i';
+      final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
+
+      if (applicantInfo != null) {
+        final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
+
+        applicantsList.add({
+          "name": applicantInfo['accountHolderName']?.toString() ?? "",
+          "account_number": applicantInfo['accountNumber']?.toString() ?? "",
+          "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
+          "server_number": applicantInfo['serverNumber']?.toString() ?? "",
+          "area": applicantInfo['area']?.toString() ?? "",
+          "potkharab_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
+          "total_area": applicantInfo['totalArea']?.toString() ?? "",
+          "plot_no": addressInfo?['plotNo']?.toString() ?? "",
+          "address": addressInfo?['address']?.toString() ?? "",
+          "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
+          "email": addressInfo?['email']?.toString() ?? "",
+          "pincode": addressInfo?['pincode']?.toString() ?? "",
+          "address_district": addressInfo?['district']?.toString() ?? "",
+          "address_village": addressInfo?['village']?.toString() ?? "",
+          "post_office": addressInfo?['postOffice']?.toString() ?? "",
+        });
+      }
+    }
+
+    print('🔍 Generated ${applicantsList.length} adjacent owners');
+    return applicantsList;
+  }
+
+// Helper method to get co-owners
+  List<Map<String, dynamic>> _getCoOwners(Map<String, dynamic> coOwnerData) {
+    List<Map<String, dynamic>> coOwnersList = [];
+    final coowners = coOwnerData['coowners'] as List<Map<String, dynamic>>?;
+
+    if (coowners != null) {
+      print('🔍 Processing ${coowners.length} co-owners');
+
+      for (int i = 0; i < coowners.length; i++) {
+        final coowner = coowners[i];
+        final addressInfo = coowner['address'] as Map<String, dynamic>?;
+
+        coOwnersList.add({
+          "name": coowner['name']?.toString() ?? "",
+          "mobile_number": coowner['mobileNumber']?.toString() ?? "",
+          "server_number": coowner['serverNumber']?.toString() ?? "",
+          "consent": coowner['consent']?.toString() ?? "",
+          "plot_no": addressInfo?['plotNo']?.toString() ?? "",
+          "address": addressInfo?['address']?.toString() ?? "",
+          "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
+          "email": addressInfo?['email']?.toString() ?? "",
+          "pincode": addressInfo?['pincode']?.toString() ?? "",
+          "address_district": addressInfo?['district']?.toString() ?? "",
+          "address_village": addressInfo?['village']?.toString() ?? "",
+          "post_office": addressInfo?['postOffice']?.toString() ?? "",
+        });
+      }
+    } else {
+      print('🔍 No co-owners found');
+    }
+
+    print('🔍 Generated ${coOwnersList.length} co-owners');
+    return coOwnersList;
+  }
+
+// Helper method to get next of kin
+  List<Map<String, dynamic>> _getNextOfKin(Map<String, dynamic> nextOfKinData) {
+    List<Map<String, dynamic>> nextOfKinList = [];
+    final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
+
+    if (entries != null) {
+      print('🔍 Processing ${entries.length} next of kin entries');
+
+      for (int i = 0; i < entries.length; i++) {
+        final entry = entries[i];
+        nextOfKinList.add({
+          "address": entry['address']?.toString() ?? "",
+          "mobile": entry['mobile']?.toString() ?? "",
+          "survey_no": entry['surveyNo']?.toString() ?? "",
+          "direction": entry['direction']?.toString() ?? "",
+          "natural_resources": entry['naturalResources']?.toString() ?? "",
+        });
+      }
+    } else {
+      print('🔍 No next of kin entries found');
+    }
+
+    print('🔍 Generated ${nextOfKinList.length} next of kin entries');
+    return nextOfKinList;
+  }
 
 
-
-
-
-  Future<void> submitSurvey() async {
+    Future<void> submitSurvey() async {
     try {
-      final requestBody = PostRequestBody();
+      String userId = (await ApiService.getUid()) ?? "0";
+      print('🆔 User ID: $userId');
 
-      final response = await ApiService.post<Map<String, dynamic>>(
-        endpoint: bhusampadanPost,
-        body: requestBody,
+      final multipartData = prepareMultipartData(userId);
+      final fields = multipartData['fields'] as Map<String, String>;
+      final files = multipartData['files'] as List<MultipartFiles>;
+
+      print('📤 Submitting survey with ${files.length} files...');
+      print('📝 Total fields: ${fields.length}');
+
+      developer.log(jsonEncode(fields), name: 'REQUEST_BODY',);
+
+      final response = await ApiService.multipartPost<Map<String, dynamic>>(
+        endpoint: haddakayamPost,
+        fields: fields,
+        files: files,
         fromJson: (json) => json as Map<String, dynamic>,
         includeToken: true,
       );
 
       if (response.success && response.data != null) {
-        print('✅ Success: ${response.data}');
+        print('✅ Survey submitted successfully: ${response.data}');
       } else {
-        print('❌ Error: ${response.errorMessage ?? 'Unknown error'}');
+        print('❌ Survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
       }
     } catch (e) {
-      print('💥 Exception: $e');
+      print('💥 Exception during survey submission: $e');
     }
   }
 
 
-  void _saveAllStepsData() {
+  void saveAllStepsData() {
     // Collect data from all step controllers
     final allControllers = [
       personalInfoController,

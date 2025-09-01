@@ -170,8 +170,7 @@ class ApiService {
 
     try {
       final request = http.MultipartRequest('POST', uri);
-      final headers =
-          await _getHeaders(includeToken: includeToken); // ✅ FIXED: Added await
+      final headers = await _getHeaders(includeToken: includeToken); // ✅ FIXED: Added await
       headers.remove('Content-Type'); // Remove Content-Type for multipart
       request.headers.addAll(headers);
       request.fields.addAll(fields);

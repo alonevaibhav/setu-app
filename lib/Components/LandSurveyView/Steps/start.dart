@@ -55,6 +55,37 @@ class PersonalInfoStep extends StatelessWidget {
             ),
             Gap(24.h),
 
+            SurveyUIUtils.buildTextFormField(
+              controller: controller.applicantNameController,
+              label: 'Applicant Name',
+              hint: 'Enter Your Name',
+              icon: PhosphorIcons.identificationBadge(PhosphorIconsStyle.regular),
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value == null || value.trim().length < 3) {
+                  return 'Please enter the name of the applicant';
+                }
+                return null;
+              },
+            ),
+            Gap(24.h),
+            SurveyUIUtils.buildTextFormField(
+              controller: controller.applicantAddressController,
+              label: 'Applicant Address',
+              hint: 'Enter Your Address',
+              icon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+              keyboardType: TextInputType.text,
+              validator: (value) {
+                if (value == null || value.trim().length < 3) {
+                  return 'Please enter the Address of the applicant';
+                }
+                return null;
+              },
+            ),
+            Gap(24.h),
+
+
+
             // Question 1: Are you the holder yourself?
             SurveyUIUtils.buildQuestionCard(
               question: 'Note: Are you the holder yourself?',
