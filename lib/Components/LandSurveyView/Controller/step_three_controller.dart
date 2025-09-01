@@ -6,13 +6,6 @@ import 'main_controller.dart';
 class CalculationController extends GetxController with StepValidationMixin, StepDataMixin {
   // Main calculation type
   final selectedCalculationType = ''.obs;
-  // final List<String> calculationTypes = [
-  //   'Hddkayam',
-  //   'Stomach',
-  //   'Non-agricultural',
-  //   'Counting by number of knots',
-  //   'Integration calculation'
-  // ];
   final List<String> calculationTypes = [
     'Hddkayam',
     'Stomach',
@@ -20,6 +13,24 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
     'Counting by number of knots',
     'Integration calculation'
   ];
+
+  // Add this method to your CalculationController class
+  String getOperationType() {
+    switch (selectedCalculationType.value) {
+      case 'Hddkayam':
+        return 'Hadd-kayam';
+      case 'Stomach':
+        return 'Pot-hissa';
+      case 'Non-agricultural':
+        return 'Bigar-sheti';
+      case 'Counting by number of knots':
+        return 'Gunthewari';
+      case 'Integration calculation':
+        return 'Samilikaran mojani';
+      default:
+        return 'Hadd-kayam'; // Default fallback
+    }
+  }
 
   // Common controllers
   final surveyNumberController = TextEditingController();

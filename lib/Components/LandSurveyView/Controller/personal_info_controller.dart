@@ -40,7 +40,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   // Reset methods for dependent fields
   void resetAuthorityFields() {
     hasAuthorityOnBehalf.value = null;
-    applicantNameController.clear();
     applicantPhoneController.clear();
     relationshipController.clear();
     relationshipWithApplicantController.clear();

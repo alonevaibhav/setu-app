@@ -12,6 +12,7 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   final selectedTaluka = ''.obs;
   final selectedVillage = ''.obs;
   final selectedOffice = ''.obs;
+  final selectedSurveyNo = 'Survey No.'.obs;
 
   // Dropdown Options - You can make these dynamic by fetching from API
   final List<String> departmentOptions = [
@@ -20,6 +21,8 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   ];
 
   final List<String> districtOptions = ['Pune', 'Mumbai', 'Nagpur', 'Thane'];
+
+  final List<String> noSelect = ['Survey No.', 'CTS No.'];
 
   final List<String> talukaOptions = ['Haveli', 'Mulshi', 'Pune City', 'Bhor'];
 
@@ -177,6 +180,7 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
         'taluka': selectedTaluka.value,
         'village': selectedVillage.value,
         'office': selectedOffice.value,
+        'Number': selectedSurveyNo.value,
       }
     };
   }

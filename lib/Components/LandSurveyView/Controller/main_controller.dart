@@ -385,12 +385,13 @@ class MainSurveyController extends GetxController {
       return {
         'survey_cts': {
           'survey_number':
-              surveyCTSController.surveyNumberController.text.trim(),
+          surveyCTSController.surveyNumberController.text.trim(),
           'department': surveyCTSController.selectedDepartment.value,
           'district': surveyCTSController.selectedDistrict.value,
           'taluka': surveyCTSController.selectedTaluka.value,
           'village': surveyCTSController.selectedVillage.value,
           'office': surveyCTSController.selectedOffice.value,
+          'Number': surveyCTSController.selectedSurveyNo.value,
         }
       };
     } catch (e) {
@@ -930,7 +931,8 @@ class MainSurveyController extends GetxController {
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
 
       // === SURVEY INFO ===
-      "survey_type": "Survey No.",
+      // "survey_type": "Survey No.",
+      "survey_type":surveyInfo?['Number']?.toString() ?? "",
       "department": surveyInfo?['department']?.toString() ?? "",
       "division_id": "1",
       "district_id": "26",
@@ -939,7 +941,8 @@ class MainSurveyController extends GetxController {
       "office_name": surveyInfo?['office']?.toString() ?? "",
 
       // === CALCULATION INFO ===
-      "operation_type": "Hadd-kayam",
+      // "operation_type": "Hadd-kayam",
+      "operation_type": calculationController.getOperationType(),
 
       // === STEP FOUR INFO ===
       "selected_calculation_type": stepFourController.selectedCalculationType.value ?? "",
@@ -1274,8 +1277,7 @@ class MainSurveyController extends GetxController {
       final fields = multipartData['fields'] as Map<String, String>;
       final files = multipartData['files'] as List<MultipartFiles>;
 
-      print('📤 Submitting survey with ${files.length} files...');
-      print('📝 Total fields: ${fields.length}');
+
 
       developer.log(jsonEncode(fields), name: 'REQUEST_BODY',);
 

@@ -672,11 +672,14 @@ class LoginViewController extends GetxController {
 
       // Update API service with token
       await ApiService.setToken(loginData.token);
+      print('Saving UID: ${loginData.token}');
 
       // Extract and save user ID from JWT token
       Map<String, dynamic> decodedToken = JwtDecoder.decode(loginData.token);
       String userId = decodedToken['id'].toString(); // Change 'id' to your field name
       await ApiService.setUid(userId);
+
+
 
     } catch (e) {
       print('Error saving user session: $e');
