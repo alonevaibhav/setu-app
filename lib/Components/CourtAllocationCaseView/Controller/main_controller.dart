@@ -853,7 +853,7 @@ class CourtAllocationCaseController extends GetxController {
 
   Future<void> submitSurvey() async {
     try {
-      String userId = (await ApiService.getUid()) ?? "0";
+      String userId = await ApiService.getUid() ?? "0";
       print('🆔 User ID: $userId');
 
       final multipartData = prepareMultipartData(userId);
