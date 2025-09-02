@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Auth/token_manager.dart';
@@ -81,7 +80,8 @@ class LoginViewController extends GetxController {
   // Check for existing session on app startup
   Future<void> checkExistingSession() async {
     try {
-      if (await TokenManager.hasToken() && !await TokenManager.isTokenExpired()) {
+      if (await TokenManager.hasToken() &&
+          !await TokenManager.isTokenExpired()) {
         // Valid session exists
         await loadUserSession();
         isLoggedIn.value = true;
@@ -158,7 +158,8 @@ class LoginViewController extends GetxController {
       }
 
       // Make API call
-      ApiResponse<Map<String, dynamic>> response = await ApiService.post<Map<String, dynamic>>(
+      ApiResponse<Map<String, dynamic>> response =
+          await ApiService.post<Map<String, dynamic>>(
         endpoint: 'api/user/login',
         body: {
           'username': username,
@@ -200,8 +201,10 @@ class LoginViewController extends GetxController {
             print('Saving UID: ${loginData.token}');
 
             // Extract and save user ID from JWT token
-            Map<String, dynamic> decodedToken = JwtDecoder.decode(loginData.token);
-            String userId = decodedToken['id'].toString(); // Change 'id' to your field name
+            Map<String, dynamic> decodedToken =
+                JwtDecoder.decode(loginData.token);
+            String userId =
+                decodedToken['id'].toString(); // Change 'id' to your field name
             await ApiService.setUid(userId);
             print('Extracted and saved UID: $userId');
 
@@ -210,7 +213,8 @@ class LoginViewController extends GetxController {
             // Success message
             Get.snackbar(
               'Welcome ${loginData.userName}!',
-              responseData['message'] ?? 'Login successful. Welcome to Setu-App',
+              responseData['message'] ??
+                  'Login successful. Welcome to Setu-App',
               backgroundColor: SetuColors.success,
               colorText: Colors.white,
               duration: Duration(seconds: 3),
@@ -237,9 +241,9 @@ class LoginViewController extends GetxController {
           throw Exception(errorMsg);
         }
       } else {
-        throw Exception(response.errorMessage ?? 'Login failed. Please try again.');
+        throw Exception(
+            response.errorMessage ?? 'Login failed. Please try again.');
       }
-
     } catch (e) {
       errorMessage.value = e.toString().replaceFirst('Exception: ', '');
       _showErrorSnackbar(errorMessage.value);
@@ -303,9 +307,6 @@ class LoginViewController extends GetxController {
       // String userId = decodedToken['id'].toString(); // Change 'id' to your field name
       // await ApiService.setUid(userId);
       // print('Extracted and saved UID: $userId');
-
-
-
     } catch (e) {
       print('Error saving user session: $e');
       throw Exception('Failed to save session data');
@@ -340,7 +341,8 @@ class LoginViewController extends GetxController {
           ? 'Session expired. Please login again.'
           : 'You have been successfully logged out';
 
-      final bgColor = sessionExpired ? SetuColors.warning : SetuColors.primaryDark;
+      final bgColor =
+          sessionExpired ? SetuColors.warning : SetuColors.primaryDark;
 
       Get.snackbar(
         sessionExpired ? 'Session Expired' : 'Logged Out',
@@ -354,7 +356,6 @@ class LoginViewController extends GetxController {
 
       // Navigate to login page
       Get.offAllNamed(AppRoutes.login);
-
     } catch (e) {
       print('Error during logout: $e');
     } finally {
