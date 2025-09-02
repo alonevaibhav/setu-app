@@ -13,11 +13,19 @@ class LandSecondController extends GetxController with StepValidationMixin, Step
   final selectedVillage = ''.obs;
   final selectedOffice = ''.obs;
 
+  final selectedSurveyNo = 'Survey No.'.obs;
+
+
   // Dropdown Options - You can make these dynamic by fetching from API
   final List<String> departmentOptions = [
     'Revenue Department',
     'Land Records Department'
   ];
+
+  final List<String> noSelect = ['Survey No.', 'CTS No.'];
+
+
+
 
   final List<String> districtOptions = [
     'Pune',
@@ -187,6 +195,7 @@ class LandSecondController extends GetxController with StepValidationMixin, Step
         'taluka': selectedTaluka.value,
         'village': selectedVillage.value,
         'office': selectedOffice.value,
+        'Number': selectedSurveyNo.value,
       }
     };
   }

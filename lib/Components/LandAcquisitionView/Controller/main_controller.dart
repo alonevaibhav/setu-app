@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../API Service/api_service.dart';
+import '../../../Constants/api_constant.dart';
 import '../../LandAcquisitionView/Controller/personal_info_controller.dart';
 import '../../LandAcquisitionView/Controller/step_three_controller.dart';
 import '../../LandAcquisitionView/Controller/survey_cts_controller.dart';
@@ -206,6 +209,7 @@ class MainLandAcquisitionController extends GetxController {
     print('=== Next SubStep Called ===');
     print('Current Step: ${currentStep.value}, Current SubStep: ${currentSubStep.value}');
     print('Current Field: $currentSubStepField');
+    submitLandAcquisitionSurvey();
 
     // Force refresh the controller state before validation
     final stepController = currentStepController;
@@ -215,6 +219,7 @@ class MainLandAcquisitionController extends GetxController {
     }
 
     debugPrintPersonalInfo();
+
 
     // Check validation
     final isValid = isCurrentSubStepValid;
@@ -249,7 +254,7 @@ class MainLandAcquisitionController extends GetxController {
       } else {
         // We're at the last step and last substep, submit the survey
         print('Submitting survey...');
-        submitSurvey();
+        submitLandAcquisitionSurvey();
       }
     }
   }
@@ -603,7 +608,7 @@ class MainLandAcquisitionController extends GetxController {
 
     developer.log('=== SURVEY CTS DATA DEBUG ===', name: 'DebugInfo');
 
-    developer.log('Survey number: "${surveyCTSController.surveyNumberController.text.trim()}"', name: 'SurveyCTS');
+    developer.log('Survey number: "${surveyCTSController.selectedSurveyNo.value}"', name: 'SurveyCTS');
     developer.log('Department: "${surveyCTSController.selectedDepartment.value}"', name: 'SurveyCTS');
     developer.log('District: "${surveyCTSController.selectedDistrict.value}"', name: 'SurveyCTS');
     developer.log('Taluka: "${surveyCTSController.selectedTaluka.value}"', name: 'SurveyCTS');
@@ -614,21 +619,16 @@ class MainLandAcquisitionController extends GetxController {
 
     developer.log('=== CALCULATION DATA DEBUG ===', name: 'DebugInfo');
 
-    developer.log('Selected village: "${calculationController.selectedVillage.value}"', name: 'Calculation');
-    developer.log('Total entries: ${calculationController.surveyEntries.length}', name: 'Calculation');
-    developer.log('Completed entries: ${calculationController.completedEntriesCount}', name: 'Calculation');
-    developer.log('Total area: ${calculationController.totalArea}', name: 'Calculation');
-    developer.log('Total land acquisition area: ${calculationController.totalLandAcquisitionArea}', name: 'Calculation');
 
     // Log each survey entry
     for (int i = 0; i < calculationController.surveyEntries.length; i++) {
       final entry = calculationController.surveyEntries[i];
-      developer.log('Entry $i - Survey No: "${entry['surveyNo'] ?? ''}"', name: 'Calculation');
-      developer.log('Entry $i - Share: "${entry['share'] ?? ''}"', name: 'Calculation');
-      developer.log('Entry $i - Area: "${entry['area'] ?? ''}"', name: 'Calculation');
-      developer.log('Entry $i - Land Acquisition Area: "${entry['landAcquisitionArea'] ?? ''}"', name: 'Calculation');
-      developer.log('Entry $i - Abdominal Section: "${entry['abdominalSection'] ?? ''}"', name: 'Calculation');
-      developer.log('Entry $i - Is Complete: ${calculationController.isEntryComplete(entry)}', name: 'Calculation');
+      developer.log('Entry  - Village: "${entry['village'] ?? ''}"', name: 'Calculation');
+      developer.log('Entry  - Survey No: "${entry['surveyNo'] ?? ''}"', name: 'Calculation');
+      developer.log('Entry  - Share: "${entry['share'] ?? ''}"', name: 'Calculation');
+      developer.log('Entry  - Area: "${entry['area'] ?? ''}"', name: 'Calculation');
+      developer.log('Entry  - Land Acquisition Area: "${entry['landAcquisitionArea'] ?? ''}"', name: 'Calculation');
+      developer.log('Entry  - Abdominal Section: "${entry['abdominalSection'] ?? ''}"', name: 'Calculation');
     }
 
     developer.log('=== END CALCULATION DATA DEBUG ===', name: 'DebugInfo');
@@ -738,55 +738,262 @@ class MainLandAcquisitionController extends GetxController {
     developer.log('=== END DEBUG ===', name: 'DebugInfo');
   }
 
+  Map<String, dynamic> prepareMultipartData(String userId) {
 
+    // Debug: Print data to check what's being collected
+    print('🔍 Starting prepareMultipartData');
 
+    // Prepare fields (non-file data) - Access controllers directly
+    Map<String, String> fields = {
+      // ID field
+      "user_id": userId,
 
-  // API Submit Method
-  Future<void> submitSurvey() async {
-    try {
-      isLoading.value = true;
-      // Final validation - check all required steps
-      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      for (int step in requiredSteps) {
-        if (!isMainStepCompleted(step)) {
-          Get.snackbar(
-            'Incomplete Form',
-            'Please complete all required fields in step ${step + 1}',
-            backgroundColor: Color(0xFFDC3545),
-            colorText: Colors.white,
-          );
-          return;
-        }
+      // === LAND ACQUISITION INFO === (Access controllers directly)
+      "land_acquisition_officer": personalInfoController.landAcquisitionOfficerController.text.trim(),
+      "land_acquisition_board": personalInfoController.landAcquisitionBoardController.text.trim(),
+      "land_acquisition_details": personalInfoController.landAcquisitionDetailsController.text.trim(),
+      "land_acquisition_order_number": personalInfoController.landAcquisitionOrderNumberController.text.trim(),
+      "land_acquisition_order_date": personalInfoController.landAcquisitionOrderDateController.text.trim(),
+      "land_acquisition_office_address": personalInfoController.landAcquisitionOfficeAddressController.text.trim(),
+
+      // === SURVEY CTS INFO === (Access controllers directly)
+      "survey_number": surveyCTSController.selectedSurveyNo.value,
+      "department": surveyCTSController.selectedDepartment.value,
+      "district": surveyCTSController.selectedDistrict.value,
+      "taluka": surveyCTSController.selectedTaluka.value,
+      "village": surveyCTSController.selectedVillage.value,
+      "office": surveyCTSController.selectedOffice.value,
+
+      // === CALCULATION SUMMARY INFO === (Access controllers directly)
+      // "selected_village": surveyCTSController.selectedVillage.value, // Using the actual selected village
+      // "total_area": calculationController.totalArea.value.toString(),
+      // "total_land_acquisition_area": calculationController.totalLandAcquisitionArea.value.toString(),
+      // "completed_entries_count": calculationController.completedEntriesCount.value.toString(),
+      // "total_entries_count": calculationController.surveyEntries.length.toString(),
+
+      // === LAND FOURTH INFO === (Access controllers directly)
+      "calculation_type": landFouthController.selectedCalculationType.value,
+      "duration": landFouthController.selectedDuration.value,
+      "holder_type": landFouthController.selectedHolderType.value,
+      "counting_fee": landFouthController.countingFee.value.toString(),
+
+      // === DOCUMENTS INFO === (Access controllers directly)
+    };
+
+    // Convert complex data to JSON strings for multipart - Access controllers directly
+    final calculationEntries = _getCalculationEntriesFixed(); // Individual calculation entries
+    final holderInformation = _getHolderInformationFixed();
+    final nextOfKinEntries = _getNextOfKinEntriesFixed();
+
+    // Debug: Print the arrays before encoding
+    print('🔍 Calculation Entries: $calculationEntries');
+    print('🔍 Holder Information: $holderInformation');
+    print('🔍 Next of Kin Entries: $nextOfKinEntries');
+
+    fields["calculation_entries"] = jsonEncode(calculationEntries); // Individual calculation entries
+    fields["holder_information"] = jsonEncode(holderInformation);
+    fields["next_of_kin_entries"] = jsonEncode(nextOfKinEntries);
+
+    // Debug: Print all fields
+    print('🔍 All Fields:');
+    fields.forEach((key, value) {
+      print('🔍 $key: $value');
+    });
+
+    // Prepare files - Access controllers directly
+    List<MultipartFiles> files = [];
+
+    // Add Land Acquisition files
+    if (personalInfoController.landAcquisitionOrderFiles?.isNotEmpty == true) {
+      final filePath = personalInfoController.landAcquisitionOrderFiles.toString();
+      if (filePath.isNotEmpty) {
+        files.add(MultipartFiles(
+          field: "land_acquisition_order_file",
+          filePath: filePath,
+        ));
       }
-      // Save final data from all controllers
-      _saveAllStepsData();
-      // Mock API call
-      await Future.delayed(Duration(seconds: 2));
-      final response = {
-        'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-        'status': 'submitted',
-        'timestamp': DateTime.now().toIso8601String(),
-        'surveyData': surveyData.value,
-      };
-      surveyData.value = response;
-      Get.snackbar(
-        'Success',
-        'Your survey has been submitted successfully',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
+    }
+
+    if (personalInfoController.landAcquisitionMapFiles?.isNotEmpty == true) {
+      final filePath = personalInfoController.landAcquisitionMapFiles.toString();
+      if (filePath.isNotEmpty) {
+        files.add(MultipartFiles(
+          field: "land_acquisition_map_file",
+          filePath: filePath,
+        ));
+      }
+    }
+
+    if (personalInfoController.kmlFiles?.isNotEmpty == true) {
+      final filePath = personalInfoController.kmlFiles.toString();
+      if (filePath.isNotEmpty) {
+        files.add(MultipartFiles(
+          field: "kml_file",
+          filePath: filePath,
+        ));
+      }
+    }
+
+    // Add document files (single entries, not arrays)
+    if (landSeventhController.identityCardFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "identity_card_path",
+        filePath: landSeventhController.identityCardFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.sevenTwelveFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "seven_twelve_path",
+        filePath: landSeventhController.sevenTwelveFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.noteFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "note_path",
+        filePath: landSeventhController.noteFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.partitionFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "partition_path",
+        filePath: landSeventhController.partitionFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.schemeSheetFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "scheme_sheet_path",
+        filePath: landSeventhController.schemeSheetFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.oldCensusMapFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "old_census_map_path",
+        filePath: landSeventhController.oldCensusMapFiles!.first.toString(),
+      ));
+    }
+
+    if (landSeventhController.demarcationCertificateFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "demarcation_certificate_path",
+        filePath: landSeventhController.demarcationCertificateFiles!.first.toString(),
+      ));
+    }
+
+    print('🔍 Total Files: ${files.length}');
+    for (var file in files) {
+      print('🔍 File: ${file.field} -> ${file.filePath}');
+    }
+
+    return {
+      'fields': fields,
+      'files': files,
+    };
+  }
+
+// Method to get individual calculation entries from calculationController.surveyEntries
+  List<Map<String, dynamic>> _getCalculationEntriesFixed() {
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing ${calculationController.surveyEntries.length} calculation entries');
+
+    for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+      final entry = calculationController.surveyEntries[i] as Map<String, dynamic>;
+      entries.add({
+        "village": entry['village']?.toString() ?? "",
+        "survey_no": entry['surveyNo']?.toString() ?? "",
+        "share": entry['share']?.toString() ?? "",
+        "area": entry['area']?.toString() ?? "",
+        "land_acquisition_area": entry['landAcquisitionArea']?.toString() ?? "",
+        "abdominal_section": entry['abdominalSection']?.toString() ?? "",
+      });
+    }
+
+    print('🔍 Generated ${entries.length} calculation entries');
+    return entries;
+  }
+
+// Fixed helper method to get holder information - Access controllers directly
+  List<Map<String, dynamic>> _getHolderInformationFixed() {
+    List<Map<String, dynamic>> holders = [];
+
+    print('🔍 Processing ${landFifthController.holderEntries.length} holders');
+
+    for (int i = 0; i < landFifthController.holderEntries.length; i++) {
+      final holder = landFifthController.holderEntries[i] as Map<String, dynamic>;
+      holders.add({
+        "holder_name": holder['holderName']?.toString() ?? "",
+        "address": holder['address']?.toString() ?? "",
+        "account_number": holder['accountNumber']?.toString() ?? "",
+        "mobile_number": holder['mobileNumber']?.toString() ?? "",
+        "server_number": holder['serverNumber']?.toString() ?? "",
+        "area": holder['area']?.toString() ?? "",
+        "pot_kharaba_area": holder['potKharabaArea']?.toString() ?? "",
+        "total_area": holder['totalArea']?.toString() ?? "",
+        "village": holder['village']?.toString() ?? "",
+        "plot_no": holder['plotNo']?.toString() ?? "",
+        "email": holder['email']?.toString() ?? "",
+        "pincode": holder['pincode']?.toString() ?? "",
+        "district": holder['district']?.toString() ?? "",
+        "post_office": holder['postOffice']?.toString() ?? "",
+      });
+    }
+
+    print('🔍 Generated ${holders.length} holder entries');
+    return holders;
+  }
+
+// Fixed helper method to get next of kin entries - Access controllers directly
+  List<Map<String, dynamic>> _getNextOfKinEntriesFixed() {
+    List<Map<String, dynamic>> nextOfKinList = [];
+
+    print('🔍 Processing ${laandSixthController.nextOfKinEntries.length} next of kin entries');
+
+    for (int i = 0; i < laandSixthController.nextOfKinEntries.length; i++) {
+      final entry = laandSixthController.nextOfKinEntries[i] as Map<String, dynamic>;
+      nextOfKinList.add({
+        "address": entry['address']?.toString() ?? "",
+        "mobile": entry['mobile']?.toString() ?? "",
+        "survey_no": entry['surveyNo']?.toString() ?? "",
+        "direction": entry['direction']?.toString() ?? "",
+        "natural_resources": entry['naturalResources']?.toString() ?? "",
+      });
+    }
+
+    print('🔍 Generated ${nextOfKinList.length} next of kin entries');
+    return nextOfKinList;
+  }
+// Updated submit method for land acquisition
+  Future<void> submitLandAcquisitionSurvey() async {
+    try {
+      String userId = (await ApiService.getUid()) ?? "0";
+      print('🆔 User ID: $userId');
+
+      final multipartData = prepareMultipartData(userId);
+      final fields = multipartData['fields'] as Map<String, String>;
+      final files = multipartData['files'] as List<MultipartFiles>;
+
+      developer.log(jsonEncode(fields), name: 'LAND_ACQUISITION_REQUEST_BODY');
+
+      final response = await ApiService.multipartPost<Map<String, dynamic>>(
+        endpoint: landAcquisitionPost, // Update with your actual endpoint
+        fields: fields,
+        files: files,
+        fromJson: (json) => json as Map<String, dynamic>,
+        includeToken: true,
       );
-      // Navigate to confirmation page
-      Get.toNamed('/confirmation');
+
+      if (response.success && response.data != null) {
+        print('✅ Land acquisition survey submitted successfully: ${response.data}');
+      } else {
+        print('❌ Land acquisition survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
+      }
     } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Please try again',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
+      print('💥 Exception during land acquisition survey submission: $e');
     }
   }
 

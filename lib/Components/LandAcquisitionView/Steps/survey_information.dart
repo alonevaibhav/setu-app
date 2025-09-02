@@ -193,15 +193,14 @@ class CalculationInformation extends StatelessWidget {
           Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Village Dropdown - Now inside the survey entries section
-          Obx(() => LandAcquisitionUIUtils.buildDropdownField(
-                label: 'Village *',
-                value: calcController.selectedVillage.value,
-                items: calcController.villageOptions,
-                onChanged: (value) {
-                  calcController.updateSelectedVillage(value ?? '');
-                },
-                icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-              )),
+          // Village field INSIDE each entry
+          LandAcquisitionUIUtils.buildTextFormField(
+            controller: entry['villageController'],
+            label: 'Village *',
+            hint: 'Enter village name',
+            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateSurveyEntry(index, 'village', value),
+          ),
 
           Gap(20.h * LandAcquisitionUIUtils.sizeFactor),
 

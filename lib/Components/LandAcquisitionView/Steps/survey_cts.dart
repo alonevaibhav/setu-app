@@ -59,19 +59,13 @@ class LandSecondView extends StatelessWidget {
           'Enter Survey No./Gat No./CTS No.',
         ),
         Gap(24.h),
-        LandAcquisitionUIUtils.buildTextFormField(
-          controller: controller.surveyNumberController,
+        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
           label: 'Survey No./Gat No./CTS No.*',
-          hint: 'Enter survey number',
-          icon: PhosphorIcons.listNumbers(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.text,
-          validator: (value) {
-            if (!controller.isSurveyNumberValid) {
-              return controller.getFieldError('survey_number');
-            }
-            return null;
-          },
-        ),
+          value: controller.selectedSurveyNo.value,
+          items: controller.noSelect,
+          onChanged: controller.updateDistrict,
+          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+        )),
         Gap(32.h),
         LandAcquisitionUIUtils.buildNavigationButtons(mainController),
       ],

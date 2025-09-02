@@ -7,6 +7,9 @@ String loginUrl = "api/user/login";
 
 String haddakayamPost = "api/counting/create/counting-land";
 
+
+String landAcquisitionPost = "api/bhusampadan/create";
+
 String stateGet = "api/location/states";
 
 

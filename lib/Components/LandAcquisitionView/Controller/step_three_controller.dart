@@ -1,20 +1,12 @@
-
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../LandAcquisitionView/Controller/main_controller.dart';
 
-class CalculationController extends GetxController with StepValidationMixin, StepDataMixin {
-
+class CalculationController extends GetxController
+    with StepValidationMixin, StepDataMixin {
   // Village Selection
   final selectedVillage = ''.obs;
-  final villageOptions = [
-    'Village 1',
-    'Village 2',
-    'Village 3',
-    'Village 4',
-    'Village 5',
-  ];
+
 
   // Survey Entries List
   final surveyEntries = <Map<String, dynamic>>[].obs;
@@ -33,6 +25,7 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
   // Survey Entry Methods
   void addSurveyEntry() {
     surveyEntries.add({
+      'villageController': TextEditingController(), // Add thisc
       'surveyNoController': TextEditingController(),
       'shareController': TextEditingController(),
       'areaController': TextEditingController(),
@@ -50,6 +43,7 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
     if (surveyEntries.length > 1 && index < surveyEntries.length) {
       // Dispose controllers to prevent memory leaks
       final entry = surveyEntries[index];
+      entry['villageController']?.dispose(); // Add this
       entry['surveyNoController']?.dispose();
       entry['shareController']?.dispose();
       entry['areaController']?.dispose();
@@ -133,7 +127,14 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
 
   // Check if entry is complete
   bool isEntryComplete(Map<String, dynamic> entry) {
-    final requiredFields = ['surveyNo', 'share', 'area', 'landAcquisitionArea', 'abdominalSection'];
+    final requiredFields = [
+      'village', // Add this
+      'surveyNo',
+      'share',
+      'area',
+      'landAcquisitionArea',
+      'abdominalSection'
+    ];
     for (String field in requiredFields) {
       final value = entry[field] ?? '';
       if (value.isEmpty) {
@@ -306,8 +307,10 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
           surveyEntries[index]['surveyNoController'].text = surveyNo;
           surveyEntries[index]['shareController'].text = share;
           surveyEntries[index]['areaController'].text = area;
-          surveyEntries[index]['landAcquisitionAreaController'].text = landAcqArea;
-          surveyEntries[index]['abdominalSectionController'].text = abdominalSection;
+          surveyEntries[index]['landAcquisitionAreaController'].text =
+              landAcqArea;
+          surveyEntries[index]['abdominalSectionController'].text =
+              abdominalSection;
 
           updateSurveyEntry(index, 'surveyNo', surveyNo);
           updateSurveyEntry(index, 'share', share);
