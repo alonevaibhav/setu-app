@@ -59,20 +59,6 @@ class SurveyCTSStep extends StatelessWidget {
           'Enter Survey No./Gat No./CTS No.',
         ),
         Gap(24.h),
-        // SurveyUIUtils.buildTextFormField(
-        //   controller: controller.surveyNumberController,
-        //   label: 'Survey No./Gat No./CTS No.*',
-        //   hint: 'Enter survey number',
-        //   icon: PhosphorIcons.listNumbers(PhosphorIconsStyle.regular),
-        //   keyboardType: TextInputType.text,
-        //   validator: (value) {
-        //     if (!controller.isSurveyNumberValid) {
-        //       return controller.getFieldError('survey_number');
-        //     }
-        //     return null;
-        //   },
-        // ),
-
         Obx(() => SurveyUIUtils.buildDropdownField(
           label: 'Survey No./Gat No./CTS No.*',
           value: controller.selectedSurveyNo.value,

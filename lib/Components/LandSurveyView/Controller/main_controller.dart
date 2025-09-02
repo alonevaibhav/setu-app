@@ -931,7 +931,6 @@ class MainSurveyController extends GetxController {
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
 
       // === SURVEY INFO ===
-      // "survey_type": "Survey No.",
       "survey_type":surveyInfo?['Number']?.toString() ?? "",
       "department": surveyInfo?['department']?.toString() ?? "",
       "division_id": "1",
@@ -941,7 +940,6 @@ class MainSurveyController extends GetxController {
       "office_name": surveyInfo?['office']?.toString() ?? "",
 
       // === CALCULATION INFO ===
-      // "operation_type": "Hadd-kayam",
       "operation_type": calculationController.getOperationType(),
 
       // === STEP FOUR INFO ===
