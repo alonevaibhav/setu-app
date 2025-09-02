@@ -750,34 +750,35 @@ class MainLandAcquisitionController extends GetxController {
 
       // === LAND ACQUISITION INFO === (Access controllers directly)
       "land_acquisition_officer": personalInfoController.landAcquisitionOfficerController.text.trim(),
-      "land_acquisition_board": personalInfoController.landAcquisitionBoardController.text.trim(),
-      "land_acquisition_details": personalInfoController.landAcquisitionDetailsController.text.trim(),
-      "land_acquisition_order_number": personalInfoController.landAcquisitionOrderNumberController.text.trim(),
-      "land_acquisition_order_date": personalInfoController.landAcquisitionOrderDateController.text.trim(),
-      "land_acquisition_office_address": personalInfoController.landAcquisitionOfficeAddressController.text.trim(),
+      "land_acquisition_board_name_address": personalInfoController.landAcquisitionBoardController.text.trim(),
+      "land_acquisition_description": personalInfoController.landAcquisitionDetailsController.text.trim(),
+      "order_proposal_number": personalInfoController.landAcquisitionOrderNumberController.text.trim(),
+      "order_proposal_date": personalInfoController.landAcquisitionOrderDateController.text.trim(),
+      "issuing_office_address": personalInfoController.landAcquisitionOfficeAddressController.text.trim(),
 
       // === SURVEY CTS INFO === (Access controllers directly)
+      // "survey_number": surveyCTSController.selectedSurveyNo.value,
+      // "department": surveyCTSController.selectedDepartment.value,
+      // "district": surveyCTSController.selectedDistrict.value,
+      // "taluka": surveyCTSController.selectedTaluka.value,
+      // "village": surveyCTSController.selectedVillage.value,
+      // "office": surveyCTSController.selectedOffice.value,
+
+      // === SURVEY CTS INFO === (Access controllers directly)
+
       "survey_number": surveyCTSController.selectedSurveyNo.value,
       "department": surveyCTSController.selectedDepartment.value,
-      "district": surveyCTSController.selectedDistrict.value,
-      "taluka": surveyCTSController.selectedTaluka.value,
-      "village": surveyCTSController.selectedVillage.value,
+      "division_id": "1",
+      "district_id": "26",
+      "taluka_id": "5",
+      "village_id": "3",
       "office": surveyCTSController.selectedOffice.value,
 
-      // === CALCULATION SUMMARY INFO === (Access controllers directly)
-      // "selected_village": surveyCTSController.selectedVillage.value, // Using the actual selected village
-      // "total_area": calculationController.totalArea.value.toString(),
-      // "total_land_acquisition_area": calculationController.totalLandAcquisitionArea.value.toString(),
-      // "completed_entries_count": calculationController.completedEntriesCount.value.toString(),
-      // "total_entries_count": calculationController.surveyEntries.length.toString(),
-
-      // === LAND FOURTH INFO === (Access controllers directly)
       "calculation_type": landFouthController.selectedCalculationType.value,
       "duration": landFouthController.selectedDuration.value,
       "holder_type": landFouthController.selectedHolderType.value,
       "counting_fee": landFouthController.countingFee.value.toString(),
 
-      // === DOCUMENTS INFO === (Access controllers directly)
     };
 
     // Convert complex data to JSON strings for multipart - Access controllers directly
@@ -808,7 +809,7 @@ class MainLandAcquisitionController extends GetxController {
       final filePath = personalInfoController.landAcquisitionOrderFiles.toString();
       if (filePath.isNotEmpty) {
         files.add(MultipartFiles(
-          field: "land_acquisition_order_file",
+          field: "order_proposal_document_path",
           filePath: filePath,
         ));
       }
@@ -818,7 +819,7 @@ class MainLandAcquisitionController extends GetxController {
       final filePath = personalInfoController.landAcquisitionMapFiles.toString();
       if (filePath.isNotEmpty) {
         files.add(MultipartFiles(
-          field: "land_acquisition_map_file",
+          field: "demarcation_map_path",
           filePath: filePath,
         ));
       }
@@ -828,7 +829,7 @@ class MainLandAcquisitionController extends GetxController {
       final filePath = personalInfoController.kmlFiles.toString();
       if (filePath.isNotEmpty) {
         files.add(MultipartFiles(
-          field: "kml_file",
+          field: "kml_file_path",
           filePath: filePath,
         ));
       }
@@ -967,6 +968,8 @@ class MainLandAcquisitionController extends GetxController {
     print('🔍 Generated ${nextOfKinList.length} next of kin entries');
     return nextOfKinList;
   }
+
+
 // Updated submit method for land acquisition
   Future<void> submitLandAcquisitionSurvey() async {
     try {

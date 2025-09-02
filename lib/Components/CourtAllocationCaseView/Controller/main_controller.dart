@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../API Service/api_service.dart';
+import '../../../Constants/api_constant.dart';
 import '../../CourtAllocationCaseView/Controller/personal_info_controller.dart';
 import '../../CourtAllocationCaseView/Controller/step_three_controller.dart';
 import '../../CourtAllocationCaseView/Controller/survey_cts.dart';
@@ -190,7 +194,8 @@ class CourtAllocationCaseController extends GetxController {
 
     // Print the current survey data to the console
     // print('Current Survey Data: ${surveyData.value}');
-    debugPrintInfo();
+    // debugPrintInfo();
+    submitSurvey();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -630,84 +635,254 @@ class CourtAllocationCaseController extends GetxController {
     developer.log('=== END COURT SEVENTH DATA DEBUG ===', name: 'DebugInfo');
 
 
-
-
-
-
   }
 
 
 
+  Map<String, dynamic> prepareMultipartData(userId) {
+    // Debug: Print data to check what's being collected
+    print('🔍 Preparing court allocation multipart data');
+
+    // Prepare fields (non-file data)
+    Map<String, String> fields = {
+      // User ID
+      "user_id": userId?.toString() ?? "0",
+
+      // === COURT ORDER INFO ===
+      "court_name": personalInfoController.courtNameController.text.trim(),
+      "court_address": personalInfoController.courtAddressController.text.trim(),
+      "court_order_number": personalInfoController.courtOrderNumberController.text.trim(),
+      "court_allotment_date": personalInfoController.courtAllotmentDateController.text.trim(),
+      "court_allotment_date_selected": personalInfoController.courtAllotmentDate.value?.toString() ?? "",
+      "claim_number_year": personalInfoController.claimNumberYearController.text.trim(),
+      "special_order_comments": personalInfoController.specialOrderCommentsController.text.trim(),
+
+      // === SURVEY CTS INFO ===
+      "survey_number": surveyCTSController.surveyNumberController.text.trim(),
+      "department": surveyCTSController.selectedDepartment.value ?? "",
+      "district": surveyCTSController.selectedDistrict.value ?? "",
+      "taluka": surveyCTSController.selectedTaluka.value ?? "",
+      "village": surveyCTSController.selectedVillage.value ?? "",
+      "office": surveyCTSController.selectedOffice.value ?? "",
+
+      // === COURT ALLOCATION FOURTH INFO ===
+      "selected_calculation_type": courtAlloFouthController.selectedCalculationType.value ?? "",
+      "selected_duration": courtAlloFouthController.selectedDuration.value ?? "",
+      "selected_holder_type": courtAlloFouthController.selectedHolderType.value ?? "",
+      "selected_location_category": courtAlloFouthController.selectedLocationCategory.value ?? "",
+      "calculation_fee": courtAlloFouthController.calculationFeeController.text.trim(),
+      "calculation_fee_numeric": courtAlloFouthController.extractNumericFee()?.toString() ?? "0",
+
+      // === DOCUMENT INFO ===
+      "identity_card_type": allocationSeventhController.selectedIdentityType.value ?? "",
+    };
+
+    // Convert complex data to JSON strings for multipart
+    final surveyEntries = _getSurveyEntries();
+    final plaintiffDefendantEntries = _getPlaintiffDefendantEntries();
+    final nextOfKinEntries = _getNextOfKinEntries();
+
+    // Debug: Print the arrays before encoding
+    print('🔍 Survey Entries: $surveyEntries');
+    print('🔍 Plaintiff/Defendant Entries: $plaintiffDefendantEntries');
+    print('🔍 Next of Kin Entries: $nextOfKinEntries');
+
+    fields["survey_entries"] = jsonEncode(surveyEntries);
+    fields["plaintiff_defendant_entries"] = jsonEncode(plaintiffDefendantEntries);
+    fields["next_of_kin_entries"] = jsonEncode(nextOfKinEntries);
+
+    // Prepare files
+    List<MultipartFiles> files = [];
+
+    // Add court order files
+    if (personalInfoController.courtOrderFiles?.isNotEmpty == true) {
+        final filePath = personalInfoController.courtOrderFiles!.toString();
+        if (filePath.isNotEmpty) {
+          files.add(MultipartFiles(
+            field: "court_order_document",
+            filePath: filePath,
+          ));
+
+      }
+    }
+
+    // Add identity card files
+    if (allocationSeventhController.identityCardFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "identity_proof_path",
+        filePath: allocationSeventhController.identityCardFiles!.first.toString(),
+      ));
+    }
+
+    // Add seven twelve files
+    if (allocationSeventhController.sevenTwelveFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "seven_twelve_path",
+        filePath: allocationSeventhController.sevenTwelveFiles!.first.toString(),
+      ));
+    }
+
+    // Add note files
+    if (allocationSeventhController.noteFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "note_path",
+        filePath: allocationSeventhController.noteFiles!.first.toString(),
+      ));
+    }
+
+    // Add partition files
+    if (allocationSeventhController.partitionFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "partition_path",
+        filePath: allocationSeventhController.partitionFiles!.first.toString(),
+      ));
+    }
+
+    // Add scheme sheet files
+    if (allocationSeventhController.schemeSheetFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "scheme_sheet_path",
+        filePath: allocationSeventhController.schemeSheetFiles!.first.toString(),
+      ));
+    }
+
+    // Add old census map files
+    if (allocationSeventhController.oldCensusMapFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "old_census_map_path",
+        filePath: allocationSeventhController.oldCensusMapFiles!.first.toString(),
+      ));
+    }
+
+    // Add demarcation certificate files
+    if (allocationSeventhController.demarcationCertificateFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "demarcation_certificate_path",
+        filePath: allocationSeventhController.demarcationCertificateFiles!.first.toString(),
+      ));
+    }
+
+    print('🔍 Total Files: ${files.length}');
+    for (var file in files) {
+      print('🔍 File: ${file.field} -> ${file.filePath}');
+    }
+
+    return {
+      'fields': fields,
+      'files': files,
+    };
+  }
+
+// Helper method to get survey entries
+  List<Map<String, dynamic>> _getSurveyEntries() {
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing ${calculationController.surveyEntries.length} survey entries');
+
+    for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+      final entry = calculationController.surveyEntries[i];
+      entries.add({
+        "selected_village": entry['selectedVillage']?.toString() ?? "",
+        "survey_no": entry['surveyNo']?.toString() ?? "",
+        "share": entry['share']?.toString() ?? "",
+        "area": entry['area']?.toString() ?? "",
+      });
+    }
+
+    print('🔍 Generated ${entries.length} survey entries');
+    return entries;
+  }
+
+// Helper method to get plaintiff/defendant entries
+  List<Map<String, dynamic>> _getPlaintiffDefendantEntries() {
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing ${allocationFifthController.plaintiffDefendantEntries.length} plaintiff/defendant entries');
+
+    for (int i = 0; i < allocationFifthController.plaintiffDefendantEntries.length; i++) {
+      final entry = allocationFifthController.plaintiffDefendantEntries[i];
+      final selectedType = entry['selectedType'] as RxString?;
+      final detailedAddress = entry['detailedAddress'] as RxMap<String, String>?;
+
+      entries.add({
+        "name": entry['nameController']?.text?.trim() ?? "",
+        "address": entry['addressController']?.text?.trim() ?? "",
+        "mobile": entry['mobileController']?.text?.trim() ?? "",
+        "survey_number": entry['surveyNumberController']?.text?.trim() ?? "",
+        "type": selectedType?.value ?? "",
+
+        // Individual detailed address fields
+        "plot_no": detailedAddress?['plotNo'] ?? "",
+        "detailed_address": detailedAddress?['address'] ?? "",
+        "mobile_number": detailedAddress?['mobileNumber'] ?? "",
+        "email": detailedAddress?['email'] ?? "",
+        "pincode": detailedAddress?['pincode'] ?? "",
+        "district": detailedAddress?['district'] ?? "",
+        "village": detailedAddress?['village'] ?? "",
+        "post_office": detailedAddress?['postOffice'] ?? "",
+      });
+    }
+
+    print('🔍 Generated ${entries.length} plaintiff/defendant entries');
+    return entries;
+  }
+
+// Helper method to get next of kin entries
+  List<Map<String, dynamic>> _getNextOfKinEntries() {
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing ${allocationSixthController.nextOfKinEntries.length} next of kin entries');
+
+    for (int i = 0; i < allocationSixthController.nextOfKinEntries.length; i++) {
+      final entry = allocationSixthController.nextOfKinEntries[i];
+
+      entries.add({
+        "address": entry['addressController']?.text?.trim() ?? "",
+        "mobile": entry['mobileController']?.text?.trim() ?? "",
+        "survey_no": entry['surveyNoController']?.text?.trim() ?? "",
+        "direction": entry['direction']?.toString() ?? "",
+        "natural_resources": entry['naturalResources']?.toString() ?? "",
+      });
+    }
+
+    print('🔍 Generated ${entries.length} next of kin entries');
+    return entries;
+  }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // API Submit Method
   Future<void> submitSurvey() async {
     try {
-      isLoading.value = true;
-      // Final validation - check all required steps
-      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      for (int step in requiredSteps) {
-        if (!isMainStepCompleted(step)) {
-          Get.snackbar(
-            'Incomplete Form',
-            'Please complete all required fields in step ${step + 1}',
-            backgroundColor: Color(0xFFDC3545),
-            colorText: Colors.white,
-          );
-          return;
-        }
+      String userId = (await ApiService.getUid()) ?? "0";
+      print('🆔 User ID: $userId');
+
+      final multipartData = prepareMultipartData(userId);
+      final fields = multipartData['fields'] as Map<String, String>;
+      final files = multipartData['files'] as List<MultipartFiles>;
+
+      developer.log(jsonEncode(fields), name: 'REQUEST_BODY',);
+
+      final response = await ApiService.multipartPost<Map<String, dynamic>>(
+        endpoint: haddakayamPost,
+        fields: fields,
+        files: files,
+        fromJson: (json) => json as Map<String, dynamic>,
+        includeToken: true,
+      );
+
+      if (response.success && response.data != null) {
+        print('✅ Survey submitted successfully: ${response.data}');
+      } else {
+        print('❌ Survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
       }
-      // Save final data from all controllers
-      _saveAllStepsData();
-      // Mock API call
-      await Future.delayed(Duration(seconds: 2));
-      final response = {
-        'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-        'status': 'submitted',
-        'timestamp': DateTime.now().toIso8601String(),
-        'surveyData': surveyData.value,
-      };
-      surveyData.value = response;
-      Get.snackbar(
-        'Success',
-        'Your survey has been submitted successfully',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
-      );
-      // Navigate to confirmation page
-      Get.toNamed('/confirmation');
     } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Please try again',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
+      print('💥 Exception during survey submission: $e');
     }
   }
+
+
+
+
 
   void _saveAllStepsData() {
     // Collect data from all step controllers

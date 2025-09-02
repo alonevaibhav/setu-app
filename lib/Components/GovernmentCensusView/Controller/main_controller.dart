@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../API Service/api_service.dart';
+import '../../../Constants/api_constant.dart';
 import '../../GovernmentCensusView/Controller/personal_info_controller.dart';
 import '../../GovernmentCensusView/Controller/step_three_controller.dart';
 import '../../GovernmentCensusView/Controller/survey_cts.dart';
@@ -198,7 +201,8 @@ class GovernmentCensusController extends GetxController {
 
     // Print the current survey data to the console
     // print('Current Survey Data: ${surveyData.value}');
-    debugPrintInfo();
+    // debugPrintInfo();
+    submitSurvey();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -352,7 +356,6 @@ class GovernmentCensusController extends GetxController {
     }
   }
 
-
   /// Collect data from SurveyCTSController
   Map<String, dynamic> getSurveyCTSData() {
     try {
@@ -398,7 +401,6 @@ class GovernmentCensusController extends GetxController {
     }
   }
 
-
   /// Collect data from CensusFourthController
   Map<String, dynamic> getCensusFourthData() {
     try {
@@ -421,7 +423,6 @@ class GovernmentCensusController extends GetxController {
       };
     }
   }
-
 
   /// Collect data from CensusFifthController
   Map<String, dynamic> getCensusFifthData() {
@@ -460,7 +461,6 @@ class GovernmentCensusController extends GetxController {
     }
   }
 
-
   /// Collect data from CensusSixthController
   Map<String, dynamic> getCensusSixthData() {
     try {
@@ -497,7 +497,6 @@ class GovernmentCensusController extends GetxController {
       };
     }
   }
-
 
   /// Collect data from CensusSeventhController
   Map<String, dynamic> getCensusSeventhData() {
@@ -738,57 +737,284 @@ class GovernmentCensusController extends GetxController {
 
 
 
+  Map<String, dynamic> prepareMultipartData(userId) {
+    // Get all data
+    final governmentCountingData = getGovernmentCountingData();
+    final governmentCounting = governmentCountingData['government_counting'] as Map<String, dynamic>?;
+    final surveyCTSData = getSurveyCTSData();
+    final surveyCTS = surveyCTSData['survey_cts'] as Map<String, dynamic>?;
+    final governmentSurveyData = getGovernmentSurveyData();
+    final censusFourthData = getCensusFourthData();
+    final censusFifthData = getCensusFifthData();
+    final censusSixthData = getCensusSixthData();
+    final censusSeventhData = getCensusSeventhData();
+    final courtEightData = getCourtEightData();
 
 
+    // Prepare fields (non-file data)
+    Map<String, String> fields = {
+      // User ID
+      "user_id": userId?.toString() ?? "0",
 
+      // === GOVERNMENT COUNTING INFO ===
+      "government_counting_officer": personalInfoController.governmentCountingOfficerController.text.trim(),
+      "government_counting_officer_address": personalInfoController.governmentCountingOfficerAddressController.text.trim(),
+      "government_counting_order_number": personalInfoController.governmentCountingOrderNumberController.text.trim(),
+      "government_counting_order_date": personalInfoController.governmentCountingOrderDateController.text.trim(),
+      "counting_applicant_name": personalInfoController.countingApplicantNameController.text.trim(),
+      "counting_applicant_address": personalInfoController.countingApplicantAddressController.text.trim(),
+      "government_counting_details": personalInfoController.governmentCountingDetailsController.text.trim(),
 
+      // === SURVEY CTS INFO ===
+      "survey_number": surveyCTSController.surveyNumberController.text.trim(),
+      "department": surveyCTSController.selectedDepartment.value ?? "",
+      "district": surveyCTSController.selectedDistrict.value ?? "",
+      "taluka": surveyCTSController.selectedTaluka.value ?? "",
+      "village": surveyCTSController.selectedVillage.value ?? "",
+      "office": surveyCTSController.selectedOffice.value ?? "",
 
-  // API Submit Method
-  Future<void> submitSurvey() async {
-    try {
-      isLoading.value = true;
-      // Final validation - check all required steps
-      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      for (int step in requiredSteps) {
-        if (!isMainStepCompleted(step)) {
-          Get.snackbar(
-            'Incomplete Form',
-            'Please complete all required fields in step ${step + 1}',
-            backgroundColor: Color(0xFFDC3545),
-            colorText: Colors.white,
-          );
-          return;
+      // === CENSUS FOURTH INFO ===
+      "calculation_type": censusFourthController.selectedCalculationType.value ?? "",
+      "duration": censusFourthController.selectedDuration.value ?? "",
+      "holder_type": censusFourthController.selectedHolderType.value ?? "",
+      "calculation_fee_rate": censusFourthController.selectedCalculationFeeRate.value ?? "",
+      "counting_fee": censusFourthController.countingFee.value?.toString() ?? "",
+    };
+
+    // Convert complex data to JSON strings for multipart
+    final surveyEntries = _getSurveyEntries(governmentSurveyData);
+    final applicantEntries = _getApplicantEntries(censusFifthData);
+    final coOwners = _getCoOwners(censusSixthData);
+    final nextOfKin = _getNextOfKin(censusSeventhData);
+
+    // Debug: Print the arrays before encoding
+    print('🔍 Survey Entries: $surveyEntries');
+    print('🔍 Applicant Entries: $applicantEntries');
+    print('🔍 Co-owners: $coOwners');
+    print('🔍 Next of Kin: $nextOfKin');
+
+    fields["survey_entries"] = jsonEncode(surveyEntries);
+    fields["applicant_entries"] = jsonEncode(applicantEntries);
+    fields["co_owners"] = jsonEncode(coOwners);
+    fields["next_of_kin"] = jsonEncode(nextOfKin);
+
+    // Prepare files
+    List<MultipartFiles> files = [];
+
+    // Add government counting order files
+    if (personalInfoController.governmentCountingOrderFiles.isNotEmpty) {
+      for (int i = 0; i < personalInfoController.governmentCountingOrderFiles.length; i++) {
+        final filePath = personalInfoController.governmentCountingOrderFiles[i].toString();
+        if (filePath.isNotEmpty) {
+          files.add(MultipartFiles(
+            field: "government_counting_order_file_$i",
+            filePath: filePath,
+          ));
         }
       }
-      // Save final data from all controllers
-      _saveAllStepsData();
-      // Mock API call
-      await Future.delayed(Duration(seconds: 2));
-      final response = {
-        'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-        'status': 'submitted',
-        'timestamp': DateTime.now().toIso8601String(),
-        'surveyData': surveyData.value,
-      };
-      surveyData.value = response;
-      Get.snackbar(
-        'Success',
-        'Your survey has been submitted successfully',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
+    }
+
+    // Add document files from census eighth controller
+    if (censusEighthController.identityCardFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "identity_proof_path",
+        filePath: censusEighthController.identityCardFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.sevenTwelveFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "seven_twelve_path",
+        filePath: censusEighthController.sevenTwelveFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.noteFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "note_path",
+        filePath: censusEighthController.noteFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.partitionFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "partition_path",
+        filePath: censusEighthController.partitionFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.schemeSheetFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "scheme_sheet_path",
+        filePath: censusEighthController.schemeSheetFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.oldCensusMapFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "old_census_map_path",
+        filePath: censusEighthController.oldCensusMapFiles!.first.toString(),
+      ));
+    }
+
+    if (censusEighthController.demarcationCertificateFiles?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "demarcation_certificate_path",
+        filePath: censusEighthController.demarcationCertificateFiles!.first.toString(),
+      ));
+    }
+
+    print('🔍 Total Files: ${files.length}');
+    for (var file in files) {
+      print('🔍 File: ${file.field} -> ${file.filePath}');
+    }
+
+    return {
+      'fields': fields,
+      'files': files,
+    };
+  }
+
+// Helper method to get survey entries
+  List<Map<String, dynamic>> _getSurveyEntries(Map<String, dynamic> governmentSurveyData) {
+    List<Map<String, dynamic>> entries = [];
+
+    print('🔍 Processing government survey entries: ${calculationController.surveyEntries.length}');
+
+    if (calculationController.surveyEntries.isNotEmpty) {
+      for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+        final entry = calculationController.surveyEntries[i];
+        entries.add({
+          "survey_no": entry['surveyNo']?.toString() ?? "",
+          "part_no": entry['partNo']?.toString() ?? "",
+          "area": entry['area']?.toString() ?? "",
+        });
+      }
+    }
+
+    print('🔍 Generated ${entries.length} survey entries');
+    return entries;
+  }
+
+// Helper method to get applicant entries
+  List<Map<String, dynamic>> _getApplicantEntries(Map<String, dynamic> censusFifthData) {
+    List<Map<String, dynamic>> applicantsList = [];
+
+    print('🔍 Processing applicant entries: ${censusFifthController.applicantEntries.length}');
+
+    if (censusFifthController.applicantEntries.isNotEmpty) {
+      for (int i = 0; i < censusFifthController.applicantEntries.length; i++) {
+        final entry = censusFifthController.applicantEntries[i];
+        final addressData = entry['address'] as RxMap<String, dynamic>?;
+
+        applicantsList.add({
+          "agreement": (entry['agreementController'] as TextEditingController?)?.text?.trim() ?? "",
+          "account_holder_name": (entry['accountHolderNameController'] as TextEditingController?)?.text?.trim() ?? "",
+          "account_number": (entry['accountNumberController'] as TextEditingController?)?.text?.trim() ?? "",
+          "mobile_number": (entry['mobileNumberController'] as TextEditingController?)?.text?.trim() ?? "",
+          "server_number": (entry['serverNumberController'] as TextEditingController?)?.text?.trim() ?? "",
+          "area": (entry['areaController'] as TextEditingController?)?.text?.trim() ?? "",
+          "potkaharaba_area": (entry['potkaharabaAreaController'] as TextEditingController?)?.text?.trim() ?? "",
+          "total_area": (entry['totalAreaController'] as TextEditingController?)?.text?.trim() ?? "",
+          "plot_no": addressData?['plotNo']?.toString() ?? "",
+          "address": addressData?['address']?.toString() ?? "",
+          "address_mobile_number": addressData?['mobileNumber']?.toString() ?? "",
+          "email": addressData?['email']?.toString() ?? "",
+          "pincode": addressData?['pincode']?.toString() ?? "",
+          "address_district": addressData?['district']?.toString() ?? "",
+          "address_village": addressData?['village']?.toString() ?? "",
+          "post_office": addressData?['postOffice']?.toString() ?? "",
+        });
+      }
+    }
+
+    print('🔍 Generated ${applicantsList.length} applicant entries');
+    return applicantsList;
+  }
+
+// Helper method to get co-owners
+  List<Map<String, dynamic>> _getCoOwners(Map<String, dynamic> censusSixthData) {
+    List<Map<String, dynamic>> coOwnersList = [];
+
+    print('🔍 Processing co-owners: ${censusSixthController.coownerEntries.length}');
+
+    if (censusSixthController.coownerEntries.isNotEmpty) {
+      for (int i = 0; i < censusSixthController.coownerEntries.length; i++) {
+        final entry = censusSixthController.coownerEntries[i];
+        final addressEntry = entry['address'];
+        final address = addressEntry != null ? addressEntry as Map<String, String> : <String, String>{};
+
+        coOwnersList.add({
+          "name": (entry['nameController'] as TextEditingController?)?.text?.trim() ?? "",
+          "mobile_number": (entry['mobileNumberController'] as TextEditingController?)?.text?.trim() ?? "",
+          "server_number": (entry['serverNumberController'] as TextEditingController?)?.text?.trim() ?? "",
+          "consent": (entry['consentController'] as TextEditingController?)?.text?.trim() ?? "",
+          "plot_no": address['plotNo'] ?? "",
+          "address": address['address'] ?? "",
+          "address_mobile_number": address['mobileNumber'] ?? "",
+          "email": address['email'] ?? "",
+          "pincode": address['pincode'] ?? "",
+          "address_district": address['district'] ?? "",
+          "address_village": address['village'] ?? "",
+          "post_office": address['postOffice'] ?? "",
+        });
+      }
+    }
+
+    print('🔍 Generated ${coOwnersList.length} co-owners');
+    return coOwnersList;
+  }
+
+// Helper method to get next of kin
+  List<Map<String, dynamic>> _getNextOfKin(Map<String, dynamic> censusSeventhData) {
+    List<Map<String, dynamic>> nextOfKinList = [];
+
+    print('🔍 Processing next of kin: ${censusSeventhController.nextOfKinEntries.length}');
+
+    if (censusSeventhController.nextOfKinEntries.isNotEmpty) {
+      for (int i = 0; i < censusSeventhController.nextOfKinEntries.length; i++) {
+        final entry = censusSeventhController.nextOfKinEntries[i];
+
+        nextOfKinList.add({
+          "name": (entry['nameController'] as TextEditingController?)?.text?.trim() ?? "",
+          "address": (entry['addressController'] as TextEditingController?)?.text?.trim() ?? "",
+          "mobile": (entry['mobileController'] as TextEditingController?)?.text?.trim() ?? "",
+          "survey_no": (entry['surveyNoController'] as TextEditingController?)?.text?.trim() ?? "",
+          "direction": entry['direction']?.toString() ?? "",
+          "natural_resources": entry['naturalResources']?.toString() ?? "",
+        });
+      }
+    }
+
+    print('🔍 Generated ${nextOfKinList.length} next of kin entries');
+    return nextOfKinList;
+  }
+  Future<void> submitSurvey() async {
+    try {
+      String userId = (await ApiService.getUid()) ?? "0";
+      print('🆔 User ID: $userId');
+
+      final multipartData = prepareMultipartData(userId);
+      final fields = multipartData['fields'] as Map<String, String>;
+      final files = multipartData['files'] as List<MultipartFiles>;
+
+      developer.log(jsonEncode(fields), name: 'REQUEST_BODY');
+
+      final response = await ApiService.multipartPost<Map<String, dynamic>>(
+        endpoint: landAcquisitionPost, // Update this endpoint name as needed
+        fields: fields,
+        files: files,
+        fromJson: (json) => json as Map<String, dynamic>,
+        includeToken: true,
       );
-      // Navigate to confirmation page
-      Get.toNamed('/confirmation');
+
+      if (response.success && response.data != null) {
+        print('✅ Government counting survey submitted successfully: ${response.data}');
+      } else {
+        print('❌ Government counting survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
+      }
     } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Please try again',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
+      print('💥 Exception during government counting survey submission: $e');
     }
   }
 

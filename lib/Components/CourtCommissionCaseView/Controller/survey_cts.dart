@@ -13,6 +13,10 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   final selectedVillage = ''.obs;
   final selectedOffice = ''.obs;
 
+  final selectedSurveyNo = 'Survey No.'.obs;
+  final List<String> noSelect = ['Survey No.', 'CTS No.'];
+
+
   // Dropdown Options - You can make these dynamic by fetching from API
   final List<String> departmentOptions = [
     'Revenue Department',

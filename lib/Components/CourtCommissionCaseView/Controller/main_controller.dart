@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../API Service/api_service.dart';
+import '../../../Constants/api_constant.dart';
 import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
 import '../../CourtCommissionCaseView/Controller/step_three_controller.dart';
 import '../../CourtCommissionCaseView/Controller/survey_cts.dart';
@@ -188,7 +191,8 @@ class CourtCommissionCaseController extends GetxController {
     _saveCurrentSubStepData();
 
     // Print the current survey data to the console
-    debugPrintPersonalInfo();
+    // debugPrintPersonalInfo();
+    submitCourtCommissionSurvey();
     // print('Current Survey Data: ${surveyData.value}');
 
     // Get the current step's total substeps
@@ -205,7 +209,7 @@ class CourtCommissionCaseController extends GetxController {
         _updateStepValidation();
       } else {
         // We're at the last step and last substep, submit the survey
-        submitSurvey();
+        submitCourtCommissionSurvey();
       }
     }
   }
@@ -645,57 +649,250 @@ class CourtCommissionCaseController extends GetxController {
 
 
 
+  Map<String, dynamic> prepareMultipartData(userId) {
+    // Debug: Print raw controller data to check what's available
+    print('🔍 Survey Entries Length: ${calculationController.surveyEntries.length}');
+    print('🔍 Survey Entries: ${calculationController.surveyEntries}');
+    print('🔍 Plaintiff/Defendant Entries Length: ${courtFifthController.plaintiffDefendantEntries.length}');
+    print('🔍 Plaintiff/Defendant Entries: ${courtFifthController.plaintiffDefendantEntries}');
+    print('🔍 Next of Kin Entries Length: ${courtSixthController.nextOfKinEntries.length}');
+    print('🔍 Next of Kin Entries: ${courtSixthController.nextOfKinEntries}');
 
+    // Prepare fields (non-file data)
+    Map<String, String> fields = {
+      // User ID
+      "user_id": userId?.toString() ?? "0",
 
+      // === COURT COMMISSION INFO ===
+      "court_name": personalInfoController.courtNameController.text.trim(),
+      "court_address": personalInfoController.courtAddressController.text.trim(),
+      "commission_order_number": personalInfoController.commissionOrderNoController.text.trim(),
+      "commission_date": personalInfoController.commissionDateController.text.trim(),
+      "civil_claim": personalInfoController.civilClaimController.text.trim(),
+      "issuing_office": personalInfoController.issuingOfficeController.text.trim(),
 
+      // === SURVEY CTS INFO ===
+      "survey_number": surveyCTSController.selectedSurveyNo.value,
+      "department": surveyCTSController.selectedDepartment.value,
+      "district": surveyCTSController.selectedDistrict.value,
+      "taluka": surveyCTSController.selectedTaluka.value,
+      "village": surveyCTSController.selectedVillage.value,
+      "office": surveyCTSController.selectedOffice.value,
 
+      // === COURT FOURTH INFO ===
+      "calculation_type": courtFourthController.selectedCalculationType.value ?? "",
+      "duration": courtFourthController.selectedDuration.value ?? "",
+      "holder_type": courtFourthController.selectedHolderType.value ?? "",
+      "location_category": courtFourthController.selectedLocationCategory.value ?? "",
+      "calculation_fee": courtFourthController.calculationFeeController.text.trim(),
+      "calculation_fee_numeric": courtFourthController.extractNumericFee()?.toString() ?? "0",
 
-  // API Submit Method
-  Future<void> submitSurvey() async {
-    try {
-      isLoading.value = true;
-      // Final validation - check all required steps
-      List<int> requiredSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-      for (int step in requiredSteps) {
-        if (!isMainStepCompleted(step)) {
-          Get.snackbar(
-            'Incomplete Form',
-            'Please complete all required fields in step ${step + 1}',
-            backgroundColor: Color(0xFFDC3545),
-            colorText: Colors.white,
-          );
-          return;
-        }
+      // === IDENTITY TYPE ===
+      "identity_card_type": courtSeventhController.selectedIdentityType.value,
+    };
+
+    // Convert complex data to JSON strings for multipart
+    final surveyAreas = _getCourtSurveyEntries();
+    final plaintiffDefendants = _getPlaintiffDefendants();
+    final nextOfKin = _getCourtNextOfKin();
+
+    // Debug: Print the arrays before encoding
+    print('🔍 Survey Entries: $surveyAreas');
+    print('🔍 Plaintiff/Defendants: $plaintiffDefendants');
+    print('🔍 Next of Kin: $nextOfKin');
+
+    fields["survey_areas"] = jsonEncode(surveyAreas);
+    fields["plaintiff_defendants"] = jsonEncode(plaintiffDefendants);
+    fields["next_of_kin"] = jsonEncode(nextOfKin);
+
+    // Prepare files
+    List<MultipartFiles> files = [];
+
+    // Add commission order files
+    if (personalInfoController.commissionOrderFiles.isNotEmpty) {
+        final filePath = personalInfoController.commissionOrderFiles.toString();
+        if (filePath.isNotEmpty) {
+          files.add(MultipartFiles(
+            field: "commission_order_document",
+            filePath: filePath,
+          ));
+
       }
-      // Save final data from all controllers
-      _saveAllStepsData();
-      // Mock API call
-      await Future.delayed(Duration(seconds: 2));
-      final response = {
-        'applicationId': 'SETU${DateTime.now().millisecondsSinceEpoch}',
-        'status': 'submitted',
-        'timestamp': DateTime.now().toIso8601String(),
-        'surveyData': surveyData.value,
-      };
-      surveyData.value = response;
-      Get.snackbar(
-        'Success',
-        'Your survey has been submitted successfully',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
+    }
+
+    // Add document files (single entries, not arrays)
+    if (courtSeventhController.identityCardFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "identity_proof_path",
+        filePath: courtSeventhController.identityCardFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.sevenTwelveFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "seven_eleven_path",
+        filePath: courtSeventhController.sevenTwelveFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.noteFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "tipan_path",
+        filePath: courtSeventhController.noteFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.partitionFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "fadni_path",
+        filePath: courtSeventhController.partitionFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.schemeSheetFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "yojana_patrak_path",
+        filePath: courtSeventhController.schemeSheetFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.oldCensusMapFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "old_measurement_path",
+        filePath: courtSeventhController.oldCensusMapFiles.first.toString(),
+      ));
+    }
+
+    if (courtSeventhController.demarcationCertificateFiles.isNotEmpty) {
+      files.add(MultipartFiles(
+        field: "simankan_pramanpatra_path",
+        filePath: courtSeventhController.demarcationCertificateFiles.first.toString(),
+      ));
+    }
+
+    print('🔍 Total Files: ${files.length}');
+    for (var file in files) {
+      print('🔍 File: ${file.field} -> ${file.filePath}');
+    }
+
+    return {
+      'fields': fields,
+      'files': files,
+    };
+  }
+
+// Helper method to get survey entries
+  List<Map<String, dynamic>> _getCourtSurveyEntries() {
+    List<Map<String, dynamic>> entries = [];
+
+    if (calculationController.surveyEntries.isNotEmpty) {
+      print('🔍 Processing ${calculationController.surveyEntries.length} survey entries');
+
+      for (int i = 0; i < calculationController.surveyEntries.length; i++) {
+        final entry = calculationController.surveyEntries[i];
+        entries.add({
+          "survey_number": entry['surveyNo']?.toString() ?? "",
+          "share": entry['share']?.toString() ?? "",
+          "area": entry['area']?.toString() ?? "",
+          "village": entry['selectedVillage']?.toString() ?? "",
+        });
+      }
+    } else {
+      print('🔍 No survey entries found in calculationController');
+    }
+
+    print('🔍 Generated ${entries.length} survey entries');
+    return entries;
+  }
+
+// Helper method to get plaintiff/defendants
+  List<Map<String, dynamic>> _getPlaintiffDefendants() {
+    List<Map<String, dynamic>> plaintiffDefendantsList = [];
+
+    if (courtFifthController.plaintiffDefendantEntries.isNotEmpty) {
+      print('🔍 Processing ${courtFifthController.plaintiffDefendantEntries.length} plaintiff/defendant entries');
+
+      for (int i = 0; i < courtFifthController.plaintiffDefendantEntries.length; i++) {
+        final entry = courtFifthController.plaintiffDefendantEntries[i];
+        final selectedType = entry['selectedType'] as RxString?;
+        final detailedAddress = entry['detailedAddress'] as RxMap<String, String>?;
+
+        plaintiffDefendantsList.add({
+          "name": entry['nameController']?.text ?? "",
+          "address": entry['addressController']?.text ?? "",
+          "mobile": entry['mobileController']?.text ?? "",
+          "survey_number": entry['surveyNumberController']?.text ?? "",
+          "type": selectedType?.value ?? "",
+          // Individual detailed address fields
+          "plot_no": detailedAddress?['plotNo'] ?? "",
+          "detailed_address": detailedAddress?['address'] ?? "",
+          "mobile_number": detailedAddress?['mobileNumber'] ?? "",
+          "email": detailedAddress?['email'] ?? "",
+          "pincode": detailedAddress?['pincode'] ?? "",
+          "district": detailedAddress?['district'] ?? "",
+          "village": detailedAddress?['village'] ?? "",
+          "post_office": detailedAddress?['postOffice'] ?? "",
+        });
+      }
+    } else {
+      print('🔍 No plaintiff/defendant entries found in courtFifthController');
+    }
+
+    print('🔍 Generated ${plaintiffDefendantsList.length} plaintiff/defendant entries with detailed address fields');
+    return plaintiffDefendantsList;
+  }
+
+// Helper method to get next of kin
+  List<Map<String, dynamic>> _getCourtNextOfKin() {
+    List<Map<String, dynamic>> nextOfKinList = [];
+
+    if (courtSixthController.nextOfKinEntries.isNotEmpty) {
+      print('🔍 Processing ${courtSixthController.nextOfKinEntries.length} next of kin entries');
+
+      for (int i = 0; i < courtSixthController.nextOfKinEntries.length; i++) {
+        final entry = courtSixthController.nextOfKinEntries[i];
+        nextOfKinList.add({
+          "address": entry['address']?.toString() ?? "",
+          "mobile": entry['mobile']?.toString() ?? "",
+          "survey_no": entry['surveyNo']?.toString() ?? "",
+          "direction": entry['direction']?.toString() ?? "",
+          "natural_resources": entry['naturalResources']?.toString() ?? "",
+        });
+      }
+    } else {
+      print('🔍 No next of kin entries found in courtSixthController');
+    }
+
+    print('🔍 Generated ${nextOfKinList.length} next of kin entries');
+    return nextOfKinList;
+  }
+
+  Future<void> submitCourtCommissionSurvey() async {
+    try {
+      String userId = (await ApiService.getUid()) ?? "0";
+      print('🆔 User ID: $userId');
+
+      final multipartData = prepareMultipartData(userId);
+      final fields = multipartData['fields'] as Map<String, String>;
+      final files = multipartData['files'] as List<MultipartFiles>;
+
+      developer.log(jsonEncode(fields), name: 'COURT_REQUEST_BODY');
+
+      final response = await ApiService.multipartPost<Map<String, dynamic>>(
+        endpoint: landAcquisitionPost, // Your API endpoint
+        fields: fields,
+        files: files,
+        fromJson: (json) => json as Map<String, dynamic>,
+        includeToken: true,
       );
-      // Navigate to confirmation page
-      Get.toNamed('/confirmation');
+
+      if (response.success && response.data != null) {
+        print('✅ Court commission survey submitted successfully: ${response.data}');
+      } else {
+        print('❌ Court commission survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
+      }
     } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        'Something went wrong. Please try again',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
+      print('💥 Exception during court commission survey submission: $e');
     }
   }
 

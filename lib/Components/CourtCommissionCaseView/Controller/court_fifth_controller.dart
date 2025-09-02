@@ -27,8 +27,7 @@ class CourtFifthController extends GetxController with StepValidationMixin, Step
       entry['mobileController']?.dispose();
       entry['surveyNumberController']?.dispose();
       // Dispose address popup controllers
-      entry['addressPopupControllers']?.forEach((key, controller) {
-        controller?.dispose();
+      entry['addressPopupControllers']?.forEach((key, controller) {controller?.dispose();
       });
     }
     super.onClose();
