@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
+import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/step_four.dart';
 
@@ -52,13 +53,16 @@ class StepFourView extends StatelessWidget {
         Gap(24.h),
 
         // Calculation Type Dropdown
-        Obx(() => SurveyUIUtils.buildDropdownField(
-          label: 'Calculation type *',
-          value: controller.selectedCalculationType.value ?? '',
-          items: controller.calculationTypeOptions,
-          onChanged: controller.updateCalculationType,
-          icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-        )),
+        Obx(() {
+          final calculationController = Get.find<CalculationController>();
+          return SurveyUIUtils.buildTextFormField(
+            controller: TextEditingController(text: calculationController.selectedCalculationType.value),
+            label: 'Calculation type',
+            hint: 'Calculation type',
+            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+            readOnly: true,
+          );
+        }),
         Gap(16.h),
 
         // Duration Dropdown

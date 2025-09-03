@@ -71,6 +71,7 @@ import 'package:get/get.dart';
 import 'API Service/api_service.dart';
 import 'Auth/login_view_controller.dart';
 import 'Auth/token_manager.dart';
+import 'Components/LandSurveyView/Controller/step_three_controller.dart';
 import 'Controller/get_translation_controller/get_translation_controller.dart';
 import 'Route Manager/app_bindings.dart';
 import 'Route Manager/app_routes.dart';
@@ -87,6 +88,7 @@ void main() async {
   // Get.lazyPut(() => TranslationController());
   Get.put(TranslationController());
   Get.put(LoginViewController()); // Initialize LoginViewController
+  Get.put(CalculationController());
 
   // Set system UI overlay style
   SystemChrome.setSystemUIOverlayStyle(
