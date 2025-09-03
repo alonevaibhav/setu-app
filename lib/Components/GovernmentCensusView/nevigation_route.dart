@@ -3,6 +3,7 @@ import 'Controller/main_controller.dart';
 import 'Steps/census_eighth_view.dart';
 import 'Steps/census_fifth_view.dart';
 import 'Steps/census_fourth_view.dart';
+import 'Steps/census_preview_view.dart';
 import 'Steps/census_seventh_view.dart';
 import 'Steps/census_sixth_view.dart';
 import 'Steps/start.dart';
@@ -70,7 +71,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 8:
-        return PersonalInfoStep(
+        return GovernmentCensusPreviewStep(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

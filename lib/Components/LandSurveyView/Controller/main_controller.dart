@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/preview_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/step_four.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_eight_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_fifth_controller.dart';
@@ -14,9 +14,6 @@ import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
 import 'dart:developer' as developer;
 
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 class MainSurveyController extends GetxController {
   // Navigation State
@@ -34,6 +31,7 @@ class MainSurveyController extends GetxController {
   late final SurveySixthController surveySixthController;
   late final SurveySeventhController surveySeventhController;
   late final SurveyEightController surveyEightController;
+  // late final SurveyPreviewController SurveyPreviewController ;
 
   // Add more controllers as needed
 
@@ -65,7 +63,7 @@ class MainSurveyController extends GetxController {
     7: [
       'documents',
     ], // Document Upload
-    8: ['preview', 'status'], // Preview
+    8: ['preview'], // Preview
     9: ['payment', 'status'], // Payment
   };
 
@@ -151,6 +149,10 @@ class MainSurveyController extends GetxController {
         return surveySeventhController;
       case 7: // Add this case for calculation step
         return surveyEightController;
+        case 8: // Add this case for calculation step
+          final previewController = Get.put(SurveyPreviewController(), tag: 'survey_preview');
+          previewController.refreshData(); // Refresh data when navigating to preview
+          return previewController;
 
       default:
         return this; // Fallback to main controller
@@ -229,6 +231,11 @@ class MainSurveyController extends GetxController {
         currentStep.value++;
         currentSubStep.value = 0;
         _updateStepValidation();
+        // If we just moved to preview step (step 8), refresh preview data
+        if (currentStep.value == 8) {
+          final previewController = Get.find<SurveyPreviewController>(tag: 'survey_preview');
+          previewController.refreshData();
+        }
       } else {
         // We're at the last step and last substep, submit the survey
         submitSurvey();
@@ -261,6 +268,12 @@ class MainSurveyController extends GetxController {
       if (canNavigate || step <= currentStep.value) {
         currentStep.value = step;
         currentSubStep.value = 0;
+        // If navigating to preview step (step 8), refresh preview data
+
+        if (step == 8) {
+          final previewController = Get.find<SurveyPreviewController>(tag: 'survey_preview');
+          previewController.refreshData();
+        }
       } else {
         Get.snackbar(
           'Incomplete',

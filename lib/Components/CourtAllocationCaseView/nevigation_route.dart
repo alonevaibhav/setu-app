@@ -3,6 +3,7 @@ import 'Controller/main_controller.dart';
 import 'Steps/allocation_fifth_view.dart';
 import 'Steps/allocation_seventh_view.dart';
 import 'Steps/allocation_sixth_view.dart';
+import 'Steps/court_all_view.dart';
 import 'Steps/court_fouth_view.dart';
 import 'Steps/start.dart';
 import 'Steps/survey_cts.dart';
@@ -64,7 +65,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 7:
-        return PersonalInfoStep(
+        return CourtAllocationPreviewStep(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

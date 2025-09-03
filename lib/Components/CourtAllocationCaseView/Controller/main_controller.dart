@@ -9,11 +9,10 @@ import '../../CourtAllocationCaseView/Controller/survey_cts.dart';
 import 'allocation_fifth_controller.dart';
 import 'allocation_seventh_controller.dart';
 import 'allocation_sixth_controller.dart';
+import 'court_all_controller.dart';
 import 'court_fouth_controller.dart';
 import 'dart:developer' as developer;
 
-
-// Import all step controllers
 
 class CourtAllocationCaseController extends GetxController {
   // Navigation State
@@ -130,6 +129,11 @@ class CourtAllocationCaseController extends GetxController {
         return allocationSixthController;
         case 6: // Add this case for calculation step
         return allocationSeventhController;
+      case 7: // Add this case for calculation step
+        final previewController = Get.put(CourtAllocationPreviewController(), tag: 'court_allocation_preview');
+        previewController.refreshData(); // Refresh data when navigating to preview
+        return previewController;
+
       // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
@@ -208,7 +212,11 @@ class CourtAllocationCaseController extends GetxController {
         currentStep.value++;
         currentSubStep.value = 0;
         _updateStepValidation();
-      } else {
+      }
+      if (currentStep.value == 7) {
+        final previewController = Get.find<CourtAllocationPreviewController>(tag: 'court_allocation_preview');
+        previewController.refreshData();
+      }else {
         // We're at the last step and last substep, submit the survey
         submitSurvey();
       }
@@ -240,6 +248,10 @@ class CourtAllocationCaseController extends GetxController {
       if (canNavigate || step <= currentStep.value) {
         currentStep.value = step;
         currentSubStep.value = 0;
+        if (step == 7) {
+          final previewController = Get.find<CourtAllocationPreviewController>(tag: 'court_allocation_preview');
+          previewController.refreshData();
+        }
       } else {
         Get.snackbar(
           'Incomplete',
@@ -317,223 +329,6 @@ class CourtAllocationCaseController extends GetxController {
   }
 
 
-///////////////////////////////////
-// ALL DATA COLLECTION METHODS
-///////////////////////////////////
-
-  /// Collect data from PersonalInfoController
-  Map<String, dynamic> getCourtOrderData() {
-    try {
-      if (personalInfoController is StepDataMixin) {
-        return personalInfoController.getStepData();
-      }
-      return {
-        'court_order': {
-          'court_name': personalInfoController.courtNameController.text.trim(),
-          'court_address': personalInfoController.courtAddressController.text.trim(),
-          'court_order_number': personalInfoController.courtOrderNumberController.text.trim(),
-          'court_allotment_date': personalInfoController.courtAllotmentDateController.text.trim(),
-          'selected_court_allotment_date': personalInfoController.courtAllotmentDate.value?.toIso8601String(),
-          'claim_number_year': personalInfoController.claimNumberYearController.text.trim(),
-          'special_order_comments': personalInfoController.specialOrderCommentsController.text.trim(),
-          'court_order_files': personalInfoController.courtOrderFiles.toList(),
-        }
-      };
-    } catch (e) {
-      print('Error getting PersonalInfo data: $e');
-      return {
-        'personal_info': {},
-        'court_order': {}
-      };
-    }
-  }
-
-  /// Collect data from SurveyCTSController
-  Map<String, dynamic> getSurveyCTSData() {
-    try {
-      if (surveyCTSController is StepDataMixin) {
-        return surveyCTSController.getStepData();
-      }
-      return {
-        'survey_cts': {
-          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
-          'department': surveyCTSController.selectedDepartment.value,
-          'district': surveyCTSController.selectedDistrict.value,
-          'taluka': surveyCTSController.selectedTaluka.value,
-          'village': surveyCTSController.selectedVillage.value,
-          'office': surveyCTSController.selectedOffice.value,
-        }
-      };
-    } catch (e) {
-      print('Error getting SurveyCTS data: $e');
-      return {'survey_cts': {}};
-    }
-  }
-
-  /// Collect data from CalculationController
-  Map<String, dynamic> getCalculationData() {
-    try {
-      if (calculationController is StepDataMixin) {
-        return calculationController.getStepData();
-      }
-      return {
-        'calculation': {
-          'survey_entries': calculationController.surveyEntries.map((entry) => {
-            'id': entry['id'],
-            'survey_no': entry['surveyNo'],
-            'share': entry['share'],
-            'area': entry['area'],
-            'selected_village': entry['selectedVillage'],
-          }).toList(),
-          'total_area': calculationController.totalArea,
-          'total_share': calculationController.totalShare,
-          'village_options': calculationController.villageOptions,
-          'is_loading': calculationController.isLoading.value,
-          'calculation_summary': calculationController.getCalculationSummary(),
-          'selected_villages': calculationController.getSelectedVillages(),
-          'completion_percentage': calculationController.getCompletionPercentage(),
-          'all_entries_complete': calculationController.areAllEntriesComplete(),
-        }
-      };
-    } catch (e) {
-      print('Error getting Calculation data: $e');
-      return {
-        'calculation': {}
-      };
-    }
-  }
-
-  /// Collect data from CourtAlloFouthController
-  Map<String, dynamic> getCourtAlloFourthData() {
-    try {
-      if (courtAlloFouthController is StepDataMixin) {
-        return courtAlloFouthController.getStepData();
-      }
-      return {
-        'court_allo_fourth': {
-          'calculation_type': courtAlloFouthController.selectedCalculationType.value,
-          'duration': courtAlloFouthController.selectedDuration.value,
-          'holder_type': courtAlloFouthController.selectedHolderType.value,
-          'location_category': courtAlloFouthController.selectedLocationCategory.value,
-          'calculation_fee': courtAlloFouthController.calculationFeeController.text.trim(),
-          'calculation_fee_numeric': courtAlloFouthController.extractNumericFee(),
-        }
-      };
-    } catch (e) {
-      print('Error getting CourtAlloFourth data: $e');
-      return {
-        'court_allo_fourth': {}
-      };
-    }
-  }
-
-  /// Collect data from AllocationFifthController
-  Map<String, dynamic> getAllocationFifthData() {
-    try {
-      if (allocationFifthController is StepDataMixin) {
-        return allocationFifthController.getStepData();
-      }
-
-      final List<Map<String, dynamic>> entriesData = [];
-
-      for (var entry in allocationFifthController.plaintiffDefendantEntries) {
-        final selectedType = entry['selectedType'] as RxString?;
-        final detailedAddress = entry['detailedAddress'] as RxMap<String, String>;
-
-        entriesData.add({
-          'name': entry['nameController']?.text ?? '',
-          'address': entry['addressController']?.text ?? '',
-          'mobile': entry['mobileController']?.text ?? '',
-          'survey_number': entry['surveyNumberController']?.text ?? '',
-          'type': selectedType?.value ?? '',
-          'detailed_address': Map<String, String>.from(detailedAddress),
-        });
-      }
-
-      return {
-        'allocation_fifth': {
-          'plaintiff_defendant_entries': entriesData,
-          'total_entries': allocationFifthController.plaintiffDefendantEntries.length,
-        }
-      };
-    } catch (e) {
-      print('Error getting AllocationFifth data: $e');
-      return {
-        'allocation_fifth': {}
-      };
-    }
-  }
-
-  /// Collect data from AllocationSixthController
-  Map<String, dynamic> getAllocationSixthData() {
-    try {
-      if (allocationSixthController is StepDataMixin) {
-        return allocationSixthController.getStepData();
-      }
-
-      final List<Map<String, dynamic>> entriesData = [];
-
-      for (final entry in allocationSixthController.nextOfKinEntries) {
-        entriesData.add({
-          'address': entry['addressController']?.text ?? '',
-          'mobile': entry['mobileController']?.text ?? '',
-          'survey_no': entry['surveyNoController']?.text ?? '',
-          'direction': entry['direction'] ?? '',
-          'natural_resources': entry['naturalResources'] ?? '',
-        });
-      }
-
-      return {
-        'allocation_sixth': {
-          'next_of_kin_entries': entriesData,
-          'total_next_of_kin_entries': allocationSixthController.nextOfKinEntries.length,
-        }
-      };
-    } catch (e) {
-      print('Error getting AllocationSixth data: $e');
-      return {
-        'allocation_sixth': {}
-      };
-    }
-  }
-
-
-  /// Collect data from CourtSeventhController
-  Map<String, dynamic> getCourtSeventhData() {
-    try {
-      if (allocationSeventhController is StepDataMixin) {
-        return allocationSeventhController.getStepData();
-      }
-      return {
-        'court_seventh': {
-          'selected_identity_type': allocationSeventhController.selectedIdentityType.value,
-          'identity_card_files': allocationSeventhController.identityCardFiles.toList(),
-          'seven_twelve_files': allocationSeventhController.sevenTwelveFiles.toList(),
-          'note_files': allocationSeventhController.noteFiles.toList(),
-          'partition_files': allocationSeventhController.partitionFiles.toList(),
-          'scheme_sheet_files': allocationSeventhController.schemeSheetFiles.toList(),
-          'old_census_map_files': allocationSeventhController.oldCensusMapFiles.toList(),
-          'demarcation_certificate_files': allocationSeventhController.demarcationCertificateFiles.toList(),
-          'identity_card_options': allocationSeventhController.identityCardOptions,
-          'all_documents_uploaded': allocationSeventhController.areAllDocumentsUploaded,
-          'upload_progress_text': allocationSeventhController.uploadProgressText,
-          // 'validation_errors': courtSeventhController.validationErrors.toMap(),
-        }
-      };
-    } catch (e) {
-      print('Error getting CourtSeventh data: $e');
-      return {
-        'court_seventh': {}
-      };
-    }
-  }
-
-
-
-
-///////////////////////////////////
-// DEBUG PRINT METHODS
-///////////////////////////////////
 
   void debugPrintInfo() {
     developer.log('=== COURT ORDER DATA DEBUG ===', name: 'DebugInfo');

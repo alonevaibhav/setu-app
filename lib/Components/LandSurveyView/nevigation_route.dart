@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'Controller/main_controller.dart';
+import 'Steps/land_survey_preview.dart';
 import 'Steps/start.dart';
 import 'Steps/step_four_view.dart';
 import 'Steps/survey_cts.dart';
@@ -70,7 +71,7 @@ class _SurveyStepWidgetState extends State<SurveyStepWidget> {
           mainController: widget.mainController,
         );
       case 8:
-        return PersonalInfoStep(
+        return SurveyPreviewStep(
           currentSubStep: widget.currentSubStep,
           mainController: widget.mainController,
         );

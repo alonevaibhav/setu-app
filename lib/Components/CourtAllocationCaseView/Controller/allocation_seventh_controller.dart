@@ -56,14 +56,22 @@ class AllocationSeventhController extends GetxController with StepValidationMixi
   @override
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'documents':
-        return _validateDocuments();
-      case 'status':
-        return true; // Status is always valid for this step
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'documents':
+  //       return _validateDocuments();
+  //     case 'status':
+  //       return true; // Status is always valid for this step
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateDocuments() {
     validationErrors.clear();

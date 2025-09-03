@@ -9,6 +9,7 @@ import '../../LandAcquisitionView/Controller/step_three_controller.dart';
 import '../../LandAcquisitionView/Controller/survey_cts_controller.dart';
 import 'land_fifth_controller.dart';
 import 'land_fouth_controller.dart';
+import 'land_preview_controller.dart';
 import 'land_seventh_controller.dart';
 import 'land_sixth_controller.dart';
 
@@ -138,7 +139,11 @@ class MainLandAcquisitionController extends GetxController {
         return laandSixthController;
       case 6: // Add this case for calculation step
         return landSeventhController;
-      // Add more cases as you create more controllers
+        case 7: // Add this case for calculation step
+        final previewController = Get.put(LandAcquisitionPreviewController(), tag: 'land_acquisition_preview');
+        previewController.refreshData(); // Refresh data when navigating to preview
+        return previewController;
+    // Add more cases as you create more controllers
       default:
         return this; // Fallback to main controller
     }
@@ -251,7 +256,13 @@ class MainLandAcquisitionController extends GetxController {
         currentSubStep.value = 0;
         print('Moved to next step: ${currentStep.value}');
         _updateStepValidation();
-      } else {
+      }
+      if (currentStep.value == 7) {
+        final previewController = Get.find<LandAcquisitionPreviewController>(tag: 'land_acquisition_preview');
+        previewController.refreshData();
+      }
+
+      else {
         // We're at the last step and last substep, submit the survey
         print('Submitting survey...');
         submitLandAcquisitionSurvey();
@@ -284,6 +295,11 @@ class MainLandAcquisitionController extends GetxController {
       if (canNavigate || step <= currentStep.value) {
         currentStep.value = step;
         currentSubStep.value = 0;
+
+        if (currentStep.value == 7) {
+          final previewController = Get.find<LandAcquisitionPreviewController>(tag: 'land_acquisition_preview');
+          previewController.refreshData();
+        }
       } else {
         Get.snackbar(
           'Incomplete',
@@ -372,181 +388,16 @@ class MainLandAcquisitionController extends GetxController {
 ///////////////////////////////////
 
   /// Collect data from PersonalInfoController
-  Map<String, dynamic> getLandAcquisitionData() {
-    try {
-      if (personalInfoController is StepDataMixin) {
-        return personalInfoController.getStepData();
-      }
-      return {
-        'land_acquisition': {
-          'land_acquisition_officer': personalInfoController.landAcquisitionOfficerController.text.trim(),
-          'land_acquisition_board': personalInfoController.landAcquisitionBoardController.text.trim(),
-          'land_acquisition_details': personalInfoController.landAcquisitionDetailsController.text.trim(),
-          'land_acquisition_order_number': personalInfoController.landAcquisitionOrderNumberController.text.trim(),
-          'land_acquisition_order_date': personalInfoController.landAcquisitionOrderDateController.text.trim(),
-          'land_acquisition_office_address': personalInfoController.landAcquisitionOfficeAddressController.text.trim(),
-          'land_acquisition_order_files': personalInfoController.landAcquisitionOrderFiles.toList(),
-          'land_acquisition_map_files': personalInfoController.landAcquisitionMapFiles.toList(),
-          'kml_files': personalInfoController.kmlFiles.toList(),
-        }
-      };
-    } catch (e) {
-      print('Error getting PersonalInfo data: $e');
-      return {
-        'personal_info': {},
-        'land_acquisition': {}
-      };
-    }
-  }
 
   /// Collect data from SurveyCTSController
-  Map<String, dynamic> getSurveyCTSData() {
-    try {
-      if (surveyCTSController is StepDataMixin) {
-        return surveyCTSController.getStepData();
-      }
-      return {
-        'survey_cts': {
-          'survey_number': surveyCTSController.surveyNumberController.text.trim(),
-          'department': surveyCTSController.selectedDepartment.value,
-          'district': surveyCTSController.selectedDistrict.value,
-          'taluka': surveyCTSController.selectedTaluka.value,
-          'village': surveyCTSController.selectedVillage.value,
-          'office': surveyCTSController.selectedOffice.value,
-        }
-      };
-    } catch (e) {
-      print('Error getting SurveyCTS data: $e');
-      return {'survey_cts': {}};
-    }
-  }
 
   /// Collect data from CalculationController
-  Map<String, dynamic> getCalculationData() {
-    try {
-      if (calculationController is StepDataMixin) {
-        return calculationController.getStepData();
-      }
-
-      List<Map<String, dynamic>> entriesData = [];
-      for (int i = 0; i < calculationController.surveyEntries.length; i++) {
-        final entry = calculationController.surveyEntries[i];
-        entriesData.add({
-          'index': i,
-          'surveyNo': entry['surveyNo'] ?? '',
-          'share': entry['share'] ?? '',
-          'area': entry['area'] ?? '',
-          'landAcquisitionArea': entry['landAcquisitionArea'] ?? '',
-          'abdominalSection': entry['abdominalSection'] ?? '',
-          'isComplete': calculationController.isEntryComplete(entry),
-        });
-      }
-
-      return {
-        'calculation': {
-          'selectedVillage': calculationController.selectedVillage.value,
-          'surveyEntries': entriesData,
-          'totalArea': calculationController.totalArea,
-          'totalLandAcquisitionArea': calculationController.totalLandAcquisitionArea,
-          'completedEntriesCount': calculationController.completedEntriesCount,
-          'totalEntriesCount': calculationController.surveyEntries.length,
-        }
-      };
-    } catch (e) {
-      print('Error getting Calculation data: $e');
-      return {'calculation': {}};
-    }
-  }
 
   /// Collect data from LandFouthController
-  Map<String, dynamic> getLandFouthData() {
-    try {
-      if (landFouthController is StepDataMixin) {
-        return landFouthController.getStepData();
-      }
-      return {
-        'land_fourth': {
-          'calculation_type': landFouthController.selectedCalculationType.value,
-          'duration': landFouthController.selectedDuration.value,
-          'holder_type': landFouthController.selectedHolderType.value,
-          'counting_fee': landFouthController.countingFee.value,
-        }
-      };
-    } catch (e) {
-      print('Error getting LandFouth data: $e');
-      return {'land_fourth': {}};
-    }
-  }
 
   /// Collect data from LandFifthController
-  Map<String, dynamic> getLandFifthData() {
-    try {
-      if (landFifthController is StepDataMixin) {
-        return landFifthController.getStepData();
-      }
-
-      final List<Map<String, dynamic>> holderData = [];
-      for (int i = 0; i < landFifthController.holderEntries.length; i++) {
-        final entry = landFifthController.holderEntries[i];
-        holderData.add({
-          'holderName': entry['holderName'] ?? '',
-          'address': entry['address'] ?? '',
-          'accountNumber': entry['accountNumber'] ?? '',
-          'mobileNumber': entry['mobileNumber'] ?? '',
-          'serverNumber': entry['serverNumber'] ?? '',
-          'area': entry['area'] ?? '',
-          'potKharabaArea': entry['potKharabaArea'] ?? '',
-          'totalArea': entry['totalArea'] ?? '',
-          'village': entry['village'] ?? '',
-          'plotNo': entry['plotNo'] ?? '',
-          'email': entry['email'] ?? '',
-          'pincode': entry['pincode'] ?? '',
-          'district': entry['district'] ?? '',
-          'postOffice': entry['postOffice'] ?? '',
-        });
-      }
-
-      return {
-        'land_fifth': {
-          'holderInformation': holderData,
-          'totalHolderEntries': landFifthController.holderEntries.length,
-        }
-      };
-    } catch (e) {
-      print('Error getting LandFifth data: $e');
-      return {'land_fifth': {}};
-    }
-  }
 
   /// Collect data from LandSixthController
-  Map<String, dynamic> getLandSixthData() {
-    try {
-      if (laandSixthController is StepDataMixin) {
-        return laandSixthController.getStepData();
-      }
-
-      final List<Map<String, dynamic>> entriesData = [];
-      for (final entry in laandSixthController.nextOfKinEntries) {
-        entriesData.add({
-          'address': entry['address'] as String? ?? '',
-          'mobile': entry['mobile'] as String? ?? '',
-          'surveyNo': entry['surveyNo'] as String? ?? '',
-          'direction': entry['direction'] as String? ?? '',
-          'naturalResources': entry['naturalResources'] as String? ?? '',
-        });
-      }
-
-      return {
-        'land_sixth': {
-          'nextOfKinEntries': entriesData,
-          'totalNextOfKinEntries': entriesData.length,
-        }
-      };
-    } catch (e) {
-      print('Error getting LandSixth data: $e');
-      return {'land_sixth': {}};
-    }
-  }
 
   /// Collect data from SurveyEightController (Documents)
   Map<String, dynamic> getDocumentsData() {
