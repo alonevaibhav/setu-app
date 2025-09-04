@@ -387,18 +387,6 @@ class MainLandAcquisitionController extends GetxController {
 // ALL DATA COLLECTION METHODS
 ///////////////////////////////////
 
-  /// Collect data from PersonalInfoController
-
-  /// Collect data from SurveyCTSController
-
-  /// Collect data from CalculationController
-
-  /// Collect data from LandFouthController
-
-  /// Collect data from LandFifthController
-
-  /// Collect data from LandSixthController
-
   /// Collect data from SurveyEightController (Documents)
   Map<String, dynamic> getDocumentsData() {
     try {
@@ -619,16 +607,16 @@ class MainLandAcquisitionController extends GetxController {
 
       "survey_number": surveyCTSController.selectedSurveyNo.value,
       "department": surveyCTSController.selectedDepartment.value,
-      "division_id": "1",
-      "district_id": "26",
-      "taluka_id": "5",
-      "village_id": "3",
+      "division": "1",
+      "district": "26",
+      "taluka": "5",
+      "village": "3",
       "office": surveyCTSController.selectedOffice.value,
 
       "calculation_type": landFouthController.selectedCalculationType.value,
       "duration": landFouthController.selectedDuration.value,
       "holder_type": landFouthController.selectedHolderType.value,
-      "counting_fee": landFouthController.countingFee.value.toString(),
+      "measurement_fee": landFouthController.countingFee.value.toString(),
 
     };
 
@@ -644,7 +632,7 @@ class MainLandAcquisitionController extends GetxController {
 
     fields["calculation_entries"] = jsonEncode(calculationEntries); // Individual calculation entries
     fields["holder_information"] = jsonEncode(holderInformation);
-    fields["next_of_kin_entries"] = jsonEncode(nextOfKinEntries);
+    fields["next_of_kin"] = jsonEncode(nextOfKinEntries);
 
     // Debug: Print all fields
     print('🔍 All Fields:');
@@ -689,49 +677,49 @@ class MainLandAcquisitionController extends GetxController {
     // Add document files (single entries, not arrays)
     if (landSeventhController.identityCardFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "identity_card_path",
+        field: "identification_path",
         filePath: landSeventhController.identityCardFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.sevenTwelveFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "seven_twelve_path",
+        field: "seven_eleven_path",
         filePath: landSeventhController.sevenTwelveFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.noteFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "note_path",
+        field: "tipan_path",
         filePath: landSeventhController.noteFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.partitionFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "partition_path",
+        field: "fadni_path",
         filePath: landSeventhController.partitionFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.schemeSheetFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "scheme_sheet_path",
+        field: "yojana_patrak_path",
         filePath: landSeventhController.schemeSheetFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.oldCensusMapFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "old_census_map_path",
+        field: "old_measurement_path",
         filePath: landSeventhController.oldCensusMapFiles!.first.toString(),
       ));
     }
 
     if (landSeventhController.demarcationCertificateFiles?.isNotEmpty == true) {
       files.add(MultipartFiles(
-        field: "demarcation_certificate_path",
+        field: "simankan_pramanpatra_path",
         filePath: landSeventhController.demarcationCertificateFiles!.first.toString(),
       ));
     }
@@ -756,15 +744,14 @@ class MainLandAcquisitionController extends GetxController {
     for (int i = 0; i < calculationController.surveyEntries.length; i++) {
       final entry = calculationController.surveyEntries[i] as Map<String, dynamic>;
       entries.add({
-        "village": entry['village']?.toString() ?? "",
-        "survey_no": entry['surveyNo']?.toString() ?? "",
+        "land_entry_village": entry['village']?.toString() ?? "",
+        "survey_gat_cts_number": entry['surveyNo']?.toString() ?? "",
         "share": entry['share']?.toString() ?? "",
         "area": entry['area']?.toString() ?? "",
-        "land_acquisition_area": entry['landAcquisitionArea']?.toString() ?? "",
-        "abdominal_section": entry['abdominalSection']?.toString() ?? "",
+        "converted_area": entry['landAcquisitionArea']?.toString() ?? "",
+        "assessment_area": entry['abdominalSection']?.toString() ?? "",
       });
     }
-
     print('🔍 Generated ${entries.length} calculation entries');
     return entries;
   }
@@ -779,19 +766,19 @@ class MainLandAcquisitionController extends GetxController {
       final holder = landFifthController.holderEntries[i] as Map<String, dynamic>;
       holders.add({
         "holder_name": holder['holderName']?.toString() ?? "",
-        "address": holder['address']?.toString() ?? "",
+        "holder_address": holder['address']?.toString() ?? "",
         "account_number": holder['accountNumber']?.toString() ?? "",
-        "mobile_number": holder['mobileNumber']?.toString() ?? "",
-        "server_number": holder['serverNumber']?.toString() ?? "",
-        "area": holder['area']?.toString() ?? "",
-        "pot_kharaba_area": holder['potKharabaArea']?.toString() ?? "",
-        "total_area": holder['totalArea']?.toString() ?? "",
-        "village": holder['village']?.toString() ?? "",
-        "plot_no": holder['plotNo']?.toString() ?? "",
-        "email": holder['email']?.toString() ?? "",
-        "pincode": holder['pincode']?.toString() ?? "",
-        "district": holder['district']?.toString() ?? "",
-        "post_office": holder['postOffice']?.toString() ?? "",
+        "holder_mobile_number": holder['mobileNumber']?.toString() ?? "",
+        "holder_survey_number": holder['serverNumber']?.toString() ?? "",
+        "holder_area": holder['area']?.toString() ?? "",
+        "holder_sub_area": holder['potKharabaArea']?.toString() ?? "",
+        "holder_total_area": holder['totalArea']?.toString() ?? "",
+        "holder_village": holder['village']?.toString() ?? "",
+        "holder_plot_number": holder['plotNo']?.toString() ?? "",
+        "holder_email": holder['email']?.toString() ?? "",
+        "holder_pincode": holder['pincode']?.toString() ?? "",
+        "holder_district": holder['district']?.toString() ?? "",
+        "holder_post_office": holder['postOffice']?.toString() ?? "",
       });
     }
 
@@ -809,7 +796,7 @@ class MainLandAcquisitionController extends GetxController {
       final entry = laandSixthController.nextOfKinEntries[i] as Map<String, dynamic>;
       nextOfKinList.add({
         "address": entry['address']?.toString() ?? "",
-        "mobile": entry['mobile']?.toString() ?? "",
+        "mobile_number": entry['mobile']?.toString() ?? "",
         "survey_no": entry['surveyNo']?.toString() ?? "",
         "direction": entry['direction']?.toString() ?? "",
         "natural_resources": entry['naturalResources']?.toString() ?? "",

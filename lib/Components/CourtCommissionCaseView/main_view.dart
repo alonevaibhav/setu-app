@@ -55,14 +55,14 @@ class CourtCommissionCaseView extends StatelessWidget {
                       _buildStepIndicator(
                         controller,
                         0,
-                        'Start',
+                        'Court Commission ',
                         PhosphorIcons.lockSimple(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
                       _buildStepIndicator(
                         controller,
                         1,
-                        'Survey/CTS\nInformation',
+                        'Land\nInformation',
                         PhosphorIcons.clipboard(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
@@ -90,54 +90,54 @@ class CourtCommissionCaseView extends StatelessWidget {
                       _buildStepIndicator(
                         controller,
                         4,
-                        'Applicant\nInformation',
+                        'Plaintiff and Defendant',
                         PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
                       _buildStepIndicator(
                         controller,
                         5,
-                        'Co-owner\nInformation',
+                        'Adjacent Holders',
                         PhosphorIcons.users(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
                       _buildStepIndicator(
                         controller,
                         6,
-                        'Information about\nAdjacent Holders',
+                        'Document\nUpload',
                         PhosphorIcons.user(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
                       _buildStepIndicator(
                         controller,
                         7,
-                        'Document\nUpload',
+                        'Preview',
                         PhosphorIcons.folders(PhosphorIconsStyle.regular),
                         sizeFactor,
                       ),
                     ],
                   ),
-                  Gap(12.h * sizeFactor),
-                  // Third Row - 2 Steps
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildStepIndicator(
-                        controller,
-                        8,
-                        'Preview',
-                        PhosphorIcons.eye(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        9,
-                        'Payment',
-                        PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                    ],
-                  ),
+                  // Gap(12.h * sizeFactor),
+                  // // Third Row - 2 Steps
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: [
+                  //     _buildStepIndicator(
+                  //       controller,
+                  //       8,
+                  //       'Preview',
+                  //       PhosphorIcons.eye(PhosphorIconsStyle.regular),
+                  //       sizeFactor,
+                  //     ),
+                  //     _buildStepIndicator(
+                  //       controller,
+                  //       9,
+                  //       'Payment',
+                  //       PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+                  //       sizeFactor,
+                  //     ),
+                  //   ],
+                  // ),
                   Gap(16.h * sizeFactor),
                   // Sub-step Progress Bar
                   Obx(() => _buildSubStepProgress(controller, sizeFactor)),

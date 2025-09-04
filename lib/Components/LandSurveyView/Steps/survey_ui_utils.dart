@@ -333,7 +333,7 @@ class SurveyUIUtils {
     String? errorText, // Add errorText parameter
     ValueChanged<String>? onChanged, // Add onChanged parameter
     GestureTapCallback? onTap,
-    bool? readOnly, // Add onTap parameter
+    bool readOnly = false, // default to false
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -365,6 +365,7 @@ class SurveyUIUtils {
                   validator: validator,
                   onChanged: onChanged, // Pass onChanged to TextFormField
                   onTap: onTap, // Pass onTap to TextFormField
+                    readOnly: readOnly, // ✅ FIX: pass readOnly here
                   decoration: InputDecoration(
                     hintText: translatedHint,
                     prefixIcon: Icon(icon,

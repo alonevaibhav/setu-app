@@ -803,14 +803,13 @@ class GovernmentCensusController extends GetxController {
 
     // Add government counting order files
     if (personalInfoController.governmentCountingOrderFiles.isNotEmpty) {
-      for (int i = 0; i < personalInfoController.governmentCountingOrderFiles.length; i++) {
-        final filePath = personalInfoController.governmentCountingOrderFiles[i].toString();
+        final filePath = personalInfoController.governmentCountingOrderFiles.toString();
         if (filePath.isNotEmpty) {
           files.add(MultipartFiles(
-            field: "government_counting_order_file_$i",
+            field: "government_counting_order_file",
             filePath: filePath,
           ));
-        }
+
       }
     }
 
