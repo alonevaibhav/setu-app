@@ -1,7 +1,12 @@
-// lib/widgets/double_back_to_exit.dart
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+
+import '../Components/LandSurveyView/Steps/survey_ui_utils.dart';
+import '../Constants/color_constant.dart';
 
 class DoubleBackToExit extends StatefulWidget {
   final Widget child;
@@ -35,6 +40,118 @@ class _DoubleBackToExitState extends State<DoubleBackToExit> {
         return true;
       },
       child: widget.child,
+    );
+  }
+}
+
+
+
+class PopToExitGetX extends StatefulWidget {
+  final Widget child;
+  final String? title;
+  final String? message;
+
+  const PopToExitGetX({
+    Key? key,
+    required this.child,
+    this.title,
+    this.message,
+  }) : super(key: key);
+
+  @override
+  State<PopToExitGetX> createState() => _PopToExitGetXState();
+}
+
+class _PopToExitGetXState extends State<PopToExitGetX> {
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return await _showExitConfirmationDialog();
+      },
+      child: widget.child,
+    );
+  }
+
+  Future<bool> _showExitConfirmationDialog() async {
+    final result = await SurveyUIUtils.showTranslatableDialog(
+      context: Get.context!,
+      title: widget.title ?? 'Exit Form',
+      message: widget.message ??
+          'Are you sure you want to exit this form? All unsaved progress will be lost.',
+      primaryButtonText: 'Exit',
+      secondaryButtonText: 'Cancel',
+      icon: PhosphorIcons.warning(PhosphorIconsStyle.regular),
+      iconColor: SetuColors.primaryGreen,
+      onPrimaryPressed: () {
+        Navigator.of(Get.context!).pop(true);
+      },
+      onSecondaryPressed: () {
+        Navigator.of(Get.context!).pop(false);
+      },
+      barrierDismissible: false,
+    );
+
+    return result ?? false;
+  }
+}
+
+// Utility class for handling exit confirmations
+class ExitConfirmationUtils {
+  /// Shows exit confirmation dialog and returns true if user wants to exit
+  static Future<bool> showExitDialog({
+    String? title,
+    String? message,
+  }) async {
+    final result = await SurveyUIUtils.showTranslatableDialog(
+      context: Get.context!,
+      title: title ?? 'Exit Form',
+      message: message ??
+          'Are you sure you want to exit this form? All unsaved progress will be lost.',
+      primaryButtonText: 'Exit',
+      secondaryButtonText: 'Cancel',
+      icon: PhosphorIcons.warning(PhosphorIconsStyle.regular),
+      iconColor: SetuColors.primaryGreen,
+      onPrimaryPressed: () {
+        Navigator.of(Get.context!).pop(true);
+      },
+      onSecondaryPressed: () {
+        Navigator.of(Get.context!).pop(false);
+      },
+      barrierDismissible: false,
+    );
+
+    return result ?? false;
+  }
+
+  /// Handles back button press with confirmation
+  static Future<void> handleBackPress() async {
+    final shouldExit = await showExitDialog();
+    if (shouldExit) {
+      Get.back();
+    }
+  }
+
+  /// Creates a back button with exit confirmation
+  static Widget buildBackButton({
+    Color iconColor = Colors.white,
+    String? title,
+    String? message,
+  }) {
+    return IconButton(
+      icon: Icon(
+        PhosphorIcons.arrowLeft(PhosphorIconsStyle.bold),
+        color: iconColor,
+      ),
+      onPressed: () async {
+        final shouldExit = await showExitDialog(
+          title: title,
+          message: message,
+        );
+        if (shouldExit) {
+          Get.back();
+        }
+      },
     );
   }
 }

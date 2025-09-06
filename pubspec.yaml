@@ -33,6 +33,7 @@ dependencies:
   # Icon packages
   phosphor_flutter: ^2.1.0
   lucide_icons: ^0.257.0
+  get_storage: ^2.1.1
 
   # UI component packages
   glassmorphism: ^3.0.0

@@ -15,7 +15,6 @@ import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
 import 'dart:developer' as developer;
 
-enum ButtonState { idle, loading, success, error }
 
 class MainSurveyController extends GetxController {
   // Navigation State
@@ -23,6 +22,9 @@ class MainSurveyController extends GetxController {
   final currentSubStep = 0.obs;
   final isLoading = false.obs;
   final errorMessage = ''.obs;
+
+
+
 
   // Step Controllers - Initialize them here
   late final PersonalInfoController personalInfoController;
@@ -1278,14 +1280,12 @@ class MainSurveyController extends GetxController {
     print('🔍 Generated ${nextOfKinList.length} next of kin entries');
     return nextOfKinList;
   }
-  ButtonState buttonState = ButtonState.idle;
 
   Future<void> submitSurvey() async {
 
     if (isLoading.value) return;
 
     // Set loading state
-    buttonState = ButtonState.loading;
     update(); // Update UI if using GetX controller
 
     try {
@@ -1321,7 +1321,6 @@ class MainSurveyController extends GetxController {
         Get.offAllNamed(AppRoutes.mainDashboard);
 
         // Show success animation
-        buttonState = ButtonState.success;
         update(); // Update UI
 
         isLoading.value = false;
@@ -1338,7 +1337,6 @@ class MainSurveyController extends GetxController {
           duration: Duration(seconds: 3),
         );
         // Show error state
-        buttonState = ButtonState.error;
         update();
 
         isLoading.value = false;
@@ -1349,7 +1347,6 @@ class MainSurveyController extends GetxController {
       print('💥 Exception during survey submission: $e');
 
       // Show error state
-      buttonState = ButtonState.error;
       update();
       isLoading.value = false;
 

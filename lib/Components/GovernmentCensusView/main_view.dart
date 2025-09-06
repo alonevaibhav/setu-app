@@ -6,6 +6,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../Constants/color_constant.dart';
 import '../../Controller/get_translation_controller/get_text_form.dart';
+import '../../Utils/double_tap_to_exit.dart';
 import 'Controller/main_controller.dart';
 import 'nevigation_route.dart';
 
@@ -17,144 +18,141 @@ class GovernmentCensusView extends StatelessWidget {
     final controller = Get.put(GovernmentCensusController());
     const double sizeFactor = 0.9; // Size constant variable
 
-    return Scaffold(
-      backgroundColor: SetuColors.background,
-      appBar: AppBar(
-        backgroundColor: SetuColors.primaryGreen,
-        elevation: 0,
-        title: Text(
-          'Setu Survey',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontSize: 20.sp * sizeFactor,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            PhosphorIcons.arrowLeft(PhosphorIconsStyle.bold),
-            color: Colors.white,
-          ),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Progress Header
-            Container(
-              color: SetuColors.primaryGreen,
-              padding: EdgeInsets.only(bottom: 20.h * sizeFactor),
-              child: Column(
-                children: [
-                  Gap(16.h * sizeFactor), // Add some top padding
-                  // First Row - 4 Steps
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStepIndicator(
-                        controller,
-                        0,
-                        'Counting Application',
-                        PhosphorIcons.lockSimple(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        1,
-                        'Land information',
-                        PhosphorIcons.clipboard(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        2,
-                        'Survey\nInformation',
-                        PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        3,
-                        'Calculation\nInformation',
-                        PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                    ],
-                  ),
-                  Gap(12.h * sizeFactor),
-                  // Second Row - 4 Steps
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildStepIndicator(
-                        controller,
-                        4,
-                        'Holder \nInformation',
-                        PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        5,
-                        'Co-owner\nInformation',
-                        PhosphorIcons.users(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        6,
-                        'Information about\nAdjacent Holders',
-                        PhosphorIcons.user(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      _buildStepIndicator(
-                        controller,
-                        7,
-                        'Document\nUpload',
-                        PhosphorIcons.folders(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                    ],
-                  ),
-                  Gap(12.h * sizeFactor),
-                  // Third Row - 2 Steps
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildStepIndicator(
-                        controller,
-                        8,
-                        'Preview',
-                        PhosphorIcons.eye(PhosphorIconsStyle.regular),
-                        sizeFactor,
-                      ),
-                      // _buildStepIndicator(
-                      //   controller,
-                      //   9,
-                      //   'Payment',
-                      //   PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-                      //   sizeFactor,
-                      // ),
-                    ],
-                  ),
-                  Gap(16.h * sizeFactor),
-                  // Sub-step Progress Bar
-                  Obx(() => _buildSubStepProgress(controller, sizeFactor)),
-                ],
-              ),
+    return PopToExitGetX(
+      child: Scaffold(
+        backgroundColor: SetuColors.background,
+        appBar: AppBar(
+          backgroundColor: SetuColors.primaryGreen,
+          elevation: 0,
+          title: Text(
+            'Setu Survey',
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontSize: 20.sp * sizeFactor,
+              fontWeight: FontWeight.w600,
             ),
-            // Main Content
-            Padding(
-              padding: EdgeInsets.all(5.w * sizeFactor),
-              child: Column(
-                children: [
-                  // Dynamic Input Container with Navigation
-                  Obx(() => _buildInputContainer(controller, sizeFactor)),
-                ],
+          ),
+          leading: ExitConfirmationUtils.buildBackButton(),
+
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // Progress Header
+              Container(
+                color: SetuColors.primaryGreen,
+                padding: EdgeInsets.only(bottom: 20.h * sizeFactor),
+                child: Column(
+                  children: [
+                    Gap(16.h * sizeFactor), // Add some top padding
+                    // First Row - 4 Steps
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildStepIndicator(
+                          controller,
+                          0,
+                          'Counting Application',
+                          PhosphorIcons.lockSimple(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          1,
+                          'Land information',
+                          PhosphorIcons.clipboard(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          2,
+                          'Survey\nInformation',
+                          PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          3,
+                          'Calculation\nInformation',
+                          PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                      ],
+                    ),
+                    Gap(12.h * sizeFactor),
+                    // Second Row - 4 Steps
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildStepIndicator(
+                          controller,
+                          4,
+                          'Holder \nInformation',
+                          PhosphorIcons.currencyDollar(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          5,
+                          'Co-owner\nInformation',
+                          PhosphorIcons.users(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          6,
+                          'Information about\nAdjacent Holders',
+                          PhosphorIcons.user(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        _buildStepIndicator(
+                          controller,
+                          7,
+                          'Document\nUpload',
+                          PhosphorIcons.folders(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                      ],
+                    ),
+                    Gap(12.h * sizeFactor),
+                    // Third Row - 2 Steps
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildStepIndicator(
+                          controller,
+                          8,
+                          'Preview',
+                          PhosphorIcons.eye(PhosphorIconsStyle.regular),
+                          sizeFactor,
+                        ),
+                        // _buildStepIndicator(
+                        //   controller,
+                        //   9,
+                        //   'Payment',
+                        //   PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+                        //   sizeFactor,
+                        // ),
+                      ],
+                    ),
+                    Gap(16.h * sizeFactor),
+                    // Sub-step Progress Bar
+                    Obx(() => _buildSubStepProgress(controller, sizeFactor)),
+                  ],
+                ),
               ),
-            ),
-          ],
+              // Main Content
+              Padding(
+                padding: EdgeInsets.all(5.w * sizeFactor),
+                child: Column(
+                  children: [
+                    // Dynamic Input Container with Navigation
+                    Obx(() => _buildInputContainer(controller, sizeFactor)),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
