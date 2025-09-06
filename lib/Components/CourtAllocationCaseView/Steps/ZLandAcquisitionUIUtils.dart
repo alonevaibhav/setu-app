@@ -9,6 +9,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../Constants/color_constant.dart';
 import '../../../Controller/get_translation_controller/get_text_form.dart';
 import '../../../Controller/get_translation_controller/get_translation_controller.dart';
+import '../../Widget/setu_simmer.dart';
 import '../Controller/main_controller.dart';
 
 class CourtAllocationCaseUIUtils {
@@ -52,13 +53,9 @@ class CourtAllocationCaseUIUtils {
           targetLanguage: targetLanguage,
           enableTranslation: enableTranslation,
           loadingWidget: loadingWidget ??
-              SizedBox(
+              SimpleShimmer(
+                width: 80,
                 height: style.fontSize ?? 16,
-                width: 20.w * sizeFactor,
-                child: CircularProgressIndicator(
-                  strokeWidth: 1,
-                  color: style.color ?? SetuColors.primaryGreen,
-                ),
               ),
           useQueuedTranslation: true,
           enableCache: true,
@@ -662,14 +659,10 @@ class CourtAllocationCaseUIUtils {
                   ),
                 ),
                 child: controller.isLoading.value
-                    ? SizedBox(
-                        height: 20.h * sizeFactor,
-                        width: 20.w * sizeFactor,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
-                        ),
-                      )
+                    ? SimpleShimmer(
+                  width: 60,
+                  height: 20.h * sizeFactor,
+                )
                     : buildTranslatableText(
                         text: controller.nextButtonText,
                         style: GoogleFonts.poppins(
