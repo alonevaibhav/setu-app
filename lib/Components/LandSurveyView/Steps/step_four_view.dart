@@ -138,15 +138,6 @@ class StepFourView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Plot Number Configuration',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.green[700],
-                        ),
-                      ),
-                      Gap(12.h),
                       SurveyUIUtils.buildTextFormField(
                         controller: controller.totalPlotNumberController,
                         label: 'Total plot number as per approved layout *',
@@ -196,23 +187,6 @@ class StepFourView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Knot Count Configuration',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.orange[700],
-                        ),
-                      ),
-                      Gap(8.h),
-                      Text(
-                        'Enter the number of knots for counting. Fee increases with each additional knot.',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.orange[600],
-                        ),
-                      ),
-                      Gap(12.h),
                       SurveyUIUtils.buildTextFormField(
                         controller: controller.knotCountController,
                         label: 'Total plot number as per approved layout *',
@@ -261,23 +235,6 @@ class StepFourView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Abdominal Section Configuration',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.blue[700],
-                        ),
-                      ),
-                      Gap(8.h),
-                      Text(
-                        'Enter the number of abdominal sections. Fee increases with each additional section.',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.blue[600],
-                        ),
-                      ),
-                      Gap(12.h),
                       SurveyUIUtils.buildTextFormField(
                         controller: controller.abdominalSectionController,
                         label: 'Abdominal section *',
@@ -413,193 +370,12 @@ class StepFourView extends StatelessWidget {
             controller.calculationFeeController.text,
             isTotal: true,
           ),
-
-          // Show calculation details for Stomach type
-          if (controller.selectedCalculationType.value == 'Stomach' &&
-              controller.calculationFeeController.text.isNotEmpty)
-            _buildStomachCalculationDetails(),
-
-          // Show calculation details for Knot counting type
-          if (controller.selectedCalculationType.value ==
-                  'Counting by number of knots' &&
-              controller.calculationFeeController.text.isNotEmpty)
-            _buildKnotCountingCalculationDetails(),
-
-          // Show calculation details for Non-agricultural type
-          if (controller.selectedCalculationType.value == 'Non-agricultural' &&
-              controller.calculationFeeController.text.isNotEmpty)
-            _buildNonAgriculturalCalculationDetails(),
         ],
       ),
     );
   }
 
-  Widget _buildStomachCalculationDetails() {
-    final sections =
-        int.tryParse(controller.abdominalSectionController.text) ?? 1;
 
-    return Column(
-      children: [
-        Gap(8.h),
-        Container(
-          padding: EdgeInsets.all(8.w),
-          decoration: BoxDecoration(
-            color: Colors.blue.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Stomach Calculation Details:',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.blue[700],
-                ),
-              ),
-              Gap(4.h),
-              Text(
-                'Base fee + Additional sections × Increment rate',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.blue[600],
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              if (sections > 1)
-                Text(
-                  'Additional sections: ${sections - 1}',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.blue[600],
-                  ),
-                ),
-              Text(
-                'Total sections: $sections',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.blue[600],
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildKnotCountingCalculationDetails() {
-    final knotCount = int.tryParse(controller.knotCountController.text) ?? 1;
-
-    return Column(
-      children: [
-        Gap(8.h),
-        Container(
-          padding: EdgeInsets.all(8.w),
-          decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Knot Counting Calculation Details:',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.orange[700],
-                ),
-              ),
-              Gap(4.h),
-              Text(
-                'Base fee + Additional knots × Increment rate',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.orange[600],
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              if (knotCount > 1)
-                Text(
-                  'Additional knots: ${knotCount - 1}',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.orange[600],
-                  ),
-                ),
-              Text(
-                'Total knots: $knotCount',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.orange[600],
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildNonAgriculturalCalculationDetails() {
-    final plotNumbers =
-        int.tryParse(controller.totalPlotNumberController.text) ?? 1;
-
-    return Column(
-      children: [
-        Gap(8.h),
-        Container(
-          padding: EdgeInsets.all(8.w),
-          decoration: BoxDecoration(
-            color: Colors.green.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Non-agricultural Calculation Details:',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.green[700],
-                ),
-              ),
-              Gap(4.h),
-              Text(
-                'Base fee + Additional plots × Increment rate',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.green[600],
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-              if (plotNumbers > 1)
-                Text(
-                  'Additional plots: ${plotNumbers - 1}',
-                  style: TextStyle(
-                    fontSize: 11.sp,
-                    color: Colors.green[600],
-                  ),
-                ),
-              Text(
-                'Total plots: $plotNumbers',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.green[600],
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildBreakdownRow(String label, String value,
       {bool isTotal = false}) {
