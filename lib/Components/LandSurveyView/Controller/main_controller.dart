@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/preview_controller.dart';
-import 'package:setuapp/Components/LandSurveyView/Controller/step_four.dart';
+import 'package:setuapp/Components/LandSurveyView/Controller/step_four_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_eight_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_fifth_controller.dart';
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_seventh_controller.dart';
