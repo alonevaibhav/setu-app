@@ -455,7 +455,7 @@ class SurveyPreviewStep extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton(
             onPressed:
-                controller.isSubmitting.value ? null : controller.submitSurvey,
+            mainController.isLoading.value ? null : mainController.submitSurvey,
             style: ElevatedButton.styleFrom(
               backgroundColor: SetuColors.primaryGreen,
               padding: EdgeInsets.symmetric(vertical: 16.h),
@@ -463,7 +463,7 @@ class SurveyPreviewStep extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12.r),
               ),
             ),
-            child: controller.isSubmitting.value
+            child: mainController.isLoading.value
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

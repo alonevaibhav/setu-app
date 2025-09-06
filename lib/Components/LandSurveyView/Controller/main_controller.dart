@@ -9,11 +9,13 @@ import 'package:setuapp/Components/LandSurveyView/Controller/survey_seventh_cont
 import 'package:setuapp/Components/LandSurveyView/Controller/survey_sixth_controller.dart';
 import '../../../API Service/api_service.dart';
 import '../../../Constants/api_constant.dart';
+import '../../../Route Manager/app_routes.dart';
 import '../../LandSurveyView/Controller/personal_info_controller.dart';
 import '../../LandSurveyView/Controller/step_three_controller.dart';
 import '../../LandSurveyView/Controller/survey_cts.dart';
 import 'dart:developer' as developer;
 
+enum ButtonState { idle, loading, success, error }
 
 class MainSurveyController extends GetxController {
   // Navigation State
@@ -217,7 +219,7 @@ class MainSurveyController extends GetxController {
     // Print the current survey data to the console
     // print('Current Survey Data: ${surveyData.value}');
     // debugPrintInfo();
-    submitSurvey();
+    // submitSurvey();
 
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
@@ -1053,15 +1055,14 @@ class MainSurveyController extends GetxController {
     // Add calculation-specific files
     if (calculationData['calculationType'] == 'Integration calculation') {
       if (calculationController.incorporationOrderFiles?.isNotEmpty == true) {
-        for (int i = 0; i < calculationController.incorporationOrderFiles!.length; i++) {
-          final filePath = calculationController.incorporationOrderFiles![i].toString();
+          final filePath = calculationController.incorporationOrderFiles!.toString();
           if (filePath.isNotEmpty) {
             files.add(MultipartFiles(
-              field: "consolidation_order_map$i",
+              field: "consolidation_order_map",
               filePath: filePath,
             ));
           }
-        }
+
       }
     }
 
@@ -1277,10 +1278,19 @@ class MainSurveyController extends GetxController {
     print('🔍 Generated ${nextOfKinList.length} next of kin entries');
     return nextOfKinList;
   }
+  ButtonState buttonState = ButtonState.idle;
 
+  Future<void> submitSurvey() async {
 
-    Future<void> submitSurvey() async {
+    if (isLoading.value) return;
+
+    // Set loading state
+    buttonState = ButtonState.loading;
+    update(); // Update UI if using GetX controller
+
     try {
+      isLoading.value = true;
+
       String userId = (await ApiService.getUid()) ?? "0";
       print('🆔 User ID: $userId');
 
@@ -1288,9 +1298,7 @@ class MainSurveyController extends GetxController {
       final fields = multipartData['fields'] as Map<String, String>;
       final files = multipartData['files'] as List<MultipartFiles>;
 
-
-
-      developer.log(jsonEncode(fields), name: 'REQUEST_BODY',);
+      developer.log(jsonEncode(fields), name: 'REQUEST_BODY');
 
       final response = await ApiService.multipartPost<Map<String, dynamic>>(
         endpoint: haddakayamPost,
@@ -1302,13 +1310,84 @@ class MainSurveyController extends GetxController {
 
       if (response.success && response.data != null) {
         print('✅ Survey submitted successfully: ${response.data}');
+
+        Get.snackbar(
+          'Success',
+          'Survey submitted successfully!',
+          backgroundColor: Color(0xFF52B788),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+        Get.offAllNamed(AppRoutes.mainDashboard);
+
+        // Show success animation
+        buttonState = ButtonState.success;
+        update(); // Update UI
+
+        isLoading.value = false;
+
+
       } else {
         print('❌ Survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
+
+        Get.snackbar(
+          'Error',
+          'Failed to submit survey. Please try again.',
+          backgroundColor: Color(0xFFDC3545),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+        // Show error state
+        buttonState = ButtonState.error;
+        update();
+
+        isLoading.value = false;
+
+
       }
     } catch (e) {
       print('💥 Exception during survey submission: $e');
+
+      // Show error state
+      buttonState = ButtonState.error;
+      update();
+      isLoading.value = false;
+
+
     }
   }
+
+
+  //   Future<void> submitSurvey() async {
+  //   try {
+  //     String userId = (await ApiService.getUid()) ?? "0";
+  //     print('🆔 User ID: $userId');
+  //
+  //     final multipartData = prepareMultipartData(userId);
+  //     final fields = multipartData['fields'] as Map<String, String>;
+  //     final files = multipartData['files'] as List<MultipartFiles>;
+  //
+  //
+  //
+  //     developer.log(jsonEncode(fields), name: 'REQUEST_BODY',);
+  //
+  //     final response = await ApiService.multipartPost<Map<String, dynamic>>(
+  //       endpoint: haddakayamPost,
+  //       fields: fields,
+  //       files: files,
+  //       fromJson: (json) => json as Map<String, dynamic>,
+  //       includeToken: true,
+  //     );
+  //
+  //     if (response.success && response.data != null) {
+  //       print('✅ Survey submitted successfully: ${response.data}');
+  //     } else {
+  //       print('❌ Survey submission failed: ${response.errorMessage ?? 'Unknown error'}');
+  //     }
+  //   } catch (e) {
+  //     print('💥 Exception during survey submission: $e');
+  //   }
+  // }
 
 
   void saveAllStepsData() {

@@ -1,6 +1,7 @@
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import '../../../Route Manager/app_routes.dart';
 import 'main_controller.dart';
 
 class SurveyPreviewController extends GetxController {
@@ -211,7 +212,7 @@ class SurveyPreviewController extends GetxController {
       );
 
       // Navigate to success page or close
-      Get.back();
+     Get.offAllNamed(AppRoutes.mainDashboard);
 
     } catch (e) {
       print('❌ Submit error: $e');
