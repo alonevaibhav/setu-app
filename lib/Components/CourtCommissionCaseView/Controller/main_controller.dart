@@ -455,28 +455,43 @@ class CourtCommissionCaseController extends GetxController {
       // User ID
       "user_id": userId?.toString() ?? "0",
 
+      //User Name
+      "declarant_name": "hsf",
+      "declarant_address": "hdahf",
+
+
       // === COURT COMMISSION INFO ===
       "court_name": personalInfoController.courtNameController.text.trim(),
       "court_address": personalInfoController.courtAddressController.text.trim(),
-      "commission_order_number": personalInfoController.commissionOrderNoController.text.trim(),
-      "commission_date": personalInfoController.commissionDateController.text.trim(),
-      "civil_claim": personalInfoController.civilClaimController.text.trim(),
-      "issuing_office": personalInfoController.issuingOfficeController.text.trim(),
+      "order_number": personalInfoController.commissionOrderNoController.text.trim(),
+      "order_date": personalInfoController.commissionDateController.text.trim(),
+      "civil_case_ref_number": personalInfoController.civilClaimController.text.trim(),
+      "court_office_name": personalInfoController.issuingOfficeController.text.trim(),
 
       // === SURVEY CTS INFO ===
+      // "survey_number": surveyCTSController.selectedSurveyNo.value,
+      // "department": surveyCTSController.selectedDepartment.value,
+      // "district": surveyCTSController.selectedDistrict.value,
+      // "taluka": surveyCTSController.selectedTaluka.value,
+      // "village": surveyCTSController.selectedVillage.value,
+      // "office": surveyCTSController.selectedOffice.value,
+
+
       "survey_number": surveyCTSController.selectedSurveyNo.value,
       "department": surveyCTSController.selectedDepartment.value,
-      "district": surveyCTSController.selectedDistrict.value,
-      "taluka": surveyCTSController.selectedTaluka.value,
-      "village": surveyCTSController.selectedVillage.value,
-      "office": surveyCTSController.selectedOffice.value,
+      "division": "1",
+      "district": "26",
+      "taluka": "5",
+      "village": "3",
+      "office_name": surveyCTSController.selectedOffice.value,
 
-      // === COURT FOURTH INFO ===
-      "calculation_type": courtFourthController.selectedCalculationType.value ?? "",
+
+      // === COURT FOURTH INFO === // there is change in UI as per the conditions we have to manage that in controller
+      "type_of_measurement": courtFourthController.selectedCalculationType.value ?? "",
       "duration": courtFourthController.selectedDuration.value ?? "",
       "holder_type": courtFourthController.selectedHolderType.value ?? "",
-      "location_category": courtFourthController.selectedLocationCategory.value ?? "",
-      "calculation_fee": courtFourthController.calculationFeeController.text.trim(),
+      "within_municipal": courtFourthController.selectedLocationCategory.value ?? "",
+      "measurement_fee": courtFourthController.calculationFeeController.text.trim(),
       "calculation_fee_numeric": courtFourthController.extractNumericFee()?.toString() ?? "0",
 
       // === IDENTITY TYPE ===
@@ -502,10 +517,10 @@ class CourtCommissionCaseController extends GetxController {
 
     // Add commission order files
     if (personalInfoController.commissionOrderFiles.isNotEmpty) {
-        final filePath = personalInfoController.commissionOrderFiles.toString();
+        final filePath = personalInfoController.commissionOrderFiles.first.toString();
         if (filePath.isNotEmpty) {
           files.add(MultipartFiles(
-            field: "commission_order_document",
+            field: "order_document_path",
             filePath: filePath,
           ));
 
@@ -522,7 +537,7 @@ class CourtCommissionCaseController extends GetxController {
 
     if (courtSeventhController.sevenTwelveFiles.isNotEmpty) {
       files.add(MultipartFiles(
-        field: "seven_eleven_path",
+        field: "seven_twelve_extract_path",
         filePath: courtSeventhController.sevenTwelveFiles.first.toString(),
       ));
     }
@@ -543,7 +558,7 @@ class CourtCommissionCaseController extends GetxController {
 
     if (courtSeventhController.schemeSheetFiles.isNotEmpty) {
       files.add(MultipartFiles(
-        field: "yojana_patrak_path",
+        field: "yojana_patrak",
         filePath: courtSeventhController.schemeSheetFiles.first.toString(),
       ));
     }
@@ -583,10 +598,10 @@ class CourtCommissionCaseController extends GetxController {
       for (int i = 0; i < calculationController.surveyEntries.length; i++) {
         final entry = calculationController.surveyEntries[i];
         entries.add({
-          "survey_number": entry['surveyNo']?.toString() ?? "",
-          "share": entry['share']?.toString() ?? "",
+          "survey_group_number": entry['surveyNo']?.toString() ?? "",
+          "sub_survey_group_number": entry['share']?.toString() ?? "",
           "area": entry['area']?.toString() ?? "",
-          "village": entry['selectedVillage']?.toString() ?? "",
+          "survey_village": entry['selectedVillage']?.toString() ?? "",
         });
       }
     } else {
@@ -645,7 +660,7 @@ class CourtCommissionCaseController extends GetxController {
         final entry = courtSixthController.nextOfKinEntries[i];
         nextOfKinList.add({
           "address": entry['address']?.toString() ?? "",
-          "mobile": entry['mobile']?.toString() ?? "",
+          "mobile_number": entry['mobile']?.toString() ?? "",
           "survey_no": entry['surveyNo']?.toString() ?? "",
           "direction": entry['direction']?.toString() ?? "",
           "natural_resources": entry['naturalResources']?.toString() ?? "",
@@ -671,7 +686,7 @@ class CourtCommissionCaseController extends GetxController {
       developer.log(jsonEncode(fields), name: 'COURT_REQUEST_BODY');
 
       final response = await ApiService.multipartPost<Map<String, dynamic>>(
-        endpoint: landAcquisitionPost, // Your API endpoint
+        endpoint: courtCommissionCase, // Your API endpoint
         fields: fields,
         files: files,
         fromJson: (json) => json as Map<String, dynamic>,
@@ -679,6 +694,7 @@ class CourtCommissionCaseController extends GetxController {
       );
 
       if (response.success && response.data != null) {
+
         print('✅ Court commission survey submitted successfully: ${response.data}');
       } else {
         print('❌ Court commission survey submission failed: ${response.errorMessage ?? 'Unknown error'}');

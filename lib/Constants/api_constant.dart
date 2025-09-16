@@ -10,6 +10,10 @@ String haddakayamPost = "api/counting/create/counting-land";
 
 String landAcquisitionPost = "api/bhusampadan/create";
 
+
+
+String courtCommissionCase = "api/courtLand/create";
+
 String stateGet = "api/location/states";
 
 
