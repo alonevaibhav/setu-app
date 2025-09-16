@@ -370,7 +370,7 @@ class LandAcquisitionPreviewStep extends StatelessWidget {
     return Obx(() => Container(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: controller.isSubmitting.value ? null : controller.submitLandAcquisitionSurvey,
+        onPressed: controller.isSubmitting.value ? null : mainController.submitLandAcquisitionSurvey,
         style: ElevatedButton.styleFrom(
           backgroundColor: SetuColors.primaryGreen,
           padding: EdgeInsets.symmetric(vertical: 16.h),
