@@ -14,7 +14,7 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   final poaIssuerNameController = TextEditingController();
   final poaHolderNameController = TextEditingController();
   final poaHolderAddressController = TextEditingController();
-  final sevenTwelveFiles = <String>[].obs;
+  final poaDocument = <String>[].obs;
 
 
   // Observable boolean values for questions

@@ -117,8 +117,7 @@ class SurveyPreviewController extends GetxController {
       List<Map<String, dynamic>>.from(coOwnerData.value?['coowners'] ?? []);
 
   // Next of Kin getters - use reactive data
-  List<Map<String, dynamic>> get nextOfKinList =>
-      List<Map<String, dynamic>>.from(nextOfKinData.value?['nextOfKinEntries'] ?? []);
+  List<Map<String, dynamic>> get nextOfKinList => List<Map<String, dynamic>>.from(nextOfKinData.value?['nextOfKinEntries'] ?? []);
 
   // Document getters - use reactive data
   String get identityCardType => documentsData.value?['identityCardType']?.toString() ?? '';
@@ -131,7 +130,7 @@ class SurveyPreviewController extends GetxController {
   List<String> get demarcationCertificateFiles => List<String>.from(documentsData.value?['demarcationCertificateFiles'] ?? []);
 
   // POA Files
-  List<String> get poaFiles => mainController.personalInfoController.sevenTwelveFiles.map((e) => e.toString()).toList();
+  List<String> get poaFiles => mainController.personalInfoController.poaDocument.map((e) => e.toString()).toList();
 
   // Get calculation entries based on type - use reactive data
   List<Map<String, dynamic>> get calculationEntries {
@@ -193,42 +192,6 @@ class SurveyPreviewController extends GetxController {
     return details;
   }
 
-  // Submit survey
-  Future<void> submitSurvey() async {
-    if (isSubmitting.value) return;
-
-    try {
-      isSubmitting.value = true;
-      errorMessage.value = '';
-
-      await mainController.submitSurvey();
-
-      Get.snackbar(
-        'Success',
-        'Survey submitted successfully!',
-        backgroundColor: Color(0xFF52B788),
-        colorText: Colors.white,
-        duration: Duration(seconds: 3),
-      );
-
-      // Navigate to success page or close
-     Get.offAllNamed(AppRoutes.mainDashboard);
-
-    } catch (e) {
-      print('❌ Submit error: $e');
-      errorMessage.value = 'Failed to submit survey: ${e.toString()}';
-
-      Get.snackbar(
-        'Error',
-        'Failed to submit survey. Please try again.',
-        backgroundColor: Color(0xFFDC3545),
-        colorText: Colors.white,
-        duration: Duration(seconds: 3),
-      );
-    } finally {
-      isSubmitting.value = false;
-    }
-  }
 
 
 

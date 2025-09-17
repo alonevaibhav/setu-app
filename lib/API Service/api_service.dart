@@ -22,8 +22,8 @@ class ApiResponse<T> {
 }
 
 class ApiService {
-  static const String baseUrl = "https://m3rj4d8p-3000.inc1.devtunnels.ms/";
-  // static const String baseUrl = "https://api.emojani.com/";
+  // static const String baseUrl = "https://m3rj4d8p-3000.inc1.devtunnels.ms/";
+  static const String baseUrl = "https://api.emojani.com/";
   static const Duration _timeoutDuration = Duration(seconds: 30);
 
   static SharedPreferences? _prefs;

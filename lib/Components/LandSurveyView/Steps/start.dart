@@ -252,11 +252,11 @@ class PersonalInfoStep extends StatelessWidget {
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
           ImagePickerUtil.buildFileUploadField(
-            label: '7/12 of the 3rd month *',
-            hint: 'Upload 7/12 document',
+            label: 'POA Document *',
+            hint: 'Upload POA Document',
             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            uploadedFiles: controller.sevenTwelveFiles,
-            onFilesSelected: (files) => controller.sevenTwelveFiles.assignAll(files),
+            uploadedFiles: controller.poaDocument,
+            onFilesSelected: (files) => controller.poaDocument.assignAll(files),
           ),
         ],
       ),

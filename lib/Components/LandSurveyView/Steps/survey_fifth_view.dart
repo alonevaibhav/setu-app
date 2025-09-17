@@ -194,14 +194,14 @@ class SurveyFifthView extends StatelessWidget {
           Gap(20.h * SurveyUIUtils.sizeFactor),
 
           // Agreement Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['agreementController'],
-            label: 'Agreement *',
-            hint: 'Enter agreement details',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                fifthController.updateApplicantEntry(index, 'agreement', value),
-          ),
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['agreementController'],
+          //   label: 'Agreement *',
+          //   hint: 'Enter agreement details',
+          //   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          //   onChanged: (value) =>
+          //       fifthController.updateApplicantEntry(index, 'agreement', value),
+          // ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
@@ -220,17 +220,17 @@ class SurveyFifthView extends StatelessWidget {
           // Account Holder Address (Clickable Field)
           _buildAddressField(fifthController, index),
 
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Account Number Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['accountNumberController'],
-            label: 'Account Number *',
-            hint: 'Enter account number',
-            icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-            onChanged: (value) => fifthController.updateApplicantEntry(
-                index, 'accountNumber', value),
-          ),
+          // // Account Number Input
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['accountNumberController'],
+          //   label: 'Account Number *',
+          //   hint: 'Enter account number',
+          //   icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+          //   onChanged: (value) => fifthController.updateApplicantEntry(
+          //       index, 'accountNumber', value),
+          // ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
@@ -245,43 +245,43 @@ class SurveyFifthView extends StatelessWidget {
                 index, 'mobileNumber', value),
           ),
 
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Server Number Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['serverNumberController'],
-            label: 'Server Number',
-            hint: 'Enter server number',
-            icon: PhosphorIcons.infinity(PhosphorIconsStyle.regular),
-            onChanged: (value) => fifthController.updateApplicantEntry(
-                index, 'serverNumber', value),
-          ),
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['serverNumberController'],
+          //   label: 'Server Number',
+          //   hint: 'Enter server number',
+          //   icon: PhosphorIcons.infinity(PhosphorIconsStyle.regular),
+          //   onChanged: (value) => fifthController.updateApplicantEntry(
+          //       index, 'serverNumber', value),
+          // ),
 
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Area Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['areaController'],
-            label: 'Area',
-            hint: 'Enter area',
-            icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) =>
-                fifthController.updateApplicantEntry(index, 'area', value),
-          ),
+          // // Area Input
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['areaController'],
+          //   label: 'Area',
+          //   hint: 'Enter area',
+          //   icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) =>
+          //       fifthController.updateApplicantEntry(index, 'area', value),
+          // ),
 
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Potkharaba Area Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['potkaharabaAreaController'],
-            label: 'Potkharaba Area',
-            hint: 'Enter potkharaba area',
-            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => fifthController.updateApplicantEntry(
-                index, 'potkaharabaArea', value),
-          ),
+          // // Potkharaba Area Input
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['potkaharabaAreaController'],
+          //   label: 'Potkharaba Area',
+          //   hint: 'Enter potkharaba area',
+          //   icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) => fifthController.updateApplicantEntry(
+          //       index, 'potkaharabaArea', value),
+          // ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
@@ -298,46 +298,6 @@ class SurveyFifthView extends StatelessWidget {
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Summary Row - Updated to use GetBuilder instead of direct text access
-          GetBuilder<SurveyFifthController>(
-            tag: 'survey_fifth',
-            builder: (controller) {
-              final accountHolderName = (entry['accountHolderNameController']
-                      as TextEditingController)
-                  .text;
-              return Container(
-                padding: EdgeInsets.all(12.w * SurveyUIUtils.sizeFactor),
-                decoration: BoxDecoration(
-                  color: SetuColors.primaryGreen.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: SetuColors.primaryGreen.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      PhosphorIcons.info(PhosphorIconsStyle.regular),
-                      color: SetuColors.primaryGreen,
-                      size: 16.sp * SurveyUIUtils.sizeFactor,
-                    ),
-                    Gap(8.w * SurveyUIUtils.sizeFactor),
-                    Expanded(
-                      child: Text(
-                        'Applicant ${index + 1} - ${accountHolderName.isNotEmpty ? accountHolderName : 'Name not entered'}',
-                        style: TextStyle(
-                          fontSize: 12.sp * SurveyUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
         ],
       ),
     );

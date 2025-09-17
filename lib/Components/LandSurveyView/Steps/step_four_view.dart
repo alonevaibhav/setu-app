@@ -54,10 +54,8 @@ class StepFourView extends StatelessWidget {
         // Calculation Type (Read-only, from previous controller)
         Obx(() {
           try {
-            final calculationController =
-                Get.find<CalculationController>(tag: 'calculation');
-            final selectedType =
-                calculationController.selectedCalculationType.value;
+            final calculationController = Get.find<CalculationController>(tag: 'calculation');
+            final selectedType = calculationController.selectedCalculationType.value;
 
             return SurveyUIUtils.buildTextFormField(
               controller: TextEditingController(text: selectedType),

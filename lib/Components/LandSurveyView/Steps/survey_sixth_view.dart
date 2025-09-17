@@ -222,28 +222,28 @@ class SurveySixthView extends StatelessWidget {
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Server Number Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['serverNumberController'],
-            label: 'Server Number',
-            hint: 'Enter server number',
-            icon: PhosphorIcons.infinity(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                sixthController.updateCoownerEntry(index, 'serverNumber', value),
-          ),
+          // // Server Number Input
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['serverNumberController'],
+          //   label: 'Server Number',
+          //   hint: 'Enter server number',
+          //   icon: PhosphorIcons.infinity(PhosphorIconsStyle.regular),
+          //   onChanged: (value) =>
+          //       sixthController.updateCoownerEntry(index, 'serverNumber', value),
+          // ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Consent Input
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['consentController'],
-            label: 'Consent of Co-owner *',
-            hint: 'Enter consent details',
-            icon: PhosphorIcons.handshake(PhosphorIconsStyle.regular),
-            maxLines: 3,
-            onChanged: (value) =>
-                sixthController.updateCoownerEntry(index, 'consent', value),
-          ),
+          // // Consent Input
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['consentController'],
+          //   label: 'Consent of Co-owner *',
+          //   hint: 'Enter consent details',
+          //   icon: PhosphorIcons.handshake(PhosphorIconsStyle.regular),
+          //   maxLines: 3,
+          //   onChanged: (value) =>
+          //       sixthController.updateCoownerEntry(index, 'consent', value),
+          // ),
 
           Gap(16.h * SurveyUIUtils.sizeFactor),
 

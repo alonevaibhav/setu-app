@@ -25,10 +25,10 @@ class SurveyCTSStep extends StatelessWidget {
     // Get the substeps from main controller configuration
     final subSteps = mainController.stepConfigurations[1] ?? ['survey_number'];
 
-    // Ensure currentSubStep is within bounds
-    if (currentSubStep >= subSteps.length) {
-      return _buildOfficeInput(); // Fallback
-    }
+    // // Ensure currentSubStep is within bounds
+    // if (currentSubStep >= subSteps.length) {
+    //   return _buildOfficeInput(); // Fallback
+    // }
 
     final currentField = subSteps[currentSubStep];
 
@@ -43,8 +43,8 @@ class SurveyCTSStep extends StatelessWidget {
         return _buildTalukaInput();
       case 'village':
         return _buildVillageInput();
-      case 'office':
-        return _buildOfficeInput();
+      // case 'office':
+      //   return _buildOfficeInput();
       default:
         return _buildSurveyNumberInput();
     }
@@ -160,25 +160,25 @@ class SurveyCTSStep extends StatelessWidget {
     );
   }
 
-  Widget _buildOfficeInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SurveyUIUtils.buildStepHeader(
-          'Office Information',
-          'Select your office',
-        ),
-        Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
-              label: 'Office*',
-              value: controller.selectedOffice.value,
-              items: controller.officeOptions,
-              onChanged: controller.updateOffice,
-              icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-            )),
-        Gap(32.h),
-        SurveyUIUtils.buildNavigationButtons(mainController),
-      ],
-    );
-  }
+  // Widget _buildOfficeInput() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       SurveyUIUtils.buildStepHeader(
+  //         'Office Information',
+  //         'Select your office',
+  //       ),
+  //       Gap(24.h),
+  //       Obx(() => SurveyUIUtils.buildDropdownField(
+  //             label: 'Office*',
+  //             value: controller.selectedOffice.value,
+  //             items: controller.officeOptions,
+  //             onChanged: controller.updateOffice,
+  //             icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+  //           )),
+  //       Gap(32.h),
+  //       SurveyUIUtils.buildNavigationButtons(mainController),
+  //     ],
+  //   );
+  // }
 }
