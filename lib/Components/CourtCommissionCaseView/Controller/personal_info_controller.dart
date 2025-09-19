@@ -11,6 +11,8 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   final commissionDateController = TextEditingController();
   final civilClaimController = TextEditingController();
   final issuingOfficeController = TextEditingController();
+  final applicantNameController = TextEditingController();
+  final applicantAddressController = TextEditingController();
 
   // Date selection
   final selectedCommissionDate = Rxn<DateTime>();

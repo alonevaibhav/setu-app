@@ -380,7 +380,7 @@ class CourtSeventhView extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           // Header
           Container(
             padding: EdgeInsets.all(10.w),
@@ -571,7 +571,6 @@ class CourtSeventhView extends StatelessWidget {
                 ),
                 Gap(16.h),
 
-
                 ImagePickerUtil.buildFileUploadField(
                   label: 'Utara Akharband *',
                   hint: 'Upload Utara Akharband',
@@ -628,66 +627,6 @@ class CourtSeventhView extends StatelessWidget {
     );
   }
 
-  Widget _buildDropdownField({
-    required String label,
-    required String value,
-    required List<String> items,
-    required Function(String) onChanged,
-    String? error,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: Colors.black87,
-          ),
-        ),
-        Gap(8.h),
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(
-              color: error != null ? Colors.red : Colors.grey.shade300,
-            ),
-            color: Colors.grey.shade50,
-          ),
-          child: DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
-              value: value.isEmpty ? null : value,
-              hint: Text('Select option'),
-              isExpanded: true,
-              items: items
-                  .map((item) => DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              ))
-                  .toList(),
-              onChanged: (newValue) {
-                if (newValue != null) onChanged(newValue);
-              },
-            ),
-          ),
-        ),
-        if (error != null)
-          Padding(
-            padding: EdgeInsets.only(top: 4.h),
-            child: Text(
-              error,
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.red,
-              ),
-            ),
-          ),
-      ],
-    );
-  }
 
   double _getUploadProgress(CourtSeventhController docController) {
     return _getUploadedCount(docController) / 7.0;

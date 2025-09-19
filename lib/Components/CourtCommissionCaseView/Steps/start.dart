@@ -28,7 +28,7 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildCourtCommissionDetails(); // Fallback
+      return _buildCourtCommissionDetails(); 
     }
 
     final currentField = subSteps[currentSubStep];
@@ -50,6 +50,35 @@ class PersonalInfoStep extends StatelessWidget {
           'Please provide court commission information',
         ),
         Gap(24.h),
+
+        CourtCommissionCaseUIUtils.buildTextFormField(
+          controller: controller.applicantNameController,
+          label: 'Applicant Name',
+          hint: 'Enter Your Name',
+          icon: PhosphorIcons.identificationBadge(PhosphorIconsStyle.regular),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value == null || value.trim().length < 3) {
+              return 'Please enter the name of the applicant';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
+        CourtCommissionCaseUIUtils.buildTextFormField(
+          controller: controller.applicantAddressController,
+          label: 'Applicant Address',
+          hint: 'Enter Your Address',
+          icon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value == null || value.trim().length < 3) {
+              return 'Please enter the Address of the applicant';
+            }
+            return null;
+          },
+        ),
+        Gap(16.h),
 
         // Name of the court that issued the court commission order
       CourtCommissionCaseUIUtils.buildTextFormField(
