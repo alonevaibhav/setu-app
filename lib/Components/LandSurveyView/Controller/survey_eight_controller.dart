@@ -217,6 +217,7 @@ class SurveyEightController extends GetxController with StepValidationMixin, Ste
   final schemeSheetFiles = <String>[].obs;
   final oldCensusMapFiles = <String>[].obs;
   final demarcationCertificateFiles = <String>[].obs;
+  final adhikarPatra = <String>[].obs;
 
   // Non-agricultural specific documents
   final sakshamPradikaranAdeshFiles = <String>[].obs;

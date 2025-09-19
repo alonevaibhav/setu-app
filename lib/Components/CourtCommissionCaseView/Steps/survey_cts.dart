@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,17 +18,14 @@ class SurveyCTSStep extends StatelessWidget {
   }) : super(key: key);
 
   // Get the SurveyCTSController
-  SurveyCTSController get controller => Get.find<SurveyCTSController>(tag: 'survey_cts');
+  SurveyCTSController get controller =>
+      Get.find<SurveyCTSController>(tag: 'survey_cts');
 
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
     final subSteps = mainController.stepConfigurations[1] ?? ['survey_number'];
 
-    // Ensure currentSubStep is within bounds
-    if (currentSubStep >= subSteps.length) {
-      return _buildOfficeInput(); // Fallback
-    }
 
     final currentField = subSteps[currentSubStep];
 
@@ -44,8 +40,6 @@ class SurveyCTSStep extends StatelessWidget {
         return _buildTalukaInput();
       case 'village':
         return _buildVillageInput();
-      case 'office':
-        return _buildOfficeInput();
       default:
         return _buildSurveyNumberInput();
     }
@@ -61,12 +55,12 @@ class SurveyCTSStep extends StatelessWidget {
         ),
         Gap(24.h),
         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'Survey No./Gat No./CTS No.*',
-          value: controller.selectedSurveyNo.value,
-          items: controller.noSelect,
-          onChanged: controller.updateDistrict,
-          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-        )),
+              label: 'Survey No./Gat No./CTS No.*',
+              value: controller.selectedSurveyNo.value,
+              items: controller.noSelect,
+              onChanged: controller.updateDistrict,
+              icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            )),
         Gap(32.h),
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
       ],
@@ -83,12 +77,12 @@ class SurveyCTSStep extends StatelessWidget {
         ),
         Gap(24.h),
         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'Department*',
-          value: controller.selectedDepartment.value,
-          items: controller.departmentOptions,
-          onChanged: controller.updateDepartment,
-          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-        )),
+              label: 'Department*',
+              value: controller.selectedDepartment.value,
+              items: controller.departmentOptions,
+              onChanged: controller.updateDepartment,
+              icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+            )),
         Gap(32.h),
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
       ],
@@ -105,12 +99,12 @@ class SurveyCTSStep extends StatelessWidget {
         ),
         Gap(24.h),
         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'District*',
-          value: controller.selectedDistrict.value,
-          items: controller.districtOptions,
-          onChanged: controller.updateDistrict,
-          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-        )),
+              label: 'District*',
+              value: controller.selectedDistrict.value,
+              items: controller.districtOptions,
+              onChanged: controller.updateDistrict,
+              icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            )),
         Gap(32.h),
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
       ],
@@ -127,12 +121,12 @@ class SurveyCTSStep extends StatelessWidget {
         ),
         Gap(24.h),
         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'Taluka*',
-          value: controller.selectedTaluka.value,
-          items: controller.getTalukaOptions(),
-          onChanged: controller.updateTaluka,
-          icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-        )),
+              label: 'Taluka*',
+              value: controller.selectedTaluka.value,
+              items: controller.getTalukaOptions(),
+              onChanged: controller.updateTaluka,
+              icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            )),
         Gap(32.h),
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
       ],
@@ -149,37 +143,16 @@ class SurveyCTSStep extends StatelessWidget {
         ),
         Gap(24.h),
         Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'Village*',
-          value: controller.selectedVillage.value,
-          items: controller.getVillageOptions(),
-          onChanged: controller.updateVillage,
-          icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
-        )),
+              label: 'Village*',
+              value: controller.selectedVillage.value,
+              items: controller.getVillageOptions(),
+              onChanged: controller.updateVillage,
+              icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
+            )),
         Gap(32.h),
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
       ],
     );
   }
 
-  Widget _buildOfficeInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CourtCommissionCaseUIUtils.buildStepHeader(
-          'Office Information',
-          'Select your office',
-        ),
-        Gap(24.h),
-        Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-          label: 'Office*',
-          value: controller.selectedOffice.value,
-          items: controller.officeOptions,
-          onChanged: controller.updateOffice,
-          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-        )),
-        Gap(32.h),
-        CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
-      ],
-    );
-  }
 }

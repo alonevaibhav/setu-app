@@ -545,7 +545,7 @@ class SurveyEightView extends StatelessWidget {
           ),
           Gap(16.h),
           ImagePickerUtil.buildFileUploadField(
-            label: 'Note *',
+            label: 'Note ',
             hint: 'Upload note document',
             icon: PhosphorIcons.note(PhosphorIconsStyle.regular),
             uploadedFiles: docController.noteFiles,
@@ -553,7 +553,7 @@ class SurveyEightView extends StatelessWidget {
           ),
           Gap(16.h),
           ImagePickerUtil.buildFileUploadField(
-            label: 'Partition *',
+            label: 'Partition ',
             hint: 'Upload partition document',
             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
             uploadedFiles: docController.partitionFiles,
@@ -582,6 +582,14 @@ class SurveyEightView extends StatelessWidget {
             icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
             uploadedFiles: docController.demarcationCertificateFiles,
             onFilesSelected: (files) => docController.demarcationCertificateFiles.assignAll(files),
+          ),
+          Gap(16.h),
+          ImagePickerUtil.buildFileUploadField(
+            label: 'Adhikar Patra *',
+            hint: 'Upload demarcation certificate',
+            icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
+            uploadedFiles: docController.adhikarPatra,
+            onFilesSelected: (files) => docController.adhikarPatra.assignAll(files),
           ),
         ],
       ),

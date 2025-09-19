@@ -250,7 +250,7 @@ class CalculationInformation extends StatelessWidget {
     );
   }
 
-  // ================ HDKAYAM SECTION ================
+  // ================ HDDKAYAM SECTION ================
 
   Widget _buildHddkayamFields(CalculationController calcController) {
     return _buildEntryList(
@@ -783,9 +783,9 @@ class CalculationInformation extends StatelessWidget {
             hint: 'Enter area in square meters',
             icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => calcController
-                .updateIntegrationCalculationEntry(index, 'areaSqm', value),
+            onChanged: (value) => calcController.updateIntegrationCalculationEntry(index, 'areaSqm', value),
           ),
+
         ],
       ),
     );
