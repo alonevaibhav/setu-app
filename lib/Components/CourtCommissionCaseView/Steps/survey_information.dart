@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -77,11 +74,11 @@ class CalculationInformation extends StatelessWidget {
 
         // Survey Entries List
         Obx(() => Column(
-          children: [
-            for (int i = 0; i < calcController.surveyEntries.length; i++)
-              _buildSurveyEntryCard(calcController, i),
-          ],
-        )),
+              children: [
+                for (int i = 0; i < calcController.surveyEntries.length; i++)
+                  _buildSurveyEntryCard(calcController, i),
+              ],
+            )),
 
         Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
@@ -133,7 +130,7 @@ class CalculationInformation extends StatelessWidget {
 
     return Container(
       margin:
-      EdgeInsets.only(bottom: 20.h * CourtCommissionCaseUIUtils.sizeFactor),
+          EdgeInsets.only(bottom: 20.h * CourtCommissionCaseUIUtils.sizeFactor),
       padding: EdgeInsets.all(20.w * CourtCommissionCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -198,14 +195,15 @@ class CalculationInformation extends StatelessWidget {
 
           // Village Dropdown - Individual for each entry
           Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-            label: 'Village *',
-            value: calcController.getSelectedVillage(index),
-            items: calcController.villageOptions,
-            onChanged: (value) {
-              calcController.updateSelectedVillage(index, value ?? 'Select Village');
-            },
-            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-          )),
+                label: 'Village *',
+                value: calcController.getSelectedVillage(index),
+                items: calcController.villageOptions,
+                onChanged: (value) {
+                  calcController.updateSelectedVillage(
+                      index, value ?? 'Select Village');
+                },
+                icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+              )),
 
           Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 
@@ -219,18 +217,18 @@ class CalculationInformation extends StatelessWidget {
                 calcController.updateSurveyEntry(index, 'surveyNo', value),
           ),
 
-          Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
+          // Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Share Input
-          CourtCommissionCaseUIUtils.buildTextFormField(
-            controller: entry['shareController'],
-            label: 'Share *',
-            hint: 'Enter share value',
-            icon: PhosphorIcons.percent(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) =>
-                calcController.updateSurveyEntry(index, 'share', value),
-          ),
+          // CourtCommissionCaseUIUtils.buildTextFormField(
+          //   controller: entry['shareController'],
+          //   label: 'Share *',
+          //   hint: 'Enter share value',
+          //   icon: PhosphorIcons.percent(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) =>
+          //       calcController.updateSurveyEntry(index, 'share', value),
+          // ),
 
           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
 
@@ -249,7 +247,7 @@ class CalculationInformation extends StatelessWidget {
           // Summary Row
           Container(
             padding:
-            EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+                EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
             decoration: BoxDecoration(
               color: SetuColors.primaryGreen.withOpacity(0.05),
               borderRadius: BorderRadius.circular(8.r),
@@ -268,13 +266,14 @@ class CalculationInformation extends StatelessWidget {
                 Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
                 Expanded(
                   child: Obx(() => Text(
-                    'Entry ${index + 1} - Village: ${calcController.getSelectedVillage(index)}, Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
-                    style: TextStyle(
-                      fontSize: 12.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                      color: SetuColors.primaryGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  )),
+                        'Entry ${index + 1} - Village: ${calcController.getSelectedVillage(index)}, Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
+                        style: TextStyle(
+                          fontSize:
+                              12.sp * CourtCommissionCaseUIUtils.sizeFactor,
+                          color: SetuColors.primaryGreen,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )),
                 ),
               ],
             ),

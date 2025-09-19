@@ -208,6 +208,10 @@ class CourtSeventhController extends GetxController with StepValidationMixin, St
   final oldCensusMapFiles = <String>[].obs;
   final demarcationCertificateFiles = <String>[].obs;
 
+  final adhikarPatra = <String>[].obs;
+
+  final utaraAkharband = <String>[].obs;
+
   // Loading states
   final isUploading = false.obs;
   final uploadProgress = 0.0.obs;

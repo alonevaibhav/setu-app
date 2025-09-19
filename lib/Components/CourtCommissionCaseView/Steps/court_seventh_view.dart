@@ -506,7 +506,7 @@ class CourtSeventhView extends StatelessWidget {
 
                 // Note
                 ImagePickerUtil.buildFileUploadField(
-                  label: 'Note *',
+                  label: 'Note',
                   hint: 'Upload note document',
                   icon: PhosphorIcons.note(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.noteFiles,
@@ -517,7 +517,7 @@ class CourtSeventhView extends StatelessWidget {
 
                 // Partition
                 ImagePickerUtil.buildFileUploadField(
-                  label: 'Partition *',
+                  label: 'Partition',
                   hint: 'Upload partition document',
                   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
                   uploadedFiles: docController.partitionFiles,
@@ -557,6 +557,27 @@ class CourtSeventhView extends StatelessWidget {
                   onFilesSelected: (files) => docController
                       .demarcationCertificateFiles
                       .assignAll(files),
+                ),
+
+                Gap(16.h),
+
+
+                ImagePickerUtil.buildFileUploadField(
+                  label: 'Adhikar Patra *',
+                  hint: 'Upload Adhikar Patra',
+                  icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
+                  uploadedFiles: docController.adhikarPatra,
+                  onFilesSelected: (files) => docController.adhikarPatra.assignAll(files),
+                ),
+                Gap(16.h),
+
+
+                ImagePickerUtil.buildFileUploadField(
+                  label: 'Utara Akharband *',
+                  hint: 'Upload Utara Akharband',
+                  icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
+                  uploadedFiles: docController.utaraAkharband,
+                  onFilesSelected: (files) => docController.utaraAkharband.assignAll(files),
                 ),
               ],
             ),
