@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -24,7 +21,8 @@ class AllocationSeventhView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final docController = Get.put(AllocationSeventhController(), tag: 'court_seven');
+    final docController =
+        Get.put(AllocationSeventhController(), tag: 'court_seven');
 
     // Get step configurations for step 8 (index 7)
     final subSteps = mainController.stepConfigurations[6] ?? ['documents'];
@@ -82,45 +80,45 @@ class AllocationSeventhView extends StatelessWidget {
 
           // Progress
           Obx(() => Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Row(
-              children: [
-                CircularProgressIndicator(
-                  value: _getUploadProgress(docController),
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      SetuColors.primaryGreen),
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: Colors.grey.shade200),
                 ),
-                Gap(16.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Upload Progress',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                child: Row(
+                  children: [
+                    CircularProgressIndicator(
+                      value: _getUploadProgress(docController),
+                      backgroundColor: Colors.grey.shade200,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          SetuColors.primaryGreen),
+                    ),
+                    Gap(16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Upload Progress',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            '${_getUploadedCount(docController)} of 7 documents uploaded',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        '${_getUploadedCount(docController)} of 7 documents uploaded',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
 
           Gap(24.h),
 
@@ -225,6 +223,16 @@ class AllocationSeventhView extends StatelessWidget {
                       .demarcationCertificateFiles
                       .assignAll(files),
                 ),
+                Gap(16.h),
+
+
+                ImagePickerUtil.buildFileUploadField(
+                  label: 'Adhikar Patra *',
+                  hint: 'Upload demarcation certificate',
+                  icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
+                  uploadedFiles: docController.adhikarPatra,
+                  onFilesSelected: (files) => docController.adhikarPatra.assignAll(files),
+                ),
               ],
             ),
           ),
@@ -310,9 +318,9 @@ class AllocationSeventhView extends StatelessWidget {
               isExpanded: true,
               items: items
                   .map((item) => DropdownMenuItem(
-                value: item,
-                child: Text(item),
-              ))
+                        value: item,
+                        child: Text(item),
+                      ))
                   .toList(),
               onChanged: (newValue) {
                 if (newValue != null) onChanged(newValue);

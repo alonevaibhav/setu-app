@@ -28,7 +28,7 @@ class SurveyCTSStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildOfficeInput(); // Fallback
+      return _buildSurveyNumberInput(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
@@ -44,8 +44,8 @@ class SurveyCTSStep extends StatelessWidget {
         return _buildTalukaInput();
       case 'village':
         return _buildVillageInput();
-      case 'office':
-        return _buildOfficeInput();
+      // case 'office':
+      //   return _buildOfficeInput();
       default:
         return _buildSurveyNumberInput();
     }
@@ -167,25 +167,25 @@ class SurveyCTSStep extends StatelessWidget {
     );
   }
 
-  Widget _buildOfficeInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CourtAllocationCaseUIUtils.buildStepHeader(
-          'Office Information',
-          'Select your office',
-        ),
-        Gap(24.h),
-        Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
-          label: 'Office*',
-          value: controller.selectedOffice.value,
-          items: controller.officeOptions,
-          onChanged: controller.updateOffice,
-          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-        )),
-        Gap(32.h),
-        CourtAllocationCaseUIUtils.buildNavigationButtons(mainController),
-      ],
-    );
-  }
+  // Widget _buildOfficeInput() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       CourtAllocationCaseUIUtils.buildStepHeader(
+  //         'Office Information',
+  //         'Select your office',
+  //       ),
+  //       Gap(24.h),
+  //       Obx(() => CourtAllocationCaseUIUtils.buildDropdownField(
+  //         label: 'Office*',
+  //         value: controller.selectedOffice.value,
+  //         items: controller.officeOptions,
+  //         onChanged: controller.updateOffice,
+  //         icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+  //       )),
+  //       Gap(32.h),
+  //       CourtAllocationCaseUIUtils.buildNavigationButtons(mainController),
+  //     ],
+  //   );
+  // }
 }

@@ -44,7 +44,6 @@ class CourtAllocationCaseController extends GetxController {
       'district',
       'taluka',
       'village',
-      'office'
     ],
     2: ['calculation'], // Survey Information
     3: ['calculation'], // Calculation Information

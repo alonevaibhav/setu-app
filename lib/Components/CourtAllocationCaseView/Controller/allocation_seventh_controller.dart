@@ -15,6 +15,8 @@ class AllocationSeventhController extends GetxController with StepValidationMixi
   final oldCensusMapFiles = <String>[].obs;
   final demarcationCertificateFiles = <String>[].obs;
 
+  final adhikarPatra = <String>[].obs;
+
   // Loading states
   final isUploading = false.obs;
   final uploadProgress = 0.0.obs;

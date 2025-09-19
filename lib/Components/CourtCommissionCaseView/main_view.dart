@@ -311,6 +311,7 @@ class CourtCommissionCaseView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final controller = Get.put(CourtCommissionCaseController());
     const double sizeFactor = 0.9;
 

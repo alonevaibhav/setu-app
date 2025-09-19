@@ -5,6 +5,8 @@ import '../Controller/main_controller.dart';
 class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
 
   // Text Controllers
+  final applicantNameController = TextEditingController();
+  final applicantAddressController = TextEditingController();
   final courtNameController = TextEditingController();
   final courtAddressController = TextEditingController();
   final courtOrderNumberController = TextEditingController();

@@ -375,6 +375,7 @@ class SurveyEightView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final docController = Get.put(SurveyEightController(), tag: 'survey_eight');
+
     final subSteps = mainController.stepConfigurations[7] ?? ['documents'];
 
     if (currentSubStep >= subSteps.length) {
