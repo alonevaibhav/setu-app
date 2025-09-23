@@ -273,25 +273,25 @@ class CalculationInformation extends StatelessWidget {
         children: [
           SurveyUIUtils.buildTextFormField(
             controller: entry['ctSurveyController'],
-            label: 'CT Survey No.',
-            hint: 'Enter CT Survey No.',
+            label: 'Survey No./Gat No./CTS No.*',
+            hint: 'Enter Survey No./Gat No./CTS No.*',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) => calcController.updateHddkayamEntry(
                 index, 'ctSurveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-          SurveyUIUtils.buildDropdownField(
-            label: 'CT Survey/TP No.',
-            value: entry['selectedCTSurvey'] ?? '',
-            items: calcController.ctSurveyOptions,
-            onChanged: (value) => calcController.updateHddkayamEntry(
-                index, 'selectedCTSurvey', value),
-            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
-          ),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
+          // SurveyUIUtils.buildDropdownField(
+          //   label: 'CT Survey/TP No.',
+          //   value: entry['selectedCTSurvey'] ?? '',
+          //   items: calcController.ctSurveyOptions,
+          //   onChanged: (value) => calcController.updateHddkayamEntry(
+          //       index, 'selectedCTSurvey', value),
+          //   icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          // ),
           Gap(16.h * SurveyUIUtils.sizeFactor),
           SurveyUIUtils.buildTextFormField(
             controller: entry['areaController'],
-            label: 'Area',
+            label: '7/12 Area',
             hint: 'Enter area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
             onChanged: (value) =>
@@ -336,8 +336,8 @@ class CalculationInformation extends StatelessWidget {
           // Survey Number field (similar to CT Survey No. in Hddkayam)
           SurveyUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
-            label: 'Survey No.',
-            hint: 'Enter Survey No.',
+            label: 'Survey No./Gat No./CTS No.*',
+            hint: 'Survey No./Gat No./CTS No.*',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) =>
                 calcController.updateStomachEntry(index, 'surveyNumber', value),
@@ -368,15 +368,15 @@ class CalculationInformation extends StatelessWidget {
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Calculated Area field (similar to Area (sq.m.) in Hddkayam)
-          SurveyUIUtils.buildTextFormField(
-            controller: entry['calculatedAreaController'],
-            label: 'Calculated Area (sq.m.)',
-            hint: 'Enter calculated area in square meters',
-            icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => calcController.updateStomachEntry(
-                index, 'calculatedArea', value),
-          ),
+          // SurveyUIUtils.buildTextFormField(
+          //   controller: entry['calculatedAreaController'],
+          //   label: 'Calculated Area (sq.m.)',
+          //   hint: 'Enter calculated area in square meters',
+          //   icon: PhosphorIcons.calculator(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) => calcController.updateStomachEntry(
+          //       index, 'calculatedArea', value),
+          // ),
         ],
       ),
     );
@@ -388,17 +388,26 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.nonAgrisurveyNumberGatNumber, // Single controller for all entries
+          label: 'Survey No./Gat No./CTS No.*',
+          hint: 'Enter Survey No./Gat No./CTS No',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateOrderNumber(value),
+        ),
+        Gap(16.h * SurveyUIUtils.sizeFactor),
         // Order Number field - OUTSIDE the entry list
         SurveyUIUtils.buildTextFormField(
-          controller: calcController
-              .orderNumberController, // Single controller for all entries
-          label:
-              'Order number or number of the letter issued for counting approved by the competent authority *',
+          controller: calcController.orderNumberController, // Single controller for all entries
+          label: 'Order number or number of the letter issued for counting approved by the competent authority *',
           hint: 'Enter order number',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           onChanged: (value) => calcController.updateOrderNumber(value),
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
+
+
 
         // Order Date field - OUTSIDE the entry list
         SurveyUIUtils.buildDatePickerField(
@@ -474,6 +483,9 @@ class CalculationInformation extends StatelessWidget {
       entryType: 'Non-Agricultural',
       child: Column(
         children: [
+
+
+
           // Survey Number field
           SurveyUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
@@ -485,21 +497,23 @@ class CalculationInformation extends StatelessWidget {
           ),
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
-          // Survey Type Dropdown
-          SurveyUIUtils.buildDropdownField(
-            label: 'Survey No./Group No.',
-            value: entry['selectedSurveyType'] ?? '',
-            items: calcController.surveyTypeOptions,
-            onChanged: (value) => calcController.updateNonAgriculturalEntry(
-                index, 'selectedSurveyType', value),
-            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+
+
+          // // Survey Type Dropdown
+          // SurveyUIUtils.buildDropdownField(
+          //   label: 'Survey No./Group No.',
+          //   value: entry['selectedSurveyType'] ?? '',
+          //   items: calcController.surveyTypeOptions,
+          //   onChanged: (value) => calcController.updateNonAgriculturalEntry(
+          //       index, 'selectedSurveyType', value),
+          //   icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          // ),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Area field
           SurveyUIUtils.buildTextFormField(
             controller: entry['areaController'],
-            label: 'Area',
+            label: '7/12 Area',
             hint: 'Enter area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
             onChanged: (value) =>
@@ -528,6 +542,14 @@ class CalculationInformation extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SurveyUIUtils.buildTextFormField(
+          controller: calcController.countingKsurveyNumberGatNumber, // Single controller for all entries
+          label: 'Survey No./Gat No./CTS No.*',
+          hint: 'Enter Survey No./Gat No./CTS No',
+          icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          onChanged: (value) => calcController.updateOrderNumber(value),
+        ),
+
         // Order Number field - OUTSIDE the entry list
         SurveyUIUtils.buildTextFormField(
           controller: calcController
@@ -622,23 +644,23 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateKnotsCountingEntry(
                 index, 'surveyNumber', value),
           ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
-
-          // Survey Type Dropdown
-          SurveyUIUtils.buildDropdownField(
-            label: 'Survey No./Group No.',
-            value: entry['selectedSurveyType'] ?? '',
-            items: calcController.surveyTypeOptions,
-            onChanged: (value) => calcController.updateKnotsCountingEntry(
-                index, 'selectedSurveyType', value),
-            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
-          ),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
+          //
+          // // Survey Type Dropdown
+          // SurveyUIUtils.buildDropdownField(
+          //   label: 'Survey No./Group No.',
+          //   value: entry['selectedSurveyType'] ?? '',
+          //   items: calcController.surveyTypeOptions,
+          //   onChanged: (value) => calcController.updateKnotsCountingEntry(
+          //       index, 'selectedSurveyType', value),
+          //   icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          // ),
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Area field
           SurveyUIUtils.buildTextFormField(
             controller: entry['areaController'],
-            label: 'Area',
+            label: '7/12 Area',
             hint: 'Enter area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
             onChanged: (value) =>
@@ -744,31 +766,30 @@ class CalculationInformation extends StatelessWidget {
           // CT Survey/TP No. field
           SurveyUIUtils.buildTextFormField(
             controller: entry['ctSurveyController'],
-            label: 'CT Survey/TP No.',
-            hint: 'Enter CT Survey/TP No.',
+            label: 'Survey No./Gat No./CTS No.*',
+            hint: 'Enter Survey No./Gat No./CTS No.*',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) =>
-                calcController.updateIntegrationCalculationEntry(
-                    index, 'ctSurveyNumber', value),
+                calcController.updateIntegrationCalculationEntry(index, 'ctSurveyNumber', value),
           ),
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // CT Survey/TP No. Dropdown
-          SurveyUIUtils.buildDropdownField(
-            label: 'CT Survey/TP No.',
-            value: entry['selectedCTSurvey'] ?? '',
-            items: calcController.ctSurveyOptions,
-            onChanged: (value) =>
-                calcController.updateIntegrationCalculationEntry(
-                    index, 'selectedCTSurvey', value),
-            icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
-          ),
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // SurveyUIUtils.buildDropdownField(
+          //   label: 'CT Survey/TP No.',
+          //   value: entry['selectedCTSurvey'] ?? '',
+          //   items: calcController.ctSurveyOptions,
+          //   onChanged: (value) =>
+          //       calcController.updateIntegrationCalculationEntry(
+          //           index, 'selectedCTSurvey', value),
+          //   icon: PhosphorIcons.listBullets(PhosphorIconsStyle.regular),
+          // ),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Area field
           SurveyUIUtils.buildTextFormField(
             controller: entry['areaController'],
-            label: 'Area',
+            label: '7/12 Area',
             hint: 'Enter area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
             onChanged: (value) => calcController

@@ -56,16 +56,32 @@ class SurveyCTSStep extends StatelessWidget {
       children: [
         SurveyUIUtils.buildStepHeader(
           'Group No./ Survey No./ C. T. Survey No./T. P. No. Information',
-          'Enter Survey No./Gat No./CTS No.',
+          // 'Enter Survey No./Gat No./CTS No.',
         ),
         Gap(24.h),
-        Obx(() => SurveyUIUtils.buildDropdownField(
+
+        // Obx(() => SurveyUIUtils.buildDropdownField(
+        //   label: 'Survey No./Gat No./CTS No.*',
+        //   value: controller.selectedSurveyNo.value,
+        //   items: controller.noSelect,
+        //   onChanged: controller.updateDistrict,
+        //   icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+        // )),
+
+        SurveyUIUtils.buildTextFormField(
+          controller: controller.surveyCtsNumber,
           label: 'Survey No./Gat No./CTS No.*',
-          value: controller.selectedSurveyNo.value,
-          items: controller.noSelect,
-          onChanged: controller.updateDistrict,
+          hint: 'Enter Survey No./Gat No./CTS No.',
           icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-        )),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value == null || value.trim().length < 3) {
+              return 'Please enter the name of the applicant';
+            }
+            return null;
+          },
+        ),
+
         Gap(32.h),
         SurveyUIUtils.buildNavigationButtons(mainController),
       ],

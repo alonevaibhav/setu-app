@@ -21,8 +21,7 @@ class AddressPopup extends StatelessWidget {
       insetPadding: EdgeInsets.all(16),
       child: Container(
         width: double.infinity,
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
+        constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

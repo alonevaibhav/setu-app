@@ -45,6 +45,8 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
 
   // Common fields for Non-agricultural & Knots counting (outside entries)
   final orderNumberController = TextEditingController();
+  final nonAgrisurveyNumberGatNumber = TextEditingController();
+  final countingKsurveyNumberGatNumber = TextEditingController();
   final orderDateController = TextEditingController();
   final schemeOrderNumberController = TextEditingController();
   final appointmentDateController = TextEditingController();
@@ -52,7 +54,7 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
   // Knots counting fields (moved outside entries)
   final knotsCountController = TextEditingController();
   final knotSpacingController = TextEditingController();
-  final calculationMethod = ''.obs;
+  final calculationMethod = 'Acres'.obs;
 
   // Integration calculation fields (moved outside entries)
   final integrationType = ''.obs;
@@ -80,8 +82,6 @@ class CalculationController extends GetxController with StepValidationMixin, Ste
   // Stomach table entries
   final stomachEntries = <Map<String, dynamic>>[].obs;
   final List<String> measurementTypeOptions = [
-    'Square meters',
-    'Square feet',
     'Acres',
     'Hectares'
   ];

@@ -218,16 +218,20 @@ class SurveyEightController extends GetxController with StepValidationMixin, Ste
   final oldCensusMapFiles = <String>[].obs;
   final demarcationCertificateFiles = <String>[].obs;
   final adhikarPatra = <String>[].obs;
+  final otherDocument = <String>[].obs;
 
   // Non-agricultural specific documents
   final sakshamPradikaranAdeshFiles = <String>[].obs;
   final nakashaFiles = <String>[].obs;
   final bhandhakamParvanaFiles = <String>[].obs;
+  final nonAgriculturalZoneCertificateFiles = <String>[].obs;
+
 
   // Stomach specific documents
   final pratisaKarayaycheNakshaFiles = <String>[].obs;
   final bandPhotoFiles = <String>[].obs;
   final sammatiPatraFiles = <String>[].obs;
+  final stomachZoneCertificateFiles = <String>[].obs;
 
   // Loading states
   final isUploading = false.obs;

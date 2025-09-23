@@ -401,11 +401,6 @@ class SurveyEightView extends StatelessWidget {
 
           Gap(24.h),
 
-          // Progress with Obx because it depends on observable state
-          Obx(() => _buildUploadProgress(docController)),
-
-          Gap(24.h),
-
           _buildIdentityCardSection(docController),
 
           Gap(20.h),
@@ -465,47 +460,6 @@ class SurveyEightView extends StatelessWidget {
     );
   }
 
-  Widget _buildUploadProgress(SurveyEightController docController) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Row(
-        children: [
-          CircularProgressIndicator(
-            value: _getUploadProgress(docController),
-            backgroundColor: Colors.grey.shade200,
-            valueColor: AlwaysStoppedAnimation<Color>(SetuColors.primaryGreen),
-          ),
-          Gap(16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Upload Progress',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  docController.uploadProgressText,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _buildIdentityCardSection(SurveyEightController docController) {
     return _buildSection(
@@ -538,7 +492,7 @@ class SurveyEightView extends StatelessWidget {
       child: Column(
         children: [
           ImagePickerUtil.buildFileUploadField(
-            label: '7/12 of the 3rd month *',
+            label: 'Latest 7/12 Of The 3 Month  *',
             hint: 'Upload 7/12 document',
             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
             uploadedFiles: docController.sevenTwelveFiles,
@@ -592,6 +546,14 @@ class SurveyEightView extends StatelessWidget {
             uploadedFiles: docController.adhikarPatra,
             onFilesSelected: (files) => docController.adhikarPatra.assignAll(files),
           ),
+          Gap(16.h),
+          ImagePickerUtil.buildFileUploadField(
+            label: 'Other Document  *',
+            hint: 'Upload Other document If You Have Any',
+            icon: PhosphorIcons.certificate(PhosphorIconsStyle.regular),
+            uploadedFiles: docController.otherDocument,
+            onFilesSelected: (files) => docController.otherDocument.assignAll(files),
+          ),
         ],
       ),
     );
@@ -616,6 +578,14 @@ class SurveyEightView extends StatelessWidget {
             icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
             uploadedFiles: docController.nakashaFiles,
             onFilesSelected: (files) => docController.nakashaFiles.assignAll(files),
+          ),
+          Gap(16.h),
+          ImagePickerUtil.buildFileUploadField(
+            label: 'Zone Certificate *',
+            hint: 'Upload Zone Certificate',
+            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            uploadedFiles: docController.nonAgriculturalZoneCertificateFiles,
+            onFilesSelected: (files) => docController.nonAgriculturalZoneCertificateFiles.assignAll(files),
           ),
           Gap(16.h),
           ImagePickerUtil.buildFileUploadField(
@@ -649,6 +619,14 @@ class SurveyEightView extends StatelessWidget {
             icon: PhosphorIcons.camera(PhosphorIconsStyle.regular),
             uploadedFiles: docController.bandPhotoFiles,
             onFilesSelected: (files) => docController.bandPhotoFiles.assignAll(files),
+          ),
+          Gap(16.h),
+          ImagePickerUtil.buildFileUploadField(
+            label: 'Zone Certificate  *',
+            hint: 'Upload Zone Certificate ',
+            icon: PhosphorIcons.camera(PhosphorIconsStyle.regular),
+            uploadedFiles: docController.stomachZoneCertificateFiles,
+            onFilesSelected: (files) => docController.stomachZoneCertificateFiles.assignAll(files),
           ),
           Gap(16.h),
           ImagePickerUtil.buildFileUploadField(
