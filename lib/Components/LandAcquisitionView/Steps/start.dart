@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Components/LandAcquisitionView/Steps/ZLandAcquisitionUIUtils.dart';
 import '../../../Utils/custimize_image_picker.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 
@@ -28,20 +29,20 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildLandAcquisitionDetails(); // Fallback
+      return _buildLandAcquisitionDetails(context); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'land_acquisition_details':
-        return _buildLandAcquisitionDetails();
+        return _buildLandAcquisitionDetails(context);
       default:
-        return _buildLandAcquisitionDetails();
+        return _buildLandAcquisitionDetails(context);
     }
   }
 
-  Widget _buildLandAcquisitionDetails() {
+  Widget _buildLandAcquisitionDetails(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -49,6 +50,35 @@ class PersonalInfoStep extends StatelessWidget {
           'Land Acquisition Details',
           'Please provide land acquisition information',
         ),
+        Gap(24.h),
+
+        LandAcquisitionUIUtils.buildTextFormField(
+          controller: controller.applicantNameController,
+          label: 'Applicant Name',
+          hint: 'Enter Your Name',
+          icon: PhosphorIcons.identificationBadge(PhosphorIconsStyle.regular),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value == null || value.trim().length < 3) {
+              return 'Please enter the name of the applicant';
+            }
+            return null;
+          },
+        ),
+        Gap(24.h),
+
+        // Replace the old address field with AddressPopup
+
+        // Replace the old address field with AddressPopup
+        // Obx(() => ApplicantAddressField(
+        //   label: 'Applicant Address',
+        //   isRequired: true,
+        //   onTap: () => controller.showApplicantAddressPopup(context),
+        //   hasDetailedAddress: controller.hasDetailedApplicantAddress(),
+        //   buttonText: 'Detailed Address',
+        //   buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+        // )),
+
         Gap(24.h),
 
         // Name of Land Acquisition Officer/Office

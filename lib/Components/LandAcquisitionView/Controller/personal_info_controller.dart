@@ -227,23 +227,23 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   }
 
   String _getLandAcquisitionValidationError() {
-    if (landAcquisitionOfficerController.text.trim().length < 3) {
-      return 'Land Acquisition Officer name must be at least 3 characters';
+    if (landAcquisitionOfficerController.text.trim().isEmpty) {
+      return 'Fill Land Acquisition Officer name ';
     }
-    if (landAcquisitionBoardController.text.trim().length < 5) {
-      return 'Land Acquisition Board details must be at least 5 characters';
+    if (landAcquisitionBoardController.text.trim().isEmpty) {
+      return 'Fill Land Acquisition Board details ';
     }
-    if (landAcquisitionDetailsController.text.trim().length < 10) {
-      return 'Land acquisition details must be at least 10 characters';
+    if (landAcquisitionDetailsController.text.trim().isEmpty) {
+      return 'Fill Land acquisition details ';
     }
-    if (landAcquisitionOrderNumberController.text.trim().length < 3) {
-      return 'Land Acquisition Order Number must be at least 3 characters';
+    if (landAcquisitionOrderNumberController.text.trim().isEmpty) {
+      return 'Fill Land Acquisition Order Number ';
     }
     if (landAcquisitionOrderDateController.text.trim().isEmpty) {
-      return 'Land Acquisition Order Date is required';
+      return 'Fill Land Acquisition Order Date is required';
     }
-    if (landAcquisitionOfficeAddressController.text.trim().length < 10) {
-      return 'Office address must be at least 10 characters';
+    if (landAcquisitionOfficeAddressController.text.trim().isEmpty) {
+      return 'Fill Office address ';
     }
     if (landAcquisitionOrderFiles.isEmpty) {
       return 'Land Acquisition Order document is required';

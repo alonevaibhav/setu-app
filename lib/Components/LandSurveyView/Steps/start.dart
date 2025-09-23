@@ -277,6 +277,7 @@ import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../Utils/custimize_image_picker.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 import '../../Widget/address.dart';
@@ -301,22 +302,22 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildHolderVerification(); // Fallback
+      return _buildHolderVerification(context); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'holder_verification':
-        return _buildHolderVerification();
+        return _buildHolderVerification(context);
       case 'enumeration_check':
         return _buildEnumerationCheck();
       default:
-        return _buildHolderVerification();
+        return _buildHolderVerification(context);
     }
   }
 
-  Widget _buildHolderVerification() {
+  Widget _buildHolderVerification(context) {
     return Obx(() => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -342,7 +343,14 @@ class PersonalInfoStep extends StatelessWidget {
         Gap(24.h),
 
         // Replace the old address field with AddressPopup
-        _buildApplicantAddressField(),
+        Obx(() => ApplicantAddressField(
+          label: 'Applicant Address',
+          isRequired: true,
+          onTap: () => controller.showApplicantAddressPopup(context),
+          hasDetailedAddress: controller.hasDetailedApplicantAddress(),
+          buttonText: 'Detailed Address',
+          buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+        ))   ,
         Gap(24.h),
 
         // Question 1: Are you the holder yourself?
@@ -386,123 +394,6 @@ class PersonalInfoStep extends StatelessWidget {
     ));
   }
 
-  Widget _buildApplicantAddressField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              'Applicant Address',
-              style: GoogleFonts.poppins(
-                fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-                fontWeight: FontWeight.w600,
-                color: SetuColors.textPrimary,
-              ),
-            ),
-            Text(
-              ' *',
-              style: TextStyle(
-                fontSize: 16.sp * SurveyUIUtils.sizeFactor,
-                fontWeight: FontWeight.w500,
-                color: Colors.red,
-              ),
-            ),
-          ],
-        ),
-        Gap(8.h * SurveyUIUtils.sizeFactor),
-
-        Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () => controller.showApplicantAddressPopup(Get.context!),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w * SurveyUIUtils.sizeFactor,
-                    vertical: 12.h * SurveyUIUtils.sizeFactor,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: SetuColors.primaryGreen.withOpacity(0.5),
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(8.r),
-                    color: SetuColors.primaryGreen.withOpacity(0.03),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
-                        color: SetuColors.primaryGreen,
-                        size: 18.sp * SurveyUIUtils.sizeFactor,
-                      ),
-                      Gap(8.w * SurveyUIUtils.sizeFactor),
-                      Text(
-                        'Detailed Address',
-                        style: TextStyle(
-                          fontSize: 14.sp * SurveyUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Gap(12.w * SurveyUIUtils.sizeFactor),
-            // Status indicator
-            Obx(() => Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 8.w * SurveyUIUtils.sizeFactor,
-                vertical: 6.h * SurveyUIUtils.sizeFactor,
-              ),
-              decoration: BoxDecoration(
-                color: controller.hasDetailedApplicantAddress()
-                    ? SetuColors.primaryGreen.withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(6.r),
-              ),
-              child: Icon(
-                controller.hasDetailedApplicantAddress()
-                    ? PhosphorIcons.checkCircle(PhosphorIconsStyle.fill)
-                    : PhosphorIcons.circle(PhosphorIconsStyle.regular),
-                color: controller.hasDetailedApplicantAddress()
-                    ? SetuColors.primaryGreen
-                    : Colors.grey,
-                size: 16.sp * SurveyUIUtils.sizeFactor,
-              ),
-            )),
-          ],
-        ),
-
-        // Show validation error if address is incomplete
-        GetBuilder<PersonalInfoController>(
-          tag: 'personal_info',
-          builder: (controller) {
-            final hasError = controller.applicantAddressValidationErrors.isNotEmpty;
-
-            if (hasError) {
-              return Padding(
-                padding: EdgeInsets.only(top: 8.h * SurveyUIUtils.sizeFactor),
-                child: Text(
-                  'Complete address information is required',
-                  style: TextStyle(
-                    fontSize: 12.sp * SurveyUIUtils.sizeFactor,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              );
-            }
-            return SizedBox.shrink();
-          },
-        ),
-      ],
-    );
-  }
 
   Widget _buildEnumerationCheck() {
     return Obx(() => Column(

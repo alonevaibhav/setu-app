@@ -220,32 +220,9 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   final poaHolderAddressController = TextEditingController();
   final poaDocument = <String>[].obs;
 
-  // Address controllers for the popup
-  final applicantAddressControllers = <String, TextEditingController>{
-    'plotNoController': TextEditingController(),
-    'addressController': TextEditingController(),
-    'mobileNumberController': TextEditingController(),
-    'emailController': TextEditingController(),
-    'pincodeController': TextEditingController(),
-    'districtController': TextEditingController(),
-    'villageController': TextEditingController(),
-    'postOfficeController': TextEditingController(),
-  };
 
-  // Applicant address data storage
-  final applicantAddressData = <String, String>{
-    'plotNo': '',
-    'address': '',
-    'mobileNumber': '',
-    'email': '',
-    'pincode': '',
-    'district': '',
-    'village': '',
-    'postOffice': '',
-  }.obs;
 
-  // Address validation errors
-  final applicantAddressValidationErrors = <String, String>{}.obs;
+
 
   // Observable boolean values for questions
   final isHolderThemselves = Rxn<bool>();
@@ -309,6 +286,36 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   void updateEnumerationCheck(bool? value) {
     hasBeenCountedBefore.value = value;
   }
+
+
+  //------------------------Address  ------------------------//
+
+  // Applicant address data storage
+  final applicantAddressData = <String, String>{
+    'plotNo': '',
+    'address': '',
+    'mobileNumber': '',
+    'email': '',
+    'pincode': '',
+    'district': '',
+    'village': '',
+    'postOffice': '',
+  }.obs;
+
+  // Address validation errors
+  final applicantAddressValidationErrors = <String, String>{}.obs;
+
+  // Address controllers for the popup
+  final applicantAddressControllers = <String, TextEditingController>{
+    'plotNoController': TextEditingController(),
+    'addressController': TextEditingController(),
+    'mobileNumberController': TextEditingController(),
+    'emailController': TextEditingController(),
+    'pincodeController': TextEditingController(),
+    'districtController': TextEditingController(),
+    'villageController': TextEditingController(),
+    'postOfficeController': TextEditingController(),
+  };
 
   // Address popup functionality
   String getFormattedApplicantAddress() {
