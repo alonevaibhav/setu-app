@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -43,8 +42,6 @@ class _DoubleBackToExitState extends State<DoubleBackToExit> {
     );
   }
 }
-
-
 
 class PopToExitGetX extends StatefulWidget {
   final Widget child;
@@ -122,14 +119,6 @@ class ExitConfirmationUtils {
     );
 
     return result ?? false;
-  }
-
-  /// Handles back button press with confirmation
-  static Future<void> handleBackPress() async {
-    final shouldExit = await showExitDialog();
-    if (shouldExit) {
-      Get.back();
-    }
   }
 
   /// Creates a back button with exit confirmation
