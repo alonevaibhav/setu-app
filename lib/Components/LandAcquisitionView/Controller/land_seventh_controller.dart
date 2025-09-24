@@ -4,7 +4,7 @@ import '../Controller/main_controller.dart';
 
 class LandSeventhController extends GetxController with StepValidationMixin, StepDataMixin {
   // Identity Card
-  final selectedIdentityType = ''.obs;
+  final selectedIdentityType = 'Aadhar Card'.obs;
   final identityCardFiles = <String>[].obs; // Changed from File to String
 
   // Document Files - Changed from List<File> to List<String>
@@ -14,6 +14,8 @@ class LandSeventhController extends GetxController with StepValidationMixin, Ste
   final schemeSheetFiles = <String>[].obs;
   final oldCensusMapFiles = <String>[].obs;
   final demarcationCertificateFiles = <String>[].obs;
+  final adhikarPatra = <String>[].obs;
+  final otherDocument = <String>[].obs;
 
   // Loading states
   final isUploading = false.obs;

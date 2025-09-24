@@ -118,110 +118,110 @@ class LandFouthView extends StatelessWidget {
         Gap(16.h),
 
         // Counting Fee Field (Read-only)
-        Obx(() => Container(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Counting fee',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                  Gap(8.h),
-                  Container(
-                    width: double.infinity,
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: Colors.grey.shade300),
-                      color: Colors.grey.shade50,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
-                          size: 20.sp,
-                          color: Colors.grey.shade600,
-                        ),
-                        Gap(8.w),
-                        Text(
-                          '₹ ${controller.countingFee.value}',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w600,
-                            color: controller.countingFee.value > 0
-                                ? Colors.green.shade700
-                                : Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )),
-        Gap(24.h),
+        // Obx(() => Container(
+        //       width: double.infinity,
+        //       child: Column(
+        //         crossAxisAlignment: CrossAxisAlignment.start,
+        //         children: [
+        //           Text(
+        //             'Counting fee',
+        //             style: TextStyle(
+        //               fontSize: 14.sp,
+        //               fontWeight: FontWeight.w500,
+        //               color: Colors.grey.shade700,
+        //             ),
+        //           ),
+        //           Gap(8.h),
+        //           Container(
+        //             width: double.infinity,
+        //             padding:
+        //                 EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+        //             decoration: BoxDecoration(
+        //               borderRadius: BorderRadius.circular(8.r),
+        //               border: Border.all(color: Colors.grey.shade300),
+        //               color: Colors.grey.shade50,
+        //             ),
+        //             child: Row(
+        //               children: [
+        //                 Icon(
+        //                   PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
+        //                   size: 20.sp,
+        //                   color: Colors.grey.shade600,
+        //                 ),
+        //                 Gap(8.w),
+        //                 Text(
+        //                   '₹ ${controller.countingFee.value}',
+        //                   style: TextStyle(
+        //                     fontSize: 16.sp,
+        //                     fontWeight: FontWeight.w600,
+        //                     color: controller.countingFee.value > 0
+        //                         ? Colors.green.shade700
+        //                         : Colors.grey.shade600,
+        //                   ),
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     )),
+        // Gap(24.h),
 
         // Information Card about fee calculation
-        Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Colors.blue.shade50,
-            borderRadius: BorderRadius.circular(8.r),
-            border: Border.all(color: Colors.blue.shade200),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    PhosphorIcons.info(PhosphorIconsStyle.fill),
-                    color: Colors.blue.shade600,
-                    size: 20.sp,
-                  ),
-                  Gap(8.w),
-                  Text(
-                    'Fee Calculation Information',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.blue.shade800,
-                    ),
-                  ),
-                ],
-              ),
-              Gap(8.h),
-              Text(
-                'The counting fee is automatically calculated based on your selection:',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  color: Colors.blue.shade700,
-                ),
-              ),
-              Gap(6.h),
-              _buildFeeInfo(
-                  'Companies/Institutions + Regular Duration', '₹7,500'),
-              _buildFeeInfo(
-                  'Companies/Institutions + Fast Pace Duration', '₹30,000'),
-              Gap(4.h),
-              Text(
-                'Note: Different rates apply for other holder types.',
-                style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Colors.blue.shade600,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   width: double.infinity,
+        //   padding: EdgeInsets.all(16.w),
+        //   decoration: BoxDecoration(
+        //     color: Colors.blue.shade50,
+        //     borderRadius: BorderRadius.circular(8.r),
+        //     border: Border.all(color: Colors.blue.shade200),
+        //   ),
+        //   child: Column(
+        //     crossAxisAlignment: CrossAxisAlignment.start,
+        //     children: [
+        //       Row(
+        //         children: [
+        //           Icon(
+        //             PhosphorIcons.info(PhosphorIconsStyle.fill),
+        //             color: Colors.blue.shade600,
+        //             size: 20.sp,
+        //           ),
+        //           Gap(8.w),
+        //           Text(
+        //             'Fee Calculation Information',
+        //             style: TextStyle(
+        //               fontSize: 14.sp,
+        //               fontWeight: FontWeight.w600,
+        //               color: Colors.blue.shade800,
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //       Gap(8.h),
+        //       Text(
+        //         'The counting fee is automatically calculated based on your selection:',
+        //         style: TextStyle(
+        //           fontSize: 12.sp,
+        //           color: Colors.blue.shade700,
+        //         ),
+        //       ),
+        //       Gap(6.h),
+        //       _buildFeeInfo(
+        //           'Companies/Institutions + Regular Duration', '₹7,500'),
+        //       _buildFeeInfo(
+        //           'Companies/Institutions + Fast Pace Duration', '₹30,000'),
+        //       Gap(4.h),
+        //       Text(
+        //         'Note: Different rates apply for other holder types.',
+        //         style: TextStyle(
+        //           fontSize: 11.sp,
+        //           color: Colors.blue.shade600,
+        //           fontStyle: FontStyle.italic,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         Gap(32.h),
 
         LandAcquisitionUIUtils.buildNavigationButtons(mainController),

@@ -1,195 +1,10 @@
-// import 'package:get/get.dart';
-// import 'package:flutter/material.dart';
-// import 'main_controller.dart';
-//
-// class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
-//   // Form Controllers (only applicant name is used in the UI)
-//   final applicantNameController = TextEditingController();
-//
-//   // Land Acquisition Form Controllers
-//   final landAcquisitionOfficerController = TextEditingController();
-//   final landAcquisitionBoardController = TextEditingController();
-//   final landAcquisitionDetailsController = TextEditingController();
-//   final landAcquisitionOrderNumberController = TextEditingController();
-//   final landAcquisitionOrderDateController = TextEditingController();
-//   final landAcquisitionOfficeAddressController = TextEditingController();
-//
-//   // Observable boolean values (not used in current UI)
-//   final isHolderThemselves = Rxn<bool>();
-//   final hasAuthorityOnBehalf = Rxn<bool>();
-//   final hasBeenCountedBefore = Rxn<bool>();
-//
-//   // File upload observables for land acquisition
-//   final landAcquisitionOrderFiles = <String>[].obs;
-//   final landAcquisitionMapFiles = <String>[].obs;
-//   final kmlFiles = <String>[].obs;
-//
-//   @override
-//   void onClose() {
-//     // Dispose controllers
-//     applicantNameController.dispose();
-//
-//     // Dispose land acquisition controllers
-//     landAcquisitionOfficerController.dispose();
-//     landAcquisitionBoardController.dispose();
-//     landAcquisitionDetailsController.dispose();
-//     landAcquisitionOrderNumberController.dispose();
-//     landAcquisitionOrderDateController.dispose();
-//     landAcquisitionOfficeAddressController.dispose();
-//
-//     super.onClose();
-//   }
-//
-//   // Reset methods (not used in current UI but kept for future use)
-//   void resetAuthorityFields() {
-//     hasAuthorityOnBehalf.value = null;
-//     applicantNameController.clear();
-//     clearPOAFields();
-//   }
-//
-//   void clearPOAFields() {
-//     // POA controllers removed as they're not used
-//   }
-//
-//   void clearLandAcquisitionFields() {
-//     landAcquisitionOfficerController.clear();
-//     landAcquisitionBoardController.clear();
-//     landAcquisitionDetailsController.clear();
-//     landAcquisitionOrderNumberController.clear();
-//     landAcquisitionOrderDateController.clear();
-//     landAcquisitionOfficeAddressController.clear();
-//     landAcquisitionOrderFiles.clear();
-//     landAcquisitionMapFiles.clear();
-//     kmlFiles.clear();
-//   }
-//
-//   // Handle holder themselves selection
-//   void updateHolderThemselves(bool? value) {
-//     isHolderThemselves.value = value;
-//     if (value == true) {
-//       resetAuthorityFields();
-//     }
-//   }
-//
-//   // Handle authority on behalf selection
-//   void updateAuthorityOnBehalf(bool? value) {
-//     hasAuthorityOnBehalf.value = value;
-//     if (value != true) {
-//       clearPOAFields();
-//     }
-//   }
-//
-//   // Handle enumeration check
-//   void updateEnumerationCheck(bool? value) {
-//     hasBeenCountedBefore.value = value;
-//   }
-//
-//   // Update land acquisition order date
-//   void updateLandAcquisitionOrderDate(DateTime selectedDate) {
-//     landAcquisitionOrderDateController.text =
-//     "${selectedDate.day.toString().padLeft(2, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.year}";
-//   }
-//
-//   @override
-//   bool validateCurrentSubStep(String field) {
-//     switch (field) {
-//       case 'land_acquisition_details':
-//         return _validateLandAcquisitionFields();
-//
-//       default:
-//         return true;
-//     }
-//   }
-//
-//   bool _validateLandAcquisitionFields() {
-//     return landAcquisitionOfficerController.text.trim().length >= 2 &&
-//         landAcquisitionBoardController.text.trim().length >= 2 &&
-//         landAcquisitionDetailsController.text.trim().length >= 2 &&
-//         landAcquisitionOrderNumberController.text.trim().length >= 2 &&
-//         landAcquisitionOrderDateController.text.trim().isNotEmpty &&
-//         landAcquisitionOfficeAddressController.text.trim().length >= 2 &&
-//         landAcquisitionOrderFiles.isNotEmpty &&
-//         landAcquisitionMapFiles.isNotEmpty &&
-//         kmlFiles.isNotEmpty;
-//   }
-//
-//   @override
-//   bool isStepCompleted(List<String> fields) {
-//     for (String field in fields) {
-//       if (!validateCurrentSubStep(field)) return false;
-//     }
-//     return true;
-//   }
-//
-//   @override
-//   String getFieldError(String field) {
-//     switch (field) {
-//       case 'land_acquisition_details':
-//         return _getLandAcquisitionValidationError();
-//
-//       default:
-//         return 'This field is required';
-//     }
-//   }
-//
-//   String _getLandAcquisitionValidationError() {
-//     if (landAcquisitionOfficerController.text.trim().length < 2) {
-//       return 'Land Acquisition Officer name must be at least 2 characters';
-//     }
-//     if (landAcquisitionBoardController.text.trim().length < 2) {
-//       return 'Land Acquisition Board details must be at least 2 characters';
-//     }
-//     if (landAcquisitionDetailsController.text.trim().length < 2) {
-//       return 'Land acquisition details must be at least 2 characters';
-//     }
-//     if (landAcquisitionOrderNumberController.text.trim().length < 2) {
-//       return 'Land Acquisition Order Number must be at least 2 characters';
-//     }
-//     if (landAcquisitionOrderDateController.text.trim().isEmpty) {
-//       return 'Land Acquisition Order Date is required';
-//     }
-//     if (landAcquisitionOfficeAddressController.text.trim().length < 2) {
-//       return 'Office address must be at least 2 characters';
-//     }
-//     if (landAcquisitionOrderFiles.isEmpty) {
-//       return 'Land Acquisition Order document is required';
-//     }
-//     if (landAcquisitionMapFiles.isEmpty) {
-//       return 'Land Acquisition Simankan Map is required';
-//     }
-//     if (kmlFiles.isEmpty) {
-//       return 'KML File is required';
-//     }
-//     return 'Please complete all Land Acquisition fields';
-//   }
-//
-//   @override
-//   Map<String, dynamic> getStepData() {
-//     return {
-//       'personal_info': {
-//         'applicant_name': applicantNameController.text.trim(),
-//       },
-//       'land_acquisition': {
-//         'land_acquisition_officer': landAcquisitionOfficerController.text.trim(),
-//         'land_acquisition_board': landAcquisitionBoardController.text.trim(),
-//         'land_acquisition_details': landAcquisitionDetailsController.text.trim(),
-//         'land_acquisition_order_number': landAcquisitionOrderNumberController.text.trim(),
-//         'land_acquisition_order_date': landAcquisitionOrderDateController.text.trim(),
-//         'land_acquisition_office_address': landAcquisitionOfficeAddressController.text.trim(),
-//         'land_acquisition_order_files': landAcquisitionOrderFiles.toList(),
-//         'land_acquisition_map_files': landAcquisitionMapFiles.toList(),
-//         'kml_files': kmlFiles.toList(),
-//       }
-//     };
-//   }}
-
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'main_controller.dart';
 import '../../Widget/address.dart';
 
-class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
+class PersonalInfoController extends GetxController
+    with StepValidationMixin, StepDataMixin {
   // Form Controllers (only applicant name is used in the UI)
   final applicantNameController = TextEditingController();
 
@@ -199,7 +14,8 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   final landAcquisitionDetailsController = TextEditingController();
   final landAcquisitionOrderNumberController = TextEditingController();
   final landAcquisitionOrderDateController = TextEditingController();
-  final landAcquisitionOfficeAddressController = TextEditingController(); // Keep for backward compatibility
+  final landAcquisitionOfficeAddressController =
+      TextEditingController(); // Keep for backward compatibility
 
   // Observable boolean values (not used in current UI)
   final isHolderThemselves = Rxn<bool>();
@@ -254,7 +70,8 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
     landAcquisitionOfficeAddressController.dispose();
 
     // Dispose address controllers
-    officeAddressControllers.values.forEach((controller) => controller.dispose());
+    officeAddressControllers.values
+        .forEach((controller) => controller.dispose());
 
     super.onClose();
   }
@@ -309,7 +126,7 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   // Update land acquisition order date
   void updateLandAcquisitionOrderDate(DateTime selectedDate) {
     landAcquisitionOrderDateController.text =
-    "${selectedDate.day.toString().padLeft(2, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.year}";
+        "${selectedDate.day.toString().padLeft(2, '0')}-${selectedDate.month.toString().padLeft(2, '0')}-${selectedDate.year}";
   }
 
   //------------------------Address Methods ------------------------//
@@ -347,14 +164,22 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   // Show office address popup
   void showOfficeAddressPopup(BuildContext context) {
     // Populate controllers with current data
-    officeAddressControllers['plotNoController']!.text = officeAddressData['plotNo'] ?? '';
-    officeAddressControllers['addressController']!.text = officeAddressData['address'] ?? '';
-    officeAddressControllers['mobileNumberController']!.text = officeAddressData['mobileNumber'] ?? '';
-    officeAddressControllers['emailController']!.text = officeAddressData['email'] ?? '';
-    officeAddressControllers['pincodeController']!.text = officeAddressData['pincode'] ?? '';
-    officeAddressControllers['districtController']!.text = officeAddressData['district'] ?? '';
-    officeAddressControllers['villageController']!.text = officeAddressData['village'] ?? '';
-    officeAddressControllers['postOfficeController']!.text = officeAddressData['postOffice'] ?? '';
+    officeAddressControllers['plotNoController']!.text =
+        officeAddressData['plotNo'] ?? '';
+    officeAddressControllers['addressController']!.text =
+        officeAddressData['address'] ?? '';
+    officeAddressControllers['mobileNumberController']!.text =
+        officeAddressData['mobileNumber'] ?? '';
+    officeAddressControllers['emailController']!.text =
+        officeAddressData['email'] ?? '';
+    officeAddressControllers['pincodeController']!.text =
+        officeAddressData['pincode'] ?? '';
+    officeAddressControllers['districtController']!.text =
+        officeAddressData['district'] ?? '';
+    officeAddressControllers['villageController']!.text =
+        officeAddressData['village'] ?? '';
+    officeAddressControllers['postOfficeController']!.text =
+        officeAddressData['postOffice'] ?? '';
 
     showDialog(
       context: context,
@@ -514,13 +339,18 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
         'applicant_name': applicantNameController.text.trim(),
       },
       'land_acquisition': {
-        'land_acquisition_officer': landAcquisitionOfficerController.text.trim(),
+        'land_acquisition_officer':
+            landAcquisitionOfficerController.text.trim(),
         'land_acquisition_board': landAcquisitionBoardController.text.trim(),
-        'land_acquisition_details': landAcquisitionDetailsController.text.trim(),
-        'land_acquisition_order_number': landAcquisitionOrderNumberController.text.trim(),
-        'land_acquisition_order_date': landAcquisitionOrderDateController.text.trim(),
+        'land_acquisition_details':
+            landAcquisitionDetailsController.text.trim(),
+        'land_acquisition_order_number':
+            landAcquisitionOrderNumberController.text.trim(),
+        'land_acquisition_order_date':
+            landAcquisitionOrderDateController.text.trim(),
         'land_acquisition_office_address': getFormattedOfficeAddress(),
-        'land_acquisition_office_address_details': Map<String, String>.from(officeAddressData),
+        'land_acquisition_office_address_details':
+            Map<String, String>.from(officeAddressData),
         'land_acquisition_order_files': landAcquisitionOrderFiles.toList(),
         'land_acquisition_map_files': landAcquisitionMapFiles.toList(),
         'kml_files': kmlFiles.toList(),

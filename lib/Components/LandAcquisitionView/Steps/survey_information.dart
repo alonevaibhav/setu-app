@@ -207,8 +207,8 @@ class CalculationInformation extends StatelessWidget {
           // Survey No./Group No. Input
           LandAcquisitionUIUtils.buildTextFormField(
             controller: entry['surveyNoController'],
-            label: 'Survey No./Group No. *',
-            hint: 'Enter survey or group number',
+            label: 'Survey No./Gat No./CTS No.*',
+            hint: 'Enter Survey No./Gat No./CTS No.*',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) =>
                 calcController.updateSurveyEntry(index, 'surveyNo', value),
@@ -269,37 +269,6 @@ class CalculationInformation extends StatelessWidget {
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Summary Row
-          Container(
-            padding: EdgeInsets.all(12.w * LandAcquisitionUIUtils.sizeFactor),
-            decoration: BoxDecoration(
-              color: SetuColors.primaryGreen.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: SetuColors.primaryGreen.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  PhosphorIcons.info(PhosphorIconsStyle.regular),
-                  color: SetuColors.primaryGreen,
-                  size: 16.sp * LandAcquisitionUIUtils.sizeFactor,
-                ),
-                Gap(8.w * LandAcquisitionUIUtils.sizeFactor),
-                Expanded(
-                  child: Text(
-                    'Entry ${index + 1} - Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
-                    style: TextStyle(
-                      fontSize: 12.sp * LandAcquisitionUIUtils.sizeFactor,
-                      color: SetuColors.primaryGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

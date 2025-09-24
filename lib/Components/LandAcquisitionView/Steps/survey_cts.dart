@@ -27,7 +27,7 @@ class LandSecondView extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildOfficeInput(); // Fallback
+      return _buildVillageInput(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
@@ -43,8 +43,6 @@ class LandSecondView extends StatelessWidget {
         return _buildTalukaInput();
       case 'village':
         return _buildVillageInput();
-      case 'office':
-        return _buildOfficeInput();
       default:
         return _buildSurveyNumberInput();
     }
@@ -166,25 +164,25 @@ class LandSecondView extends StatelessWidget {
     );
   }
 
-  Widget _buildOfficeInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        LandAcquisitionUIUtils.buildStepHeader(
-          'Office Information',
-          'Select your office',
-        ),
-        Gap(24.h),
-        Obx(() => LandAcquisitionUIUtils.buildDropdownField(
-              label: 'Office*',
-              value: controller.selectedOffice.value,
-              items: controller.officeOptions,
-              onChanged: controller.updateOffice,
-              icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-            )),
-        Gap(32.h),
-        LandAcquisitionUIUtils.buildNavigationButtons(mainController),
-      ],
-    );
-  }
+  // Widget _buildOfficeInput() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       LandAcquisitionUIUtils.buildStepHeader(
+  //         'Office Information',
+  //         'Select your office',
+  //       ),
+  //       Gap(24.h),
+  //       Obx(() => LandAcquisitionUIUtils.buildDropdownField(
+  //             label: 'Office*',
+  //             value: controller.selectedOffice.value,
+  //             items: controller.officeOptions,
+  //             onChanged: controller.updateOffice,
+  //             icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+  //           )),
+  //       Gap(32.h),
+  //       LandAcquisitionUIUtils.buildNavigationButtons(mainController),
+  //     ],
+  //   );
+  // }
 }

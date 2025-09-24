@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import 'package:setuapp/Components/LandSurveyView/Steps/survey_ui_utils.dart';
 import '../../../Constants/color_constant.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/survey_fifth_controller.dart';
 
@@ -23,20 +24,20 @@ class SurveyFifthView extends StatelessWidget {
     final subSteps = mainController.stepConfigurations[4] ?? ['applicant'];
 
     if (currentSubStep >= subSteps.length) {
-      return _buildApplicantInput();
+      return _buildApplicantInput(context);
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'applicant':
-        return _buildApplicantInput();
+        return _buildApplicantInput(context);
       default:
-        return _buildApplicantInput();
+        return _buildApplicantInput(context);
     }
   }
 
-  Widget _buildApplicantInput() {
+  Widget _buildApplicantInput(context) {
     final fifthController = Get.put(SurveyFifthController(), tag: 'survey_fifth');
 
     return Column(
@@ -49,7 +50,7 @@ class SurveyFifthView extends StatelessWidget {
         Gap(24.h * SurveyUIUtils.sizeFactor),
 
         // Applicant Entries Section
-        _buildApplicantEntries(fifthController),
+        _buildApplicantEntries(fifthController,context),
 
         Gap(32.h * SurveyUIUtils.sizeFactor),
         SurveyUIUtils.buildNavigationButtons(mainController),
@@ -57,7 +58,7 @@ class SurveyFifthView extends StatelessWidget {
     );
   }
 
-  Widget _buildApplicantEntries(SurveyFifthController fifthController) {
+  Widget _buildApplicantEntries(SurveyFifthController fifthController,context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -78,7 +79,7 @@ class SurveyFifthView extends StatelessWidget {
                 for (int i = 0;
                     i < fifthController.applicantEntries.length;
                     i++)
-                  _buildApplicantEntryCard(fifthController, i),
+                  _buildApplicantEntryCard(fifthController, i,context),
               ],
             )),
 
@@ -127,7 +128,7 @@ class SurveyFifthView extends StatelessWidget {
   }
 
   Widget _buildApplicantEntryCard(
-      SurveyFifthController fifthController, int index) {
+      SurveyFifthController fifthController, int index,context) {
     final entry = fifthController.applicantEntries[index];
 
     return Container(
@@ -218,7 +219,17 @@ class SurveyFifthView extends StatelessWidget {
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Account Holder Address (Clickable Field)
-          _buildAddressField(fifthController, index),
+          // _buildAddressField(fifthController, index),
+
+          Obx(() => ApplicantAddressField(
+            label: 'Account Holder\'s Address',
+            isRequired: true,
+            onTap: () => fifthController.showApplicantAddressPopup(context, index),
+            hasDetailedAddress: fifthController.hasDetailedApplicantAddress(index),
+            buttonText: 'Click to add address',
+            buttonIcon:
+            PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+          )),
 
           // Gap(16.h * SurveyUIUtils.sizeFactor),
 

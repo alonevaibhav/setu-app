@@ -209,17 +209,17 @@ class LandFifthView extends StatelessWidget {
           // Address Section with Popup Button
           _buildAddressSection(holderController, index, entry),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
-
-          // Account Number Input
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: entry['accountNumberController'],
-            label: 'Account Number *',
-            hint: 'Enter account number',
-            icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-            onChanged: (value) => holderController.updateHolderEntry(
-                index, 'accountNumber', value),
-          ),
+          // Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          //
+          // // Account Number Input
+          // LandAcquisitionUIUtils.buildTextFormField(
+          //   controller: entry['accountNumberController'],
+          //   label: 'Account Number *',
+          //   hint: 'Enter account number',
+          //   icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+          //   onChanged: (value) => holderController.updateHolderEntry(
+          //       index, 'accountNumber', value),
+          // ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
@@ -246,18 +246,18 @@ class LandFifthView extends StatelessWidget {
                 holderController.updateHolderEntry(index, 'area', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          // Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Pot Kharaba Area Input
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: entry['potKharabaAreaController'],
-            label: 'Pot Kharaba Area *',
-            hint: 'Enter pot kharaba area',
-            icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => holderController.updateHolderEntry(
-                index, 'potKharabaArea', value),
-          ),
+          // LandAcquisitionUIUtils.buildTextFormField(
+          //   controller: entry['potKharabaAreaController'],
+          //   label: 'Pot Kharaba Area *',
+          //   hint: 'Enter pot kharaba area',
+          //   icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) => holderController.updateHolderEntry(
+          //       index, 'potKharabaArea', value),
+          // ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
@@ -274,38 +274,6 @@ class LandFifthView extends StatelessWidget {
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
-          // Summary Row
-          Container(
-            padding: EdgeInsets.all(12.w * LandAcquisitionUIUtils.sizeFactor),
-            decoration: BoxDecoration(
-              color: SetuColors.primaryGreen.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: SetuColors.primaryGreen.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  PhosphorIcons.info(PhosphorIconsStyle.regular),
-                  color: SetuColors.primaryGreen,
-                  size: 16.sp * LandAcquisitionUIUtils.sizeFactor,
-                ),
-                Gap(8.w * LandAcquisitionUIUtils.sizeFactor),
-                Expanded(
-                  child: Text(
-                    'Holder ${index + 1} - ${entry['holderName'] ?? 'Name not entered'}',
-                    style: TextStyle(
-                      fontSize: 12.sp * LandAcquisitionUIUtils.sizeFactor,
-                      color: SetuColors.primaryGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

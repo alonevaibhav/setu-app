@@ -492,7 +492,7 @@ class SurveyEightView extends StatelessWidget {
       child: Column(
         children: [
           ImagePickerUtil.buildFileUploadField(
-            label: 'Latest 7/12 Of The 3 Month  *',
+            label: 'Latest 7/12 Of The 3 Month*',
             hint: 'Upload 7/12 document',
             icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
             uploadedFiles: docController.sevenTwelveFiles,
