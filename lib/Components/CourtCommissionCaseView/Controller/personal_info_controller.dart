@@ -189,7 +189,6 @@
 //     return validationErrors.containsKey(field);
 //   }
 // }
-
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../CourtCommissionCaseView/Controller/main_controller.dart';
@@ -198,11 +197,11 @@ import '../../Widget/address.dart';
 class PersonalInfoController extends GetxController with StepValidationMixin, StepDataMixin {
   // Text Controllers
   final courtNameController = TextEditingController();
-  final courtAddressController = TextEditingController(); // Keep for backward compatibility
+  final courtAddressController = TextEditingController();
   final commissionOrderNoController = TextEditingController();
   final commissionDateController = TextEditingController();
   final civilClaimController = TextEditingController();
-  final issuingOfficeController = TextEditingController(); // Keep for backward compatibility
+  final issuingOfficeController = TextEditingController();
   final applicantNameController = TextEditingController();
   final applicantAddressController = TextEditingController(); // Keep for backward compatibility
 
@@ -214,64 +213,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   // Validation states
   final validationErrors = <String, String>{}.obs;
-
-  //------------------------Court Address Validation Implementation ------------------------//
-
-  // Court address data storage
-  final courtAddressData = <String, String>{
-    'plotNo': '',
-    'address': '',
-    'mobileNumber': '',
-    'email': '',
-    'pincode': '',
-    'district': '',
-    'village': '',
-    'postOffice': '',
-  }.obs;
-
-  // Court address validation errors
-  final courtAddressValidationErrors = <String, String>{}.obs;
-
-  // Court address controllers for the popup
-  final courtAddressControllers = <String, TextEditingController>{
-    'plotNoController': TextEditingController(),
-    'addressController': TextEditingController(),
-    'mobileNumberController': TextEditingController(),
-    'emailController': TextEditingController(),
-    'pincodeController': TextEditingController(),
-    'districtController': TextEditingController(),
-    'villageController': TextEditingController(),
-    'postOfficeController': TextEditingController(),
-  };
-
-  //------------------------Issuing Office Address Validation Implementation ------------------------//
-
-  // Issuing office address data storage
-  final issuingOfficeAddressData = <String, String>{
-    'plotNo': '',
-    'address': '',
-    'mobileNumber': '',
-    'email': '',
-    'pincode': '',
-    'district': '',
-    'village': '',
-    'postOffice': '',
-  }.obs;
-
-  // Issuing office address validation errors
-  final issuingOfficeAddressValidationErrors = <String, String>{}.obs;
-
-  // Issuing office address controllers for the popup
-  final issuingOfficeAddressControllers = <String, TextEditingController>{
-    'plotNoController': TextEditingController(),
-    'addressController': TextEditingController(),
-    'mobileNumberController': TextEditingController(),
-    'emailController': TextEditingController(),
-    'pincodeController': TextEditingController(),
-    'districtController': TextEditingController(),
-    'villageController': TextEditingController(),
-    'postOfficeController': TextEditingController(),
-  };
 
   //------------------------Applicant Address Validation Implementation ------------------------//
 
@@ -310,7 +251,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   @override
   void onClose() {
-    // Dispose main controllers
     courtNameController.dispose();
     courtAddressController.dispose();
     commissionOrderNoController.dispose();
@@ -321,8 +261,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
     applicantAddressController.dispose();
 
     // Dispose address controllers
-    courtAddressControllers.values.forEach((controller) => controller.dispose());
-    issuingOfficeAddressControllers.values.forEach((controller) => controller.dispose());
     applicantAddressControllers.values.forEach((controller) => controller.dispose());
 
     super.onClose();
@@ -347,7 +285,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   void _clearFieldError(String field) {
     validationErrors.remove(field);
   }
-
 
   //------------------------Applicant Address Methods ------------------------//
 
@@ -462,22 +399,22 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   // Validation Methods
   @override
-  // bool validateCurrentSubStep(String field) {
-  //   switch (field) {
-  //     case 'government_survey':
-  //       return true; // Temporarily return true to bypass validation
-  //     default:
-  //       return true;
-  //   }
-  // }
   bool validateCurrentSubStep(String field) {
     switch (field) {
-      case 'court_commission_details':
-        return _validateCourtCommissionDetails();
+      case 'government_survey':
+        return true; // Temporarily return true to bypass validation
       default:
         return true;
     }
   }
+  // bool validateCurrentSubStep(String field) {
+  //   switch (field) {
+  //     case 'court_commission_details':
+  //       return _validateCourtCommissionDetails();
+  //     default:
+  //       return true;
+  //   }
+  // }
 
   bool _validateCourtCommissionDetails() {
     validationErrors.clear();
@@ -492,8 +429,12 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
       isValid = false;
     }
 
-    if (courtAddressValidationErrors.isNotEmpty) {
-      validationErrors['court_address'] = 'Please complete the court address details';
+    // Validate court address
+    if (courtAddressController.text.trim().isEmpty) {
+      validationErrors['court_address'] = 'Court address is required';
+      isValid = false;
+    } else if (courtAddressController.text.trim().length < 10) {
+      validationErrors['court_address'] = 'Address must be at least 10 characters';
       isValid = false;
     }
 
@@ -521,7 +462,30 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
       isValid = false;
     }
 
+    // Validate issuing office
+    if (issuingOfficeController.text.trim().isEmpty) {
+      validationErrors['issuing_office'] = 'Issuing office details are required';
+      isValid = false;
+    } else if (issuingOfficeController.text.trim().length < 5) {
+      validationErrors['issuing_office'] = 'Office details must be at least 5 characters';
+      isValid = false;
+    }
 
+    // Validate applicant name
+    if (applicantNameController.text.trim().isEmpty) {
+      validationErrors['applicant_name'] = 'Applicant name is required';
+      isValid = false;
+    } else if (applicantNameController.text.trim().length < 3) {
+      validationErrors['applicant_name'] = 'Applicant name must be at least 3 characters';
+      isValid = false;
+    }
+
+    // Validate applicant address using new validation
+    _validateApplicantAddressFields(applicantAddressData);
+    if (applicantAddressValidationErrors.isNotEmpty) {
+      validationErrors['applicant_address'] = 'Please complete the applicant address details';
+      isValid = false;
+    }
 
     // Validate file upload
     if (commissionOrderFiles.isEmpty) {
@@ -559,11 +523,11 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   Map<String, dynamic> getStepData() {
     return {
       'court_name': courtNameController.text.trim(),
-      'court_address_details': Map<String, String>.from(courtAddressData),
+      'court_address': courtAddressController.text.trim(),
       'commission_order_no': commissionOrderNoController.text.trim(),
       'commission_date': selectedCommissionDate.value?.toIso8601String(),
       'civil_claim': civilClaimController.text.trim(),
-      'issuing_office_address_details': Map<String, String>.from(issuingOfficeAddressData),
+      'issuing_office': issuingOfficeController.text.trim(),
       'applicant_name': applicantNameController.text.trim(),
       'applicant_address': getFormattedApplicantAddress(),
       'applicant_address_details': Map<String, String>.from(applicantAddressData),
@@ -579,5 +543,52 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
 
   bool hasFieldError(String field) {
     return validationErrors.containsKey(field);
+  }
+
+  // Utility methods
+  void clearAllFields() {
+    courtNameController.clear();
+    courtAddressController.clear();
+    commissionOrderNoController.clear();
+    commissionDateController.clear();
+    civilClaimController.clear();
+    issuingOfficeController.clear();
+    applicantNameController.clear();
+    clearApplicantAddressFields(); // Use new address clearing method
+    commissionOrderFiles.clear();
+    selectedCommissionDate.value = null;
+    validationErrors.clear();
+  }
+
+  void loadStepData(Map<String, dynamic> data) {
+    courtNameController.text = data['court_name'] ?? '';
+    courtAddressController.text = data['court_address'] ?? '';
+    commissionOrderNoController.text = data['commission_order_no'] ?? '';
+    civilClaimController.text = data['civil_claim'] ?? '';
+    issuingOfficeController.text = data['issuing_office'] ?? '';
+    applicantNameController.text = data['applicant_name'] ?? '';
+
+    // Load applicant address data
+    if (data['applicant_address_details'] != null) {
+      final addressDetails = Map<String, String>.from(data['applicant_address_details']);
+      updateApplicantAddress(addressDetails);
+    } else if (data['applicant_address'] != null) {
+      applicantAddressController.text = data['applicant_address'];
+    }
+
+    // Load commission date if exists
+    if (data['commission_date'] != null) {
+      try {
+        selectedCommissionDate.value = DateTime.parse(data['commission_date']);
+        commissionDateController.text = _formatDate(selectedCommissionDate.value!);
+      } catch (e) {
+        print('Error parsing date: $e');
+      }
+    }
+
+    // Load files if exists
+    if (data['commission_order_files'] != null) {
+      commissionOrderFiles.assignAll(List<String>.from(data['commission_order_files']));
+    }
   }
 }
