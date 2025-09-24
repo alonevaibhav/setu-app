@@ -229,8 +229,8 @@ class CalculationInformation extends StatelessWidget {
           // Survey No./Group No. Input
           GovernmentCensusUIUtils.buildTextFormField(
             controller: entry['surveyNoController'],
-            label: 'Survey No./Group No. *',
-            hint: 'Enter survey or group number as per 7/12',
+            label: 'Survey No./Gat No./CTS No. *',
+            hint: 'Enter Survey No./Gat No./CTS No',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) =>
                 surveyController.updateSurveyEntry(index, 'surveyNo', value),

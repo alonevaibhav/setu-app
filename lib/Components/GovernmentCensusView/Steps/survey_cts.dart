@@ -209,7 +209,7 @@ class SurveyCTSStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildOfficeInput(); // Fallback
+      return _buildDistrictInput(); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
@@ -225,8 +225,6 @@ class SurveyCTSStep extends StatelessWidget {
         return _buildTalukaInput();
       case 'village':
         return _buildVillageInput();
-      case 'office':
-        return _buildOfficeInput();
       default:
         return _buildSurveyNumberInput();
     }
@@ -341,28 +339,6 @@ class SurveyCTSStep extends StatelessWidget {
           items: controller.getVillageOptions(),
           onChanged: controller.updateVillage,
           icon: PhosphorIcons.house(PhosphorIconsStyle.regular),
-        )),
-        Gap(32.h),
-        GovernmentCensusUIUtils.buildNavigationButtons(mainController),
-      ],
-    );
-  }
-
-  Widget _buildOfficeInput() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GovernmentCensusUIUtils.buildStepHeader(
-          'Office Information',
-          'Select your office',
-        ),
-        Gap(24.h),
-        Obx(() => GovernmentCensusUIUtils.buildDropdownField(
-          label: 'Office*',
-          value: controller.selectedOffice.value,
-          items: controller.officeOptions,
-          onChanged: controller.updateOffice,
-          icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
         )),
         Gap(32.h),
         GovernmentCensusUIUtils.buildNavigationButtons(mainController),

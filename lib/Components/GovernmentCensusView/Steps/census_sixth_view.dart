@@ -641,58 +641,58 @@ class CensusSixthView extends StatelessWidget {
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Consent Input
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: entry['consentController'] ,
-            label: 'Consent of Co-owner *',
-            hint: 'Enter consent details',
-            icon: PhosphorIcons.handshake(PhosphorIconsStyle.regular),
-            maxLines: 3,
-            onChanged: (value) =>
-                sixthController.updateCoownerEntry(index, 'consent', value),
-          ),
+          // GovernmentCensusUIUtils.buildTextFormField(
+          //   controller: entry['consentController'] ,
+          //   label: 'Consent of Co-owner *',
+          //   hint: 'Enter consent details',
+          //   icon: PhosphorIcons.handshake(PhosphorIconsStyle.regular),
+          //   maxLines: 3,
+          //   onChanged: (value) =>
+          //       sixthController.updateCoownerEntry(index, 'consent', value),
+          // ),
 
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Summary Row - Fixed with consistent tag and safer text access
-          GetBuilder<CensusSixthController>(
-            tag: 'census_sixth', // Fixed: Use consistent tag
-            builder: (controller) {
-              final nameController = entry['nameController'] as TextEditingController?;
-              final coownerName = nameController?.text ?? '';
-
-              return Container(
-                padding: EdgeInsets.all(12.w * GovernmentCensusUIUtils.sizeFactor),
-                decoration: BoxDecoration(
-                  color: SetuColors.primaryGreen.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: SetuColors.primaryGreen.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      PhosphorIcons.info(PhosphorIconsStyle.regular),
-                      color: SetuColors.primaryGreen,
-                      size: 16.sp * GovernmentCensusUIUtils.sizeFactor,
-                    ),
-                    Gap(8.w * GovernmentCensusUIUtils.sizeFactor),
-                    Expanded(
-                      child: Text(
-                        'Co-owner ${index + 1} - ${coownerName.isNotEmpty ? coownerName : 'Name not entered'}',
-                        style: TextStyle(
-                          fontSize: 12.sp * GovernmentCensusUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          // GetBuilder<CensusSixthController>(
+          //   tag: 'census_sixth', // Fixed: Use consistent tag
+          //   builder: (controller) {
+          //     final nameController = entry['nameController'] as TextEditingController?;
+          //     final coownerName = nameController?.text ?? '';
+          //
+          //     return Container(
+          //       padding: EdgeInsets.all(12.w * GovernmentCensusUIUtils.sizeFactor),
+          //       decoration: BoxDecoration(
+          //         color: SetuColors.primaryGreen.withOpacity(0.05),
+          //         borderRadius: BorderRadius.circular(8.r),
+          //         border: Border.all(
+          //           color: SetuColors.primaryGreen.withOpacity(0.2),
+          //           width: 1,
+          //         ),
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           Icon(
+          //             PhosphorIcons.info(PhosphorIconsStyle.regular),
+          //             color: SetuColors.primaryGreen,
+          //             size: 16.sp * GovernmentCensusUIUtils.sizeFactor,
+          //           ),
+          //           Gap(8.w * GovernmentCensusUIUtils.sizeFactor),
+          //           Expanded(
+          //             child: Text(
+          //               'Co-owner ${index + 1} - ${coownerName.isNotEmpty ? coownerName : 'Name not entered'}',
+          //               style: TextStyle(
+          //                 fontSize: 12.sp * GovernmentCensusUIUtils.sizeFactor,
+          //                 color: SetuColors.primaryGreen,
+          //                 fontWeight: FontWeight.w500,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

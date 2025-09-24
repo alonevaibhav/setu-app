@@ -83,52 +83,52 @@ class CensusFourthView extends StatelessWidget {
         Gap(16.h),
 
         // Calculation Fee Rate
-        Obx(() => GovernmentCensusUIUtils.buildDropdownField(
-          label: 'Calculation fee rate *',
-          value: controller.selectedCalculationFeeRate.value ?? '',
-          items: controller.calculationFeeRateOptions,
-          onChanged: controller.updateCalculationFeeRate,
-          icon: PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
-        )),
-        Gap(24.h),
+        // Obx(() => GovernmentCensusUIUtils.buildDropdownField(
+        //   label: 'Calculation fee rate *',
+        //   value: controller.selectedCalculationFeeRate.value ?? '',
+        //   items: controller.calculationFeeRateOptions,
+        //   onChanged: controller.updateCalculationFeeRate,
+        //   icon: PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
+        // )),
+        // Gap(24.h),
 
         // Counting Fee Display
-        Obx(() => Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: Color(0xFFF8F9FA),
-            borderRadius: BorderRadius.circular(12.r),
-            border: Border.all(color: Color(0xFFE9ECEF)),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
-                color: Color(0xFF6C757D),
-                size: 20.w,
-              ),
-              Gap(12.w),
-              Text(
-                'Counting Fee:',
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF495057),
-                ),
-              ),
-              Spacer(),
-              Text(
-                '₹${controller.countingFee.value}',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF28A745),
-                ),
-              ),
-            ],
-          ),
-        )),
-        Gap(32.h),
+        // Obx(() => Container(
+        //   padding: EdgeInsets.all(16.w),
+        //   decoration: BoxDecoration(
+        //     color: Color(0xFFF8F9FA),
+        //     borderRadius: BorderRadius.circular(12.r),
+        //     border: Border.all(color: Color(0xFFE9ECEF)),
+        //   ),
+        //   child: Row(
+        //     children: [
+        //       Icon(
+        //         PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
+        //         color: Color(0xFF6C757D),
+        //         size: 20.w,
+        //       ),
+        //       Gap(12.w),
+        //       Text(
+        //         'Counting Fee:',
+        //         style: TextStyle(
+        //           fontSize: 14.sp,
+        //           fontWeight: FontWeight.w500,
+        //           color: Color(0xFF495057),
+        //         ),
+        //       ),
+        //       Spacer(),
+        //       Text(
+        //         '₹${controller.countingFee.value}',
+        //         style: TextStyle(
+        //           fontSize: 18.sp,
+        //           fontWeight: FontWeight.bold,
+        //           color: Color(0xFF28A745),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // )),
+        // Gap(32.h),
 
         // Navigation Buttons
         GovernmentCensusUIUtils.buildNavigationButtons(mainController),

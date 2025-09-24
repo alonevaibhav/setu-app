@@ -1,4 +1,3 @@
-
 // import 'package:flutter/material.dart';
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:gap/gap.dart';
@@ -300,7 +299,6 @@
 //   }
 // }
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
@@ -323,7 +321,6 @@ class AllocationSixthView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final subSteps = mainController.stepConfigurations[5] ?? ['next_of_kin'];
 
     if (currentSubStep >= subSteps.length) {
@@ -341,7 +338,8 @@ class AllocationSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveySevenController = Get.put(AllocationSixthController(), tag: 'court_sixth');
+    final surveySevenController =
+        Get.put(AllocationSixthController(), tag: 'court_sixth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -361,7 +359,8 @@ class AllocationSixthView extends StatelessWidget {
     );
   }
 
-  Widget _buildNextOfKinEntries(AllocationSixthController surveyEightController) {
+  Widget _buildNextOfKinEntries(
+      AllocationSixthController surveyEightController) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -378,13 +377,13 @@ class AllocationSixthView extends StatelessWidget {
 
         // Next of Kin Entries List
         Obx(() => Column(
-          children: [
-            for (int i = 0;
-            i < surveyEightController.nextOfKinEntries.length;
-            i++)
-              _buildNextOfKinEntryCard(surveyEightController, i),
-          ],
-        )),
+              children: [
+                for (int i = 0;
+                    i < surveyEightController.nextOfKinEntries.length;
+                    i++)
+                  _buildNextOfKinEntryCard(surveyEightController, i),
+              ],
+            )),
 
         Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
@@ -435,7 +434,8 @@ class AllocationSixthView extends StatelessWidget {
     final entry = surveyEightController.nextOfKinEntries[index];
 
     return Container(
-      margin: EdgeInsets.only(bottom: 20.h * CourtAllocationCaseUIUtils.sizeFactor),
+      margin:
+          EdgeInsets.only(bottom: 20.h * CourtAllocationCaseUIUtils.sizeFactor),
       padding: EdgeInsets.all(20.w * CourtAllocationCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -482,7 +482,8 @@ class AllocationSixthView extends StatelessWidget {
                   onTap: () =>
                       surveyEightController.removeNextOfKinEntry(index),
                   child: Container(
-                    padding: EdgeInsets.all(8.w * CourtAllocationCaseUIUtils.sizeFactor),
+                    padding: EdgeInsets.all(
+                        8.w * CourtAllocationCaseUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8.r),
@@ -541,7 +542,8 @@ class AllocationSixthView extends StatelessWidget {
 
           // Summary Row
           Container(
-            padding: EdgeInsets.all(12.w * CourtAllocationCaseUIUtils.sizeFactor),
+            padding:
+                EdgeInsets.all(12.w * CourtAllocationCaseUIUtils.sizeFactor),
             decoration: BoxDecoration(
               color: SetuColors.primaryGreen.withOpacity(0.05),
               borderRadius: BorderRadius.circular(8.r),
@@ -639,11 +641,11 @@ class AllocationSixthView extends StatelessWidget {
 
         // Sub-entries list
         Obx(() => Column(
-          children: [
-            for (int i = 0; i < subEntries.length; i++)
-              _buildSubEntryCard(surveyEightController, index, i),
-          ],
-        )),
+              children: [
+                for (int i = 0; i < subEntries.length; i++)
+                  _buildSubEntryCard(surveyEightController, index, i),
+              ],
+            )),
       ],
     );
   }
@@ -655,7 +657,8 @@ class AllocationSixthView extends StatelessWidget {
     final subEntry = subEntries[subIndex];
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16.h * CourtAllocationCaseUIUtils.sizeFactor),
+      margin:
+          EdgeInsets.only(bottom: 16.h * CourtAllocationCaseUIUtils.sizeFactor),
       padding: EdgeInsets.all(16.w * CourtAllocationCaseUIUtils.sizeFactor),
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
@@ -695,7 +698,8 @@ class AllocationSixthView extends StatelessWidget {
                   onTap: () => surveyEightController.removeSubEntry(
                       parentIndex, subIndex),
                   child: Container(
-                    padding: EdgeInsets.all(6.w * CourtAllocationCaseUIUtils.sizeFactor),
+                    padding: EdgeInsets.all(
+                        6.w * CourtAllocationCaseUIUtils.sizeFactor),
                     decoration: BoxDecoration(
                       color: Colors.red.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6.r),
@@ -756,11 +760,11 @@ class AllocationSixthView extends StatelessWidget {
             label: 'Survey No./Gat No./CTS No.  *',
             hint: 'Enter survey number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) => surveyEightController.updateSubEntry(parentIndex, subIndex, 'surveyNo', value),
+            onChanged: (value) => surveyEightController.updateSubEntry(
+                parentIndex, subIndex, 'surveyNo', value),
           ),
         ],
       ),
     );
   }
 }
-

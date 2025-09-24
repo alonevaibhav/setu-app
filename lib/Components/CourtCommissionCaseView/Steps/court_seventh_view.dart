@@ -414,46 +414,46 @@ class CourtSeventhView extends StatelessWidget {
           Gap(24.h),
 
           // Progress
-          Obx(() => Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: Colors.grey.shade200),
-            ),
-            child: Row(
-              children: [
-                CircularProgressIndicator(
-                  value: _getUploadProgress(docController),
-                  backgroundColor: Colors.grey.shade200,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                      SetuColors.primaryGreen),
-                ),
-                Gap(16.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Upload Progress',
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        '${_getUploadedCount(docController)} of 7 documents uploaded',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )),
+          // Obx(() => Container(
+          //   padding: EdgeInsets.all(16.w),
+          //   decoration: BoxDecoration(
+          //     color: Colors.white,
+          //     borderRadius: BorderRadius.circular(12.r),
+          //     border: Border.all(color: Colors.grey.shade200),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       CircularProgressIndicator(
+          //         value: _getUploadProgress(docController),
+          //         backgroundColor: Colors.grey.shade200,
+          //         valueColor: AlwaysStoppedAnimation<Color>(
+          //             SetuColors.primaryGreen),
+          //       ),
+          //       Gap(16.w),
+          //       Expanded(
+          //         child: Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           children: [
+          //             Text(
+          //               'Upload Progress',
+          //               style: TextStyle(
+          //                 fontSize: 16.sp,
+          //                 fontWeight: FontWeight.w600,
+          //               ),
+          //             ),
+          //             Text(
+          //               '${_getUploadedCount(docController)} of 7 documents uploaded',
+          //               style: TextStyle(
+          //                 fontSize: 14.sp,
+          //                 color: Colors.grey.shade600,
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // )),
 
           Gap(24.h),
 

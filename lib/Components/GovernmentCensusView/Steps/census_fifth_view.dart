@@ -649,22 +649,22 @@ class CensusFifthView extends StatelessWidget {
           Gap(20.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Agreement Input
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: entry['agreementController'] ,
-            label: 'Agreement *',
-            hint: 'Enter agreement details',
-            icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                fifthController.updateApplicantEntry(index, 'agreement', value),
-          ),
-
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
+          // GovernmentCensusUIUtils.buildTextFormField(
+          //   controller: entry['agreementController'] ,
+          //   label: 'Agreement *',
+          //   hint: 'Enter agreement details',
+          //   icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
+          //   onChanged: (value) =>
+          //       fifthController.updateApplicantEntry(index, 'agreement', value),
+          // ),
+          //
+          // Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Account Holder Name Input
           GovernmentCensusUIUtils.buildTextFormField(
             controller: entry['accountHolderNameController'] ,
-            label: 'Account Holder Name *',
-            hint: 'Enter account holder name',
+            label: 'Holder Name *',
+            hint: 'Enter holder name',
             icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
             onChanged: (value) => fifthController.updateApplicantEntry(
                 index, 'accountHolderName', value),
@@ -678,16 +678,16 @@ class CensusFifthView extends StatelessWidget {
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Account Number Input
-          GovernmentCensusUIUtils.buildTextFormField(
-            controller: entry['accountNumberController'] ,
-            label: 'Account Number *',
-            hint: 'Enter account number',
-            icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
-            onChanged: (value) => fifthController.updateApplicantEntry(
-                index, 'accountNumber', value),
-          ),
+          // GovernmentCensusUIUtils.buildTextFormField(
+          //   controller: entry['accountNumberController'] ,
+          //   label: 'Account Number *',
+          //   hint: 'Enter account number',
+          //   icon: PhosphorIcons.creditCard(PhosphorIconsStyle.regular),
+          //   onChanged: (value) => fifthController.updateApplicantEntry(
+          //       index, 'accountNumber', value),
+          // ),
 
-          Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
+          // Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Mobile Number Input
           GovernmentCensusUIUtils.buildTextFormField(
@@ -754,45 +754,45 @@ class CensusFifthView extends StatelessWidget {
           Gap(16.h * GovernmentCensusUIUtils.sizeFactor),
 
           // Summary Row - Fixed with correct tag and safer text access
-          GetBuilder<CensusFifthController>(
-            tag: 'census_fifth', // Fixed: Use consistent tag
-            builder: (controller) {
-              final accountHolderController = entry['accountHolderNameController'] as TextEditingController?;
-              final accountHolderName = accountHolderController?.text ?? '';
-
-              return Container(
-                padding: EdgeInsets.all(12.w * GovernmentCensusUIUtils.sizeFactor),
-                decoration: BoxDecoration(
-                  color: SetuColors.primaryGreen.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: SetuColors.primaryGreen.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      PhosphorIcons.info(PhosphorIconsStyle.regular),
-                      color: SetuColors.primaryGreen,
-                      size: 16.sp * GovernmentCensusUIUtils.sizeFactor,
-                    ),
-                    Gap(8.w * GovernmentCensusUIUtils.sizeFactor),
-                    Expanded(
-                      child: Text(
-                        'Applicant ${index + 1} - ${accountHolderName.isNotEmpty ? accountHolderName : 'Name not entered'}',
-                        style: TextStyle(
-                          fontSize: 12.sp * GovernmentCensusUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          // GetBuilder<CensusFifthController>(
+          //   tag: 'census_fifth', // Fixed: Use consistent tag
+          //   builder: (controller) {
+          //     final accountHolderController = entry['accountHolderNameController'] as TextEditingController?;
+          //     final accountHolderName = accountHolderController?.text ?? '';
+          //
+          //     return Container(
+          //       padding: EdgeInsets.all(12.w * GovernmentCensusUIUtils.sizeFactor),
+          //       decoration: BoxDecoration(
+          //         color: SetuColors.primaryGreen.withOpacity(0.05),
+          //         borderRadius: BorderRadius.circular(8.r),
+          //         border: Border.all(
+          //           color: SetuColors.primaryGreen.withOpacity(0.2),
+          //           width: 1,
+          //         ),
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           Icon(
+          //             PhosphorIcons.info(PhosphorIconsStyle.regular),
+          //             color: SetuColors.primaryGreen,
+          //             size: 16.sp * GovernmentCensusUIUtils.sizeFactor,
+          //           ),
+          //           Gap(8.w * GovernmentCensusUIUtils.sizeFactor),
+          //           Expanded(
+          //             child: Text(
+          //               'Applicant ${index + 1} - ${accountHolderName.isNotEmpty ? accountHolderName : 'Name not entered'}',
+          //               style: TextStyle(
+          //                 fontSize: 12.sp * GovernmentCensusUIUtils.sizeFactor,
+          //                 color: SetuColors.primaryGreen,
+          //                 fontWeight: FontWeight.w500,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

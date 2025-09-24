@@ -48,7 +48,6 @@ class GovernmentCensusController extends GetxController {
       'district',
       'taluka',
       'village',
-      'office'
     ],
     2: ['government_survey'], // Survey Information
     3: ['calculation', 'status'], // Calculation Information
