@@ -16,6 +16,9 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   final selectedSurveyNo = 'Survey No.'.obs;
   final List<String> noSelect = ['Survey No.', 'CTS No.'];
 
+  final surveyCtsNumber = TextEditingController();
+
+
 
   // Dropdown Options - You can make these dynamic by fetching from API
   final List<String> departmentOptions = [
@@ -52,6 +55,7 @@ class SurveyCTSController extends GetxController with StepValidationMixin, StepD
   @override
   void onClose() {
     surveyNumberController.dispose();
+    surveyCtsNumber.dispose();
     super.onClose();
   }
 
