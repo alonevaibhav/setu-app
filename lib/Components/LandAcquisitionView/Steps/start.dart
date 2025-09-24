@@ -20,12 +20,14 @@ class PersonalInfoStep extends StatelessWidget {
   }) : super(key: key);
 
   // Get the PersonalInfoController
-  PersonalInfoController get controller => Get.find<PersonalInfoController>(tag: 'personal_info');
+  PersonalInfoController get controller =>
+      Get.find<PersonalInfoController>(tag: 'personal_info');
 
   @override
   Widget build(BuildContext context) {
     // Get the substeps from main controller configuration
-    final subSteps = mainController.stepConfigurations[0] ?? ['land_acquisition_details'];
+    final subSteps =
+        mainController.stepConfigurations[0] ?? ['land_acquisition_details'];
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
@@ -67,17 +69,14 @@ class PersonalInfoStep extends StatelessWidget {
         ),
         Gap(24.h),
 
-        // Replace the old address field with AddressPopup
-
-        // Replace the old address field with AddressPopup
-        // Obx(() => ApplicantAddressField(
-        //   label: 'Applicant Address',
-        //   isRequired: true,
-        //   onTap: () => controller.showApplicantAddressPopup(context),
-        //   hasDetailedAddress: controller.hasDetailedApplicantAddress(),
-        //   buttonText: 'Detailed Address',
-        //   buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
-        // )),
+        Obx(() => ApplicantAddressField(
+              label: 'Applicant Address',
+              isRequired: true,
+              onTap: () => controller.showOfficeAddressPopup(context),
+              hasDetailedAddress: controller.hasDetailedOfficeAddress(),
+              buttonText: 'Applicant Address',
+              buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+            )),
 
         Gap(24.h),
 

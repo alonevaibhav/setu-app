@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Utils/custimize_image_picker.dart';
 import '../../CourtAllocationCaseView/Controller/personal_info_controller.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
 
@@ -28,20 +29,20 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildCourtAllocationDetails();
+      return _buildCourtAllocationDetails(context);
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'calculation':
-        return _buildCourtAllocationDetails();
+        return _buildCourtAllocationDetails(context);
       default:
-        return _buildCourtAllocationDetails();
+        return _buildCourtAllocationDetails(context);
     }
   }
 
-  Widget _buildCourtAllocationDetails() {
+  Widget _buildCourtAllocationDetails(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,19 +66,15 @@ class PersonalInfoStep extends StatelessWidget {
           },
         ),
         Gap(16.h),
-        CourtAllocationCaseUIUtils.buildTextFormField(
-          controller: controller.applicantAddressController,
+        // Replace your applicant address field with:
+        Obx(() => ApplicantAddressField(
           label: 'Applicant Address',
-          hint: 'Enter Your Address',
-          icon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.text,
-          validator: (value) {
-            if (value == null || value.trim().length < 3) {
-              return 'Please enter the Address of the applicant';
-            }
-            return null;
-          },
-        ),
+          isRequired: true,
+          onTap: () => controller.showApplicantAddressPopup(context),
+          hasDetailedAddress: controller.hasDetailedApplicantAddress(),
+          buttonText: 'Detailed Address',
+          buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+        )),
         Gap(16.h),
 
         // Name of the court issuing the court allocation order

@@ -342,7 +342,7 @@ class PersonalInfoStep extends StatelessWidget {
         ),
         Gap(24.h),
 
-        // Replace the old address field with AddressPopup
+        //  AddressPopup
         Obx(() => ApplicantAddressField(
           label: 'Applicant Address',
           isRequired: true,

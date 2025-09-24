@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Utils/custimize_image_picker.dart';
 import '../../CourtCommissionCaseView/Controller/personal_info_controller.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
 
@@ -28,20 +29,20 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildCourtCommissionDetails(); 
+      return _buildCourtCommissionDetails(context);
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'court_commission_details':
-        return _buildCourtCommissionDetails();
+        return _buildCourtCommissionDetails(context);
       default:
-        return _buildCourtCommissionDetails();
+        return _buildCourtCommissionDetails(context);
     }
   }
 
-  Widget _buildCourtCommissionDetails() {
+  Widget _buildCourtCommissionDetails(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,19 +66,15 @@ class PersonalInfoStep extends StatelessWidget {
           },
         ),
         Gap(16.h),
-        CourtCommissionCaseUIUtils.buildTextFormField(
-          controller: controller.applicantAddressController,
+        Obx(() => ApplicantAddressField(
           label: 'Applicant Address',
-          hint: 'Enter Your Address',
-          icon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
-          keyboardType: TextInputType.text,
-          validator: (value) {
-            if (value == null || value.trim().length < 3) {
-              return 'Please enter the Address of the applicant';
-            }
-            return null;
-          },
-        ),
+          isRequired: true,
+          onTap: () => controller.showCourtAddressPopup(context),
+          hasDetailedAddress: controller.hasDetailedCourtAddress(),
+          buttonText: 'Enter Applicant Address',
+          buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+        )),
+
         Gap(16.h),
 
         // Name of the court that issued the court commission order
@@ -164,16 +161,6 @@ class PersonalInfoStep extends StatelessWidget {
           hint: 'Enter civil claim details with reference numbers',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
           maxLines: 3,
-          errorText: controller.getFieldValidationError('civil_claim'),
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Civil claim details are required';
-            }
-            if (value.trim().length < 5) {
-              return 'Civil claim must be at least 5 characters';
-            }
-            return null;
-          },
         ),
         Gap(16.h),
 

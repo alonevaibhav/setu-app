@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Utils/custimize_image_picker.dart';
+import '../../Widget/address_view.dart';
 import '../Controller/main_controller.dart';
 import '../Controller/personal_info_controller.dart';
 import 'ZLandAcquisitionUIUtils.dart';
@@ -28,20 +29,20 @@ class PersonalInfoStep extends StatelessWidget {
 
     // Ensure currentSubStep is within bounds
     if (currentSubStep >= subSteps.length) {
-      return _buildGovernmentCountingDetails(); // Fallback
+      return _buildGovernmentCountingDetails(context); // Fallback
     }
 
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {
       case 'government_counting_details':
-        return _buildGovernmentCountingDetails();
+        return _buildGovernmentCountingDetails(context);
       default:
-        return _buildGovernmentCountingDetails();
+        return _buildGovernmentCountingDetails(context);
     }
   }
 
-  Widget _buildGovernmentCountingDetails() {
+  Widget _buildGovernmentCountingDetails(context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -49,6 +50,34 @@ class PersonalInfoStep extends StatelessWidget {
           'Government Counting Details',
           'Please provide government counting information',
         ),
+        Gap(24.h),
+
+        GovernmentCensusUIUtils.buildTextFormField(
+          controller: controller.applicantNameController,
+          label: 'Applicant Name',
+          hint: 'Enter Your Name',
+          icon: PhosphorIcons.identificationBadge(PhosphorIconsStyle.regular),
+          keyboardType: TextInputType.text,
+          validator: (value) {
+            if (value == null || value.trim().length < 3) {
+              return 'Please enter the name of the applicant';
+            }
+            return null;
+          },
+        ),
+
+        Gap(24.h),
+
+        // Replace your applicant address field with:
+        Obx(() => ApplicantAddressField(
+          label: 'Counting Applicant Address',
+          isRequired: true,
+          onTap: () => controller.showApplicantAddressPopup(context),
+          hasDetailedAddress: controller.hasDetailedApplicantAddress(),
+          buttonText: 'Detailed Address',
+          buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
+        )),
+
         Gap(24.h),
 
         // Name of the officer who issued the order regarding the government count

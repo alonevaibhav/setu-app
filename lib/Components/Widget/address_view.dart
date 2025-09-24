@@ -47,7 +47,7 @@ class ApplicantAddressField extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16.sp * SurveyUIUtils.sizeFactor,
                   fontWeight: FontWeight.w500,
-                  color: Colors.red,
+                  color: SetuColors.textPrimary,
                 ),
               ),
           ],
@@ -63,14 +63,14 @@ class ApplicantAddressField extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 16.w * SurveyUIUtils.sizeFactor,
-                    vertical: 12.h * SurveyUIUtils.sizeFactor,
+                    vertical: 15.h * SurveyUIUtils.sizeFactor,
                   ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: SetuColors.primaryGreen.withOpacity(0.5),
-                      width: 1.5,
+                      width: 0.5,
                     ),
-                    borderRadius: BorderRadius.circular(8.r),
+                    borderRadius: BorderRadius.circular(5.r),
                     color: SetuColors.primaryGreen.withOpacity(0.03),
                   ),
                   child: Row(
