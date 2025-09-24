@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:get/get.dart';
 import '../../../Constants/color_constant.dart';
@@ -208,6 +209,7 @@ class AllocationFifthView extends StatelessWidget {
             icon: PhosphorIcons.userCheck(PhosphorIconsStyle.regular),
           )),
 
+
           Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
           // Name Input
@@ -222,6 +224,15 @@ class AllocationFifthView extends StatelessWidget {
 
           Gap(16.h * CourtAllocationCaseUIUtils.sizeFactor),
 
+          CourtAllocationCaseUIUtils.buildTranslatableText(
+            text: 'Address *',
+            style: GoogleFonts.poppins(
+              fontSize: 16.sp * CourtAllocationCaseUIUtils.sizeFactor,
+              fontWeight: FontWeight.w600,
+              color: SetuColors.textPrimary,
+            ),
+          ),
+          Gap(7.h * CourtAllocationCaseUIUtils.sizeFactor),
           // Enhanced Address Input with Popup
           _buildAddressFieldWithPopup(courtFifthController, entry, index),
 
@@ -243,8 +254,8 @@ class AllocationFifthView extends StatelessWidget {
           // Survey Number/Group Number Input
           CourtAllocationCaseUIUtils.buildTextFormField(
             controller: entry['surveyNumberController'],
-            label: 'Survey Number/Group Number *',
-            hint: 'Enter survey or group number',
+            label: 'Survey No./Gat No./CTS No. *',
+            hint: 'Enter survey number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) => courtFifthController
                 .updatePlaintiffDefendantEntry(index, 'surveyNumber', value),

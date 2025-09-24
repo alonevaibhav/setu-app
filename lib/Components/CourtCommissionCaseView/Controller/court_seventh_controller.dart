@@ -209,6 +209,7 @@ class CourtSeventhController extends GetxController with StepValidationMixin, St
   final demarcationCertificateFiles = <String>[].obs;
 
   final adhikarPatra = <String>[].obs;
+  final otherDocument = <String>[].obs;
 
   final utaraAkharband = <String>[].obs;
 

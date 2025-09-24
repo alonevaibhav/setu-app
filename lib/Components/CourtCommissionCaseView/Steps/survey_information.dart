@@ -194,24 +194,34 @@ class CalculationInformation extends StatelessWidget {
           Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Village Dropdown - Individual for each entry
-          Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
-                label: 'Village *',
-                value: calcController.getSelectedVillage(index),
-                items: calcController.villageOptions,
-                onChanged: (value) {
-                  calcController.updateSelectedVillage(
-                      index, value ?? 'Select Village');
-                },
-                icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
-              )),
+          // Obx(() => CourtCommissionCaseUIUtils.buildDropdownField(
+          //       label: 'Village *',
+          //       value: calcController.getSelectedVillage(index),
+          //       items: calcController.villageOptions,
+          //       onChanged: (value) {
+          //         calcController.updateSelectedVillage(
+          //             index, value ?? 'Select Village');
+          //       },
+          //       icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+          //     )),
+
+          CourtCommissionCaseUIUtils.buildTextFormField(
+            controller: entry['villageController'],
+            label: 'Village *',
+            hint: 'Enter village name',
+            icon: PhosphorIcons.mapPin(PhosphorIconsStyle.regular),
+            onChanged: (value) => calcController.updateSurveyEntry(index, 'village', value),
+          ),
+
+
 
           Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Survey No./Group No. Input
           CourtCommissionCaseUIUtils.buildTextFormField(
             controller: entry['surveyNoController'],
-            label: 'Survey No./Group No. *',
-            hint: 'Enter survey or group number',
+            label: 'Survey No./Gat No./CTS No. *',
+            hint: 'Enter Survey No./Gat No./CTS No.',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
             onChanged: (value) =>
                 calcController.updateSurveyEntry(index, 'surveyNo', value),
@@ -245,39 +255,39 @@ class CalculationInformation extends StatelessWidget {
 
           Gap(16.h * CourtCommissionCaseUIUtils.sizeFactor),
           // Summary Row
-          Container(
-            padding:
-                EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
-            decoration: BoxDecoration(
-              color: SetuColors.primaryGreen.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: SetuColors.primaryGreen.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  PhosphorIcons.info(PhosphorIconsStyle.regular),
-                  color: SetuColors.primaryGreen,
-                  size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                ),
-                Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
-                Expanded(
-                  child: Obx(() => Text(
-                        'Entry ${index + 1} - Village: ${calcController.getSelectedVillage(index)}, Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
-                        style: TextStyle(
-                          fontSize:
-                              12.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding:
+          //       EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+          //   decoration: BoxDecoration(
+          //     color: SetuColors.primaryGreen.withOpacity(0.05),
+          //     borderRadius: BorderRadius.circular(8.r),
+          //     border: Border.all(
+          //       color: SetuColors.primaryGreen.withOpacity(0.2),
+          //       width: 1,
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Icon(
+          //         PhosphorIcons.info(PhosphorIconsStyle.regular),
+          //         color: SetuColors.primaryGreen,
+          //         size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+          //       ),
+          //       Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+          //       Expanded(
+          //         child: Obx(() => Text(
+          //               'Entry ${index + 1} - Village: ${calcController.getSelectedVillage(index)}, Survey/Group: ${entry['surveyNo'] ?? 'Not entered'}',
+          //               style: TextStyle(
+          //                 fontSize:
+          //                     12.sp * CourtCommissionCaseUIUtils.sizeFactor,
+          //                 color: SetuColors.primaryGreen,
+          //                 fontWeight: FontWeight.w500,
+          //               ),
+          //             )),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

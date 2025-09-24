@@ -233,8 +233,8 @@ class AllocationSixthController extends GetxController
       'addressController': TextEditingController(),
       'mobileController': TextEditingController(),
       'surveyNoController': TextEditingController(),
-      'direction': '', // Initialize as empty string, not null
-      'naturalResources': '', // Initialize as empty string, not null
+      'direction': 'East', // Initialize as empty string, not null
+      'naturalResources': 'Road', // Initialize as empty string, not null
       'address': '',
       'mobile': '',
       'surveyNo': '',

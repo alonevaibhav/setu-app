@@ -543,38 +543,38 @@ class CourtSixthView extends StatelessWidget {
           Gap(20.h * CourtCommissionCaseUIUtils.sizeFactor),
 
           // Summary Row
-          Container(
-            padding:
-                EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
-            decoration: BoxDecoration(
-              color: SetuColors.primaryGreen.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: SetuColors.primaryGreen.withOpacity(0.2),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  PhosphorIcons.info(PhosphorIconsStyle.regular),
-                  color: SetuColors.primaryGreen,
-                  size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                ),
-                Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
-                Expanded(
-                  child: Text(
-                    'Next of Kin ${index + 1} - ${(entry['naturalResources'] as String? ?? '').isEmpty ? 'Natural resource not selected' : entry['naturalResources']}',
-                    style: TextStyle(
-                      fontSize: 12.sp * CourtCommissionCaseUIUtils.sizeFactor,
-                      color: SetuColors.primaryGreen,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   padding:
+          //       EdgeInsets.all(12.w * CourtCommissionCaseUIUtils.sizeFactor),
+          //   decoration: BoxDecoration(
+          //     color: SetuColors.primaryGreen.withOpacity(0.05),
+          //     borderRadius: BorderRadius.circular(8.r),
+          //     border: Border.all(
+          //       color: SetuColors.primaryGreen.withOpacity(0.2),
+          //       width: 1,
+          //     ),
+          //   ),
+          //   child: Row(
+          //     children: [
+          //       Icon(
+          //         PhosphorIcons.info(PhosphorIconsStyle.regular),
+          //         color: SetuColors.primaryGreen,
+          //         size: 16.sp * CourtCommissionCaseUIUtils.sizeFactor,
+          //       ),
+          //       Gap(8.w * CourtCommissionCaseUIUtils.sizeFactor),
+          //       Expanded(
+          //         child: Text(
+          //           'Next of Kin ${index + 1} - ${(entry['naturalResources'] as String? ?? '').isEmpty ? 'Natural resource not selected' : entry['naturalResources']}',
+          //           style: TextStyle(
+          //             fontSize: 12.sp * CourtCommissionCaseUIUtils.sizeFactor,
+          //             color: SetuColors.primaryGreen,
+          //             fontWeight: FontWeight.w500,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );

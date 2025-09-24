@@ -210,8 +210,7 @@ class CalculationInformation extends StatelessWidget {
             label: 'Survey No./Gat No./CTS No.*',
             hint: 'Enter Survey No./Gat No./CTS No.*',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) =>
-                calcController.updateSurveyEntry(index, 'surveyNo', value),
+            onChanged: (value) => calcController.updateSurveyEntry(index, 'surveyNo', value),
           ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),

@@ -341,8 +341,7 @@ class AllocationSixthView extends StatelessWidget {
   }
 
   Widget _buildNextOfKinInput() {
-    final surveySevenController =
-    Get.put(AllocationSixthController(), tag: 'court_sixth');
+    final surveySevenController = Get.put(AllocationSixthController(), tag: 'court_sixth');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -754,11 +753,10 @@ class AllocationSixthView extends StatelessWidget {
           // Survey No./Group No. Input
           CourtAllocationCaseUIUtils.buildTextFormField(
             controller: subEntry['surveyNoController'] as TextEditingController,
-            label: 'Survey No./Group No. *',
-            hint: 'Enter survey or group number',
+            label: 'Survey No./Gat No./CTS No.  *',
+            hint: 'Enter survey number',
             icon: PhosphorIcons.numberSquareOne(PhosphorIconsStyle.regular),
-            onChanged: (value) => surveyEightController.updateSubEntry(
-                parentIndex, subIndex, 'surveyNo', value),
+            onChanged: (value) => surveyEightController.updateSubEntry(parentIndex, subIndex, 'surveyNo', value),
           ),
         ],
       ),

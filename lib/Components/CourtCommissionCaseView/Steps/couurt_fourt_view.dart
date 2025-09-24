@@ -93,23 +93,23 @@ class CouurtFourtView extends StatelessWidget {
         Gap(16.h),
 
         // Calculation Fee (Auto-calculated, read-only)
-        CourtCommissionCaseUIUtils.buildTextFormField(
-          controller: controller.calculationFeeController,
-          label: 'Calculation fee',
-          hint: 'Auto-calculated based on selections',
-          icon: PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
-          // readOnly: true,
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Please complete all selections above';
-            }
-            return null;
-          },
-        ),
+        // CourtCommissionCaseUIUtils.buildTextFormField(
+        //   controller: controller.calculationFeeController,
+        //   label: 'Calculation fee',
+        //   hint: 'Auto-calculated based on selections',
+        //   icon: PhosphorIcons.currencyInr(PhosphorIconsStyle.regular),
+        //   // readOnly: true,
+        //   validator: (value) {
+        //     if (value == null || value.trim().isEmpty) {
+        //       return 'Please complete all selections above';
+        //     }
+        //     return null;
+        //   },
+        // ),
         Gap(16.h),
 
         // Fee breakdown information card
-        Obx(() => _buildFeeBreakdownCard()),
+        // Obx(() => _buildFeeBreakdownCard()),
         Gap(32.h),
 
         CourtCommissionCaseUIUtils.buildNavigationButtons(mainController),
