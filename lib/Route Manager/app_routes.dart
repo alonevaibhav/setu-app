@@ -7,6 +7,7 @@ import '../Components/GovernmentCensusView/main_view.dart';
 import '../Components/LandAcquisitionView/main_view.dart';
 import '../Components/LandSurveyView/land_survey_view.dart';
 import '../Components/join_as_site_lead.dart';
+import '../View/MyApplication/my_application.dart';
 import '../View/bottum_nevigation_bar.dart';
 import 'app_bindings.dart';
 
@@ -21,6 +22,9 @@ class AppRoutes {
   static const courtCommissionCase = '/CourtCommissionCase';
   static const courtAllocationCase = '/courtAllocationCase';
   static const governmentCensus = '/governmentCensus';
+
+
+  static const dashboardMyApplication = '/dashboardMyApplication';
 
   static const cleaner = '/cleaner/dashboard';
   static const inspector = '/inspector/dashboard';
@@ -64,6 +68,12 @@ class AppRoutes {
     GetPage(
       name: governmentCensus,
       page: () => GovernmentCensusView(),
+      binding: AppBindings(),
+    ),
+
+    GetPage(
+      name: dashboardMyApplication,
+      page: () => MyApplication(),
       binding: AppBindings(),
     ),
   ];

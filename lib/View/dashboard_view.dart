@@ -346,31 +346,48 @@ class DashboardView extends StatelessWidget {
     );
   }
 
-  // Navigation handlers for Quick Actions
+// Replace your _handleQuickActionTap method with this:
   void _handleQuickActionTap(BuildContext context, String actionTitle) {
-    switch (actionTitle) {
-      case 'New Registration':
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => NewRegistrationPage()));
-        print('Navigate to: New Registration Page');
-        break;
-      case 'View Documents':
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => ViewDocumentsPage()));
-        print('Navigate to: View Documents Page');
-        break;
-      case 'Upload Photos':
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => UploadPhotosPage()));
-        print('Navigate to: Upload Photos Page');
-        break;
-      case 'Contact Support':
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => ContactSupportPage()));
-        print('Navigate to: Contact Support Page');
-        break;
-      default:
-        print('Unknown action: $actionTitle');
+    // Add error handling and debugging
+    try {
+      print('Attempting to navigate to: $actionTitle');
+
+      switch (actionTitle) {
+        case 'My Application':  // Fixed: This should match your actual action title
+          Get.toNamed(AppRoutes.dashboardMyApplication);
+          print('Navigated to: My Application Page');
+          break;
+        case 'Pending Application':
+        // Add your route here
+          print('Navigate to: Pending Application Page');
+          break;
+        case 'Contact Support':
+        // Add your route here
+          print('Navigate to: Contact Support Page');
+          break;
+        case 'Verified Applications':
+        // Add your route here
+          print('Navigate to: Verified Applications Page');
+          break;
+        default:
+          print('Unknown action: $actionTitle');
+          // Show snackbar for debugging
+          Get.snackbar(
+            'Navigation Error',
+            'Route not found for: $actionTitle',
+            snackPosition: SnackPosition.BOTTOM,
+          );
+      }
+    } catch (e) {
+      print('Navigation error: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to navigate: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
-  // Navigation handlers for Government Schemes
 // Navigation handlers for Government Schemes
   void _handleSchemeTap(BuildContext context, String schemeTitle) {
     // Remove line breaks from title for cleaner routing
