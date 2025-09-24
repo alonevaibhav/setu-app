@@ -66,12 +66,13 @@ class PersonalInfoStep extends StatelessWidget {
           },
         ),
         Gap(16.h),
+        // Replace your applicant address field with:
         Obx(() => ApplicantAddressField(
           label: 'Applicant Address',
           isRequired: true,
-          onTap: () => controller.showCourtAddressPopup(context),
-          hasDetailedAddress: controller.hasDetailedCourtAddress(),
-          buttonText: 'Enter Applicant Address',
+          onTap: () => controller.showApplicantAddressPopup(context),
+          hasDetailedAddress: controller.hasDetailedApplicantAddress(),
+          buttonText: 'Detailed Address',
           buttonIcon: PhosphorIcons.addressBook(PhosphorIconsStyle.regular),
         )),
 

@@ -348,116 +348,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
     validationErrors.remove(field);
   }
 
-  //------------------------Court Address Methods ------------------------//
-
-  // Court address formatting method
-  String getFormattedCourtAddress() {
-    final parts = <String>[];
-
-    if (courtAddressData['plotNo']?.isNotEmpty == true) {
-      parts.add(courtAddressData['plotNo']!);
-    }
-    if (courtAddressData['address']?.isNotEmpty == true) {
-      parts.add(courtAddressData['address']!);
-    }
-    if (courtAddressData['village']?.isNotEmpty == true) {
-      parts.add(courtAddressData['village']!);
-    }
-    if (courtAddressData['postOffice']?.isNotEmpty == true) {
-      parts.add(courtAddressData['postOffice']!);
-    }
-    if (courtAddressData['pincode']?.isNotEmpty == true) {
-      parts.add(courtAddressData['pincode']!);
-    }
-
-    return parts.isEmpty ? 'Click to add court address' : parts.join(', ');
-  }
-
-  // Check if detailed court address is available
-  bool hasDetailedCourtAddress() {
-    return courtAddressData.isNotEmpty &&
-        (courtAddressData['address']?.isNotEmpty == true ||
-            courtAddressData['village']?.isNotEmpty == true);
-  }
-
-  // Show court address popup
-  void showCourtAddressPopup(BuildContext context) {
-    // Populate controllers with current data
-    courtAddressControllers['plotNoController']!.text = courtAddressData['plotNo'] ?? '';
-    courtAddressControllers['addressController']!.text = courtAddressData['address'] ?? '';
-    courtAddressControllers['mobileNumberController']!.text = courtAddressData['mobileNumber'] ?? '';
-    courtAddressControllers['emailController']!.text = courtAddressData['email'] ?? '';
-    courtAddressControllers['pincodeController']!.text = courtAddressData['pincode'] ?? '';
-    courtAddressControllers['districtController']!.text = courtAddressData['district'] ?? '';
-    courtAddressControllers['villageController']!.text = courtAddressData['village'] ?? '';
-    courtAddressControllers['postOfficeController']!.text = courtAddressData['postOffice'] ?? '';
-
-    showDialog(
-      context: context,
-      builder: (context) => AddressPopup(
-        entryIndex: 0,
-        controllers: courtAddressControllers,
-        onSave: () => _saveCourtAddressFromPopup(),
-      ),
-    );
-  }
-
-  // Save court address from popup
-  void _saveCourtAddressFromPopup() {
-    final newAddressData = {
-      'plotNo': courtAddressControllers['plotNoController']!.text,
-      'address': courtAddressControllers['addressController']!.text,
-      'mobileNumber': courtAddressControllers['mobileNumberController']!.text,
-      'email': courtAddressControllers['emailController']!.text,
-      'pincode': courtAddressControllers['pincodeController']!.text,
-      'district': courtAddressControllers['districtController']!.text,
-      'village': courtAddressControllers['villageController']!.text,
-      'postOffice': courtAddressControllers['postOfficeController']!.text,
-    };
-
-    updateCourtAddress(newAddressData);
-    Get.back(); // Close the popup
-  }
-
-  // Update court address with validation
-  void updateCourtAddress(Map<String, String> newAddressData) {
-    courtAddressData.assignAll(newAddressData);
-
-    // Update the old controller for backward compatibility
-    courtAddressController.text = getFormattedCourtAddress();
-
-    // Clear validation errors
-    courtAddressValidationErrors.clear();
-
-    // Validate address fields
-    _validateCourtAddressFields(newAddressData);
-
-    update(); // Trigger UI update
-  }
-
-  // Validate court address fields
-  void _validateCourtAddressFields(Map<String, String> addressData) {
-    if (addressData['address']?.trim().isEmpty ?? true) {
-      courtAddressValidationErrors['address'] = 'Court address is required';
-    }
-    if (addressData['pincode']?.trim().isEmpty ?? true) {
-      courtAddressValidationErrors['pincode'] = 'Pincode is required';
-    }
-    if (addressData['village']?.trim().isEmpty ?? true) {
-      courtAddressValidationErrors['village'] = 'Village is required';
-    }
-    if (addressData['postOffice']?.trim().isEmpty ?? true) {
-      courtAddressValidationErrors['postOffice'] = 'Post Office is required';
-    }
-  }
-
-  // Clear court address fields
-  void clearCourtAddressFields() {
-    courtAddressData.clear();
-    courtAddressValidationErrors.clear();
-    courtAddressControllers.values.forEach((controller) => controller.clear());
-    courtAddressController.clear();
-  }
 
   //------------------------Applicant Address Methods ------------------------//
 
@@ -602,8 +492,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
       isValid = false;
     }
 
-    // Validate court address using new validation
-    _validateCourtAddressFields(courtAddressData);
     if (courtAddressValidationErrors.isNotEmpty) {
       validationErrors['court_address'] = 'Please complete the court address details';
       isValid = false;
@@ -671,7 +559,6 @@ class PersonalInfoController extends GetxController with StepValidationMixin, St
   Map<String, dynamic> getStepData() {
     return {
       'court_name': courtNameController.text.trim(),
-      'court_address': getFormattedCourtAddress(),
       'court_address_details': Map<String, String>.from(courtAddressData),
       'commission_order_no': commissionOrderNoController.text.trim(),
       'commission_date': selectedCommissionDate.value?.toIso8601String(),
