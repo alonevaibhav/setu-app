@@ -367,10 +367,10 @@ class SurveyEightView extends StatelessWidget {
   final MainSurveyController mainController;
 
   const SurveyEightView({
-    Key? key,
+    super.key,
     required this.currentSubStep,
     required this.mainController,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

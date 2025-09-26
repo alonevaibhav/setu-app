@@ -234,6 +234,22 @@ class PersonalInfoStep extends StatelessWidget {
           ),
           Gap(16.h * SurveyUIUtils.sizeFactor),
 
+          // Name of the holder of the Power of Attorney
+          SurveyUIUtils.buildTextFormField(
+            controller: controller.poaHolderAddressController,
+            label: 'Address of the holder ',
+            hint: 'Enter attorney Address',
+            icon: PhosphorIcons.user(PhosphorIconsStyle.regular),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value == null || value.trim().length < 2) {
+                return 'Attorney holder name must be at least 2 characters';
+              }
+              return null;
+            },
+          ),
+          Gap(16.h * SurveyUIUtils.sizeFactor),
+
           ImagePickerUtil.buildFileUploadField(
             label: 'POA Document *',
             hint: 'Upload POA Document',

@@ -247,46 +247,46 @@ class SurveySixthView extends StatelessWidget {
           //       sixthController.updateCoownerEntry(index, 'consent', value),
           // ),
 
-          Gap(16.h * SurveyUIUtils.sizeFactor),
+          // Gap(16.h * SurveyUIUtils.sizeFactor),
 
           // Summary Row
-          GetBuilder<SurveySixthController>(
-            tag: 'survey_sixth',
-            builder: (controller) {
-              final coownerName = (entry['nameController'] as TextEditingController).text;
-              return Container(
-                padding: EdgeInsets.all(12.w * SurveyUIUtils.sizeFactor),
-                decoration: BoxDecoration(
-                  color: SetuColors.primaryGreen.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: SetuColors.primaryGreen.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      PhosphorIcons.info(PhosphorIconsStyle.regular),
-                      color: SetuColors.primaryGreen,
-                      size: 16.sp * SurveyUIUtils.sizeFactor,
-                    ),
-                    Gap(8.w * SurveyUIUtils.sizeFactor),
-                    Expanded(
-                      child: Text(
-                        'Co-owner ${index + 1} - ${coownerName.isNotEmpty ? coownerName : 'Name not entered'}',
-                        style: TextStyle(
-                          fontSize: 12.sp * SurveyUIUtils.sizeFactor,
-                          color: SetuColors.primaryGreen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+          // GetBuilder<SurveySixthController>(
+          //   tag: 'survey_sixth',
+          //   builder: (controller) {
+          //     final coownerName = (entry['nameController'] as TextEditingController).text;
+          //     return Container(
+          //       padding: EdgeInsets.all(12.w * SurveyUIUtils.sizeFactor),
+          //       decoration: BoxDecoration(
+          //         color: SetuColors.primaryGreen.withOpacity(0.05),
+          //         borderRadius: BorderRadius.circular(8.r),
+          //         border: Border.all(
+          //           color: SetuColors.primaryGreen.withOpacity(0.2),
+          //           width: 1,
+          //         ),
+          //       ),
+          //       child: Row(
+          //         children: [
+          //           Icon(
+          //             PhosphorIcons.info(PhosphorIconsStyle.regular),
+          //             color: SetuColors.primaryGreen,
+          //             size: 16.sp * SurveyUIUtils.sizeFactor,
+          //           ),
+          //           Gap(8.w * SurveyUIUtils.sizeFactor),
+          //           Expanded(
+          //             child: Text(
+          //               'Co-owner ${index + 1} - ${coownerName.isNotEmpty ? coownerName : 'Name not entered'}',
+          //               style: TextStyle(
+          //                 fontSize: 12.sp * SurveyUIUtils.sizeFactor,
+          //                 color: SetuColors.primaryGreen,
+          //                 fontWeight: FontWeight.w500,
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     );
+          //   },
+          // ),
         ],
       ),
     );

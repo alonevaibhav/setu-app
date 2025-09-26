@@ -222,9 +222,9 @@ class MainSurveyController extends GetxController {
 
     // Print the current survey data to the console
     // print('Current Survey Data: ${surveyData.value}');
-    debugPrintInfo();
+    // debugPrintInfo();
     // submitSurvey();
-
+    debugPrint();
     // Get the current step's total substeps
     final currentStepSubSteps = stepConfigurations[currentStep.value];
     final totalSubSteps = currentStepSubSteps?.length ?? 1;
@@ -725,25 +725,33 @@ class MainSurveyController extends GetxController {
     final nextOfKinData = getSeventhController();
 
     // === PERSONAL INFO ===
-    developer.log('=== PERSONAL INFO ===', name: 'DebugInfo');
-    developer.log('is_holder_themselves: ${personalInfoController.isHolderThemselves.value.toString()}', name: 'PersonalInfo');
-    developer.log('has_authority_on_behalf: ${personalInfoController.hasAuthorityOnBehalf.value.toString()}', name: 'PersonalInfo');
-    developer.log('has_been_counted_before: ${personalInfoController.hasBeenCountedBefore.value.toString()}', name: 'PersonalInfo');
+    developer.log('=== PERSONAL INFO DEBUG ===', name: 'DebugInfo');
+
+    developer.log('applicant_name: "${personalInfoController.applicantNameController.text.trim()}"', name: 'PersonalInfo');
+    developer.log('applicant_address_details: ${personalInfoController.applicantAddressData}', name: 'PersonalInfo');
+    developer.log('is_holder_themselves: ${personalInfoController.isHolderThemselves.value}', name: 'PersonalInfo');
+    developer.log('has_authority_on_behalf: ${personalInfoController.hasAuthorityOnBehalf.value}', name: 'PersonalInfo');
+    developer.log('should_show_authority_question: ${personalInfoController.shouldShowAuthorityQuestion}', name: 'PersonalInfo');
+    developer.log('had_been_counted_before: ${personalInfoController.hasBeenCountedBefore.value.toString()}', name: 'PersonalInfo');
+    developer.log('should_show_poa_fields: ${personalInfoController.shouldShowPOAFields}', name: 'PersonalInfo');
     developer.log('poa_registration_number: "${personalInfoController.poaRegistrationNumberController.text.trim()}"', name: 'PersonalInfo');
     developer.log('poa_registration_date: "${personalInfoController.poaRegistrationDateController.text.trim()}"', name: 'PersonalInfo');
     developer.log('poa_issuer_name: "${personalInfoController.poaIssuerNameController.text.trim()}"', name: 'PersonalInfo');
     developer.log('poa_holder_name: "${personalInfoController.poaHolderNameController.text.trim()}"', name: 'PersonalInfo');
     developer.log('poa_holder_address: "${personalInfoController.poaHolderAddressController.text.trim()}"', name: 'PersonalInfo');
-    developer.log('POA_Documents: "${personalInfoController.poaDocument.value}"', name: 'PersonalInfo');
+    developer.log('poa_documents: ${personalInfoController.poaDocument}', name: 'PersonalInfo');
 
-    // === SURVEY INFO ===
-    developer.log('=== SURVEY INFO ===', name: 'DebugInfo');
-    developer.log('survey_number: "${surveyInfo?['survey_number']?.toString() ?? ""}"', name: 'SurveyInfo');
-    developer.log('department: "${surveyInfo?['department']?.toString() ?? ""}"', name: 'SurveyInfo');
-    developer.log('district: "${surveyInfo?['district']?.toString() ?? ""}"', name: 'SurveyInfo');
-    developer.log('taluka: "${surveyInfo?['taluka']?.toString() ?? ""}"', name: 'SurveyInfo');
-    developer.log('village: "${surveyInfo?['village']?.toString() ?? ""}"', name: 'SurveyInfo');
-    developer.log('office: "${surveyInfo?['office']?.toString() ?? ""}"', name: 'SurveyInfo');
+
+
+// === SURVEY INFO DEBUG ===
+    developer.log('=== SURVEY INFO DEBUG ===', name: 'DebugInfo');
+
+    developer.log('survey_number: "${surveyCTSController.surveyCtsNumber.text.trim()}"', name: 'SurveyInfo');
+    developer.log('department: "${surveyCTSController.selectedDepartment.value}"', name: 'SurveyInfo');
+    developer.log('district: "${surveyCTSController.selectedDistrict.value}"', name: 'SurveyInfo');
+    developer.log('taluka: "${surveyCTSController.selectedTaluka.value}"', name: 'SurveyInfo');
+    developer.log('village: "${surveyCTSController.selectedVillage.value}"', name: 'SurveyInfo');
+
 
     // === CALCULATION INFO ===
     developer.log('=== CALCULATION INFO ===', name: 'DebugInfo');
@@ -1004,13 +1012,12 @@ class MainSurveyController extends GetxController {
       "poa_holder_address": personalInfoController.poaHolderAddressController.text.trim(),
 
       // === SURVEY INFO ===
-      "survey_type":surveyInfo?['Number']?.toString() ?? "",
-      "department": surveyInfo?['department']?.toString() ?? "",
-      "division_id": "1",
-      "district_id": "26",
-      "taluka_id": "5",
-      "village_id": "3",
-      "office_name": surveyInfo?['office']?.toString() ?? "",
+      "survey_type": surveyCTSController.surveyCtsNumber.text,
+      "department": surveyCTSController.selectedDepartment.value.toString(),
+      "division_id": "1", // Hardcoded as per your example
+      "district_id": "26", // Hardcoded as per your example
+      "taluka_id": "5", // Hardcoded as per your example
+      "village_id": "3", // Hardcoded as per your example
 
       // === CALCULATION INFO ===
       "operation_type": calculationController.getOperationType(),
@@ -1030,12 +1037,6 @@ class MainSurveyController extends GetxController {
     final adjacentOwners = _getAdjacentOwners(applicantData);
     final coOwners = _getCoOwners(coOwnerData);
     final nextOfKin = _getNextOfKin(nextOfKinData);
-
-    // Debug: Print the arrays before encoding
-    print('🔍 Calculation Entries: $calculationEntries');
-    print('🔍 Adjacent Owners: $adjacentOwners');
-    print('🔍 Co-owners: $coOwners');
-    print('🔍 Next of Kin: $nextOfKin');
 
     fields["survey_areas"] = jsonEncode(calculationEntries);
     fields["adjacent_owners"] = jsonEncode(adjacentOwners);
@@ -1114,18 +1115,78 @@ class MainSurveyController extends GetxController {
         filePath: surveyEightController.adhikarPatra!.first.toString(),
       ));
     }
+    if (surveyEightController.otherDocument?.isNotEmpty == true) {
+      files.add(MultipartFiles(
+        field: "other_documents_path",
+        filePath: surveyEightController.otherDocument!.first.toString(),
+      ));
+    }
 
     // Add calculation-specific files
     if (calculationData['calculationType'] == 'Integration calculation') {
-      if (calculationController.incorporationOrderFiles?.isNotEmpty == true) {
         final filePath = calculationController.incorporationOrderFiles!.toString();
         if (filePath.isNotEmpty) {
           files.add(MultipartFiles(
             field: "consolidation_order_map",
             filePath: filePath,
           ));
-        }
+      }
+    }
 
+    // Add non-agricultural specific files
+    if (surveyEightController.isNonAgricultural) {
+      if (surveyEightController.sakshamPradikaranAdeshFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "saksham_pradikaran_adesh_path",
+          filePath: surveyEightController.sakshamPradikaranAdeshFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.nakashaFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "nakasha_path",
+          filePath: surveyEightController.nakashaFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.bhandhakamParvanaFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "bhandhakam_parvana_path",
+          filePath: surveyEightController.bhandhakamParvanaFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.nonAgriculturalZoneCertificateFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "non_agricultural_zone_certificate_path",
+          filePath: surveyEightController.nonAgriculturalZoneCertificateFiles!.first.toString(),
+        ));
+      }
+    }
+
+
+    // Add stomach specific files
+    if (surveyEightController.isStomach) {
+      if (surveyEightController.pratisaKarayaycheNakshaFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "pratisa_karayayche_naksha_path",
+          filePath: surveyEightController.pratisaKarayaycheNakshaFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.bandPhotoFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "band_photo_path",
+          filePath: surveyEightController.bandPhotoFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.sammatiPatraFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "sammati_patra_path",
+          filePath: surveyEightController.sammatiPatraFiles!.first.toString(),
+        ));
+      }
+      if (surveyEightController.stomachZoneCertificateFiles?.isNotEmpty == true) {
+        files.add(MultipartFiles(
+          field: "stomach_zone_certificate_path",
+          filePath: surveyEightController.stomachZoneCertificateFiles!.first.toString(),
+        ));
       }
     }
 
@@ -1155,6 +1216,7 @@ class MainSurveyController extends GetxController {
             entries.add({
               "survey_number": entry['ctSurveyNumber']?.toString() ?? "",
               "original_area": entry['area']?.toString() ?? "",
+              "area": entry['areaSqmController']?.text ?? ""
             });
           }
         }
@@ -1167,6 +1229,7 @@ class MainSurveyController extends GetxController {
             entries.add({
               "survey_number": entry['surveyNumber']?.toString() ?? "",
               "original_area": entry['totalArea']?.toString() ?? "",
+              "total_area":   entry['selectedMeasurementType']?.toString() ?? "",
             });
           }
         }
@@ -1175,6 +1238,7 @@ class MainSurveyController extends GetxController {
       case 'Non-agricultural':
       // Add order details first
         entries.add({
+          "survey_number": calculationController.nonAgrisurveyNumberGatNumber.text.trim(),
           "order_approval_number": calculationController.orderNumberController.text.trim(),
           "order_approval_date": calculationController.orderDateController.text.trim(),
           "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
@@ -1188,6 +1252,7 @@ class MainSurveyController extends GetxController {
             entries.add({
               "survey_number": entry['surveyNumber']?.toString() ?? "",
               "original_area": entry['area']?.toString() ?? "",
+              "area_hector":  entry['areaHectaresController']?.toString() ?? "",
             });
           }
         }
@@ -1196,6 +1261,7 @@ class MainSurveyController extends GetxController {
       case 'Counting by number of knots':
       // Add order details first
         entries.add({
+          "survey_number": calculationController.countingKsurveyNumberGatNumber.text.trim(),
           "order_approval_number": calculationController.orderNumberController.text.trim(),
           "order_approval_date": calculationController.orderDateController.text.trim(),
           "layout_approval_number": calculationController.schemeOrderNumberController.text.trim(),
@@ -1209,6 +1275,7 @@ class MainSurveyController extends GetxController {
             entries.add({
               "survey_number": entry['surveyNumber']?.toString() ?? "",
               "original_area": entry['area']?.toString() ?? "",
+              "hector_area":entry['areaHectaresController']?.toString() ?? "",
             });
           }
         }
@@ -1243,27 +1310,22 @@ class MainSurveyController extends GetxController {
     return entries;
   }
 
-// Helper method to get adjacent owners
   List<Map<String, dynamic>> _getAdjacentOwners(Map<String, dynamic> applicantData) {
     List<Map<String, dynamic>> applicantsList = [];
     final applicantCount = applicantData['applicantCount'] ?? 0;
-
     print('🔍 Processing $applicantCount adjacent owners');
-
     for (int i = 0; i < applicantCount; i++) {
       final applicantKey = 'applicant_$i';
       final applicantInfo = applicantData[applicantKey] as Map<String, dynamic>?;
-
       if (applicantInfo != null) {
-        final addressInfo = applicantInfo['address'] as Map<String, dynamic>?;
-
+        final addressInfo = applicantInfo['addressDetails'] as Map<String, dynamic>?;
         applicantsList.add({
           "name": applicantInfo['accountHolderName']?.toString() ?? "",
-          "account_number": applicantInfo['accountNumber']?.toString() ?? "",
+          // "account_number": applicantInfo['accountNumber']?.toString() ?? "",
           "mobile_number": applicantInfo['mobileNumber']?.toString() ?? "",
-          "server_number": applicantInfo['serverNumber']?.toString() ?? "",
-          "area": applicantInfo['area']?.toString() ?? "",
-          "potkharab_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
+          // "server_number": applicantInfo['serverNumber']?.toString() ?? "",
+          // "area": applicantInfo['area']?.toString() ?? "",
+          // "potkharab_area": applicantInfo['potkaharabaArea']?.toString() ?? "",
           "total_area": applicantInfo['totalArea']?.toString() ?? "",
           "plot_no": addressInfo?['plotNo']?.toString() ?? "",
           "address": addressInfo?['address']?.toString() ?? "",
@@ -1276,10 +1338,10 @@ class MainSurveyController extends GetxController {
         });
       }
     }
-
     print('🔍 Generated ${applicantsList.length} adjacent owners');
     return applicantsList;
   }
+
 
 // Helper method to get co-owners
   List<Map<String, dynamic>> _getCoOwners(Map<String, dynamic> coOwnerData) {
@@ -1296,8 +1358,8 @@ class MainSurveyController extends GetxController {
         coOwnersList.add({
           "name": coowner['name']?.toString() ?? "",
           "mobile_number": coowner['mobileNumber']?.toString() ?? "",
-          "server_number": coowner['serverNumber']?.toString() ?? "",
-          "consent": coowner['consent']?.toString() ?? "",
+          // "server_number": coowner['serverNumber']?.toString() ?? "",
+          // "consent": coowner['consent']?.toString() ?? "",
           "plot_no": addressInfo?['plotNo']?.toString() ?? "",
           "address": addressInfo?['address']?.toString() ?? "",
           "address_mobile_number": addressInfo?['mobileNumber']?.toString() ?? "",
@@ -1316,7 +1378,6 @@ class MainSurveyController extends GetxController {
     return coOwnersList;
   }
 
-// Helper method to get next of kin for API
   List<Map<String, dynamic>> _getNextOfKin(Map<String, dynamic> nextOfKinData) {
     List<Map<String, dynamic>> nextOfKinList = [];
     final entries = nextOfKinData['nextOfKinEntries'] as List<Map<String, dynamic>>?;
@@ -1329,14 +1390,11 @@ class MainSurveyController extends GetxController {
         final naturalResources = entry['naturalResources']?.toString() ?? '';
         final direction = entry['direction']?.toString() ?? '';
 
-        // Check if this entry has sub-entries (Name/Other types)
-        if (entry.containsKey('subEntries') && entry.containsKey('totalSubEntries')) {
+        // Handle entries with sub-entries (Name/Other)
+        if (entry.containsKey('subEntries')) {
           final subEntries = entry['subEntries'] as List<Map<String, dynamic>>?;
-
           if (subEntries != null && subEntries.isNotEmpty) {
-            // Create a grouped entry with sub-entries
             List<Map<String, dynamic>> subEntriesList = [];
-
             for (int j = 0; j < subEntries.length; j++) {
               final subEntry = subEntries[j];
               subEntriesList.add({
@@ -1346,21 +1404,16 @@ class MainSurveyController extends GetxController {
                 "survey_no": subEntry['surveyNo']?.toString() ?? "",
               });
             }
-
-            // // Add the grouped entry
             nextOfKinList.add({
               "direction": direction,
               "natural_resources": naturalResources,
               "sub_entries": subEntriesList,
-              "total_sub_entries": subEntries.length,
             });
           }
-        } else {
-          // Handle other natural resources types (Road, River, etc.)
+        }
+        // Handle entries without sub-entries (Road, River, etc.)
+        else {
           nextOfKinList.add({
-            "address": entry['address']?.toString() ?? "",
-            "mobile": entry['mobile']?.toString() ?? "",
-            "survey_no": entry['surveyNo']?.toString() ?? "",
             "direction": direction,
             "natural_resources": naturalResources,
             "entry_type": "simple",
@@ -1375,6 +1428,21 @@ class MainSurveyController extends GetxController {
     print('🔍 Generated ${nextOfKinList.length} next of kin API entries');
     return nextOfKinList;
   }
+
+
+void debugPrint(){
+
+  String userId = "0";
+  print('🆔 User ID: $userId');
+
+  final multipartData = prepareMultipartData(userId);
+  final fields = multipartData['fields'] as Map<String, String>;
+  final files = multipartData['files'] as List<MultipartFiles>;
+
+  developer.log(jsonEncode(fields), name: 'REQUEST_BODY');
+
+
+}
 
 
 
@@ -1396,6 +1464,7 @@ class MainSurveyController extends GetxController {
       final files = multipartData['files'] as List<MultipartFiles>;
 
       developer.log(jsonEncode(fields), name: 'REQUEST_BODY');
+
 
       final response = await ApiService.multipartPost<Map<String, dynamic>>(
         endpoint: haddakayamPost,

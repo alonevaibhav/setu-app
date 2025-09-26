@@ -25,11 +25,6 @@ class SurveyCTSStep extends StatelessWidget {
     // Get the substeps from main controller configuration
     final subSteps = mainController.stepConfigurations[1] ?? ['survey_number'];
 
-    // // Ensure currentSubStep is within bounds
-    // if (currentSubStep >= subSteps.length) {
-    //   return _buildOfficeInput(); // Fallback
-    // }
-
     final currentField = subSteps[currentSubStep];
 
     switch (currentField) {

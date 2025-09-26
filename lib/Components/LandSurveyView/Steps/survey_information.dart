@@ -394,7 +394,7 @@ class CalculationInformation extends StatelessWidget {
           label: 'Survey No./Gat No./CTS No.*',
           hint: 'Enter Survey No./Gat No./CTS No',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-          onChanged: (value) => calcController.updateOrderNumber(value),
+          // onChanged: (value) => calcController.updateOrderNumber(value),
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
         // Order Number field - OUTSIDE the entry list
@@ -406,7 +406,6 @@ class CalculationInformation extends StatelessWidget {
           onChanged: (value) => calcController.updateOrderNumber(value),
         ),
         Gap(16.h * SurveyUIUtils.sizeFactor),
-
 
 
         // Order Date field - OUTSIDE the entry list
@@ -547,7 +546,6 @@ class CalculationInformation extends StatelessWidget {
           label: 'Survey No./Gat No./CTS No.*',
           hint: 'Enter Survey No./Gat No./CTS No',
           icon: PhosphorIcons.fileText(PhosphorIconsStyle.regular),
-          onChanged: (value) => calcController.updateOrderNumber(value),
         ),
 
         // Order Number field - OUTSIDE the entry list
