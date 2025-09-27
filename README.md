@@ -17,12 +17,10 @@
 ## 📱 Download & Try the App
 
 <div align="center">
-  <a href="[YOUR_DRIVE_LINK_HERE]">
+  <a href="https://drive.google.com/file/d/1enDU-5mVnJ5BVj_doiVc3CGp4QawYO3c/view?usp=drivesdk">
     <img src="https://img.shields.io/badge/📱_Download_APK-4285F4?style=for-the-badge&logo=googledrive&logoColor=white" alt="Download APK" />
   </a>
 </div>
-
-> **Note:** Replace `[YOUR_DRIVE_LINK_HERE]` with your actual Google Drive download link
 
 ---
 
@@ -69,30 +67,39 @@
   <table>
     <tr>
       <td align="center">
-        <img src="screenshots/login.png" width="200px" alt="Login Screen"/><br/>
+        <img src="screenshots/login.jpg" width="200px" alt="Login Screen"/><br/>
         <b>🔐 Login Screen</b>
       </td>
       <td align="center">
-        <img src="screenshots/language.png" width="200px" alt="Language Selection"/><br/>
+        <img src="screenshots/language.jpg" width="200px" alt="Language Selection"/><br/>
         <b>🌐 Language Selection</b>
       </td>
       <td align="center">
-        <img src="screenshots/dashboard.png" width="200px" alt="Dashboard"/><br/>
+        <img src="screenshots/dashboard.jpg" width="200px" alt="Dashboard"/><br/>
         <b>🏠 Dashboard</b>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="screenshots/schemes.png" width="200px" alt="Government Schemes"/><br/>
+        <img src="screenshots/showlangaage.jpg" width="200px" alt="Government Schemes"/><br/>
         <b>🏛️ Government Schemes</b>
       </td>
       <td align="center">
-        <img src="screenshots/profile.png" width="200px" alt="Profile Settings"/><br/>
+        <img src="screenshots/setting.jpg" width="200px" alt="Profile Settings"/><br/>
         <b>👤 Profile Settings</b>
       </td>
       <td align="center">
-        <img src="screenshots/survey.png" width="200px" alt="Survey System"/><br/>
+        <img src="screenshots/form.jpg" width="200px" alt="Survey System"/><br/>
         <b>📊 Survey System</b>
+      </td>
+    </tr>    <tr>
+      <td align="center">
+        <img src="screenshots/userlifecycle.jpg" width="200px" alt="Government Schemes"/><br/>
+        <b>👤 User Lifecycle</b>
+      </td>
+      <td align="center">
+        <img src="screenshots/language.jpg" width="200px" alt="Profile Settings"/><br/>
+        <b>🌐 Language Preference</b>
       </td>
     </tr>
   </table>
