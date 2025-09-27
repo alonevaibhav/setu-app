@@ -14,7 +14,6 @@ import 'land_preview_controller.dart';
 import 'land_seventh_controller.dart';
 import 'land_sixth_controller.dart';
 
-// Import all step controllers
 
 class MainLandAcquisitionController extends GetxController {
   // Navigation State
@@ -37,9 +36,7 @@ class MainLandAcquisitionController extends GetxController {
 
   // Sub-step configurations for each main step (0-9)
   final Map<int, List<String>> stepConfigurations = {
-    0: [
-      'land_acquisition_details',
-    ], // Personal Info step
+    0: ['land_acquisition_details'], // Personal Info step
     1: [
       'survey_number',
       'department',
@@ -48,12 +45,8 @@ class MainLandAcquisitionController extends GetxController {
       'village',
     ],
     2: ['calculation'], // Survey Information
-    3: [
-      'land_fouth_step',
-    ], // Calculation Information
-    4: [
-      'holder_information',
-    ], // Applicant Information
+    3: ['land_fouth_step',], // Calculation Information
+    4: ['holder_information',], // Applicant Information
     5: ['next_of_kin'], // Co-owner Information
     6: ['documents' ], // Information about Adjacent Holders
     7: ['documents', 'status'], // Document Upload
@@ -223,7 +216,9 @@ class MainLandAcquisitionController extends GetxController {
       stepController.surveyEntries.refresh();
     }
 
-    debugPrintPersonalInfo();
+    // debugPrintPersonalInfo();
+
+    debugPrint();
 
 
     // Check validation
@@ -265,7 +260,7 @@ class MainLandAcquisitionController extends GetxController {
       else {
         // We're at the last step and last substep, submit the survey
         print('Submitting survey...');
-        submitLandAcquisitionSurvey();
+        // submitLandAcquisitionSurvey();
       }
     }
   }
@@ -751,8 +746,8 @@ class MainLandAcquisitionController extends GetxController {
       "user_id": userId,
 
       //need to add
-      "holder_name": "vaibhav",
-      "holder_address": "vaibhav",
+      "holder_name": personalInfoController.applicantNameController.text.trim(),
+      "holder_address": personalInfoController.applicantAddressController.text.trim(),
 
       // === LAND ACQUISITION INFO === (Access controllers directly)
       "land_acquisition_officer": personalInfoController.landAcquisitionOfficerController.text.trim(),
@@ -763,18 +758,18 @@ class MainLandAcquisitionController extends GetxController {
       "issuing_office_address": personalInfoController.landAcquisitionOfficeAddressController.text.trim(),
 
       // === SURVEY CTS INFO === (Access controllers directly)
-      "survey_number": surveyCTSController.selectedSurveyNo.value,
+      "survey_number": surveyCTSController.surveyCtsNumber.text.trim(),
       "department": surveyCTSController.selectedDepartment.value,
       "division": "1",
       "district": "26",
       "taluka": "5",
       "village": "3",
-      "office": surveyCTSController.selectedOffice.value,
+      // "office": surveyCTSController.selectedOffice.value,
 
       "measurement_type": landFouthController.selectedCalculationType.value,
       "duration": landFouthController.selectedDuration.value,
       "holder_type": landFouthController.selectedHolderType.value,
-      "measurement_fee": landFouthController.countingFee.value.toString(),
+      // "measurement_fee": landFouthController.countingFee.value.toString(),
     };
 
     // Convert complex data to JSON strings for multipart - Access controllers directly
@@ -895,10 +890,10 @@ class MainLandAcquisitionController extends GetxController {
       entries.add({
         "land_entry_village": entry['village']?.toString() ?? "",
         "survey_gat_cts_number": entry['surveyNo']?.toString() ?? "",
-        "share": entry['share']?.toString() ?? "",
+        // "share": entry['share']?.toString() ?? "",
         "area": entry['area']?.toString() ?? "",
-        "converted_area": entry['landAcquisitionArea']?.toString() ?? "",
-        "assessment_area": entry['abdominalSection']?.toString() ?? "",
+        // "converted_area": entry['landAcquisitionArea']?.toString() ?? "",
+        // "assessment_area": entry['abdominalSection']?.toString() ?? "",
       });
     }
     print('🔍 Generated ${entries.length} calculation entries');
@@ -916,11 +911,11 @@ class MainLandAcquisitionController extends GetxController {
       holders.add({
         "holder_name": holder['holderName']?.toString() ?? "",
         "holder_address": holder['address']?.toString() ?? "",
-        "account_number": holder['accountNumber']?.toString() ?? "",
+        // "account_number": holder['accountNumber']?.toString() ?? "",
         "holder_mobile_number": holder['mobileNumber']?.toString() ?? "",
         "holder_survey_number": holder['serverNumber']?.toString() ?? "",
         "holder_area": holder['area']?.toString() ?? "",
-        "holder_sub_area": holder['potKharabaArea']?.toString() ?? "",
+        // "holder_sub_area": holder['potKharabaArea']?.toString() ?? "",
         "holder_total_area": holder['totalArea']?.toString() ?? "",
         "holder_village": holder['village']?.toString() ?? "",
         "holder_plot_number": holder['plotNo']?.toString() ?? "",
@@ -935,25 +930,75 @@ class MainLandAcquisitionController extends GetxController {
     return holders;
   }
 
-// Fixed helper method to get next of kin entries - Access controllers directly
   List<Map<String, dynamic>> _getNextOfKinEntriesFixed() {
     List<Map<String, dynamic>> nextOfKinList = [];
 
     print('🔍 Processing ${laandSixthController.nextOfKinEntries.length} next of kin entries');
 
-    for (int i = 0; i < laandSixthController.nextOfKinEntries.length; i++) {
-      final entry = laandSixthController.nextOfKinEntries[i] as Map<String, dynamic>;
-      nextOfKinList.add({
-        "address": entry['address']?.toString() ?? "",
-        "mobile_number": entry['mobile']?.toString() ?? "",
-        "survey_no": entry['surveyNo']?.toString() ?? "",
-        "direction": entry['direction']?.toString() ?? "",
-        "natural_resources": entry['naturalResources']?.toString() ?? "",
-      });
+    for (final entry in laandSixthController.nextOfKinEntries) {
+      final naturalResources = entry['naturalResources'] as String? ?? '';
+      final direction = entry['direction'] as String? ?? '';
+
+      if (naturalResources == 'Name' || naturalResources == 'Other') {
+        // Handle sub-entries for Name/Other types (these have controllers)
+        final subEntries = entry['subEntries'] as RxList<Map<String, dynamic>>?;
+        final List<Map<String, dynamic>> subEntriesData = [];
+
+        if (subEntries != null) {
+          for (final subEntry in subEntries) {
+            // Get data from controllers in sub-entries
+            final nameController = subEntry['nameController'] as TextEditingController?;
+            final addressController = subEntry['addressController'] as TextEditingController?;
+            final mobileController = subEntry['mobileController'] as TextEditingController?;
+            final surveyNoController = subEntry['surveyNoController'] as TextEditingController?;
+
+            subEntriesData.add({
+              'name': nameController?.text ?? '',
+              'address': addressController?.text ?? '',
+              'mobile': mobileController?.text ?? '',
+              'survey_no': surveyNoController?.text ?? '',
+            });
+          }
+        }
+
+        nextOfKinList.add({
+          'direction': direction,
+          'natural_resources': naturalResources,
+          'sub_entries': subEntriesData,
+        });
+      } else {
+        // Handle other natural resources types (these have main entry controllers)
+        final addressController = entry['addressController'] as TextEditingController?;
+        final mobileController = entry['mobileController'] as TextEditingController?;
+        final surveyNoController = entry['surveyNoController'] as TextEditingController?;
+
+        nextOfKinList.add({
+          'direction': direction,
+          'natural_resources': naturalResources,
+          'address': addressController?.text ?? '',
+          'mobile': mobileController?.text ?? '',
+          'survey_no': surveyNoController?.text ?? '',
+        });
+      }
     }
 
     print('🔍 Generated ${nextOfKinList.length} next of kin entries');
     return nextOfKinList;
+  }
+
+
+  void debugPrint(){
+
+    String userId = "0";
+    print('🆔 User ID: $userId');
+
+    final multipartData = prepareMultipartData(userId);
+    final fields = multipartData['fields'] as Map<String, String>;
+    final files = multipartData['files'] as List<MultipartFiles>;
+
+    developer.log(jsonEncode(fields), name: 'REQUEST_BODY');
+
+
   }
 
 

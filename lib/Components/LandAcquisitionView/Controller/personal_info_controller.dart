@@ -7,6 +7,8 @@ class PersonalInfoController extends GetxController
     with StepValidationMixin, StepDataMixin {
   // Form Controllers (only applicant name is used in the UI)
   final applicantNameController = TextEditingController();
+  final applicantAddressController = TextEditingController();
+
 
   // Land Acquisition Form Controllers
   final landAcquisitionOfficerController = TextEditingController();
@@ -132,26 +134,65 @@ class PersonalInfoController extends GetxController
   //------------------------Address Methods ------------------------//
 
   // Office address formatting method
+  // String getFormattedOfficeAddress() {
+  //   final parts = <String>[];
+  //
+  //   if (officeAddressData['plotNo']?.isNotEmpty == true) {
+  //     parts.add(officeAddressData['plotNo']!);
+  //   }
+  //   if (officeAddressData['address']?.isNotEmpty == true) {
+  //     parts.add(officeAddressData['address']!);
+  //   }
+  //   if (officeAddressData['village']?.isNotEmpty == true) {
+  //     parts.add(officeAddressData['village']!);
+  //   }
+  //   if (officeAddressData['postOffice']?.isNotEmpty == true) {
+  //     parts.add(officeAddressData['postOffice']!);
+  //   }
+  //   if (officeAddressData['pincode']?.isNotEmpty == true) {
+  //     parts.add(officeAddressData['pincode']!);
+  //   }
+  //
+  //   return parts.isEmpty ? 'Click to add office address' : parts.join(', ');
+  // }
+
+
   String getFormattedOfficeAddress() {
     final parts = <String>[];
-
+    // Plot No
     if (officeAddressData['plotNo']?.isNotEmpty == true) {
-      parts.add(officeAddressData['plotNo']!);
+      parts.add('Plot No: ${officeAddressData['plotNo']}');
     }
+    // Address (house/building, street, locality)
     if (officeAddressData['address']?.isNotEmpty == true) {
       parts.add(officeAddressData['address']!);
     }
+    // Village
     if (officeAddressData['village']?.isNotEmpty == true) {
       parts.add(officeAddressData['village']!);
     }
+    // Post Office
     if (officeAddressData['postOffice']?.isNotEmpty == true) {
-      parts.add(officeAddressData['postOffice']!);
+      parts.add('Post: ${officeAddressData['postOffice']}');
     }
+    // District
+    if (officeAddressData['district']?.isNotEmpty == true) {
+      parts.add('Dist: ${officeAddressData['district']}');
+    }
+    // Pincode
     if (officeAddressData['pincode']?.isNotEmpty == true) {
-      parts.add(officeAddressData['pincode']!);
+      parts.add('Pin: ${officeAddressData['pincode']}');
+    }
+    // Mobile Number (optional)
+    if (officeAddressData['mobileNumber']?.isNotEmpty == true) {
+      parts.add('Mobile: ${officeAddressData['mobileNumber']}');
+    }
+    // Email (optional)
+    if (officeAddressData['email']?.isNotEmpty == true) {
+      parts.add('Email: ${officeAddressData['email']}');
     }
 
-    return parts.isEmpty ? 'Click to add office address' : parts.join(', ');
+    return parts.isEmpty ? 'Click to add address' : parts.join(', ');
   }
 
   // Check if detailed office address is available
@@ -213,7 +254,7 @@ class PersonalInfoController extends GetxController
     officeAddressData.assignAll(newAddressData);
 
     // Update the old controller for backward compatibility
-    landAcquisitionOfficeAddressController.text = getFormattedOfficeAddress();
+    applicantAddressController.text = getFormattedOfficeAddress();
 
     // Clear validation errors
     officeAddressValidationErrors.clear();

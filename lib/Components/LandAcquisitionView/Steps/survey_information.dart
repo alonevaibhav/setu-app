@@ -213,25 +213,25 @@ class CalculationInformation extends StatelessWidget {
             onChanged: (value) => calcController.updateSurveyEntry(index, 'surveyNo', value),
           ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          // Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Share Input
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: entry['shareController'],
-            label: 'Share *',
-            hint: 'Enter share value',
-            icon: PhosphorIcons.percent(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) =>
-                calcController.updateSurveyEntry(index, 'share', value),
-          ),
+          // LandAcquisitionUIUtils.buildTextFormField(
+          //   controller: entry['shareController'],
+          //   label: 'Share *',
+          //   hint: 'Enter share value',
+          //   icon: PhosphorIcons.percent(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) =>
+          //       calcController.updateSurveyEntry(index, 'share', value),
+          // ),
 
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Area Input
           LandAcquisitionUIUtils.buildTextFormField(
             controller: entry['areaController'],
-            label: 'Area *',
+            label: '7/12 Area *',
             hint: 'Enter total area',
             icon: PhosphorIcons.square(PhosphorIconsStyle.regular),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
@@ -242,30 +242,30 @@ class CalculationInformation extends StatelessWidget {
           Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Land Acquisition Area Input
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: entry['landAcquisitionAreaController'],
-            label: 'Land Acquisition Area *',
-            hint: 'Enter land acquisition area',
-            icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            onChanged: (value) => calcController.updateSurveyEntry(
-                index, 'landAcquisitionArea', value),
-          ),
+          // LandAcquisitionUIUtils.buildTextFormField(
+          //   controller: entry['landAcquisitionAreaController'],
+          //   label: 'Land Acquisition Area *',
+          //   hint: 'Enter land acquisition area',
+          //   icon: PhosphorIcons.buildings(PhosphorIconsStyle.regular),
+          //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+          //   onChanged: (value) => calcController.updateSurveyEntry(
+          //       index, 'landAcquisitionArea', value),
+          // ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          // Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Abdominal Section Input
-          LandAcquisitionUIUtils.buildTextFormField(
-            controller: entry['abdominalSectionController'],
-            label: 'Abdominal Section *',
-            hint: 'Enter abdominal section details',
-            icon: PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
-            maxLines: 3,
-            onChanged: (value) => calcController.updateSurveyEntry(
-                index, 'abdominalSection', value),
-          ),
+          // LandAcquisitionUIUtils.buildTextFormField(
+          //   controller: entry['abdominalSectionController'],
+          //   label: 'Abdominal Section *',
+          //   hint: 'Enter abdominal section details',
+          //   icon: PhosphorIcons.textAlignLeft(PhosphorIconsStyle.regular),
+          //   maxLines: 3,
+          //   onChanged: (value) => calcController.updateSurveyEntry(
+          //       index, 'abdominalSection', value),
+          // ),
 
-          Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
+          // Gap(16.h * LandAcquisitionUIUtils.sizeFactor),
 
           // Summary Row
         ],
