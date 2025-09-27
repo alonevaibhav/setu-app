@@ -676,6 +676,7 @@ class SurveyEightView extends StatelessWidget {
   }
 
   double _getUploadProgress(SurveyEightController docController) {
+
     int uploadedCount = 0;
     int totalRequired = 7; // Basic documents
 

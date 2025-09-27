@@ -294,9 +294,9 @@ class ProfileView extends StatelessWidget {
       case 'Privacy & Security':
         _navigateToPrivacySettings(context);
         break;
-      // case 'Language':
-      //   _showLanguageSelectionDialog(context);
-      //   break;
+      case 'Language':
+        _showLanguageSelectionDialog(context);
+        break;
       case 'Help & Support':
         _navigateToHelpSupport(context);
         break;

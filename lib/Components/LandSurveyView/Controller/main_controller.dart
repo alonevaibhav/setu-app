@@ -1124,7 +1124,7 @@ class MainSurveyController extends GetxController {
 
     // Add calculation-specific files
     if (calculationData['calculationType'] == 'Integration calculation') {
-        final filePath = calculationController.incorporationOrderFiles!.toString();
+        final filePath = calculationController.incorporationOrderFiles!.first.toString();
         if (filePath.isNotEmpty) {
           files.add(MultipartFiles(
             field: "consolidation_order_map",
